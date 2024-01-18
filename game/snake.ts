@@ -119,17 +119,31 @@ export default class Snake extends Entity {
   }
   analyzeMove(dirX: number, dirY: number): Move {
     const head = this.segments[0]
+    const tail = this.segments[this.segments.length - 1]
     const deltaX = dirX * head.size
     const deltaY = dirY * head.size
     const x = head.x + deltaX
     const y = head.y + deltaY
-    const hit = this._hitTestAllEntities(x, y, false)
+    const ahead = this._hitTestAllEntities(x, y, false)
+    const trail = this._hitTestAllEntities(tail.x, tail.y, true)
+    // console.log(ahead, trail)
+    // TODO: prevent overlapped snake doubling back on itself
+    // I could check if entitiesThere includes this snake,
+    // but I don't want to add special cases if I don't need to.
+    // Also need to prevent snakes swapping depths...
+    // There's also the case where the tail is "supporting/housing"
+    // a snake but the tail will be filled with the head within the move;
+    // should that allow the move, or should the head/tail seam act as a barrier?
+    // I feel like I'd lean towards freedom of movement
+    // (but I may be overdoing it on that front in this game design...)
+    // Well, you can normally pass through it, so for consistency it should be allowed
+    // (unless I go wholely the other way, but that's still less consistent overall, considering sideways entrance/exiting)
     return {
-      valid: hit.topLayer !== head.layer,
+      valid: ahead.topLayer !== head.layer && trail.topLayer === head.layer,
       x,
       y,
-      entitiesThere: hit.entitiesThere,
-      topLayer: hit.topLayer,
+      entitiesThere: ahead.entitiesThere,
+      topLayer: ahead.topLayer,
     }
   }
   private _hitTestAllEntities(x: number, y: number, includeOwnTail = true): HitTestResult {
