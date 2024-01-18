@@ -1,4 +1,5 @@
 import { Block } from "./block"
+import { Collectable } from "./collectable"
 import Entity from "./entity"
 import { entities } from "./game-state"
 import { CollisionLayer, HitTestResult, Move, Tile } from "./types"
@@ -194,6 +195,17 @@ export default class Snake extends Entity {
       // stay valid for both splice calls.
       entities.splice(maxIndex + 1, 0, this)
       entities.splice(thisIndex, 1)
+    }
+    // Eat collectables
+    // Not currently collidable with at() so just checking x/y
+    for (const entity of entities) {
+      if (
+        entity instanceof Collectable &&
+        entity.x === move.x &&
+        entity.y === move.y
+      ) {
+        entities.splice(entities.indexOf(entity), 1)
+      }
     }
   }
 }

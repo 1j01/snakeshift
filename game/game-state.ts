@@ -1,4 +1,5 @@
 import { Block } from "./block"
+import { Collectable } from "./collectable"
 import Entity from "./entity"
 import Snake from "./snake"
 import { CollisionLayer, GameState, ParsedGameState } from "./types"
@@ -65,6 +66,9 @@ export function deserialize(state: GameState) {
       case "Snake":
         instance = new Snake()
         break
+      case "Collectable":
+        instance = new Collectable()
+        break
       default:
         throw new Error(`Unknown entity type: ${entityType}`)
     }
@@ -87,6 +91,14 @@ export function initLevel() {
   for (let x = 0; x < 16; x++) {
     for (let y = 8; y < 16; y++) {
       entities.push(new Block(x * size, y * size, size, CollisionLayer.White))
+    }
+  }
+  for (let x = 4; x < 12; x++) {
+    for (let y = 0; y < 8; y++) {
+      entities.push(new Collectable(x * size, y * size, size, CollisionLayer.White))
+    }
+    for (let y = 8; y < 16; y++) {
+      entities.push(new Collectable(x * size, y * size, size, CollisionLayer.Black))
     }
   }
   activePlayer = new Snake()
