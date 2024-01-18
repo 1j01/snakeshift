@@ -1,4 +1,5 @@
 import Entity from "./entity"
+import { entities } from "./game-state"
 import { Tile } from "./types"
 
 export default class Snake extends Entity {
@@ -41,16 +42,27 @@ export default class Snake extends Entity {
       ctx.restore()
     }
   }
+  occupying(x: number, y: number, includeHead = true, includeTail = true): boolean {
+    for (let i = (includeHead ? 0 : 1); i < this.segments.length - (includeTail ? 0 : 1); i++) {
+      const segment = this.segments[i]
+      if (x === segment.x && y === segment.y) {
+        return true
+      }
+    }
+    return false
+  }
   canMove(dirX: number, dirY: number): boolean {
     const deltaX = dirX * this.segments[0].size
     const deltaY = dirY * this.segments[0].size
-    const head = this.segments[0]
-    // skipping head, so you can move at all
-    // skipping tail, so moving into it is ok
-    for (let i = 1; i < this.segments.length - 1; i++) {
-      const segment = this.segments[i]
-      if (head.x + deltaX === segment.x && head.y + deltaY === segment.y) {
-        return false
+    const x = this.segments[0].x + deltaX
+    const y = this.segments[0].y + deltaY
+    for (const entity of entities) {
+      if (entity instanceof Snake) {
+        // This snake's tail will be leaving the space, so ignore it
+        // but don't ignore any other snake's tail.
+        if (entity.occupying(x, y, true, entity !== this)) {
+          return false
+        }
       }
     }
     return true
