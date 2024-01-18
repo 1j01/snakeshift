@@ -47,20 +47,24 @@ export default class Snake extends Entity {
     highlightCtx.lineJoin = "round"
     highlightCtx.lineCap = "round"
     highlightCtx.setTransform(transform)
-    this._drawPath(highlightCtx, (segment) => {
-      if (nonHighlightOutline) {
+    if (nonHighlightOutline) {
+      this._drawPath(highlightCtx, (segment) => {
         highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
         highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
         highlight = 1
         highlightCtx.stroke()
+      })
+      this._drawPath(highlightCtx, (segment) => {
         highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#000' : '#fff'
         highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
         highlight = 1
         highlightCtx.stroke()
-      } else {
+      })
+    } else {
+      this._drawPath(highlightCtx, () => {
         highlightCtx.stroke()
-      }
-    })
+      })
+    }
     // Cut out the snake's fill, leaving a clean outline.
     highlightCtx.globalCompositeOperation = 'destination-out'
     this._drawPath(highlightCtx, () => {
