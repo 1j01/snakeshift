@@ -35,7 +35,11 @@ export interface Tile extends Point {
   size: number
 }
 
-export interface Move extends Point {
-  valid: boolean
+export interface HitTestResult extends Point {
   entitiesThere: Entity[]
+  topLayer: CollisionLayer
+}
+
+export interface Move extends HitTestResult {
+  valid: boolean
 }

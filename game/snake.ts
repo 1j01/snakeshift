@@ -1,7 +1,7 @@
 import { Block } from "./block"
 import Entity from "./entity"
 import { entities } from "./game-state"
-import { CollisionLayer, Move, Tile } from "./types"
+import { CollisionLayer, HitTestResult, Move, Tile } from "./types"
 
 interface SnakeSegment extends Tile {
   layer: CollisionLayer
@@ -123,13 +123,23 @@ export default class Snake extends Entity {
     const deltaY = dirY * head.size
     const x = head.x + deltaX
     const y = head.y + deltaY
+    const hit = this._hitTestAllEntities(x, y, false)
+    return {
+      valid: hit.topLayer !== head.layer,
+      x,
+      y,
+      entitiesThere: hit.entitiesThere,
+      topLayer: hit.topLayer,
+    }
+  }
+  private _hitTestAllEntities(x: number, y: number, includeOwnTail = true): HitTestResult {
     let foremost = CollisionLayer.Black
     const entitiesThere: Entity[] = []
     for (const entity of entities) {
       if (entity instanceof Snake) {
-        // This snake's tail will be leaving the space, so ignore it
-        // but don't ignore any other snake's tail.
-        const there = entity.at(x, y, true, entity !== this)
+        // This snake's tail may be leaving the space, so ignore it
+        // in that case but don't ignore any other snake's tail.
+        const there = entity.at(x, y, true, includeOwnTail || entity !== this)
         if (there) {
           foremost = there
           entitiesThere.push(entity)
@@ -146,7 +156,7 @@ export default class Snake extends Entity {
       x,
       y,
       entitiesThere,
-      valid: foremost !== head.layer
+      topLayer: foremost,
     }
   }
   takeMove(move: Move): void {
