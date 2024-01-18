@@ -37,6 +37,8 @@ export function serialize(): GameState {
   })
 }
 export function deserialize(state: GameState) {
+  // TODO: give entities IDs; reordering breaks this
+  const whichSnakeBefore = entities.filter(e => e instanceof Snake).indexOf(activePlayer!)
   entities.length = 0
 
   const parsed = JSON.parse(state) as ParsedGameState
@@ -63,6 +65,11 @@ export function deserialize(state: GameState) {
   }
 
   activePlayer = entities[parsed.activePlayerEntityIndex] as Snake
+
+  const whichSnakeAfter = entities.filter(e => e instanceof Snake).indexOf(activePlayer)
+  if (whichSnakeBefore !== whichSnakeAfter) {
+    activePlayer.highlight()
+  }
 }
 
 
