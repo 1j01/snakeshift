@@ -83,6 +83,9 @@ export default class Snake extends Entity {
         ctx.lineTo(1 / 2, 1 / 2)
         ctx.closePath()
         // eye
+        // TODO: draw separately so if two snake heads overlap,
+        // the eye of the top one is still visible.
+        // Right now I'm drawing it as a hole.
         const eyeRadius = 1 / 7
         ctx.moveTo(eyeRadius, 0)
         ctx.arc(0, 0, eyeRadius, 0, Math.PI * 2, true)
