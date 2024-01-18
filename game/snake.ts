@@ -1,20 +1,25 @@
 import Entity from "./entity"
 import { entities } from "./game-state"
-import { Tile } from "./types"
+import { CollisionLayer, Tile } from "./types"
+
+interface SnakeSegment extends Tile {
+  layer: CollisionLayer
+}
 
 export default class Snake extends Entity {
-  public segments: Tile[] = []
+  public segments: SnakeSegment[] = []
   constructor() {
     super()
     const size = 10
     for (let i = 0; i < 10; i++) {
-      this.segments.push({ x: i * size, y: 0, size })
+      this.segments.push({ x: i * size, y: 0, size, layer: CollisionLayer.White })
     }
   }
   draw(ctx: CanvasRenderingContext2D): void {
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
-      ctx.fillStyle = 'hsl(' + (i / this.segments.length * 360) + ', 100%, 50%)'
+      // ctx.fillStyle = 'hsl(' + (i / this.segments.length * 360) + ', 100%, 50%)'
+      ctx.fillStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
       ctx.save()
       ctx.translate(segment.x + segment.size / 2, segment.y + segment.size / 2)
       ctx.scale(segment.size, segment.size)
@@ -42,14 +47,14 @@ export default class Snake extends Entity {
       ctx.restore()
     }
   }
-  occupying(x: number, y: number, includeHead = true, includeTail = true): boolean {
+  at(x: number, y: number, includeHead = true, includeTail = true): CollisionLayer {
     for (let i = (includeHead ? 0 : 1); i < this.segments.length - (includeTail ? 0 : 1); i++) {
       const segment = this.segments[i]
       if (x === segment.x && y === segment.y) {
-        return true
+        return segment.layer
       }
     }
-    return false
+    return CollisionLayer.None
   }
   canMove(dirX: number, dirY: number): boolean {
     const head = this.segments[0]
@@ -61,7 +66,8 @@ export default class Snake extends Entity {
       if (entity instanceof Snake) {
         // This snake's tail will be leaving the space, so ignore it
         // but don't ignore any other snake's tail.
-        if (entity.occupying(x, y, true, entity !== this)) {
+        const there = entity.at(x, y, true, entity !== this)
+        if (there === head.layer) {
           return false
         }
       }

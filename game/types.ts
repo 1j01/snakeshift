@@ -7,6 +7,12 @@ export enum ControlScheme {
   Pointer, // mouse/pen/touch
 }
 
+export enum CollisionLayer {
+  None = 0,
+  White = 1,
+  Black = 2,
+}
+
 export interface GameState {
   controlScheme: ControlScheme
   entities: Entity[]
