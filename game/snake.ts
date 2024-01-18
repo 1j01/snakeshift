@@ -46,11 +46,22 @@ export default class Snake extends Entity {
     highlightCtx.lineCap = "round"
     highlightCtx.setTransform(transform)
     // Focus highlight animation
-    highlightCtx.strokeStyle = `hsla(40, 100%, 50%, ${highlight})`
+    highlightCtx.strokeStyle = `hsl(40, 100%, 50%)`
     highlightCtx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
     this._drawPath(highlightCtx, () => {
       highlightCtx.stroke()
     })
+    // Reduce opacity as highlight fades
+    // This is a separate step in order to avoid greater opacity where the highlight overlaps itself.
+    // To do this as a separate step, I need to draw this highlight before the restful outlines,
+    // to avoid reducing the opacity of the restful outlines.
+    highlightCtx.resetTransform()
+    highlightCtx.globalCompositeOperation = 'destination-out'
+    highlightCtx.globalAlpha = 1 - highlight
+    highlightCtx.fillStyle = "#fff"
+    highlightCtx.fillRect(0, 0, highlightCtx.canvas.width, highlightCtx.canvas.height)
+    highlightCtx.setTransform(transform)
+    highlightCtx.globalAlpha = 1
     // Restful outlines for general clarity
     // Draw these outlines underneath the variable-opacity highlight.
     // N.B. This blend mode reverses the draw order!
