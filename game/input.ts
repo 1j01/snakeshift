@@ -104,6 +104,7 @@ export function handleInput(
 
   addEventListener('keydown', (event: KeyboardEvent) => {
     // Using `event.code` instead of `event.key` since the control scheme relies on the physical key layout, not the letters.
+    let handling = true
     switch (event.code) {
       case 'ArrowLeft': // arrow keys
       case 'KeyA': // WASD
@@ -149,6 +150,12 @@ export function handleInput(
       case 'ShiftRight':
         cyclePlayerControl()
         break
+      default:
+        handling = false
+        break
+    }
+    if (handling) {
+      event.preventDefault()
     }
   })
 
