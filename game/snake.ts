@@ -14,7 +14,31 @@ export default class Snake extends Entity {
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
       ctx.fillStyle = 'hsl(' + (i / this.segments.length * 360) + ', 100%, 50%)'
-      ctx.fillRect(segment.x, segment.y, segment.size, segment.size)
+      ctx.save()
+      ctx.translate(segment.x + segment.size / 2, segment.y + segment.size / 2)
+      ctx.scale(segment.size, segment.size)
+      const angle = i === 0 ?
+        Math.atan2(this.segments[1].y - segment.y, this.segments[1].x - segment.x) :
+        Math.atan2(segment.y - this.segments[i - 1].y, segment.x - this.segments[i - 1].x)
+      ctx.rotate(angle)
+      if (i === 0) {
+        // round head
+        ctx.beginPath()
+        ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
+        ctx.lineTo(1 / 2, -1 / 2)
+        ctx.lineTo(1 / 2, 1 / 2)
+        ctx.fill()
+      } else if (i === this.segments.length - 1) {
+        // triangle tail
+        ctx.beginPath()
+        ctx.moveTo(-1 / 2, -1 / 2)
+        ctx.lineTo(1 / 2, 0)
+        ctx.lineTo(-1 / 2, 1 / 2)
+        ctx.fill()
+      } else {
+        ctx.fillRect(-1 / 2, -1 / 2, 1, 1)
+      }
+      ctx.restore()
     }
   }
   canMove(dirX: number, dirY: number): boolean {
