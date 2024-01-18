@@ -9,6 +9,7 @@ body {
 
 body {
   background-color: #000;
+  color: #fff;
   font-family: sans-serif;
 }
 
@@ -18,4 +19,14 @@ body {
   border-radius: 5px;
   box-shadow: 0 0 10px 5px yellow;
   box-sizing: border-box;
+}
+
+#tao-te-ching-quote {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#tao-te-ching-quote h2 {
+  font-size: 1.3em;
 }
