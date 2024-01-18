@@ -9,6 +9,7 @@ interface SnakeSegment extends Tile {
 
 export default class Snake extends Entity {
   public segments: SnakeSegment[] = []
+  public id: string = crypto.randomUUID()
   private _highlightTime = -Infinity
   private _highlightCanvas = document.createElement('canvas')
   static readonly HIGHLIGHT_DURATION = 500
@@ -23,6 +24,7 @@ export default class Snake extends Entity {
     // Must exclude _highlightCanvas; by default it will be serialized
     // as an empty object, and will overwrite the canvas when deserialized.
     return {
+      id: this.id,
       segments: this.segments,
     }
   }

@@ -7,6 +7,7 @@ export const entities: Entity[] = []
 
 // Note: entities can be reordered, so this is safer than
 // storing the index within entities, which is only done for serialization.
+// An ID could be used instead... I've now added an ID...
 export let activePlayer: Snake | undefined = undefined
 
 const undos: GameState[] = []
@@ -37,8 +38,7 @@ export function serialize(): GameState {
   })
 }
 export function deserialize(state: GameState) {
-  // TODO: give entities IDs; reordering breaks this
-  const whichSnakeBefore = entities.filter(e => e instanceof Snake).indexOf(activePlayer!)
+  const whichSnakeBefore = activePlayer?.id ?? ""
   entities.length = 0
 
   const parsed = JSON.parse(state) as ParsedGameState
@@ -66,7 +66,7 @@ export function deserialize(state: GameState) {
 
   activePlayer = entities[parsed.activePlayerEntityIndex] as Snake
 
-  const whichSnakeAfter = entities.filter(e => e instanceof Snake).indexOf(activePlayer)
+  const whichSnakeAfter = activePlayer?.id ?? ""
   if (whichSnakeBefore !== whichSnakeAfter) {
     activePlayer.highlight()
   }
