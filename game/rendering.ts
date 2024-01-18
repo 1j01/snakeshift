@@ -1,4 +1,5 @@
 import { entities } from "./game-state"
+import Snake from "./snake"
 
 export const canvas = document.createElement('canvas')
 const ctx = canvas.getContext('2d')!
@@ -21,6 +22,11 @@ export function draw() {
   ctx.translate(canvas.width / 2, canvas.height / 2)
   for (const entity of entities) {
     entity.draw?.(ctx)
+  }
+  for (const entity of entities) {
+    if (entity instanceof Snake) {
+      entity.drawHighlight(ctx)
+    }
   }
   ctx.restore()
 }

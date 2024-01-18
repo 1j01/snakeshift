@@ -21,17 +21,26 @@ export default class Snake extends Entity {
   highlight(): void {
     this._highlightTime = performance.now()
   }
-  draw(ctx: CanvasRenderingContext2D): void {
+  drawHighlight(ctx: CanvasRenderingContext2D): void {
     const msSinceHighlight = performance.now() - this._highlightTime
     const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
+    ctx.strokeStyle = "hsla(40, 100%, 50%, " + (highlight * 0.5) + ")"
+    ctx.lineWidth = 1
+    ctx.lineJoin = "round"
+    ctx.lineCap = "round"
+    this._drawPath(ctx, () => {
+      ctx.stroke()
+    })
+  }
+  draw(ctx: CanvasRenderingContext2D): void {
+    this._drawPath(ctx, (segment) => {
+      ctx.fillStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
+      ctx.fill()
+    })
+  }
+  private _drawPath(ctx: CanvasRenderingContext2D, draw: (segment: SnakeSegment) => void): void {
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
-      // ctx.fillStyle = 'hsl(' + (i / this.segments.length * 360) + ', 100%, 50%)'
-      ctx.fillStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
-      ctx.strokeStyle = "hsla(40, 100%, 50%, " + (highlight * 0.5) + ")"
-      ctx.lineWidth = 1
-      ctx.lineJoin = "round"
-      ctx.lineCap = "round"
       ctx.save()
       ctx.translate(segment.x + segment.size / 2, segment.y + segment.size / 2)
       ctx.scale(segment.size, segment.size)
@@ -57,8 +66,7 @@ export default class Snake extends Entity {
       } else {
         ctx.rect(-1 / 2, -1 / 2, 1, 1)
       }
-      ctx.fill()
-      ctx.stroke()
+      draw(segment)
       ctx.restore()
     }
   }
