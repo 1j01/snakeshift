@@ -88,9 +88,14 @@ export default class Snake extends Entity {
         ctx.arc(0, 0, eyeRadius, 0, Math.PI * 2, true)
       } else if (i === this.segments.length - 1) {
         // triangle tail
+        // ctx.moveTo(-1 / 2, -1 / 2)
+        // ctx.lineTo(1 / 2, 0)
+        // ctx.lineTo(-1 / 2, 1 / 2)
+        // quadratic tapered tail
+        // - smoother, looks better
+        // - fatter, makes it clearer what color the space counts as
         ctx.moveTo(-1 / 2, -1 / 2)
-        ctx.lineTo(1 / 2, 0)
-        ctx.lineTo(-1 / 2, 1 / 2)
+        ctx.quadraticCurveTo(1.7, 0, -1 / 2, 1 / 2)
       } else {
         ctx.rect(-1 / 2, -1 / 2, 1, 1)
       }
