@@ -95,6 +95,7 @@ export function handleInput(
 
   function move(dx: number, dy: number, controlScheme = ControlScheme.KeyboardAbsoluteDirection) {
     // TODO: maybe show highlight for invalid move even though normally absolute direction doesn't use a highlight
+    if (!activePlayer) return
     if (!activePlayer.canMove(dx, dy)) return
     activePlayer.move(dx, dy)
   }
