@@ -1,4 +1,4 @@
-import { activePlayer } from './game-state'
+import { activePlayer, redo, undo, undoable } from './game-state'
 import { ControlScheme, Tile } from './types'
 
 export function handleInput(
@@ -97,6 +97,7 @@ export function handleInput(
     // TODO: maybe show highlight for invalid move even though normally absolute direction doesn't use a highlight
     if (!activePlayer) return
     if (!activePlayer.canMove(dx, dy)) return
+    undoable()
     activePlayer.move(dx, dy)
   }
 
@@ -126,6 +127,16 @@ export function handleInput(
       case 'Numpad2': // numpad
       case 'KeyJ': // vi-style
         move(0, 1)
+        break
+      case 'KeyZ':
+        if (event.shiftKey) {
+          redo()
+        } else {
+          undo()
+        }
+        break
+      case 'KeyY':
+        redo()
         break
     }
   })

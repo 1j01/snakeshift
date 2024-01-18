@@ -3,6 +3,8 @@
     "gamepad",
     "HJKL",
     "Snakeshift",
+    "undoable",
+    "undos",
     "Vite",
     "WASD"
   ],

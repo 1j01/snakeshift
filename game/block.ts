@@ -4,10 +4,10 @@ import { CollisionLayer } from "./types"
 export class Block extends Entity {
   static readonly BASE_SIZE = 10
   constructor(
-    public x: number,
-    public y: number,
+    public x = 0,
+    public y = 0,
     public size = Block.BASE_SIZE,
-    public layer: CollisionLayer,
+    public layer = CollisionLayer.White,
   ) {
     super()
   }

@@ -13,10 +13,14 @@ export enum CollisionLayer {
   Black = 2,
 }
 
-export interface GameState {
-  controlScheme: ControlScheme
+export interface ParsedGameState {
+  format: string
+  formatVersion: number
   entities: Entity[]
+  entityTypes: string[]
+  activePlayerEntityIndex: number
 }
+export type GameState = string
 
 export interface Point {
   x: number
