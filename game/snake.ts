@@ -34,8 +34,7 @@ export default class Snake extends Entity {
   }
   drawHighlight(ctx: CanvasRenderingContext2D): void {
     const msSinceHighlight = performance.now() - this._highlightTime
-    let highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
-    const nonHighlightOutline = highlight === 0
+    const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
     const transform = ctx.getTransform()
     this._highlightCanvas.width = ctx.canvas.width
     this._highlightCanvas.height = ctx.canvas.height
@@ -46,22 +45,24 @@ export default class Snake extends Entity {
     highlightCtx.lineCap = "round"
     highlightCtx.setTransform(transform)
     // Focus highlight animation
-    highlightCtx.strokeStyle = `hsl(40, 100%, 50%)`
-    highlightCtx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
-    this._drawPath(highlightCtx, () => {
-      highlightCtx.stroke()
-    })
-    // Reduce opacity as highlight fades
-    // This is a separate step in order to avoid greater opacity where the highlight overlaps itself.
-    // To do this as a separate step, I need to draw this highlight before the restful outlines,
-    // to avoid reducing the opacity of the restful outlines.
-    highlightCtx.resetTransform()
-    highlightCtx.globalCompositeOperation = 'destination-out'
-    highlightCtx.globalAlpha = 1 - highlight
-    highlightCtx.fillStyle = "#fff"
-    highlightCtx.fillRect(0, 0, highlightCtx.canvas.width, highlightCtx.canvas.height)
-    highlightCtx.setTransform(transform)
-    highlightCtx.globalAlpha = 1
+    if (highlight > 0) {
+      highlightCtx.strokeStyle = `hsl(40, 100%, 50%)`
+      highlightCtx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
+      this._drawPath(highlightCtx, () => {
+        highlightCtx.stroke()
+      })
+      // Reduce opacity as highlight fades
+      // This is a separate step in order to avoid greater opacity where the highlight overlaps itself.
+      // To do this as a separate step, I need to draw this highlight before the restful outlines,
+      // to avoid reducing the opacity of the restful outlines.
+      highlightCtx.resetTransform()
+      highlightCtx.globalCompositeOperation = 'destination-out'
+      highlightCtx.globalAlpha = 1 - highlight
+      highlightCtx.fillStyle = "#fff"
+      highlightCtx.fillRect(0, 0, highlightCtx.canvas.width, highlightCtx.canvas.height)
+      highlightCtx.setTransform(transform)
+      highlightCtx.globalAlpha = 1
+    }
     // Restful outlines for general clarity
     // Draw these outlines underneath the variable-opacity highlight.
     // N.B. This blend mode reverses the draw order!
