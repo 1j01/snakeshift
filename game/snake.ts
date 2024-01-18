@@ -9,6 +9,8 @@ interface SnakeSegment extends Tile {
 
 export default class Snake extends Entity {
   public segments: SnakeSegment[] = []
+  private _highlightTime = -Infinity
+  static readonly HIGHLIGHT_DURATION = 500
   constructor() {
     super()
     const size = Block.BASE_SIZE
@@ -16,11 +18,20 @@ export default class Snake extends Entity {
       this.segments.push({ x: i * size, y: 0, size, layer: CollisionLayer.White })
     }
   }
+  highlight(): void {
+    this._highlightTime = performance.now()
+  }
   draw(ctx: CanvasRenderingContext2D): void {
+    const msSinceHighlight = performance.now() - this._highlightTime
+    const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
       // ctx.fillStyle = 'hsl(' + (i / this.segments.length * 360) + ', 100%, 50%)'
       ctx.fillStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
+      ctx.strokeStyle = "hsla(40, 100%, 50%, " + (highlight * 0.5) + ")"
+      ctx.lineWidth = 1
+      ctx.lineJoin = "round"
+      ctx.lineCap = "round"
       ctx.save()
       ctx.translate(segment.x + segment.size / 2, segment.y + segment.size / 2)
       ctx.scale(segment.size, segment.size)
@@ -28,9 +39,9 @@ export default class Snake extends Entity {
         Math.atan2(this.segments[1].y - segment.y, this.segments[1].x - segment.x) :
         Math.atan2(segment.y - this.segments[i - 1].y, segment.x - this.segments[i - 1].x)
       ctx.rotate(angle)
+      ctx.beginPath()
       if (i === 0) {
         // round head
-        ctx.beginPath()
         ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
         ctx.lineTo(1 / 2, -1 / 2)
         ctx.lineTo(1 / 2, 1 / 2)
@@ -38,17 +49,16 @@ export default class Snake extends Entity {
         const eyeRadius = 1 / 7
         ctx.moveTo(eyeRadius, 0)
         ctx.arc(0, 0, eyeRadius, 0, Math.PI * 2, true)
-        ctx.fill()
       } else if (i === this.segments.length - 1) {
         // triangle tail
-        ctx.beginPath()
         ctx.moveTo(-1 / 2, -1 / 2)
         ctx.lineTo(1 / 2, 0)
         ctx.lineTo(-1 / 2, 1 / 2)
-        ctx.fill()
       } else {
-        ctx.fillRect(-1 / 2, -1 / 2, 1, 1)
+        ctx.rect(-1 / 2, -1 / 2, 1, 1)
       }
+      ctx.fill()
+      ctx.stroke()
       ctx.restore()
     }
   }

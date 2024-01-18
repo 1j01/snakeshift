@@ -90,5 +90,6 @@ export function cyclePlayerControl() {
   const index = players.indexOf(activePlayer!)
   const nextIndex = (index + 1) % players.length
   activePlayer = players[nextIndex]
+  activePlayer.highlight()
 }
 
