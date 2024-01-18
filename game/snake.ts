@@ -45,23 +45,27 @@ export default class Snake extends Entity {
     highlightCtx.lineJoin = "round"
     highlightCtx.lineCap = "round"
     highlightCtx.setTransform(transform)
-    // Restful outlines for general clarity
-    this._drawPath(highlightCtx, (segment) => {
-      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
-      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
-      highlightCtx.stroke()
-    })
-    this._drawPath(highlightCtx, (segment) => {
-      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#000' : '#fff'
-      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
-      highlightCtx.stroke()
-    })
     // Focus highlight animation
     highlightCtx.strokeStyle = `hsla(40, 100%, 50%, ${highlight})`
     highlightCtx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
     this._drawPath(highlightCtx, () => {
       highlightCtx.stroke()
     })
+    // Restful outlines for general clarity
+    // Draw these outlines underneath the variable-opacity highlight.
+    // N.B. This blend mode reverses the draw order!
+    highlightCtx.globalCompositeOperation = 'destination-over'
+    this._drawPath(highlightCtx, (segment) => {
+      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#000' : '#fff'
+      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
+      highlightCtx.stroke()
+    })
+    this._drawPath(highlightCtx, (segment) => {
+      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
+      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
+      highlightCtx.stroke()
+    })
+
     // Cut out the snake's fill, leaving a clean outline.
     highlightCtx.globalCompositeOperation = 'destination-out'
     this._drawPath(highlightCtx, () => {
