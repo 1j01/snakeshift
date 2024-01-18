@@ -34,14 +34,14 @@ export default class Snake extends Entity {
   move(dirX: number, dirY: number): void {
     const deltaX = dirX * this.segments[0].size
     const deltaY = dirY * this.segments[0].size
-    const head = this.segments[0]
-    head.x += deltaX
-    head.y += deltaY
     for (let i = this.segments.length - 1; i > 0; i--) {
       const segment = this.segments[i]
       const prev = this.segments[i - 1]
       segment.x = prev.x
       segment.y = prev.y
     }
+    const head = this.segments[0]
+    head.x += deltaX
+    head.y += deltaY
   }
 }
