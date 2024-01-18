@@ -1,4 +1,4 @@
-import { activePlayer, redo, undo, undoable } from './game-state'
+import { activePlayer, cyclePlayerControl, entities, redo, undo, undoable } from './game-state'
 import { ControlScheme } from './types'
 
 export function handleInput(
@@ -138,6 +138,11 @@ export function handleInput(
         break
       case 'KeyY':
         redo()
+        break
+      case 'Tab':
+      case 'ShiftLeft':
+      case 'ShiftRight':
+        cyclePlayerControl()
         break
     }
   })

@@ -83,3 +83,12 @@ export function initLevel() {
   }
   entities.push(otherSnake)
 }
+
+export function cyclePlayerControl() {
+  undoable()
+  const players = entities.filter(e => e instanceof Snake) as Snake[]
+  const index = players.indexOf(activePlayer!)
+  const nextIndex = (index + 1) % players.length
+  activePlayer = players[nextIndex]
+}
+
