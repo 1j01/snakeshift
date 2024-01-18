@@ -42,40 +42,35 @@ export default class Snake extends Entity {
     const highlightCtx = this._highlightCanvas.getContext('2d')!
     highlightCtx.save()
     highlightCtx.clearRect(0, 0, highlightCtx.canvas.width, highlightCtx.canvas.height)
-    highlightCtx.strokeStyle = "hsl(40, 100%, 50%)"
-    highlightCtx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
     highlightCtx.lineJoin = "round"
     highlightCtx.lineCap = "round"
     highlightCtx.setTransform(transform)
-    if (nonHighlightOutline) {
-      this._drawPath(highlightCtx, (segment) => {
-        highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
-        highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
-        highlight = 1
-        highlightCtx.stroke()
-      })
-      this._drawPath(highlightCtx, (segment) => {
-        highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#000' : '#fff'
-        highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
-        highlight = 1
-        highlightCtx.stroke()
-      })
-    } else {
-      this._drawPath(highlightCtx, () => {
-        highlightCtx.stroke()
-      })
-    }
+    // Restful outlines for general clarity
+    this._drawPath(highlightCtx, (segment) => {
+      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
+      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
+      highlightCtx.stroke()
+    })
+    this._drawPath(highlightCtx, (segment) => {
+      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#000' : '#fff'
+      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
+      highlightCtx.stroke()
+    })
+    // Focus highlight animation
+    highlightCtx.strokeStyle = `hsla(40, 100%, 50%, ${highlight})`
+    highlightCtx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
+    this._drawPath(highlightCtx, () => {
+      highlightCtx.stroke()
+    })
     // Cut out the snake's fill, leaving a clean outline.
     highlightCtx.globalCompositeOperation = 'destination-out'
     this._drawPath(highlightCtx, () => {
       highlightCtx.fill()
     })
     highlightCtx.restore()
-    ctx.globalAlpha = highlight
     ctx.resetTransform()
     ctx.drawImage(this._highlightCanvas, 0, 0)
     ctx.setTransform(transform)
-    ctx.globalAlpha = 1
   }
   draw(ctx: CanvasRenderingContext2D): void {
     // body
