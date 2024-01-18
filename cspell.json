@@ -1,0 +1,16 @@
+{
+  "words": [
+    "gamepad",
+    "HJKL",
+    "Snakeshift",
+    "Vite",
+    "WASD"
+  ],
+  "ignorePaths": [
+    "node_modules",
+    ".history",
+    "dist",
+    "*.svg",
+    "*.sketch"
+  ]
+}
