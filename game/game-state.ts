@@ -75,7 +75,7 @@ export function deserialize(state: GameState) {
 
 export function initLevel() {
   entities.length = 0
-  const size = 10
+  const size = Block.BASE_SIZE
   for (let x = 0; x < 16; x++) {
     for (let y = 8; y < 16; y++) {
       entities.push(new Block(x * size, y * size, size, CollisionLayer.White))
