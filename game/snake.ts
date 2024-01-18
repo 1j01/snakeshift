@@ -34,8 +34,8 @@ export default class Snake extends Entity {
   }
   drawHighlight(ctx: CanvasRenderingContext2D): void {
     const msSinceHighlight = performance.now() - this._highlightTime
-    const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
-    if (highlight === 0) return
+    let highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
+    const nonHighlightOutline = highlight === 0
     const transform = ctx.getTransform()
     this._highlightCanvas.width = ctx.canvas.width
     this._highlightCanvas.height = ctx.canvas.height
@@ -48,7 +48,18 @@ export default class Snake extends Entity {
     highlightCtx.lineCap = "round"
     highlightCtx.setTransform(transform)
     this._drawPath(highlightCtx, () => {
-      highlightCtx.stroke()
+      if (nonHighlightOutline) {
+        highlightCtx.strokeStyle = "white"
+        highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
+        highlight = 1
+        highlightCtx.stroke()
+        highlightCtx.strokeStyle = "black"
+        highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
+        highlight = 1
+        highlightCtx.stroke()
+      } else {
+        highlightCtx.stroke()
+      }
     })
     // Cut out the snake's fill, leaving a clean outline.
     highlightCtx.globalCompositeOperation = 'destination-out'
@@ -63,10 +74,36 @@ export default class Snake extends Entity {
     ctx.globalAlpha = 1
   }
   draw(ctx: CanvasRenderingContext2D): void {
+    // body
     this._drawPath(ctx, (segment) => {
       ctx.fillStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
       ctx.fill()
     })
+
+    const head = this.segments[0]
+    ctx.save()
+    ctx.translate(head.x + head.size / 2, head.y + head.size / 2)
+    ctx.scale(head.size, head.size)
+    const angle = Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x)
+    ctx.rotate(angle)
+
+    // eye
+    const eyeRadius = 1 / 7
+    ctx.beginPath()
+    ctx.moveTo(eyeRadius, 0)
+    ctx.arc(0, 0, eyeRadius, 0, Math.PI * 2, true)
+    ctx.fillStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
+    ctx.fill()
+    // tongue
+    // TODO
+    // ctx.beginPath()
+    // ctx.moveTo(0, 0)
+    // ctx.lineTo(-1 / 2, 0)
+    // ctx.strokeStyle = '#f00'
+    // ctx.lineWidth = 1 / 7
+    // ctx.stroke()
+
+    ctx.restore()
   }
   private _drawPath(ctx: CanvasRenderingContext2D, draw: (segment: SnakeSegment) => void): void {
     for (let i = 0; i < this.segments.length; i++) {
@@ -85,13 +122,9 @@ export default class Snake extends Entity {
         ctx.lineTo(1 / 2, -1 / 2)
         ctx.lineTo(1 / 2, 1 / 2)
         ctx.closePath()
-        // eye
-        // TODO: draw separately so if two snake heads overlap,
-        // the eye of the top one is still visible.
-        // Right now I'm drawing it as a hole.
-        const eyeRadius = 1 / 7
-        ctx.moveTo(eyeRadius, 0)
-        ctx.arc(0, 0, eyeRadius, 0, Math.PI * 2, true)
+        // eye and tongue are drawn separately
+        // If the eye was rendered as a hole in the head, then
+        // when two snake heads overlapped, the eye would be invisible.
       } else if (i === this.segments.length - 1) {
         // triangle tail
         // ctx.moveTo(-1 / 2, -1 / 2)
