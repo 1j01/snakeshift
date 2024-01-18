@@ -1,3 +1,4 @@
+import { Block } from "./block"
 import Entity from "./entity"
 import { entities } from "./game-state"
 import { CollisionLayer, Tile } from "./types"
@@ -10,7 +11,7 @@ export default class Snake extends Entity {
   public segments: SnakeSegment[] = []
   constructor() {
     super()
-    const size = 10
+    const size = Block.BASE_SIZE
     for (let i = 0; i < 10; i++) {
       this.segments.push({ x: i * size, y: 0, size, layer: CollisionLayer.White })
     }
@@ -67,6 +68,11 @@ export default class Snake extends Entity {
         // This snake's tail will be leaving the space, so ignore it
         // but don't ignore any other snake's tail.
         const there = entity.at(x, y, true, entity !== this)
+        if (there === head.layer) {
+          return false
+        }
+      } else if (entity.at) {
+        const there = entity.at(x, y)
         if (there === head.layer) {
           return false
         }
