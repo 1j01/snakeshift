@@ -34,6 +34,10 @@ export default class Snake extends Entity {
         ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
         ctx.lineTo(1 / 2, -1 / 2)
         ctx.lineTo(1 / 2, 1 / 2)
+        // eye
+        const eyeRadius = 1 / 7
+        ctx.moveTo(eyeRadius, 0)
+        ctx.arc(0, 0, eyeRadius, 0, Math.PI * 2, true)
         ctx.fill()
       } else if (i === this.segments.length - 1) {
         // triangle tail
