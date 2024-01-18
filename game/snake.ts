@@ -63,22 +63,17 @@ export default class Snake extends Entity {
     const deltaY = dirY * head.size
     const x = head.x + deltaX
     const y = head.y + deltaY
+    let foremost = CollisionLayer.Black
     for (const entity of entities) {
       if (entity instanceof Snake) {
         // This snake's tail will be leaving the space, so ignore it
         // but don't ignore any other snake's tail.
-        const there = entity.at(x, y, true, entity !== this)
-        if (there === head.layer) {
-          return false
-        }
+        foremost = entity.at(x, y, true, entity !== this) || foremost
       } else if (entity.at) {
-        const there = entity.at(x, y)
-        if (there === head.layer) {
-          return false
-        }
+        foremost = entity.at(x, y) || foremost
       }
     }
-    return true
+    return foremost !== head.layer
   }
   move(dirX: number, dirY: number): void {
     const head = this.segments[0]
