@@ -1,4 +1,5 @@
-import { entities } from "./game-state"
+import { Block } from "./block"
+import { entities, levelInfo } from "./game-state"
 import Snake from "./snake"
 
 export const canvas = document.createElement('canvas')
@@ -20,6 +21,11 @@ export function draw() {
 
   ctx.save()
   ctx.translate(canvas.width / 2, canvas.height / 2)
+  const viewWidth = levelInfo.width * Block.BASE_SIZE
+  const viewHeight = levelInfo.height * Block.BASE_SIZE
+  const scale = Math.min(canvas.width / viewWidth, canvas.height / viewHeight)
+  ctx.scale(scale, scale)
+  ctx.translate(-viewWidth / 2, -viewHeight / 2)
   for (const entity of entities) {
     entity.draw?.(ctx)
   }

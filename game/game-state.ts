@@ -5,6 +5,14 @@ import { CollisionLayer, GameState, ParsedGameState } from "./types"
 
 export const entities: Entity[] = []
 
+export const levelInfo = {
+  // name: "Level 1",
+  // description: "This is a level.",
+  // par: 10,
+  width: 16,
+  height: 16,
+}
+
 // Note: entities can be reordered, so this is safer than
 // storing the index within entities, which is only done for serialization.
 // An ID could be used instead... I've now added an ID...

@@ -2,7 +2,7 @@ import Entity from "./entity"
 import { CollisionLayer } from "./types"
 
 export class Block extends Entity {
-  static readonly BASE_SIZE = 10
+  static readonly BASE_SIZE = 1
   constructor(
     public x = 0,
     public y = 0,
