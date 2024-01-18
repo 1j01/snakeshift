@@ -30,3 +30,7 @@ export interface Point {
 export interface Tile extends Point {
   size: number
 }
+
+export interface Move extends Point {
+  valid: boolean
+}

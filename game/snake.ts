@@ -1,7 +1,7 @@
 import { Block } from "./block"
 import Entity from "./entity"
 import { entities } from "./game-state"
-import { CollisionLayer, Tile } from "./types"
+import { CollisionLayer, Move, Tile } from "./types"
 
 interface SnakeSegment extends Tile {
   layer: CollisionLayer
@@ -57,7 +57,7 @@ export default class Snake extends Entity {
     }
     return CollisionLayer.None
   }
-  canMove(dirX: number, dirY: number): boolean {
+  analyzeMove(dirX: number, dirY: number): Move {
     const head = this.segments[0]
     const deltaX = dirX * head.size
     const deltaY = dirY * head.size
@@ -73,19 +73,21 @@ export default class Snake extends Entity {
         foremost = entity.at(x, y) || foremost
       }
     }
-    return foremost !== head.layer
+    return {
+      x,
+      y,
+      valid: foremost !== head.layer
+    }
   }
-  move(dirX: number, dirY: number): void {
+  takeMove(move: Move): void {
     const head = this.segments[0]
-    const deltaX = dirX * head.size
-    const deltaY = dirY * head.size
     for (let i = this.segments.length - 1; i > 0; i--) {
       const segment = this.segments[i]
       const prev = this.segments[i - 1]
       segment.x = prev.x
       segment.y = prev.y
     }
-    head.x += deltaX
-    head.y += deltaY
+    head.x = move.x
+    head.y = move.y
   }
 }

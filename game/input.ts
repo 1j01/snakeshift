@@ -1,5 +1,5 @@
 import { activePlayer, redo, undo, undoable } from './game-state'
-import { ControlScheme, Tile } from './types'
+import { ControlScheme } from './types'
 
 export function handleInput(
   eventTarget: EventTarget,
@@ -96,9 +96,10 @@ export function handleInput(
   function move(dx: number, dy: number, controlScheme = ControlScheme.KeyboardAbsoluteDirection) {
     // TODO: maybe show highlight for invalid move even though normally absolute direction doesn't use a highlight
     if (!activePlayer) return
-    if (!activePlayer.canMove(dx, dy)) return
+    const move = activePlayer.analyzeMove(dx, dy)
+    if (!move.valid) return
     undoable()
-    activePlayer.move(dx, dy)
+    activePlayer.takeMove(move)
   }
 
   addEventListener('keydown', (event: KeyboardEvent) => {
