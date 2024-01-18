@@ -52,10 +52,11 @@ export default class Snake extends Entity {
     return false
   }
   canMove(dirX: number, dirY: number): boolean {
-    const deltaX = dirX * this.segments[0].size
-    const deltaY = dirY * this.segments[0].size
-    const x = this.segments[0].x + deltaX
-    const y = this.segments[0].y + deltaY
+    const head = this.segments[0]
+    const deltaX = dirX * head.size
+    const deltaY = dirY * head.size
+    const x = head.x + deltaX
+    const y = head.y + deltaY
     for (const entity of entities) {
       if (entity instanceof Snake) {
         // This snake's tail will be leaving the space, so ignore it
@@ -68,15 +69,15 @@ export default class Snake extends Entity {
     return true
   }
   move(dirX: number, dirY: number): void {
-    const deltaX = dirX * this.segments[0].size
-    const deltaY = dirY * this.segments[0].size
+    const head = this.segments[0]
+    const deltaX = dirX * head.size
+    const deltaY = dirY * head.size
     for (let i = this.segments.length - 1; i > 0; i--) {
       const segment = this.segments[i]
       const prev = this.segments[i - 1]
       segment.x = prev.x
       segment.y = prev.y
     }
-    const head = this.segments[0]
     head.x += deltaX
     head.y += deltaY
   }
