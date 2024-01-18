@@ -10,6 +10,7 @@ interface SnakeSegment extends Tile {
 export default class Snake extends Entity {
   public segments: SnakeSegment[] = []
   private _highlightTime = -Infinity
+  private _highlightCanvas = document.createElement('canvas')
   static readonly HIGHLIGHT_DURATION = 500
   constructor() {
     super()
@@ -24,13 +25,32 @@ export default class Snake extends Entity {
   drawHighlight(ctx: CanvasRenderingContext2D): void {
     const msSinceHighlight = performance.now() - this._highlightTime
     const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
-    ctx.strokeStyle = "hsla(40, 100%, 50%, " + (highlight * 0.5) + ")"
-    ctx.lineWidth = 1
-    ctx.lineJoin = "round"
-    ctx.lineCap = "round"
-    this._drawPath(ctx, () => {
-      ctx.stroke()
+    if (highlight === 0) return
+    this._highlightCanvas.width = ctx.canvas.width
+    this._highlightCanvas.height = ctx.canvas.height
+    const highlightCtx = this._highlightCanvas.getContext('2d')!
+    highlightCtx.save()
+    highlightCtx.clearRect(0, 0, highlightCtx.canvas.width, highlightCtx.canvas.height)
+    highlightCtx.strokeStyle = "hsl(40, 100%, 50%)"
+    highlightCtx.lineWidth = 1
+    highlightCtx.lineJoin = "round"
+    highlightCtx.lineCap = "round"
+    const transform = ctx.getTransform()
+    highlightCtx.setTransform(transform)
+    this._drawPath(highlightCtx, () => {
+      highlightCtx.stroke()
     })
+    // Cut out the snake's fill, leaving a clean outline.
+    highlightCtx.globalCompositeOperation = 'destination-out'
+    this._drawPath(highlightCtx, () => {
+      highlightCtx.fill()
+    })
+    highlightCtx.restore()
+    ctx.globalAlpha = highlight
+    ctx.resetTransform()
+    ctx.drawImage(this._highlightCanvas, 0, 0)
+    ctx.setTransform(transform)
+    ctx.globalAlpha = 1
   }
   draw(ctx: CanvasRenderingContext2D): void {
     this._drawPath(ctx, (segment) => {
