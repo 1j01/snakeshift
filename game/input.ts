@@ -130,6 +130,11 @@ export function handleInput(
         move(0, 1)
         break
       case 'KeyZ':
+        // Hm, shift cycling players breaks this.
+        // I could specially handle it, preserving redos in a separate stack
+        // until you release shift, or I could make it not cycle players
+        // until you release shift, or I could remove shift cycling players,
+        // or just say you need to use Y to redo.
         if (event.shiftKey) {
           redo()
         } else {
