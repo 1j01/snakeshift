@@ -5,6 +5,8 @@ import { CollisionLayer, GameState, ParsedGameState } from "./types"
 
 export const entities: Entity[] = []
 
+// Note: entities can be reordered, so this is safer than
+// storing the index within entities, which is only done for serialization.
 export let activePlayer: Snake | undefined = undefined
 
 const undos: GameState[] = []

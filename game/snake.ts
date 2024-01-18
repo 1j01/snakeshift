@@ -64,18 +64,28 @@ export default class Snake extends Entity {
     const x = head.x + deltaX
     const y = head.y + deltaY
     let foremost = CollisionLayer.Black
+    const entitiesThere: Entity[] = []
     for (const entity of entities) {
       if (entity instanceof Snake) {
         // This snake's tail will be leaving the space, so ignore it
         // but don't ignore any other snake's tail.
-        foremost = entity.at(x, y, true, entity !== this) || foremost
+        const there = entity.at(x, y, true, entity !== this)
+        if (there) {
+          foremost = there
+          entitiesThere.push(entity)
+        }
       } else if (entity.at) {
-        foremost = entity.at(x, y) || foremost
+        const there = entity.at(x, y)
+        if (there) {
+          foremost = there
+          entitiesThere.push(entity)
+        }
       }
     }
     return {
       x,
       y,
+      entitiesThere,
       valid: foremost !== head.layer
     }
   }
@@ -89,5 +99,17 @@ export default class Snake extends Entity {
     }
     head.x = move.x
     head.y = move.y
+    // Sort entities so this is on top of anything it's moving onto.
+    // This handles the visual as well as making it so
+    // you can't double back while inside an inverse snake.
+    const ontoIndices = move.entitiesThere.map(e => entities.indexOf(e))
+    const maxIndex = Math.max(...ontoIndices)
+    const thisIndex = entities.indexOf(this)
+    if (thisIndex < maxIndex) {
+      // Add before removing so relevant indices
+      // stay valid for both splice calls.
+      entities.splice(maxIndex + 1, 0, this)
+      entities.splice(thisIndex, 1)
+    }
   }
 }

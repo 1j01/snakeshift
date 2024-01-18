@@ -22,6 +22,10 @@ export interface ParsedGameState {
 }
 export type GameState = string
 
+// Note: Interfaces are better than classes for serialization.
+// No special constructor handling! Still need to worry about
+// circular/multiple references, though.
+
 export interface Point {
   x: number
   y: number
@@ -33,4 +37,5 @@ export interface Tile extends Point {
 
 export interface Move extends Point {
   valid: boolean
+  entitiesThere: Entity[]
 }
