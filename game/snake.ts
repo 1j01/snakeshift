@@ -19,6 +19,13 @@ export default class Snake extends Entity {
       this.segments.push({ x: i * size, y: 0, size, layer: CollisionLayer.White })
     }
   }
+  toJSON(): object {
+    // Must exclude _highlightCanvas; by default it will be serialized
+    // as an empty object, and will overwrite the canvas when deserialized.
+    return {
+      segments: this.segments,
+    }
+  }
   highlight(): void {
     this._highlightTime = performance.now()
   }
