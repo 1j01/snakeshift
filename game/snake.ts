@@ -132,21 +132,23 @@ export default class Snake extends Entity {
     // tongue
     const msSinceHighlight = performance.now() - this._highlightTime
     const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
-    ctx.beginPath()
-    ctx.translate(-1 / 2, 0)
-    ctx.scale(Math.pow(Math.sin(highlight), 0.2), 1)
-    ctx.rotate(Math.sin(performance.now() / 50) * Math.PI / 8)
-    ctx.moveTo(0, 0)
-    ctx.translate(-0.5, 0)
-    ctx.lineTo(0, 0)
-    ctx.rotate(Math.sin(performance.now() / 50 - 1.5) * Math.PI / 8)
-    ctx.lineTo(-0.4, -0.2)
-    ctx.lineTo(0, 0)
-    ctx.lineTo(-0.4, 0.2)
-    ctx.strokeStyle = '#fff'
-    ctx.globalCompositeOperation = 'exclusion'
-    ctx.lineWidth = 1 / 12
-    ctx.stroke()
+    if (highlight > 0) {
+      ctx.beginPath()
+      ctx.translate(-1 / 2, 0)
+      ctx.scale(Math.pow(Math.sin(highlight), 0.2), 1)
+      ctx.rotate(Math.sin(performance.now() / 50) * Math.PI / 8)
+      ctx.moveTo(0, 0)
+      ctx.translate(-0.5, 0)
+      ctx.lineTo(0, 0)
+      ctx.rotate(Math.sin(performance.now() / 50 - 1.5) * Math.PI / 8)
+      ctx.lineTo(-0.4, -0.2)
+      ctx.lineTo(0, 0)
+      ctx.lineTo(-0.4, 0.2)
+      ctx.strokeStyle = '#fff'
+      ctx.globalCompositeOperation = 'exclusion'
+      ctx.lineWidth = 1 / 12
+      ctx.stroke()
+    }
 
     ctx.restore()
   }
