@@ -9,11 +9,15 @@ interface SnakeSegment extends Tile {
 }
 
 export default class Snake extends Entity {
+  // When adding new properties, remember to update toJSON()!
   public segments: SnakeSegment[] = []
   public id: string = crypto.randomUUID()
+  public growOnNextMove = false
+
   private _highlightTime = -Infinity
   private _highlightCanvas = document.createElement('canvas')
   static readonly HIGHLIGHT_DURATION = 500
+
   constructor() {
     super()
     const size = Block.BASE_SIZE
@@ -27,6 +31,7 @@ export default class Snake extends Entity {
     return {
       id: this.id,
       segments: this.segments,
+      growOnNextMove: this.growOnNextMove,
     }
   }
   highlight(): void {
@@ -207,7 +212,7 @@ export default class Snake extends Entity {
     const deltaY = dirY * head.size
     const x = head.x + deltaX
     const y = head.y + deltaY
-    const ahead = this._hitTestAllEntities(x, y, false)
+    const ahead = this._hitTestAllEntities(x, y, this.growOnNextMove)
     const trail = this._hitTestAllEntities(tail.x, tail.y, true)
     // console.log(ahead, trail)
     // TODO: prevent overlapped snake doubling back on itself
@@ -257,6 +262,10 @@ export default class Snake extends Entity {
     }
   }
   takeMove(move: Move): void {
+    if (this.growOnNextMove) {
+      this.grow()
+      this.growOnNextMove = false
+    }
     const head = this.segments[0]
     for (let i = this.segments.length - 1; i > 0; i--) {
       const segment = this.segments[i]
@@ -287,14 +296,13 @@ export default class Snake extends Entity {
         entity.y === move.y
       ) {
         entities.splice(entities.indexOf(entity), 1)
-        this.grow()
+        this.growOnNextMove = true
       }
     }
   }
   grow(): void {
-    // This only works because SnakeSegment is a flat object.
-    // TODO: grow on next move, not immediately
     const tail = this.segments[this.segments.length - 1]
+    // This only works because SnakeSegment is a flat object.
     const newTail = { ...tail }
     this.segments.push(newTail)
   }
