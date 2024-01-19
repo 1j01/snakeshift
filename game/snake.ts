@@ -165,8 +165,17 @@ export default class Snake extends Entity {
         // quadratic tapered tail
         // - smoother, looks better
         // - fatter, makes it clearer what color the space counts as
+        // ctx.moveTo(-1 / 2, -1 / 2)
+        // ctx.quadraticCurveTo(1.7, 0, -1 / 2, 1 / 2)
+        // double quadratic tapered tail
+        // - smooth join to body
+        // - adjustable to be fatter for logical clarity or pointier for aesthetics
         ctx.moveTo(-1 / 2, -1 / 2)
-        ctx.quadraticCurveTo(1.7, 0, -1 / 2, 1 / 2)
+        const extent = .5
+        const pointiness = 0
+        ctx.quadraticCurveTo(extent * (1 - pointiness), -1 / 2, extent, 0)
+        ctx.quadraticCurveTo(extent * (1 - pointiness), 1 / 2, -1 / 2, 1 / 2)
+        ctx.closePath()
       } else {
         ctx.rect(-1 / 2, -1 / 2, 1, 1)
       }

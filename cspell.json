@@ -3,6 +3,7 @@
     "collidable",
     "gamepad",
     "HJKL",
+    "pointiness",
     "Snakeshift",
     "undoable",
     "undos",
