@@ -34,7 +34,7 @@ export default class Snake extends Entity {
   }
   draw(ctx: CanvasRenderingContext2D): void {
     // body
-    this._drawPath(ctx, (segment) => {
+    this._drawBodyPath(ctx, (segment) => {
       ctx.fillStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
       ctx.fill()
     })
@@ -43,14 +43,47 @@ export default class Snake extends Entity {
     // eye and tongue
     // Tongue should always go on top of other snakes.
     this._drawHeadDetails(ctx)
+    // Restful outlines for general clarity
+    this._drawBodyOutline(ctx, (highlightCtx, segment, transform) => {
+      // highlightCtx.setLineDash([0.1, 0.2])
+      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
+      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
+      highlightCtx.stroke()
+    })
+    this._drawBodyOutline(ctx, (highlightCtx, segment, transform) => {
+      // highlightCtx.setLineDash([0.1, 0.2])
+      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#000' : '#fff'
+      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
+      highlightCtx.stroke()
+    })
   }
   draw3(ctx: CanvasRenderingContext2D): void {
     // control switching highlight
-    this._drawHighlight(ctx)
-  }
-  private _drawHighlight(ctx: CanvasRenderingContext2D): void {
     const msSinceHighlight = performance.now() - this._highlightTime
     const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
+    if (highlight > 0) {
+      this._drawBodyOutline(ctx, (highlightCtx, segment, transform) => {
+        highlightCtx.strokeStyle = `hsl(40, 100%, 50%)`
+        highlightCtx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
+        highlightCtx.stroke()
+      }, (highlightCtx, transform) => {
+        // Reduce opacity as highlight fades
+        // This is a separate step in order to avoid greater opacity where the highlight overlaps itself.
+        highlightCtx.resetTransform()
+        highlightCtx.globalCompositeOperation = 'destination-out'
+        highlightCtx.globalAlpha = 1 - highlight
+        highlightCtx.fillStyle = "#fff"
+        highlightCtx.fillRect(0, 0, highlightCtx.canvas.width, highlightCtx.canvas.height)
+        highlightCtx.setTransform(transform)
+        highlightCtx.globalAlpha = 1
+      })
+    }
+  }
+  private _drawBodyOutline(
+    ctx: CanvasRenderingContext2D,
+    drawSegment: (ctx: CanvasRenderingContext2D, segment: SnakeSegment, transform: DOMMatrix) => void,
+    postDraw?: (ctx: CanvasRenderingContext2D, transform: DOMMatrix) => void,
+  ): void {
     const transform = ctx.getTransform()
     this._highlightCanvas.width = ctx.canvas.width
     this._highlightCanvas.height = ctx.canvas.height
@@ -60,50 +93,21 @@ export default class Snake extends Entity {
     highlightCtx.lineJoin = "round"
     highlightCtx.lineCap = "round"
     highlightCtx.setTransform(transform)
-    // Focus highlight animation
-    if (highlight > 0) {
-      highlightCtx.strokeStyle = `hsl(40, 100%, 50%)`
-      highlightCtx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
-      this._drawPath(highlightCtx, () => {
-        highlightCtx.stroke()
-      })
-      // Reduce opacity as highlight fades
-      // This is a separate step in order to avoid greater opacity where the highlight overlaps itself.
-      // To do this as a separate step, I need to draw this highlight before the restful outlines,
-      // to avoid reducing the opacity of the restful outlines.
-      highlightCtx.resetTransform()
-      highlightCtx.globalCompositeOperation = 'destination-out'
-      highlightCtx.globalAlpha = 1 - highlight
-      highlightCtx.fillStyle = "#fff"
-      highlightCtx.fillRect(0, 0, highlightCtx.canvas.width, highlightCtx.canvas.height)
-      highlightCtx.setTransform(transform)
-      highlightCtx.globalAlpha = 1
-    }
-    // Restful outlines for general clarity
-    // Draw these outlines underneath the variable-opacity highlight.
-    // N.B. This blend mode reverses the draw order!
-    highlightCtx.globalCompositeOperation = 'destination-over'
-    // highlightCtx.setLineDash([0.1, 0.2])
-    this._drawPath(highlightCtx, (segment) => {
-      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#000' : '#fff'
-      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
-      highlightCtx.stroke()
+    this._drawBodyPath(highlightCtx, (segment) => {
+      drawSegment(highlightCtx, segment, transform)
     })
-    this._drawPath(highlightCtx, (segment) => {
-      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
-      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
-      highlightCtx.stroke()
-    })
+    postDraw?.(highlightCtx, transform)
 
     // Cut out the snake's fill, leaving a clean outline.
     highlightCtx.globalCompositeOperation = 'destination-out'
-    this._drawPath(highlightCtx, () => {
+    this._drawBodyPath(highlightCtx, () => {
       highlightCtx.fill()
     })
     highlightCtx.restore()
     ctx.resetTransform()
     ctx.drawImage(this._highlightCanvas, 0, 0)
     ctx.setTransform(transform)
+
   }
   private _drawHeadDetails(ctx: CanvasRenderingContext2D): void {
     const head = this.segments[0]
@@ -141,7 +145,7 @@ export default class Snake extends Entity {
 
     ctx.restore()
   }
-  private _drawPath(ctx: CanvasRenderingContext2D, draw: (segment: SnakeSegment) => void): void {
+  private _drawBodyPath(ctx: CanvasRenderingContext2D, draw: (segment: SnakeSegment) => void): void {
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
       ctx.save()
