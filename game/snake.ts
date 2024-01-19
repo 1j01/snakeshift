@@ -111,8 +111,12 @@ export default class Snake extends Entity {
     ctx.fillStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
     ctx.fill()
     // tongue
+    const msSinceHighlight = performance.now() - this._highlightTime
+    const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
     ctx.beginPath()
     ctx.translate(-1 / 2, 0)
+    ctx.scale(Math.pow(Math.sin(highlight), 0.2), 1)
+    ctx.rotate(Math.sin(performance.now() / 50) * Math.PI / 8)
     ctx.moveTo(0, 0)
     ctx.lineTo(-0.5, 0)
     ctx.lineTo(-0.9, -0.2)
