@@ -14,17 +14,32 @@ body {
 }
 
 .hover-effect {
-  cursor: pointer;
+  position: absolute;
   border: 5px solid yellow;
   border-radius: 5px;
-  box-shadow: 0 0 10px 5px yellow;
+  /* box-shadow: 0 0 10px 5px yellow; */
   box-sizing: border-box;
+  pointer-events: none;
+  /* cursor: pointer; */
+  transform: scale(1.1);
+}
+
+.hover-effect.active-effect {
+  transform: scale(1);
+}
+
+.hover-effect:not(.valid) {
+  border: 5px solid red;
+  /* box-shadow: 0 0 10px 5px red; */
+  /* cursor: not-allowed; */
 }
 
 #tao-te-ching-quote {
   position: absolute;
   top: 0;
   left: 0;
+  pointer-events: none;
+  user-select: none;
 }
 
 #tao-te-ching-quote h2 {

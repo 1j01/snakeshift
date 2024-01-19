@@ -229,7 +229,11 @@ export default class Snake extends Entity {
     // Well, you can normally pass through it, so for consistency it should be allowed
     // (unless I go wholely the other way, but that's still less consistent overall, considering sideways entrance/exiting)
     return {
-      valid: ahead.topLayer !== head.layer && trail.topLayer === head.layer,
+      valid:
+        (dirX === 0 || dirY === 0) &&
+        (Math.abs(dirX) === 1 || Math.abs(dirY) === 1) &&
+        ahead.topLayer !== head.layer &&
+        trail.topLayer === head.layer,
       x,
       y,
       entitiesThere: ahead.entitiesThere,

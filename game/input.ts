@@ -1,36 +1,50 @@
-import { activePlayer, cyclePlayerControl, entities, redo, undo, undoable } from './game-state'
-import { ControlScheme } from './types'
+import { activePlayer, cyclePlayerControl, redo, undo, undoable } from './game-state'
+import { pageToWorldTile, tileOnPage } from './rendering'
+import { ControlScheme, Tile } from './types'
+
+function sameTile(a: Tile, b: Tile) {
+  return a.x === b.x && a.y === b.y && a.size === b.size
+}
+
+// function updateGameState(update: any) {
+// }
 
 export function handleInput(
-  eventTarget: EventTarget,
+  eventTarget: HTMLElement,
 ) {
 
   // --------------------
   // Highlight management
   // --------------------
 
-  // let hoverEffect: HTMLDivElement | undefined = undefined
-  // function setHighlight(tile: Tile | undefined) {
-  //   if (hoverEffect) {
-  //     hoverEffect.remove()
-  //     hoverEffect = undefined
-  //   }
-  //   if (tile) {
-  //     hoverEffect = document.createElement('div')
-  //     hoverEffect.classList.add('hover-effect')
-  //     hoverEffect.style.left = `${tile.x}px`
-  //     hoverEffect.style.top = `${tile.y}px`
-  //     hoverEffect.style.width = `${tile.size}px`
-  //     hoverEffect.style.height = `${tile.size}px`
-  //     document.body.appendChild(hoverEffect)
-  //     let pressed = false
-  //     if (pointerDownCoordinates) {
-  //       pressed = tile.equals(pointerDownCoordinates)
-  //     }
-  //     hoverEffect?.classList.toggle("active-effect", pressed)
-  //     hoverEffect?.classList.toggle("valid", player.isValidMove(tile))
-  //   }
-  // }
+  let hoverEffect: HTMLDivElement | undefined = undefined
+  function setHighlight(tile: Tile | undefined) {
+    if (hoverEffect) {
+      hoverEffect.remove()
+      hoverEffect = undefined
+    }
+    if (tile && activePlayer) {
+      const onPage = tileOnPage(tile)
+      hoverEffect = document.createElement('div')
+      hoverEffect.classList.add('hover-effect')
+      hoverEffect.style.left = `${onPage.x}px`
+      hoverEffect.style.top = `${onPage.y}px`
+      hoverEffect.style.width = `${onPage.size}px`
+      hoverEffect.style.height = `${onPage.size}px`
+      document.body.appendChild(hoverEffect)
+      let pressed = false
+      if (pointerDownTile) {
+        pressed = sameTile(tile, pointerDownTile)
+      }
+      hoverEffect?.classList.toggle("active-effect", pressed)
+      const dirX = Math.sign(tile.x - activePlayer.segments[0].x)
+      const dirY = Math.sign(tile.y - activePlayer.segments[0].y)
+      // TODO: handle tile size > 1?
+      const adjacent = sameTile(tile, { x: activePlayer.segments[0].x + dirX, y: activePlayer.segments[0].y + dirY, size: 1 })
+      const move = activePlayer.analyzeMove(dirX, dirY)
+      hoverEffect?.classList.toggle("valid", move.valid && adjacent)
+    }
+  }
 
   // onUpdate(['playerCoordinates', 'playerFacing', 'controlScheme'], ({ playerCoordinates, playerFacing, controlScheme }) => {
   //   const aheadTile = neighborOf(new Tile(playerCoordinates), playerFacing)
@@ -45,49 +59,55 @@ export function handleInput(
   // Mouse/pen/touch support
   // -----------------------
 
-  // let pointerDownCoordinates: TupleCoordinates | null = null
-  // let mouseHoveredTile: Tile | undefined = undefined
-  // eventTarget.addEventListener('pointerdown', (event: MouseEvent) => {
-  //   pointerDownCoordinates = pageToWorld(event.target!)
-  //   if (pointerDownCoordinates) {
-  //     updateGameState({ controlScheme: ControlScheme.Pointer })
-  //     setHighlight(mouseHoveredTile)
-  //   }
-  // })
+  let pointerDownTile: Tile | undefined = undefined
+  let mouseHoveredTile: Tile | undefined = undefined
+  eventTarget.addEventListener('pointerdown', (event: MouseEvent) => {
+    pointerDownTile = pageToWorldTile(event)
+    if (pointerDownTile) {
+      // updateGameState({ controlScheme: ControlScheme.Pointer })
+      setHighlight(mouseHoveredTile)
+    }
+  })
 
-  // eventTarget.addEventListener('pointerup', (event: MouseEvent) => {
-  //   const coordinates = pageToWorld(event.target!)
-  //   if (
-  //     coordinates &&
-  //     pointerDownCoordinates &&
-  //     coordinates[0] === pointerDownCoordinates[0] &&
-  //     coordinates[1] === pointerDownCoordinates[1] &&
-  //     player.isValidMove(coordinates)
-  //   ) {
-  //     updateGameState({
-  //       playerCoordinates: coordinates,
-  //       playerFacing: player.directionOfMove(coordinates)!,
-  //       controlScheme: ControlScheme.Pointer
-  //     })
-  //   }
-  //   pointerDownCoordinates = null
-  //   setHighlight(mouseHoveredTile)
-  // })
+  eventTarget.addEventListener('pointerup', (event: MouseEvent) => {
+    const pointerUpTile = pageToWorldTile(event)
+    if (
+      activePlayer &&
+      pointerUpTile &&
+      pointerDownTile &&
+      sameTile(pointerUpTile, pointerDownTile)
+    ) {
+      const dirX = Math.sign(pointerUpTile.x - activePlayer.segments[0].x)
+      const dirY = Math.sign(pointerUpTile.y - activePlayer.segments[0].y)
+      const move = activePlayer.analyzeMove(dirX, dirY)
+      if (move.valid) {
+        undoable()
+        activePlayer.takeMove(move)
+      }
+      // updateGameState({
+      //   playerCoordinates: pointerUpTile,
+      //   playerFacing: activePlayer.directionOfMove(pointerUpTile)!,
+      //   controlScheme: ControlScheme.Pointer
+      // })
+    }
+    pointerDownTile = undefined
+    setHighlight(mouseHoveredTile)
+  })
 
-  // eventTarget.addEventListener('pointercancel', () => {
-  //   pointerDownCoordinates = null
-  //   setHighlight(mouseHoveredTile)
-  // })
+  eventTarget.addEventListener('pointercancel', () => {
+    pointerDownTile = undefined
+    setHighlight(mouseHoveredTile)
+  })
 
-  // eventTarget.addEventListener('mouseover', (event: MouseEvent) => {
-  //   const coordinates = coordinatesFromTarget(event.target!)
-  //   mouseHoveredTile = undefined
-  //   if (coordinates) {
-  //     mouseHoveredTile = new Tile(coordinates)
-  //   }
-  //   updateGameState({ controlScheme: ControlScheme.Pointer })
-  //   setHighlight(mouseHoveredTile)
-  // })
+  eventTarget.addEventListener('pointermove', (event: MouseEvent) => {
+    const coordinates = pageToWorldTile(event)
+    mouseHoveredTile = undefined
+    if (coordinates) {
+      mouseHoveredTile = coordinates
+    }
+    // updateGameState({ controlScheme: ControlScheme.Pointer })
+    setHighlight(mouseHoveredTile)
+  })
 
   // ----------------
   // Keyboard support
@@ -186,7 +206,7 @@ export function handleInput(
   //       usingGamepad = true
   //       const neighbor = neighborOf(playerTile, direction)
   //       hoveredTile = neighbor
-  //       if (hoveredTile && justPressed(0, gamepad) && player.isValidMove([neighbor.q, neighbor.r])) {
+  //       if (hoveredTile && justPressed(0, gamepad) && activePlayer.isValidMove([neighbor.q, neighbor.r])) {
   //         updateGameState({
   //           playerCoordinates: [hoveredTile.q, hoveredTile.r],
   //           playerFacing: direction,
