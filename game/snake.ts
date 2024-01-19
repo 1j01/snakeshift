@@ -44,18 +44,20 @@ export default class Snake extends Entity {
     // Tongue should always go on top of other snakes.
     this._drawHeadDetails(ctx)
     // Restful outlines for general clarity
+    ctx.globalCompositeOperation = 'exclusion'
     this._drawBodyOutline(ctx, (highlightCtx, segment, transform) => {
       // highlightCtx.setLineDash([0.1, 0.2])
-      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
+      highlightCtx.strokeStyle = '#fff'
       highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
       highlightCtx.stroke()
-    })
-    this._drawBodyOutline(ctx, (highlightCtx, segment, transform) => {
-      // highlightCtx.setLineDash([0.1, 0.2])
-      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#000' : '#fff'
+      highlightCtx.globalCompositeOperation = 'destination-out'
       highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
       highlightCtx.stroke()
+      highlightCtx.globalCompositeOperation = 'source-over'
     })
+    ctx.globalCompositeOperation = 'source-over'
+    // ctx.shadowBlur = 10
+    // ctx.shadowColor = '#fff'
   }
   draw3(ctx: CanvasRenderingContext2D): void {
     // control switching highlight
