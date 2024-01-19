@@ -84,6 +84,8 @@ export function deserialize(state: GameState) {
   if (whichSnakeBefore !== whichSnakeAfter) {
     activePlayer.highlight()
   }
+
+  postUpdate()
 }
 
 
@@ -111,6 +113,7 @@ export function initLevel() {
     segment.layer = CollisionLayer.Black
   }
   entities.push(otherSnake)
+  postUpdate() // might matter to clear a highlight if level is reset
 }
 
 export function cyclePlayerControl() {
@@ -120,6 +123,7 @@ export function cyclePlayerControl() {
   const nextIndex = (index + 1) % players.length
   activePlayer = players[nextIndex]
   activePlayer.highlight()
+  postUpdate()
 }
 
 const updateListeners: (() => void)[] = []
@@ -127,10 +131,14 @@ export function onUpdate(listener: () => void) {
   updateListeners.push(listener)
 }
 
-export function setControlScheme(scheme: ControlScheme) {
-  controlScheme = scheme
+function postUpdate() {
   for (const listener of updateListeners) {
     listener()
   }
+}
+
+export function setControlScheme(scheme: ControlScheme) {
+  controlScheme = scheme
+  postUpdate()
 }
 

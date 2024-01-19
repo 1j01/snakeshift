@@ -62,6 +62,8 @@ export function handleInput(
       // setHighlight(activePlayer.aheadTile())
     } else if (controlScheme === ControlScheme.KeyboardAbsoluteDirection) {
       setHighlight(undefined)
+    } else if (controlScheme === ControlScheme.Pointer) {
+      setHighlight(mouseHoveredTile)
     }
   })
 
@@ -74,8 +76,7 @@ export function handleInput(
   eventTarget.addEventListener('pointerdown', (event: MouseEvent) => {
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile) {
-      setControlScheme(ControlScheme.Pointer)
-      setHighlight(mouseHoveredTile)
+      setControlScheme(ControlScheme.Pointer) // sets highlight
     }
   })
 
@@ -93,7 +94,7 @@ export function handleInput(
       if (move.valid) {
         undoable()
         activePlayer.takeMove(move)
-        setControlScheme(ControlScheme.Pointer)
+        setControlScheme(ControlScheme.Pointer) // sets highlight redundantly
       }
       // updateGameState({
       //   playerCoordinates: pointerUpTile,
@@ -117,8 +118,7 @@ export function handleInput(
       mouseHoveredTile = coordinates
     }
     // TODO: only with significant movement, such as moving to a new tile
-    setControlScheme(ControlScheme.Pointer)
-    setHighlight(mouseHoveredTile)
+    setControlScheme(ControlScheme.Pointer) // sets highlight
   })
 
   // ----------------
