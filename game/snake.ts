@@ -287,7 +287,15 @@ export default class Snake extends Entity {
         entity.y === move.y
       ) {
         entities.splice(entities.indexOf(entity), 1)
+        this.grow()
       }
     }
+  }
+  grow(): void {
+    // This only works because SnakeSegment is a flat object.
+    // TODO: grow on next move, not immediately
+    const tail = this.segments[this.segments.length - 1]
+    const newTail = { ...tail }
+    this.segments.push(newTail)
   }
 }
