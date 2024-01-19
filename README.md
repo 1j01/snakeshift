@@ -4,6 +4,10 @@ A cross between Snake and Shift.
 
 An inverse space puzzle game.
 
+Shapeshift in makeshift ways. Shift snakes into lakes. Snake wakes into shapes.
+
+Skin and fang. Yin and yang.
+
 ## Controls
 
 ### Mouse/Pen/Touch
