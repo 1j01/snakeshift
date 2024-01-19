@@ -67,6 +67,7 @@ export default class Snake extends Entity {
     // Draw these outlines underneath the variable-opacity highlight.
     // N.B. This blend mode reverses the draw order!
     highlightCtx.globalCompositeOperation = 'destination-over'
+    // highlightCtx.setLineDash([0.1, 0.2])
     this._drawPath(highlightCtx, (segment) => {
       highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#000' : '#fff'
       highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
@@ -110,13 +111,15 @@ export default class Snake extends Entity {
     ctx.fillStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
     ctx.fill()
     // tongue
-    // TODO
-    // ctx.beginPath()
-    // ctx.moveTo(0, 0)
-    // ctx.lineTo(-1 / 2, 0)
-    // ctx.strokeStyle = '#f00'
-    // ctx.lineWidth = 1 / 7
-    // ctx.stroke()
+    ctx.beginPath()
+    ctx.moveTo(-1 / 2, 0)
+    ctx.lineTo(-1, 0)
+    ctx.lineTo(-1.4, -0.2)
+    ctx.lineTo(-1, 0)
+    ctx.lineTo(-1.4, 0.2)
+    ctx.strokeStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
+    ctx.lineWidth = 1 / 12
+    ctx.stroke()
 
     ctx.restore()
   }
