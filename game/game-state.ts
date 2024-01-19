@@ -2,7 +2,7 @@ import { Block } from "./block"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
 import Snake from "./snake"
-import { CollisionLayer, GameState, ParsedGameState } from "./types"
+import { CollisionLayer, ControlScheme, GameState, ParsedGameState } from "./types"
 
 export const entities: Entity[] = []
 
@@ -18,6 +18,8 @@ export const levelInfo = {
 // storing the index within entities, which is only done for serialization.
 // An ID could be used instead... I've now added an ID...
 export let activePlayer: Snake | undefined = undefined
+
+export let controlScheme = ControlScheme.KeyboardAbsoluteDirection
 
 const undos: GameState[] = []
 const redos: GameState[] = []
@@ -118,5 +120,17 @@ export function cyclePlayerControl() {
   const nextIndex = (index + 1) % players.length
   activePlayer = players[nextIndex]
   activePlayer.highlight()
+}
+
+const updateListeners: (() => void)[] = []
+export function onUpdate(listener: () => void) {
+  updateListeners.push(listener)
+}
+
+export function setControlScheme(scheme: ControlScheme) {
+  controlScheme = scheme
+  for (const listener of updateListeners) {
+    listener()
+  }
 }
 
