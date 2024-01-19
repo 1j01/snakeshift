@@ -112,11 +112,12 @@ export default class Snake extends Entity {
     ctx.fill()
     // tongue
     ctx.beginPath()
-    ctx.moveTo(-1 / 2, 0)
-    ctx.lineTo(-1, 0)
-    ctx.lineTo(-1.4, -0.2)
-    ctx.lineTo(-1, 0)
-    ctx.lineTo(-1.4, 0.2)
+    ctx.translate(-1 / 2, 0)
+    ctx.moveTo(0, 0)
+    ctx.lineTo(-0.5, 0)
+    ctx.lineTo(-0.9, -0.2)
+    ctx.lineTo(-0.5, 0)
+    ctx.lineTo(-0.9, 0.2)
     ctx.strokeStyle = '#fff'
     ctx.globalCompositeOperation = 'exclusion'
     ctx.lineWidth = 1 / 12
