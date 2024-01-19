@@ -117,7 +117,8 @@ export default class Snake extends Entity {
     ctx.lineTo(-1.4, -0.2)
     ctx.lineTo(-1, 0)
     ctx.lineTo(-1.4, 0.2)
-    ctx.strokeStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
+    ctx.strokeStyle = '#fff'
+    ctx.globalCompositeOperation = 'exclusion'
     ctx.lineWidth = 1 / 12
     ctx.stroke()
 
