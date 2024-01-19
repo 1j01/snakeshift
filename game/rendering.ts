@@ -30,9 +30,10 @@ export function draw() {
     entity.draw?.(ctx)
   }
   for (const entity of entities) {
-    if (entity instanceof Snake) {
-      entity.drawHighlight(ctx)
-    }
+    entity.draw2?.(ctx)
+  }
+  for (const entity of entities) {
+    entity.draw3?.(ctx)
   }
   ctx.restore()
 }

@@ -32,12 +32,23 @@ export default class Snake extends Entity {
   highlight(): void {
     this._highlightTime = performance.now()
   }
-  drawHighlight(ctx: CanvasRenderingContext2D): void {
-    // Head details are part of highlight just for the render order,
-    // so it's always on top of other snakes.
-    // (The tongue animation is also somewhat semantically part of the highlight.)
+  draw(ctx: CanvasRenderingContext2D): void {
+    // body
+    this._drawPath(ctx, (segment) => {
+      ctx.fillStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
+      ctx.fill()
+    })
+  }
+  draw2(ctx: CanvasRenderingContext2D): void {
+    // eye and tongue
+    // Tongue should always go on top of other snakes.
     this._drawHeadDetails(ctx)
-
+  }
+  draw3(ctx: CanvasRenderingContext2D): void {
+    // control switching highlight
+    this._drawHighlight(ctx)
+  }
+  private _drawHighlight(ctx: CanvasRenderingContext2D): void {
     const msSinceHighlight = performance.now() - this._highlightTime
     const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
     const transform = ctx.getTransform()
@@ -93,13 +104,6 @@ export default class Snake extends Entity {
     ctx.resetTransform()
     ctx.drawImage(this._highlightCanvas, 0, 0)
     ctx.setTransform(transform)
-  }
-  draw(ctx: CanvasRenderingContext2D): void {
-    // body
-    this._drawPath(ctx, (segment) => {
-      ctx.fillStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
-      ctx.fill()
-    })
   }
   private _drawHeadDetails(ctx: CanvasRenderingContext2D): void {
     const head = this.segments[0]
