@@ -1,3 +1,4 @@
+import { Block } from './block'
 import { activePlayer, cyclePlayerControl, redo, undo, undoable } from './game-state'
 import { pageToWorldTile, tileOnPage } from './rendering'
 import { ControlScheme, Tile } from './types'
@@ -37,12 +38,14 @@ export function handleInput(
         pressed = sameTile(tile, pointerDownTile)
       }
       hoverEffect?.classList.toggle("active-effect", pressed)
-      const dirX = Math.sign(tile.x - activePlayer.segments[0].x)
-      const dirY = Math.sign(tile.y - activePlayer.segments[0].y)
-      // TODO: handle tile size > 1?
-      const adjacent = sameTile(tile, { x: activePlayer.segments[0].x + dirX, y: activePlayer.segments[0].y + dirY, size: 1 })
-      const move = activePlayer.analyzeMove(dirX, dirY)
-      hoverEffect?.classList.toggle("valid", move.valid && adjacent)
+      // Using Math.sign() here would lead to checking if moving to an adjacent tile is valid,
+      // even when a further tile is hovered.
+      // const dirX = Math.sign(tile.x - activePlayer.segments[0].x)
+      // const dirY = Math.sign(tile.y - activePlayer.segments[0].y)
+      const deltaGridX = Math.round((tile.x - activePlayer.segments[0].x) / Block.BASE_SIZE)
+      const deltaGridY = Math.round((tile.y - activePlayer.segments[0].y) / Block.BASE_SIZE)
+      const move = activePlayer.analyzeMove(deltaGridX, deltaGridY)
+      hoverEffect?.classList.toggle("valid", move.valid)
     }
   }
 
@@ -77,9 +80,9 @@ export function handleInput(
       pointerDownTile &&
       sameTile(pointerUpTile, pointerDownTile)
     ) {
-      const dirX = Math.sign(pointerUpTile.x - activePlayer.segments[0].x)
-      const dirY = Math.sign(pointerUpTile.y - activePlayer.segments[0].y)
-      const move = activePlayer.analyzeMove(dirX, dirY)
+      const deltaGridX = Math.round((pointerUpTile.x - activePlayer.segments[0].x) / Block.BASE_SIZE)
+      const deltaGridY = Math.round((pointerUpTile.y - activePlayer.segments[0].y) / Block.BASE_SIZE)
+      const move = activePlayer.analyzeMove(deltaGridX, deltaGridY)
       if (move.valid) {
         undoable()
         activePlayer.takeMove(move)
