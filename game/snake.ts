@@ -118,10 +118,12 @@ export default class Snake extends Entity {
     ctx.scale(Math.pow(Math.sin(highlight), 0.2), 1)
     ctx.rotate(Math.sin(performance.now() / 50) * Math.PI / 8)
     ctx.moveTo(0, 0)
-    ctx.lineTo(-0.5, 0)
-    ctx.lineTo(-0.9, -0.2)
-    ctx.lineTo(-0.5, 0)
-    ctx.lineTo(-0.9, 0.2)
+    ctx.translate(-0.5, 0)
+    ctx.lineTo(0, 0)
+    ctx.rotate(Math.sin(performance.now() / 50 - 1.5) * Math.PI / 8)
+    ctx.lineTo(-0.4, -0.2)
+    ctx.lineTo(0, 0)
+    ctx.lineTo(-0.4, 0.2)
     ctx.strokeStyle = '#fff'
     ctx.globalCompositeOperation = 'exclusion'
     ctx.lineWidth = 1 / 12
