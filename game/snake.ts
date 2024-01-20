@@ -184,7 +184,7 @@ export default class Snake extends Entity {
         // ctx.rotate(foreAngle)
         // // ctx.rect(-1 / 2, -1 / 2, 1, 1)
         addMirroredPoints(-1 / 2, 1 / 2)
-        addMirroredPoints(1 / 2, 1 / 2)
+        // addMirroredPoints(1 / 2, 1 / 2)
 
         // const shortestAngle = Math.atan2(
         //   Math.sin(backAngle - foreAngle),
