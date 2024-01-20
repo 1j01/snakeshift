@@ -150,7 +150,7 @@ export default class Snake extends Entity {
     const backtrack: DOMPoint[] = []
     function addMirroredPoints(x: number, y: number) {
       ctx.lineTo(x, y)
-      backtrack.push(new DOMPoint(-x, y).matrixTransform(ctx.getTransform()))
+      backtrack.push(new DOMPoint(x, -y).matrixTransform(ctx.getTransform()))
     }
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
