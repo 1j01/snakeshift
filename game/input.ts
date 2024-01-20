@@ -1,61 +1,17 @@
 import { Block } from './block'
 import { activePlayer, controlScheme, cyclePlayerControl, onUpdate, redo, setControlScheme, undo, undoable } from './game-state'
-import { pageToWorldTile, tileOnPage } from './rendering'
+import { neighborOf, sameTile } from './helpers'
+import { pageToWorldTile } from './rendering'
+import { setHighlight } from './tile-highlight'
 import { ControlScheme, DIRECTIONS, Tile } from './types'
-
-function sameTile(a: Tile, b: Tile) {
-  return a.x === b.x && a.y === b.y && a.size === b.size
-}
-
-function neighborOf(tile: Tile, direction: { x: number, y: number }) {
-  return {
-    x: tile.x + direction.x * tile.size,
-    y: tile.y + direction.y * tile.size,
-    size: tile.size,
-  }
-}
-
-// function updateGameState(update: any) {
-// }
 
 export function handleInput(
   eventTarget: HTMLElement,
 ) {
 
-  // --------------------
-  // Highlight management
-  // --------------------
-
-  let hoverEffect: HTMLDivElement | undefined = undefined
-  function setHighlight(tile: Tile | undefined) {
-    if (hoverEffect) {
-      hoverEffect.remove()
-      hoverEffect = undefined
-    }
-    if (tile && activePlayer) {
-      const onPage = tileOnPage(tile)
-      hoverEffect = document.createElement('div')
-      hoverEffect.classList.add('hover-effect')
-      hoverEffect.style.left = `${onPage.x}px`
-      hoverEffect.style.top = `${onPage.y}px`
-      hoverEffect.style.width = `${onPage.size}px`
-      hoverEffect.style.height = `${onPage.size}px`
-      document.body.appendChild(hoverEffect)
-      let pressed = false
-      if (pointerDownTile) {
-        pressed = sameTile(tile, pointerDownTile)
-      }
-      hoverEffect?.classList.toggle("active-effect", pressed)
-      // Using Math.sign() here would lead to checking if moving to an adjacent tile is valid,
-      // even when a further tile is hovered.
-      // const dirX = Math.sign(tile.x - activePlayer.segments[0].x)
-      // const dirY = Math.sign(tile.y - activePlayer.segments[0].y)
-      const deltaGridX = Math.round((tile.x - activePlayer.segments[0].x) / Block.BASE_SIZE)
-      const deltaGridY = Math.round((tile.y - activePlayer.segments[0].y) / Block.BASE_SIZE)
-      const move = activePlayer.analyzeMove(deltaGridX, deltaGridY)
-      hoverEffect?.classList.toggle("valid", move.valid)
-    }
-  }
+  // ---------------------
+  // Reactive highlighting
+  // ---------------------
 
   onUpdate(() => {
     if (controlScheme === ControlScheme.KeyboardFacingRelative) {
@@ -63,7 +19,11 @@ export function handleInput(
     } else if (controlScheme === ControlScheme.KeyboardAbsoluteDirection) {
       setHighlight(undefined)
     } else if (controlScheme === ControlScheme.Pointer) {
-      setHighlight(mouseHoveredTile)
+      let pressed = false
+      if (pointerDownTile && mouseHoveredTile) {
+        pressed = sameTile(mouseHoveredTile, pointerDownTile)
+      }
+      setHighlight(mouseHoveredTile, pressed)
     }
   })
 
