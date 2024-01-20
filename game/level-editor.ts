@@ -2,7 +2,7 @@ import { Block } from './block'
 import { Collectable } from './collectable'
 import Entity from './entity'
 import { entities, postUpdate, undoable } from './game-state'
-import { makeEntity, sameTile } from './helpers'
+import { hitTestAllEntities, makeEntity, sameTile } from './helpers'
 import { pageToWorldTile } from './rendering'
 import Snake from './snake'
 import { setHighlight } from './tile-highlight'
@@ -64,7 +64,10 @@ export function handleInputForLevelEditing(
   eventTarget.addEventListener('pointerdown', (event: MouseEvent) => {
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile) {
-
+      // TODO: allow dragging non-solid entities (i.e. Collectable)
+      // also, consider reversing the array to be topmost first
+      const hit = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
+      placing = hit.entitiesThere[hit.entitiesThere.length - 1]
       updateHighlight()
     }
   })
@@ -72,9 +75,10 @@ export function handleInputForLevelEditing(
   eventTarget.addEventListener('pointerup', (event: MouseEvent) => {
     const pointerUpTile = pageToWorldTile(event)
     if (
-      pointerUpTile &&
-      pointerDownTile &&
-      sameTile(pointerUpTile, pointerDownTile)
+      pointerUpTile
+      // pointerUpTile &&
+      // pointerDownTile &&
+      // sameTile(pointerUpTile, pointerDownTile)
     ) {
       // undoable()
       placing = undefined
