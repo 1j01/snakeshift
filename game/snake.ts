@@ -180,8 +180,8 @@ export default class Snake extends Entity {
       } else {
         // body
         // ctx.rect(-1 / 2, -1 / 2, 1, 1)
-        addMirroredPoints(1 / 2, -1 / 2)
         addMirroredPoints(1 / 2, 1 / 2)
+        addMirroredPoints(-1 / 2, 1 / 2)
       }
       ctx.restore()
     }
