@@ -258,7 +258,10 @@ export default class Snake extends Entity {
     // Sort entities so this is on top of anything it's moving onto.
     // This handles the visual as well as making it so
     // you can't double back while inside an inverse snake.
-    const ontoIndices = move.entitiesThere.map(e => entities.indexOf(e))
+    // Exclude non-solid collectables, since, if you don't eat them (because they're a different color),
+    // they should stay visible.
+    // TODO: ensure collectables are on top in the first place
+    const ontoIndices = move.entitiesThere.filter(e => e.solid).map(e => entities.indexOf(e))
     const maxIndex = Math.max(...ontoIndices)
     const thisIndex = entities.indexOf(this)
     if (thisIndex < maxIndex) {
@@ -269,7 +272,7 @@ export default class Snake extends Entity {
     }
     // Eat collectables
     for (const entity of move.entitiesThere) {
-      if (entity instanceof Collectable) {
+      if (entity instanceof Collectable && entity.layer === head.layer) {
         entities.splice(entities.indexOf(entity), 1)
         this.growOnNextMove = true
       }
