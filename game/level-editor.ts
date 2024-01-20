@@ -1,6 +1,6 @@
 import Entity from './entity'
 import { entities, postUpdate, undoable } from './game-state'
-import { hitTestAllEntities, makeEntity, sameTile } from './helpers'
+import { hitTestAllEntities, makeEntity, sameTile, sortEntities } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { pageToWorldTile } from './rendering'
 import Snake from './snake'
@@ -34,6 +34,7 @@ export function handleInputForLevelEditing(
       }
       undoable()
       entities.push(entityInstance)
+      sortEntities()
       placing = entityInstance
       postUpdate()
     })
@@ -71,6 +72,8 @@ export function handleInputForLevelEditing(
         // reorder so that the entity is on top
         entities.splice(entities.indexOf(placing), 1)
         entities.push(placing)
+        // unless it shouldn't be
+        sortEntities()
       }
       updateHighlight()
     }

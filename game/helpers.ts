@@ -33,6 +33,18 @@ export function makeEntity(entityType: string): Entity {
   }
 }
 
+export function sortEntities() {
+  // Ensure collectables are on top, and crates are below snakes.
+  // TODO: rule should be crates are below anything they are not inside of,
+  // which is complicated, as in this game, crates can be inside of crates inside of snakes inside of crates.
+  entities.sort((a, b) => {
+    return (
+      (+(a instanceof Collectable) - +(b instanceof Collectable)) ||
+      (+(b instanceof Crate && a instanceof Snake) - +(a instanceof Crate && b instanceof Snake))
+    )
+  })
+}
+
 export function hitTestAllEntities(x: number, y: number, options: Partial<{ ignoreTailOfSnake: Snake | undefined }> = {}): HitTestResult {
   // A snake's tail may be leaving the space, so it can be ignored, optionally.
   let foremost = CollisionLayer.Black
