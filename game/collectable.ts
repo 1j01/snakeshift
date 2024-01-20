@@ -1,26 +1,10 @@
-import Entity from "./entity"
+import { RectangularEntity } from "./rectangular-entity"
 import { CollisionLayer } from "./types"
 
-export class Collectable extends Entity {
+export class Collectable extends RectangularEntity {
   static readonly SIZE = 0.2
+
   solid = false
-
-  constructor(
-    public x = 0,
-    public y = 0,
-    public size = 1,
-    public layer = CollisionLayer.White,
-  ) {
-    super()
-  }
-
-  // TODO: DRY with Block, such as with a base class BoxyEntity
-  at(x: number, y: number): CollisionLayer {
-    if (x >= this.x && x < this.x + this.size && y >= this.y && y < this.y + this.size) {
-      return this.layer
-    }
-    return CollisionLayer.None
-  }
 
   draw(ctx: CanvasRenderingContext2D) {
     ctx.save()
