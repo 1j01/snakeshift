@@ -47,13 +47,13 @@ export function handleInput(
 
   let pointerDownTile: Tile | undefined = undefined
   let mouseHoveredTile: Tile | undefined = undefined
-  on(eventTarget, 'pointerdown', (event: MouseEvent) => {
+  on(eventTarget, 'pointerdown', (event: PointerEvent) => {
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile) {
       setControlScheme(ControlScheme.Pointer) // sets highlight
     }
   })
-  on(eventTarget, 'pointerup', (event: MouseEvent) => {
+  on(eventTarget, 'pointerup', (event: PointerEvent) => {
     const pointerUpTile = pageToWorldTile(event)
     if (
       activePlayer &&
@@ -84,7 +84,7 @@ export function handleInput(
     setHighlight(mouseHoveredTile)
   })
 
-  on(eventTarget, 'pointermove', (event: MouseEvent) => {
+  on(eventTarget, 'pointermove', (event: PointerEvent) => {
     const coordinates = pageToWorldTile(event)
     mouseHoveredTile = undefined
     if (coordinates) {

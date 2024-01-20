@@ -93,7 +93,7 @@ export function handleInputForLevelEditing(
 
   let pointerDownTile: Tile | undefined = undefined
   let mouseHoveredTile: Tile | undefined = undefined
-  on(eventTarget, 'pointerdown', (event: MouseEvent) => {
+  on(eventTarget, 'pointerdown', (event: PointerEvent) => {
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile && !placing) {
       // TODO: consider reversing the array to be topmost first
@@ -111,7 +111,7 @@ export function handleInputForLevelEditing(
     }
   })
 
-  on(eventTarget, 'pointerup', (event: MouseEvent) => {
+  on(eventTarget, 'pointerup', (event: PointerEvent) => {
     const pointerUpTile = pageToWorldTile(event)
     if (
       pointerUpTile
@@ -133,7 +133,7 @@ export function handleInputForLevelEditing(
     updateHighlight()
   })
 
-  on(eventTarget, 'pointermove', (event: MouseEvent) => {
+  on(eventTarget, 'pointermove', (event: PointerEvent) => {
     const coordinates = pageToWorldTile(event)
     mouseHoveredTile = undefined
     if (coordinates) {
