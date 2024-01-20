@@ -69,6 +69,9 @@ export function handleInputForLevelEditing(
       placing = hit.entitiesThere[hit.entitiesThere.length - 1]
       if (placing) {
         undoable()
+        // reorder so that the entity is on top
+        entities.splice(entities.indexOf(placing), 1)
+        entities.push(placing)
       }
       updateHighlight()
     }
