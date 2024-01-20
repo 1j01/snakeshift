@@ -38,25 +38,24 @@ export default class Snake extends Entity {
   }
   draw(ctx: CanvasRenderingContext2D): void {
     // body
-    this._drawBodyPath(ctx, (segment) => {
-      ctx.fillStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
-      ctx.fill()
-    })
+    this._bodyPath(ctx)
+    ctx.fillStyle = this.segments[0].layer === CollisionLayer.White ? '#fff' : '#000'
+    ctx.fill()
   }
   draw2(ctx: CanvasRenderingContext2D): void {
     // eye and tongue
     // Tongue should always go on top of other snakes.
     this._drawHeadDetails(ctx)
     // Restful outlines for general clarity
-    this._drawBodyOutline(ctx, (highlightCtx, segment, transform) => {
+    this._drawBodyOutline(ctx, (highlightCtx, transform) => {
       // highlightCtx.setLineDash([0.1, 0.2])
-      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#fff' : '#000'
+      highlightCtx.strokeStyle = this.segments[0].layer === CollisionLayer.White ? '#fff' : '#000'
       highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
       highlightCtx.stroke()
     })
-    this._drawBodyOutline(ctx, (highlightCtx, segment, transform) => {
+    this._drawBodyOutline(ctx, (highlightCtx, transform) => {
       // highlightCtx.setLineDash([0.1, 0.2])
-      highlightCtx.strokeStyle = segment.layer === CollisionLayer.White ? '#000' : '#fff'
+      highlightCtx.strokeStyle = this.segments[0].layer === CollisionLayer.White ? '#000' : '#fff'
       highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
       highlightCtx.stroke()
     })
@@ -66,11 +65,10 @@ export default class Snake extends Entity {
     const msSinceHighlight = performance.now() - this._highlightTime
     const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
     if (highlight > 0) {
-      this._drawBodyOutline(ctx, (highlightCtx, segment, transform) => {
+      this._drawBodyOutline(ctx, (highlightCtx, transform) => {
         highlightCtx.strokeStyle = `hsl(40, 100%, 50%)`
         highlightCtx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
         highlightCtx.stroke()
-      }, (highlightCtx, transform) => {
         // Reduce opacity as highlight fades
         // This is a separate step in order to avoid greater opacity where the highlight overlaps itself.
         highlightCtx.resetTransform()
@@ -85,8 +83,7 @@ export default class Snake extends Entity {
   }
   private _drawBodyOutline(
     ctx: CanvasRenderingContext2D,
-    drawSegment: (ctx: CanvasRenderingContext2D, segment: SnakeSegment, transform: DOMMatrix) => void,
-    postDraw?: (ctx: CanvasRenderingContext2D, transform: DOMMatrix) => void,
+    draw: (ctx: CanvasRenderingContext2D, transform: DOMMatrix) => void,
   ): void {
     const transform = ctx.getTransform()
     this._highlightCanvas.width = ctx.canvas.width
@@ -97,16 +94,13 @@ export default class Snake extends Entity {
     highlightCtx.lineJoin = "round"
     highlightCtx.lineCap = "round"
     highlightCtx.setTransform(transform)
-    this._drawBodyPath(highlightCtx, (segment) => {
-      drawSegment(highlightCtx, segment, transform)
-    })
-    postDraw?.(highlightCtx, transform)
+    this._bodyPath(highlightCtx)
+    draw(highlightCtx, transform)
 
     // Cut out the snake's fill, leaving a clean outline.
     highlightCtx.globalCompositeOperation = 'destination-out'
-    this._drawBodyPath(highlightCtx, () => {
-      highlightCtx.fill()
-    })
+    this._bodyPath(highlightCtx)
+    highlightCtx.fill()
     highlightCtx.restore()
     ctx.resetTransform()
     ctx.drawImage(this._highlightCanvas, 0, 0)
@@ -151,18 +145,17 @@ export default class Snake extends Entity {
 
     ctx.restore()
   }
-  private _drawBodyPath(ctx: CanvasRenderingContext2D, draw: (segment: SnakeSegment) => void): void {
-    const pixel = 1 / ctx.getTransform().a
+  private _bodyPath(ctx: CanvasRenderingContext2D): void {
+    ctx.beginPath()
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
       ctx.save()
       ctx.translate(segment.x + segment.size / 2, segment.y + segment.size / 2)
-      ctx.scale(segment.size + pixel, segment.size + pixel)
       const angle = i === 0 ?
         Math.atan2(this.segments[1].y - segment.y, this.segments[1].x - segment.x) :
         Math.atan2(segment.y - this.segments[i - 1].y, segment.x - this.segments[i - 1].x)
       ctx.rotate(angle)
-      ctx.beginPath()
+
       if (i === 0) {
         // head
         ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
@@ -184,7 +177,6 @@ export default class Snake extends Entity {
         // body
         ctx.rect(-1 / 2, -1 / 2, 1, 1)
       }
-      draw(segment)
       ctx.restore()
     }
   }
