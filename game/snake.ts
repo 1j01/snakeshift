@@ -206,7 +206,16 @@ export default class Snake extends Entity {
     }
     return CollisionLayer.None
   }
-  analyzeMove(dirX: number, dirY: number): Move {
+  analyzeMoveAbsolute(tile: Tile): Move {
+    // Using Math.sign() here would lead to checking if moving to an adjacent tile is valid,
+    // even when a further tile is in question.
+    // const dirX = Math.sign(tile.x - this.segments[0].x)
+    // const dirY = Math.sign(tile.y - this.segments[0].y)
+    const deltaGridX = Math.round(tile.x - this.segments[0].x)
+    const deltaGridY = Math.round(tile.y - this.segments[0].y)
+    return this.analyzeMoveRelative(deltaGridX, deltaGridY)
+  }
+  analyzeMoveRelative(dirX: number, dirY: number): Move {
     const head = this.segments[0]
     const tail = this.segments[this.segments.length - 1]
     const deltaX = dirX * head.size

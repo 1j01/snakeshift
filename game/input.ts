@@ -1,7 +1,7 @@
 import { activePlayer, controlScheme, cyclePlayerControl, onUpdate, redo, setControlScheme, undo, undoable } from './game-state'
 import { neighborOf, sameTile } from './helpers'
 import { pageToWorldTile } from './rendering'
-import { setHighlight } from './tile-highlight'
+import { highlightMove } from './tile-highlight'
 import { ControlScheme, DIRECTIONS, Tile } from './types'
 
 export function handleInput(
@@ -29,15 +29,15 @@ export function handleInput(
 
   onUpdate(() => {
     if (controlScheme === ControlScheme.KeyboardFacingRelative) {
-      // setHighlight(activePlayer.aheadTile())
+      // highlightMove(activePlayer.aheadTile())
     } else if (controlScheme === ControlScheme.KeyboardAbsoluteDirection) {
-      setHighlight(undefined)
+      highlightMove(undefined)
     } else if (controlScheme === ControlScheme.Pointer) {
       let pressed = false
       if (pointerDownTile && mouseHoveredTile) {
         pressed = sameTile(mouseHoveredTile, pointerDownTile)
       }
-      setHighlight(mouseHoveredTile, pressed)
+      highlightMove(mouseHoveredTile, { pressed })
     }
   })
 
@@ -63,7 +63,7 @@ export function handleInput(
     ) {
       const deltaGridX = Math.round(pointerUpTile.x - activePlayer.segments[0].x)
       const deltaGridY = Math.round(pointerUpTile.y - activePlayer.segments[0].y)
-      const move = activePlayer.analyzeMove(deltaGridX, deltaGridY)
+      const move = activePlayer.analyzeMoveRelative(deltaGridX, deltaGridY)
       if (move.valid) {
         undoable()
         activePlayer.takeMove(move)
@@ -76,12 +76,12 @@ export function handleInput(
       // })
     }
     pointerDownTile = undefined
-    setHighlight(mouseHoveredTile)
+    highlightMove(mouseHoveredTile)
   })
 
   on(eventTarget, 'pointercancel', () => {
     pointerDownTile = undefined
-    setHighlight(mouseHoveredTile)
+    highlightMove(mouseHoveredTile)
   })
 
   on(eventTarget, 'pointermove', (event: PointerEvent) => {
@@ -101,7 +101,7 @@ export function handleInput(
   function move(dx: number, dy: number, controlScheme = ControlScheme.KeyboardAbsoluteDirection) {
     // TODO: maybe show highlight for invalid move even though normally absolute direction doesn't use a highlight
     if (!activePlayer) return
-    const move = activePlayer.analyzeMove(dx, dy)
+    const move = activePlayer.analyzeMoveRelative(dx, dy)
     setControlScheme(controlScheme)
     if (!move.valid) return
     undoable()
@@ -195,7 +195,7 @@ export function handleInput(
         usingGamepad = true
         const neighbor = neighborOf(playerTile, direction)
         hoveredTile = neighbor
-        const move = activePlayer.analyzeMove(direction.x, direction.y)
+        const move = activePlayer.analyzeMoveRelative(direction.x, direction.y)
         if (hoveredTile && justPressed(0, gamepad) && move.valid) {
           // updateGameState({
           //   playerCoordinates: [hoveredTile.x, hoveredTile.y],
@@ -237,7 +237,7 @@ export function handleInput(
       }
     }
     if (controlScheme === ControlScheme.Gamepad) {
-      setHighlight(hoveredTile)
+      highlightMove(hoveredTile)
     }
   }
   const intervalID = setInterval(pollGamepads, 1000 / 60)

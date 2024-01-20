@@ -84,7 +84,7 @@ export function handleInputForLevelEditing(
     if (pointerDownTile && mouseHoveredTile) {
       pressed = sameTile(mouseHoveredTile, pointerDownTile)
     }
-    setHighlight(mouseHoveredTile, pressed)
+    setHighlight(mouseHoveredTile, { pressed, valid: mouseHoveredTile ? hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y).entitiesThere.length > 0 : false })
   }
 
   // -----------------------
