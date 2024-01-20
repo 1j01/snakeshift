@@ -29,6 +29,13 @@ export class RectangularEntity extends Entity {
     ctx.globalCompositeOperation = this.layer === CollisionLayer.White ? 'lighter' : 'source-over'
     ctx.fillStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
     ctx.fillRect(this.x, this.y, this.width, this.height)
+    // A more general approach is to extend the coordinates, or use a stroke.
+    // A stroke is imperfect, as it has its own anti-aliasing.
+    if (this.layer === CollisionLayer.Black) {
+      ctx.strokeStyle = '#000'
+      ctx.lineWidth = 1 / ctx.getTransform().a
+      ctx.strokeRect(this.x, this.y, this.width, this.height)
+    }
     ctx.globalCompositeOperation = 'source-over'
   }
 }
