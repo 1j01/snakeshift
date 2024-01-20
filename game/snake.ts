@@ -173,7 +173,7 @@ export default class Snake extends Entity {
         // when two snake heads overlapped, the eye would be invisible.
       } else if (i === this.segments.length - 1) {
         // tail
-        ctx.moveTo(-1 / 2, -1 / 2)
+        ctx.lineTo(-1 / 2, -1 / 2)
         const extent = .5
         const pointiness = 0
         ctx.quadraticCurveTo(extent * (1 - pointiness), -1 / 2, extent, 0)
