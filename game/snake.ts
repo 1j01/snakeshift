@@ -148,9 +148,15 @@ export default class Snake extends Entity {
   private _bodyPath(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath()
     const backtrack: ({ matrix: DOMMatrix, draw: () => void })[] = []
-    function addMirroredPoints(x: number, y: number) {
-      ctx.lineTo(x, y)
-      backtrack.push({ matrix: ctx.getTransform(), draw() { ctx.lineTo(x, -y) } })
+    function mirrored(draw: () => void) {
+      draw()
+      backtrack.push({
+        matrix: ctx.getTransform(),
+        draw() {
+          ctx.scale(1, -1)
+          draw()
+        }
+      })
     }
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
@@ -164,7 +170,7 @@ export default class Snake extends Entity {
         // head
         ctx.rotate(backAngle)
         // ctx.moveTo(1 / 2, 1 / 2)
-        addMirroredPoints(1 / 2, 1 / 2)
+        mirrored(() => ctx.lineTo(1 / 2, 1 / 2))
         ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
         ctx.lineTo(1 / 2, -1 / 2)
         ctx.lineTo(1 / 2, 1 / 2)
@@ -183,8 +189,8 @@ export default class Snake extends Entity {
         // body
         ctx.rotate(foreAngle)
         // // ctx.rect(-1 / 2, -1 / 2, 1, 1)
-        addMirroredPoints(-1 / 2, 1 / 2)
-        // addMirroredPoints(1 / 2, 1 / 2)
+        mirrored(() => ctx.lineTo(-1 / 2, 1 / 2))
+        // mirrored(() => ctx.lineTo((1 / 2, 1 / 2))
 
         // const shortestAngle = Math.atan2(
         //   Math.sin(backAngle - foreAngle),
@@ -194,7 +200,7 @@ export default class Snake extends Entity {
         //   const angle = backAngle - shortestAngle * j
         //   const x = Math.sin(-angle) * 1 / 2
         //   const y = Math.cos(-angle) * 1 / 2
-        //   addMirroredPoints(x, y)
+        //   mirrored(() => ctx.lineTo((x, y))
         // }
 
         // ctx.quadraticCurveTo(
