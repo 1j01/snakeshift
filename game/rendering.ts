@@ -1,5 +1,5 @@
 import Entity from "./entity"
-import { entities, levelInfo } from "./game-state"
+import { entities, levelInfo, postUpdate } from "./game-state"
 import { Point, Tile } from "./types"
 
 export const canvas = document.createElement('canvas')
@@ -19,6 +19,7 @@ export function draw() {
   if (canvas.width !== width || canvas.height !== height) {
     canvas.width = width
     canvas.height = height
+    postUpdate() // update highlight, as grid size has changed
   }
 
   ctx.fillStyle = '#000'
