@@ -21,21 +21,16 @@ export class RectangularEntity extends Entity {
 
   // used as-is by Block, but defined here as a placeholder for new entities as well
   draw(ctx: CanvasRenderingContext2D) {
-    // "lighter" avoids seams between adjacent blocks
+    // "lighter" blend mode can avoid seams between adjacent white blocks.
     // There is no equivalent for the color black, as this works only by using additive blending instead of alpha blending,
     // and black is zero, so adding it doesn't change anything.
     // This blend mode can be used to blend arbitrary colors seamlessly, but not if they overlap.
     // https://stackoverflow.com/a/53292886/2624876
-    ctx.globalCompositeOperation = this.layer === CollisionLayer.White ? 'lighter' : 'source-over'
+    // A more general approach is to extend the coordinates.
+    // (A stroke works similarly, but is imperfect, as it has its own anti-aliasing.
+    // If you use the fill tool in an image editor, you can see that it leaves a slightly different color at the edges.)
+    const pixel = 1 / ctx.getTransform().a
     ctx.fillStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
-    ctx.fillRect(this.x, this.y, this.width, this.height)
-    // A more general approach is to extend the coordinates, or use a stroke.
-    // A stroke is imperfect, as it has its own anti-aliasing.
-    if (this.layer === CollisionLayer.Black) {
-      ctx.strokeStyle = '#000'
-      ctx.lineWidth = 1 / ctx.getTransform().a
-      ctx.strokeRect(this.x, this.y, this.width, this.height)
-    }
-    ctx.globalCompositeOperation = 'source-over'
+    ctx.fillRect(this.x, this.y, this.width + pixel, this.height + pixel)
   }
 }
