@@ -1,5 +1,6 @@
 import { Block } from "./block"
 import { Collectable } from "./collectable"
+import { Crate } from "./crate"
 import Entity from "./entity"
 import { entities } from "./game-state"
 import Snake from "./snake"
@@ -25,6 +26,8 @@ export function makeEntity(entityType: string): Entity {
       return new Snake()
     case "Collectable":
       return new Collectable()
+    case "Crate":
+      return new Crate()
     default:
       throw new Error(`Unknown entity type: ${entityType}`)
   }

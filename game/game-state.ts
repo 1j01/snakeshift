@@ -1,5 +1,6 @@
 import { Block } from "./block"
 import { Collectable } from "./collectable"
+import { Crate } from "./crate"
 import Entity from "./entity"
 import { makeEntity } from "./helpers"
 import Snake from "./snake"
@@ -101,6 +102,8 @@ export function initLevel() {
     segment.layer = CollisionLayer.Black
   }
   entities.push(otherSnake)
+  entities.push(new Crate(3, 3, 1, CollisionLayer.White))
+  entities.push(new Crate(3, 13, 1, CollisionLayer.Black))
   postUpdate() // might matter to clear a highlight if level is reset
 }
 

@@ -1,8 +1,7 @@
-import { Block } from './block'
-import { Collectable } from './collectable'
 import Entity from './entity'
 import { entities, postUpdate, undoable } from './game-state'
 import { hitTestAllEntities, makeEntity, sameTile } from './helpers'
+import { RectangularEntity } from './rectangular-entity'
 import { pageToWorldTile } from './rendering'
 import Snake from './snake'
 import { setHighlight } from './tile-highlight'
@@ -30,7 +29,7 @@ export function handleInputForLevelEditing(
         for (const segment of entityInstance.segments) {
           segment.layer = layer
         }
-      } else if (entityInstance instanceof Block || entityInstance instanceof Collectable) {
+      } else if (entityInstance instanceof RectangularEntity) {
         entityInstance.layer = layer
       }
       undoable()
@@ -105,7 +104,7 @@ export function handleInputForLevelEditing(
     if (coordinates) {
       mouseHoveredTile = coordinates
       if (placing) {
-        if (placing instanceof Block || placing instanceof Collectable) {
+        if (placing instanceof RectangularEntity) {
           placing.x = mouseHoveredTile.x
           placing.y = mouseHoveredTile.y
         } else if (placing instanceof Snake) {
