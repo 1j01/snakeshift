@@ -27,5 +27,8 @@
     "venv/**": true,
     ".env/**": true,
     "env/**": true,
-  }
+  },
+  // Theming
+  "workbench.colorTheme": "Simple BW Dark",
+  "workbench.iconTheme": "vs-minimal",
 }
