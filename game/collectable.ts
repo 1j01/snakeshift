@@ -2,7 +2,7 @@ import { RectangularEntity } from "./rectangular-entity"
 import { CollisionLayer } from "./types"
 
 export class Collectable extends RectangularEntity {
-  static readonly SIZE = 0.2
+  static readonly VISUAL_SIZE = 0.2
 
   solid = false
 
@@ -16,7 +16,8 @@ export class Collectable extends RectangularEntity {
     ctx.translate(1 / 2, 1 / 2)
     ctx.rotate(Math.PI / 4)
     ctx.beginPath()
-    ctx.rect(-Collectable.SIZE / 2, -Collectable.SIZE / 2, Collectable.SIZE, Collectable.SIZE)
+    // Don't use scale() as it will scale the stroke width
+    ctx.rect(-Collectable.VISUAL_SIZE / 2, -Collectable.VISUAL_SIZE / 2, Collectable.VISUAL_SIZE, Collectable.VISUAL_SIZE)
     ctx.stroke()
     ctx.fill()
     ctx.restore()
