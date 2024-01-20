@@ -147,6 +147,11 @@ export default class Snake extends Entity {
   }
   private _bodyPath(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath()
+    const backtrack: DOMPoint[] = []
+    function addMirroredPoints(x: number, y: number) {
+      ctx.lineTo(x, y)
+      backtrack.push(new DOMPoint(-x, y).matrixTransform(ctx.getTransform()))
+    }
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
       ctx.save()
@@ -158,10 +163,10 @@ export default class Snake extends Entity {
 
       if (i === 0) {
         // head
+        ctx.moveTo(1 / 2, 1 / 2)
         ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
         ctx.lineTo(1 / 2, -1 / 2)
         ctx.lineTo(1 / 2, 1 / 2)
-        ctx.closePath()
         // eye and tongue are drawn separately
         // If the eye was rendered as a hole in the head, then
         // when two snake heads overlapped, the eye would be invisible.
@@ -172,13 +177,24 @@ export default class Snake extends Entity {
         const pointiness = 0
         ctx.quadraticCurveTo(extent * (1 - pointiness), -1 / 2, extent, 0)
         ctx.quadraticCurveTo(extent * (1 - pointiness), 1 / 2, -1 / 2, 1 / 2)
-        ctx.closePath()
       } else {
         // body
-        ctx.rect(-1 / 2, -1 / 2, 1, 1)
+        // ctx.rect(-1 / 2, -1 / 2, 1, 1)
+        addMirroredPoints(1 / 2, -1 / 2)
+        addMirroredPoints(1 / 2, 1 / 2)
       }
       ctx.restore()
     }
+    // View transform is baked into the backtrack points,
+    // so we need to reset it before using them.
+    const transform = ctx.getTransform()
+    ctx.resetTransform()
+    for (let i = backtrack.length - 1; i >= 0; i--) {
+      const point = backtrack[i]
+      ctx.lineTo(point.x, point.y)
+    }
+    ctx.closePath()
+    ctx.setTransform(transform)
   }
   at(x: number, y: number, includeHead = true, includeTail = true): CollisionLayer {
     for (let i = (includeHead ? 0 : 1); i < this.segments.length - (includeTail ? 0 : 1); i++) {
