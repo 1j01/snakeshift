@@ -1,4 +1,4 @@
-import { entities, initLevel } from "./game-state"
+import { entities, initLevel, redo, undo } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing, initLevelEditorGUI } from "./level-editor"
 import { canvas, draw } from "./rendering"
@@ -37,5 +37,21 @@ animate(0)
 addEventListener('keydown', event => {
   if (event.key === '`') {
     setEditMode(!editing)
+    event.preventDefault()
+  } else if (event.key === 'z') {
+    // Shift by itself cycling players breaks (Ctrl+)Shift+Z redo in play mode.
+    // I could handle it specially, preserving redos in a separate stack
+    // until you release Shift, or I could make it not cycle players
+    // until you release Shift, or I could remove Shift cycling players,
+    // or just say you need to use Y to redo (in play mode).
+    if (event.shiftKey) {
+      redo()
+    } else {
+      undo()
+    }
+    event.preventDefault()
+  } else if (event.key === 'y') {
+    redo()
+    event.preventDefault()
   }
 })

@@ -1,4 +1,4 @@
-import { activePlayer, controlScheme, cyclePlayerControl, onUpdate, redo, setControlScheme, undo, undoable } from './game-state'
+import { activePlayer, controlScheme, cyclePlayerControl, onUpdate, setControlScheme, undoable } from './game-state'
 import { neighborOf, sameTile } from './helpers'
 import { pageToWorldTile } from './rendering'
 import { highlightMove } from './tile-highlight'
@@ -110,7 +110,6 @@ export function handleInput(
 
   on(window, 'keydown', (event: KeyboardEvent) => {
     // Using `event.code` instead of `event.key` since the control scheme relies on the physical key layout, not the letters.
-    // TODO: that's not the case for undo/redo, so use `event.key` for that
     let handling = true
     switch (event.code) {
       case 'ArrowLeft': // arrow keys
@@ -136,21 +135,6 @@ export function handleInput(
       case 'Numpad2': // numpad
       case 'KeyJ': // vi-style
         move(0, 1)
-        break
-      case 'KeyZ':
-        // Hm, shift cycling players breaks this.
-        // I could specially handle it, preserving redos in a separate stack
-        // until you release shift, or I could make it not cycle players
-        // until you release shift, or I could remove shift cycling players,
-        // or just say you need to use Y to redo.
-        if (event.shiftKey) {
-          redo()
-        } else {
-          undo()
-        }
-        break
-      case 'KeyY':
-        redo()
         break
       case 'Tab':
       case 'ShiftLeft':

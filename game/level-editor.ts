@@ -1,5 +1,5 @@
 import Entity from './entity'
-import { entities, postUpdate, redo, undo, undoable } from './game-state'
+import { entities, postUpdate, undoable } from './game-state'
 import { hitTestAllEntities, makeEntity, sameTile, sortEntities } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
@@ -157,34 +157,6 @@ export function handleInputForLevelEditing(
     }
     // TODO: only with significant movement, such as moving to a new tile
     updateHighlight()
-  })
-
-  // --------
-  // Keyboard
-  // --------
-
-  on(window, 'keydown', (event: KeyboardEvent) => {
-    // Using `event.code` instead of `event.key` since the control scheme relies on the physical key layout, not the letters.
-    // TODO: that's not the case for undo/redo, so use `event.key` for that
-    let handling = true
-    switch (event.code) {
-      case 'KeyZ':
-        if (event.shiftKey) {
-          redo()
-        } else {
-          undo()
-        }
-        break
-      case 'KeyY':
-        redo()
-        break
-      default:
-        handling = false
-        break
-    }
-    if (handling) {
-      event.preventDefault()
-    }
   })
 
   // ------------
