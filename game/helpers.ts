@@ -38,13 +38,17 @@ export function hitTestAllEntities(x: number, y: number, options: Partial<{ igno
     if (entity instanceof Snake) {
       const there = entity.at(x, y, true, entity !== options.ignoreTailOfSnake)
       if (there) {
-        foremost = there
+        if (entity.solid) {
+          foremost = there
+        }
         entitiesThere.push(entity)
       }
     } else if (entity.at) {
       const there = entity.at(x, y)
       if (there) {
-        foremost = there
+        if (entity.solid) {
+          foremost = there
+        }
         entitiesThere.push(entity)
       }
     }
@@ -52,7 +56,7 @@ export function hitTestAllEntities(x: number, y: number, options: Partial<{ igno
   return {
     x,
     y,
-    entitiesThere,
-    topLayer: foremost,
+    entitiesThere, // including non-solid entities
+    topLayer: foremost, // top solid entity's color
   }
 }

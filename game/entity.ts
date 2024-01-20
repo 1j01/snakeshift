@@ -6,4 +6,5 @@ export default class Entity {
   draw3?(ctx: CanvasRenderingContext2D): void
   step?(time: number): void
   at?(x: number, y: number): CollisionLayer
+  solid = true
 }

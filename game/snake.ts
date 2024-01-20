@@ -268,13 +268,8 @@ export default class Snake extends Entity {
       entities.splice(thisIndex, 1)
     }
     // Eat collectables
-    // Not currently collidable with at() so just checking x/y
-    for (const entity of entities) {
-      if (
-        entity instanceof Collectable &&
-        entity.x === move.x &&
-        entity.y === move.y
-      ) {
+    for (const entity of move.entitiesThere) {
+      if (entity instanceof Collectable) {
         entities.splice(entities.indexOf(entity), 1)
         this.growOnNextMove = true
       }

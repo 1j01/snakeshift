@@ -64,8 +64,7 @@ export function handleInputForLevelEditing(
   eventTarget.addEventListener('pointerdown', (event: MouseEvent) => {
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile) {
-      // TODO: allow dragging non-solid entities (i.e. Collectable)
-      // also, consider reversing the array to be topmost first
+      // TODO: consider reversing the array to be topmost first
       const hit = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
       placing = hit.entitiesThere[hit.entitiesThere.length - 1]
       updateHighlight()
@@ -80,7 +79,7 @@ export function handleInputForLevelEditing(
       // pointerDownTile &&
       // sameTile(pointerUpTile, pointerDownTile)
     ) {
-      // undoable()
+      // undoable is covered at start of drag or addition of a new entity
       placing = undefined
     }
     pointerDownTile = undefined
@@ -88,6 +87,7 @@ export function handleInputForLevelEditing(
   })
 
   eventTarget.addEventListener('pointercancel', () => {
+    // TODO: undo and delete undoable?
     pointerDownTile = undefined
     placing = undefined
     updateHighlight()

@@ -4,6 +4,8 @@ import { CollisionLayer } from "./types"
 
 export class Collectable extends Entity {
   static readonly SIZE = 0.2
+  solid = false
+
   constructor(
     public x = 0,
     public y = 0,
@@ -11,6 +13,14 @@ export class Collectable extends Entity {
     public layer = CollisionLayer.White,
   ) {
     super()
+  }
+
+  // TODO: DRY with Block, such as with a base class BoxyEntity
+  at(x: number, y: number): CollisionLayer {
+    if (x >= this.x && x < this.x + this.size && y >= this.y && y < this.y + this.size) {
+      return this.layer
+    }
+    return CollisionLayer.None
   }
 
   draw(ctx: CanvasRenderingContext2D) {
