@@ -6,12 +6,14 @@ export const canvas = document.createElement('canvas')
 const ctx = canvas.getContext('2d')!
 document.body.appendChild(canvas)
 
+const editorGUI = document.getElementById('entities-bar')!
+
 let transform: DOMMatrix | undefined = undefined
 export function draw() {
   // Round down to nearest even number to avoid borders between tiles
   // due to anti-aliasing.
   const width = Math.floor(window.innerWidth / 2) * 2
-  const height = Math.floor(window.innerHeight / 2) * 2
+  const height = Math.floor((window.innerHeight - editorGUI.clientHeight) / 2) * 2
   if (canvas.width !== width || canvas.height !== height) {
     canvas.width = width
     canvas.height = height
