@@ -80,12 +80,12 @@ export function deserialize(state: GameState) {
 
 export function initLevel() {
   entities.length = 0
-  // TODO: reduce the entity count and number of loops by using width/height
-  for (let x = 0; x < 16; x++) {
-    for (let y = 8; y < 16; y++) {
-      entities.push(new Block(x, y, 1, 1, CollisionLayer.White))
-    }
-  }
+  // for (let x = 0; x < 16; x++) {
+  //   for (let y = 8; y < 16; y++) {
+  //     entities.push(new Block(x, y, 1, 1, CollisionLayer.White))
+  //   }
+  // }
+  entities.push(new Block(0, 8, 16, 8, CollisionLayer.White))
   for (let x = 4; x < 12; x++) {
     for (let y = 0; y < 8; y++) {
       entities.push(new Collectable(x, y, 1, 1, CollisionLayer.White))
