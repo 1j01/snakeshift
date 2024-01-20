@@ -189,13 +189,24 @@ export default class Snake extends Entity {
         // body
         ctx.rotate(foreAngle)
         // mirrored(() => ctx.lineTo(-1 / 2, 1 / 2))
-        mirrored(() => ctx.lineTo(1 / 2, 1 / 2))
+        // mirrored(() => ctx.lineTo(1 / 2, 1 / 2))
 
+        const shortestAngle = Math.atan2(
+          Math.sin(backAngle - foreAngle),
+          Math.cos(backAngle - foreAngle),
+        )
         mirrored(() => {
-          ctx.quadraticCurveTo(
-            1 / 2, 1 / 2,
-            -1 / 2, 1 / 2,
-          )
+          if (shortestAngle > 0) {
+            ctx.quadraticCurveTo(
+              1 / 2, 1 / 2,
+              -1 / 2, 1 / 2,
+            )
+          } else {
+            ctx.quadraticCurveTo(
+              -1 / 2, 1 / 2,
+              1 / 2, 1 / 2,
+            )
+          }
         })
       }
       ctx.restore()
