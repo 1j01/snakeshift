@@ -79,18 +79,18 @@ export function deserialize(state: GameState) {
 
 export function initLevel() {
   entities.length = 0
-  const size = Block.BASE_SIZE
+  // TODO: replace size with width/height and put it to use by reducing the entity count and number of loops
   for (let x = 0; x < 16; x++) {
     for (let y = 8; y < 16; y++) {
-      entities.push(new Block(x * size, y * size, size, CollisionLayer.White))
+      entities.push(new Block(x, y, 1, CollisionLayer.White))
     }
   }
   for (let x = 4; x < 12; x++) {
     for (let y = 0; y < 8; y++) {
-      entities.push(new Collectable(x * size, y * size, size, CollisionLayer.White))
+      entities.push(new Collectable(x, y, 1, CollisionLayer.White))
     }
     for (let y = 8; y < 16; y++) {
-      entities.push(new Collectable(x * size, y * size, size, CollisionLayer.Black))
+      entities.push(new Collectable(x, y, 1, CollisionLayer.Black))
     }
   }
   activePlayer = new Snake()

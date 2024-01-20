@@ -1,4 +1,3 @@
-import { Block } from "./block"
 import { entities, levelInfo } from "./game-state"
 import { Point, Tile } from "./types"
 
@@ -22,8 +21,8 @@ export function draw() {
 
   ctx.save()
   ctx.translate(canvas.width / 2, canvas.height / 2)
-  const viewWidth = levelInfo.width * Block.BASE_SIZE
-  const viewHeight = levelInfo.height * Block.BASE_SIZE
+  const viewWidth = levelInfo.width
+  const viewHeight = levelInfo.height
   const scale = Math.min(canvas.width / viewWidth, canvas.height / viewHeight)
   ctx.scale(scale, scale)
   ctx.translate(-viewWidth / 2, -viewHeight / 2)
@@ -63,9 +62,9 @@ export function pageToWorldTile(clientPoint: { clientX: number, clientY: number 
     return undefined
   }
   return {
-    x: Math.floor(worldPoint.x / Block.BASE_SIZE) * Block.BASE_SIZE,
-    y: Math.floor(worldPoint.y / Block.BASE_SIZE) * Block.BASE_SIZE,
-    size: Block.BASE_SIZE,
+    x: Math.floor(worldPoint.x),
+    y: Math.floor(worldPoint.y),
+    size: 1,
   }
 }
 

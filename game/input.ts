@@ -1,4 +1,3 @@
-import { Block } from './block'
 import { activePlayer, controlScheme, cyclePlayerControl, onUpdate, redo, setControlScheme, undo, undoable } from './game-state'
 import { neighborOf, sameTile } from './helpers'
 import { pageToWorldTile } from './rendering'
@@ -48,8 +47,8 @@ export function handleInput(
       pointerDownTile &&
       sameTile(pointerUpTile, pointerDownTile)
     ) {
-      const deltaGridX = Math.round((pointerUpTile.x - activePlayer.segments[0].x) / Block.BASE_SIZE)
-      const deltaGridY = Math.round((pointerUpTile.y - activePlayer.segments[0].y) / Block.BASE_SIZE)
+      const deltaGridX = Math.round(pointerUpTile.x - activePlayer.segments[0].x)
+      const deltaGridY = Math.round(pointerUpTile.y - activePlayer.segments[0].y)
       const move = activePlayer.analyzeMove(deltaGridX, deltaGridY)
       if (move.valid) {
         undoable()

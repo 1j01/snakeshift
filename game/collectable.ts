@@ -1,4 +1,3 @@
-import { Block } from "./block"
 import Entity from "./entity"
 import { CollisionLayer } from "./types"
 
@@ -9,7 +8,7 @@ export class Collectable extends Entity {
   constructor(
     public x = 0,
     public y = 0,
-    public size = Block.BASE_SIZE,
+    public size = 1,
     public layer = CollisionLayer.White,
   ) {
     super()

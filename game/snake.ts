@@ -1,4 +1,3 @@
-import { Block } from "./block"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
 import { entities } from "./game-state"
@@ -21,9 +20,8 @@ export default class Snake extends Entity {
 
   constructor() {
     super()
-    const size = Block.BASE_SIZE
     for (let i = 0; i < 10; i++) {
-      this.segments.push({ x: i * size, y: 0, size, layer: CollisionLayer.White })
+      this.segments.push({ x: i, y: 0, size: 1, layer: CollisionLayer.White })
     }
   }
   toJSON(): object {

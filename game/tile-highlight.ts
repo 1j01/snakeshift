@@ -1,4 +1,3 @@
-import { Block } from "./block"
 import { activePlayer } from "./game-state"
 import { tileOnPage } from "./rendering"
 import { Tile } from "./types"
@@ -23,8 +22,8 @@ export function setHighlight(tile: Tile | undefined, pressed = false) {
     // even when a further tile is hovered.
     // const dirX = Math.sign(tile.x - activePlayer.segments[0].x)
     // const dirY = Math.sign(tile.y - activePlayer.segments[0].y)
-    const deltaGridX = Math.round((tile.x - activePlayer.segments[0].x) / Block.BASE_SIZE)
-    const deltaGridY = Math.round((tile.y - activePlayer.segments[0].y) / Block.BASE_SIZE)
+    const deltaGridX = Math.round(tile.x - activePlayer.segments[0].x)
+    const deltaGridY = Math.round(tile.y - activePlayer.segments[0].y)
     const move = activePlayer.analyzeMove(deltaGridX, deltaGridY)
     hoverEffect?.classList.toggle("valid", move.valid)
   }
