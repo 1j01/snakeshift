@@ -179,9 +179,9 @@ export default class Snake extends Entity {
         ctx.quadraticCurveTo(extent * (1 - pointiness), 1 / 2, -1 / 2, 1 / 2)
       } else {
         // body
-        // ctx.rect(-1 / 2, -1 / 2, 1, 1)
+        ctx.rect(-1 / 2, -1 / 2, 1, 1)
         addMirroredPoints(1 / 2, 1 / 2)
-        addMirroredPoints(-1 / 2, 1 / 2)
+        // addMirroredPoints(-1 / 2, 1 / 2)
       }
       ctx.restore()
     }
