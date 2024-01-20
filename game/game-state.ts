@@ -1,6 +1,7 @@
 import { Block } from "./block"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
+import { makeEntity } from "./helpers"
 import Snake from "./snake"
 import { CollisionLayer, ControlScheme, GameState, ParsedGameState } from "./types"
 
@@ -60,20 +61,7 @@ export function deserialize(state: GameState) {
   for (let i = 0; i < parsed.entities.length; i++) {
     const entityData = parsed.entities[i]
     const entityType = parsed.entityTypes[i]
-    let instance: Entity
-    switch (entityType) {
-      case "Block":
-        instance = new Block()
-        break
-      case "Snake":
-        instance = new Snake()
-        break
-      case "Collectable":
-        instance = new Collectable()
-        break
-      default:
-        throw new Error(`Unknown entity type: ${entityType}`)
-    }
+    const instance = makeEntity(entityType)
     Object.assign(instance, entityData)
     entities.push(instance)
   }
@@ -131,7 +119,7 @@ export function onUpdate(listener: () => void) {
   updateListeners.push(listener)
 }
 
-function postUpdate() {
+export function postUpdate() {
   for (const listener of updateListeners) {
     listener()
   }

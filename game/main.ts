@@ -1,5 +1,6 @@
 import { entities, initLevel } from "./game-state"
 import { handleInput } from "./input"
+import { handleInputForLevelEditing } from "./level-editor"
 import { canvas, draw } from "./rendering"
 
 function step(time: number) {
@@ -17,5 +18,6 @@ function animate(time: number) {
 
 initLevel()
 handleInput(canvas)
+handleInputForLevelEditing(canvas)
 animate(0)
 
