@@ -39,8 +39,8 @@ export default class Snake extends Entity {
   draw(ctx: CanvasRenderingContext2D): void {
     // body
     this._bodyPath(ctx)
-    // ctx.fillStyle = this.segments[0].layer === CollisionLayer.White ? '#fff' : '#000'
-    // ctx.fill()
+    ctx.fillStyle = this.segments[0].layer === CollisionLayer.White ? '#fff' : '#000'
+    ctx.fill()
   }
   draw2(ctx: CanvasRenderingContext2D): void {
     // eye and tongue
@@ -98,9 +98,9 @@ export default class Snake extends Entity {
     draw(highlightCtx, transform)
 
     // Cut out the snake's fill, leaving a clean outline.
-    // highlightCtx.globalCompositeOperation = 'destination-out'
-    // this._bodyPath(highlightCtx)
-    // highlightCtx.fill()
+    highlightCtx.globalCompositeOperation = 'destination-out'
+    this._bodyPath(highlightCtx)
+    highlightCtx.fill()
     highlightCtx.restore()
     ctx.resetTransform()
     ctx.drawImage(this._highlightCanvas, 0, 0)
@@ -182,12 +182,9 @@ export default class Snake extends Entity {
         // body
         // ctx.rect(-1 / 2, -1 / 2, 1, 1)
         addMirroredPoints(-1 / 2, -1 / 2)
-        // addMirroredPoints(1 / 2, -1 / 2)
+        addMirroredPoints(1 / 2, -1 / 2)
       }
       ctx.restore()
-      if (Math.sin(performance.now() / 4000 - i / this.segments.length * Math.PI / 2) > 0) {
-        return
-      }
     }
     // View transform is baked into the backtrack points,
     // so we need to reset it before using them.
@@ -197,11 +194,8 @@ export default class Snake extends Entity {
       const point = backtrack[i]
       // ctx.lineTo(point.x + Math.random() * 10, point.y + Math.random() * 10)
       ctx.lineTo(point.x, point.y)
-      if (Math.sin(performance.now() / 4000 - i / this.segments.length * Math.PI / 2) > 0) {
-        break
-      }
     }
-    // ctx.closePath()
+    ctx.closePath()
     ctx.setTransform(transform)
   }
   at(x: number, y: number, includeHead = true, includeTail = true): CollisionLayer {
