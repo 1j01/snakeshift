@@ -152,11 +152,12 @@ export default class Snake extends Entity {
     ctx.restore()
   }
   private _drawBodyPath(ctx: CanvasRenderingContext2D, draw: (segment: SnakeSegment) => void): void {
+    const pixel = 1 / ctx.getTransform().a
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
       ctx.save()
       ctx.translate(segment.x + segment.size / 2, segment.y + segment.size / 2)
-      ctx.scale(segment.size, segment.size)
+      ctx.scale(segment.size + pixel, segment.size + pixel)
       const angle = i === 0 ?
         Math.atan2(this.segments[1].y - segment.y, this.segments[1].x - segment.x) :
         Math.atan2(segment.y - this.segments[i - 1].y, segment.x - this.segments[i - 1].x)
