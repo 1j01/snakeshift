@@ -216,6 +216,7 @@ export function handleInput(
       directionIndex = ((directionIndex % DIRECTIONS.length) + DIRECTIONS.length) % DIRECTIONS.length
       const direction = DIRECTIONS[directionIndex]
       let usingGamepad = false
+      // Joystick
       if (dist > minDistance) {
         usingGamepad = true
         const neighbor = neighborOf(playerTile, direction)
@@ -240,6 +241,17 @@ export function handleInput(
           setControlScheme(ControlScheme.Gamepad)
         }
       }
+      // D-pad
+      if (justPressed(12, gamepad)) {
+        move(0, -1, ControlScheme.Gamepad)
+      } else if (justPressed(13, gamepad)) {
+        move(0, 1, ControlScheme.Gamepad)
+      } else if (justPressed(14, gamepad)) {
+        move(-1, 0, ControlScheme.Gamepad)
+      } else if (justPressed(15, gamepad)) {
+        move(1, 0, ControlScheme.Gamepad)
+      }
+
       buttonsLast.set(gamepad.index, new Map(gamepad.buttons.map((button, index) => [index, button.pressed])))
       for (const button of gamepad.buttons) {
         if (button.pressed) {
