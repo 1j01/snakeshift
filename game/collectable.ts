@@ -12,7 +12,7 @@ export class Collectable extends RectangularEntity {
     ctx.strokeStyle = this.layer === CollisionLayer.White ? '#000' : '#fff'
     ctx.fillStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
     ctx.translate(this.x, this.y)
-    ctx.scale(this.size, this.size)
+    ctx.scale(this.width, this.height)
     ctx.translate(1 / 2, 1 / 2)
     ctx.rotate(Math.PI / 4)
     ctx.beginPath()

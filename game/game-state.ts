@@ -80,18 +80,18 @@ export function deserialize(state: GameState) {
 
 export function initLevel() {
   entities.length = 0
-  // TODO: replace size with width/height and put it to use by reducing the entity count and number of loops
+  // TODO: reduce the entity count and number of loops by using width/height
   for (let x = 0; x < 16; x++) {
     for (let y = 8; y < 16; y++) {
-      entities.push(new Block(x, y, 1, CollisionLayer.White))
+      entities.push(new Block(x, y, 1, 1, CollisionLayer.White))
     }
   }
   for (let x = 4; x < 12; x++) {
     for (let y = 0; y < 8; y++) {
-      entities.push(new Collectable(x, y, 1, CollisionLayer.White))
+      entities.push(new Collectable(x, y, 1, 1, CollisionLayer.White))
     }
     for (let y = 8; y < 16; y++) {
-      entities.push(new Collectable(x, y, 1, CollisionLayer.Black))
+      entities.push(new Collectable(x, y, 1, 1, CollisionLayer.Black))
     }
   }
   activePlayer = new Snake()
@@ -102,8 +102,8 @@ export function initLevel() {
     segment.layer = CollisionLayer.Black
   }
   entities.push(otherSnake)
-  entities.push(new Crate(3, 3, 1, CollisionLayer.White))
-  entities.push(new Crate(3, 13, 1, CollisionLayer.Black))
+  entities.push(new Crate(3, 3, 1, 1, CollisionLayer.White))
+  entities.push(new Crate(3, 13, 1, 1, CollisionLayer.Black))
   sortEntities() // because I don't care to manage the order of this code more than I need to
   postUpdate() // might matter to clear a highlight if level is reset
 }

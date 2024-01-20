@@ -8,7 +8,7 @@ export class Crate extends RectangularEntity {
     ctx.strokeStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
     ctx.fillStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
     ctx.beginPath()
-    ctx.rect(this.x, this.y, this.size, this.size)
+    ctx.rect(this.x, this.y, this.width, this.height)
     ctx.fill()
     ctx.stroke()
     ctx.lineWidth = 0.05
@@ -17,7 +17,7 @@ export class Crate extends RectangularEntity {
     ctx.clip()
     ctx.beginPath()
     ctx.moveTo(this.x, this.y)
-    ctx.lineTo(this.x + this.size, this.y + this.size)
+    ctx.lineTo(this.x + this.width, this.y + this.height)
     ctx.lineWidth = 0.2
     ctx.strokeStyle = this.layer === CollisionLayer.White ? '#000' : '#fff'
     ctx.stroke()
@@ -25,8 +25,8 @@ export class Crate extends RectangularEntity {
     ctx.strokeStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
     ctx.stroke()
     ctx.beginPath()
-    ctx.moveTo(this.x + this.size, this.y)
-    ctx.lineTo(this.x, this.y + this.size)
+    ctx.moveTo(this.x + this.width, this.y)
+    ctx.lineTo(this.x, this.y + this.height)
     ctx.lineWidth = 0.2
     ctx.strokeStyle = this.layer === CollisionLayer.White ? '#000' : '#fff'
     ctx.stroke()
