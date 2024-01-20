@@ -67,6 +67,9 @@ export function handleInputForLevelEditing(
       // TODO: consider reversing the array to be topmost first
       const hit = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
       placing = hit.entitiesThere[hit.entitiesThere.length - 1]
+      if (placing) {
+        undoable()
+      }
       updateHighlight()
     }
   })
