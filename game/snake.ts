@@ -194,7 +194,7 @@ export default class Snake extends Entity {
         mirrored(() => {
           ctx.quadraticCurveTo(
             1 / 2, 1 / 2,
-            -1 / 2, 1 / 2,
+            1 / 2, -1 / 2,
           )
         })
       }
