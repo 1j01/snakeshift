@@ -71,6 +71,7 @@ body:not(.editing) #entities-bar {
   padding: 5px 10px;
   margin: 0 5px;
   cursor: pointer;
+  user-select: none;
 }
 
 .entity-button:active {
