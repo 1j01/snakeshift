@@ -164,7 +164,7 @@ export default class Snake extends Entity {
       ctx.rotate(angle)
       ctx.beginPath()
       if (i === 0) {
-        // round head
+        // head
         ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
         ctx.lineTo(1 / 2, -1 / 2)
         ctx.lineTo(1 / 2, 1 / 2)
@@ -173,18 +173,7 @@ export default class Snake extends Entity {
         // If the eye was rendered as a hole in the head, then
         // when two snake heads overlapped, the eye would be invisible.
       } else if (i === this.segments.length - 1) {
-        // triangle tail
-        // ctx.moveTo(-1 / 2, -1 / 2)
-        // ctx.lineTo(1 / 2, 0)
-        // ctx.lineTo(-1 / 2, 1 / 2)
-        // quadratic tapered tail
-        // - smoother, looks better
-        // - fatter, makes it clearer what color the space counts as
-        // ctx.moveTo(-1 / 2, -1 / 2)
-        // ctx.quadraticCurveTo(1.7, 0, -1 / 2, 1 / 2)
-        // double quadratic tapered tail
-        // - smooth join to body
-        // - adjustable to be fatter for logical clarity or pointier for aesthetics
+        // tail
         ctx.moveTo(-1 / 2, -1 / 2)
         const extent = .5
         const pointiness = 0
@@ -192,6 +181,7 @@ export default class Snake extends Entity {
         ctx.quadraticCurveTo(extent * (1 - pointiness), 1 / 2, -1 / 2, 1 / 2)
         ctx.closePath()
       } else {
+        // body
         ctx.rect(-1 / 2, -1 / 2, 1, 1)
       }
       draw(segment)
