@@ -35,7 +35,7 @@ setEditMode(true)
 animate(0)
 
 addEventListener('keydown', event => {
-  if (event.key === '`') {
+  if (event.key === '`' && !event.repeat) {
     setEditMode(!editing)
     event.preventDefault()
   } else if (event.key === 'z') {
