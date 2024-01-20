@@ -2,7 +2,8 @@ import { Block } from "./block"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
 import { entities } from "./game-state"
-import { CollisionLayer, HitTestResult, Move, Tile } from "./types"
+import { hitTestAllEntities } from "./helpers"
+import { CollisionLayer, Move, Tile } from "./types"
 
 interface SnakeSegment extends Tile {
   layer: CollisionLayer
@@ -214,8 +215,8 @@ export default class Snake extends Entity {
     const deltaY = dirY * head.size
     const x = head.x + deltaX
     const y = head.y + deltaY
-    const ahead = this._hitTestAllEntities(x, y, this.growOnNextMove)
-    const trail = this._hitTestAllEntities(tail.x, tail.y, true)
+    const ahead = hitTestAllEntities(x, y, { ignoreTailOfSnake: this.growOnNextMove ? undefined : this })
+    const trail = hitTestAllEntities(tail.x, tail.y)
     // console.log(ahead, trail)
     // TODO: prevent overlapped snake doubling back on itself
     // I could check if entitiesThere includes this snake,
@@ -238,33 +239,6 @@ export default class Snake extends Entity {
       y,
       entitiesThere: ahead.entitiesThere,
       topLayer: ahead.topLayer,
-    }
-  }
-  private _hitTestAllEntities(x: number, y: number, includeOwnTail = true): HitTestResult {
-    let foremost = CollisionLayer.Black
-    const entitiesThere: Entity[] = []
-    for (const entity of entities) {
-      if (entity instanceof Snake) {
-        // This snake's tail may be leaving the space, so ignore it
-        // in that case but don't ignore any other snake's tail.
-        const there = entity.at(x, y, true, includeOwnTail || entity !== this)
-        if (there) {
-          foremost = there
-          entitiesThere.push(entity)
-        }
-      } else if (entity.at) {
-        const there = entity.at(x, y)
-        if (there) {
-          foremost = there
-          entitiesThere.push(entity)
-        }
-      }
-    }
-    return {
-      x,
-      y,
-      entitiesThere,
-      topLayer: foremost,
     }
   }
   takeMove(move: Move): void {

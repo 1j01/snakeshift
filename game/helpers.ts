@@ -1,8 +1,9 @@
 import { Block } from "./block"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
+import { entities } from "./game-state"
 import Snake from "./snake"
-import { Tile } from "./types"
+import { CollisionLayer, HitTestResult, Tile } from "./types"
 
 export function sameTile(a: Tile, b: Tile) {
   return a.x === b.x && a.y === b.y && a.size === b.size
@@ -26,5 +27,32 @@ export function makeEntity(entityType: string): Entity {
       return new Collectable()
     default:
       throw new Error(`Unknown entity type: ${entityType}`)
+  }
+}
+
+export function hitTestAllEntities(x: number, y: number, options: Partial<{ ignoreTailOfSnake: Snake | undefined }> = {}): HitTestResult {
+  // A snake's tail may be leaving the space, so it can be ignored, optionally.
+  let foremost = CollisionLayer.Black
+  const entitiesThere: Entity[] = []
+  for (const entity of entities) {
+    if (entity instanceof Snake) {
+      const there = entity.at(x, y, true, entity !== options.ignoreTailOfSnake)
+      if (there) {
+        foremost = there
+        entitiesThere.push(entity)
+      }
+    } else if (entity.at) {
+      const there = entity.at(x, y)
+      if (there) {
+        foremost = there
+        entitiesThere.push(entity)
+      }
+    }
+  }
+  return {
+    x,
+    y,
+    entitiesThere,
+    topLayer: foremost,
   }
 }
