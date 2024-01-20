@@ -163,7 +163,8 @@ export default class Snake extends Entity {
 
       if (i === 0) {
         // head
-        ctx.moveTo(1 / 2, 1 / 2)
+        // ctx.moveTo(1 / 2, 1 / 2)
+        addMirroredPoints(1 / 2, 1 / 2)
         ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
         ctx.lineTo(1 / 2, -1 / 2)
         ctx.lineTo(1 / 2, 1 / 2)
@@ -179,9 +180,9 @@ export default class Snake extends Entity {
         ctx.quadraticCurveTo(extent * (1 - pointiness), 1 / 2, -1 / 2, 1 / 2)
       } else {
         // body
-        ctx.rect(-1 / 2, -1 / 2, 1, 1)
-        addMirroredPoints(1 / 2, 1 / 2)
-        // addMirroredPoints(-1 / 2, 1 / 2)
+        // ctx.rect(-1 / 2, -1 / 2, 1, 1)
+        addMirroredPoints(-1 / 2, -1 / 2)
+        addMirroredPoints(1 / 2, -1 / 2)
       }
       ctx.restore()
     }
@@ -191,6 +192,7 @@ export default class Snake extends Entity {
     ctx.resetTransform()
     for (let i = backtrack.length - 1; i >= 0; i--) {
       const point = backtrack[i]
+      // ctx.lineTo(point.x + Math.random() * 10, point.y + Math.random() * 10)
       ctx.lineTo(point.x, point.y)
     }
     ctx.closePath()
