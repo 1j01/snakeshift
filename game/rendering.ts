@@ -49,7 +49,12 @@ export function viewToWorld(clientPoint: { clientX: number, clientY: number }): 
 }
 
 export function worldToView(worldPoint: Point): Point {
-  return new DOMPoint(worldPoint.x, worldPoint.y).matrixTransform(transform)
+  const rect = canvas.getBoundingClientRect()
+  const point = new DOMPoint(worldPoint.x, worldPoint.y).matrixTransform(transform)
+  return {
+    x: point.x + rect.left,
+    y: point.y + rect.top,
+  }
 }
 
 export function pageToWorldTile(clientPoint: { clientX: number, clientY: number }): Tile | undefined {
