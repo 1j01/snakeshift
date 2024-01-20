@@ -147,10 +147,10 @@ export default class Snake extends Entity {
   }
   private _bodyPath(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath()
-    const backtrack: DOMPoint[] = []
+    const backtrack: ({ matrix: DOMMatrix, draw: () => void })[] = []
     function addMirroredPoints(x: number, y: number) {
       ctx.lineTo(x, y)
-      backtrack.push(new DOMPoint(x, -y).matrixTransform(ctx.getTransform()))
+      backtrack.push({ matrix: ctx.getTransform(), draw() { ctx.lineTo(x, -y) } })
     }
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
@@ -183,8 +183,8 @@ export default class Snake extends Entity {
         // body
         // ctx.rotate(foreAngle)
         // // ctx.rect(-1 / 2, -1 / 2, 1, 1)
-        // addMirroredPoints(-1 / 2, 1 / 2)
-        // addMirroredPoints(1 / 2, 1 / 2)
+        addMirroredPoints(-1 / 2, 1 / 2)
+        addMirroredPoints(1 / 2, 1 / 2)
 
         // const shortestAngle = Math.atan2(
         //   Math.sin(backAngle - foreAngle),
@@ -197,27 +197,18 @@ export default class Snake extends Entity {
         //   addMirroredPoints(x, y)
         // }
 
-        ctx.quadraticCurveTo(
-          0, 0,
-          Math.cos(backAngle) * 1 / 2,
-          Math.sin(backAngle) * 1 / 2,
-        )
-        ctx.quadraticCurveTo(
-          Math.cos(foreAngle) * 1 / 2,
-          Math.sin(foreAngle) * 1 / 2,
-          0, 0,
-        )
+        // ctx.quadraticCurveTo(
+        //   0, 0,
+        //   Math.cos(backAngle) * 1 / 2,
+        //   Math.sin(backAngle) * 1 / 2,
+        // )
       }
       ctx.restore()
     }
-    // View transform is baked into the backtrack points,
-    // so we need to reset it before using them.
     const transform = ctx.getTransform()
-    ctx.resetTransform()
     for (let i = backtrack.length - 1; i >= 0; i--) {
-      const point = backtrack[i]
-      // ctx.lineTo(point.x + Math.random() * 10, point.y + Math.random() * 10)
-      ctx.lineTo(point.x, point.y)
+      ctx.setTransform(backtrack[i].matrix)
+      backtrack[i].draw()
     }
     ctx.closePath()
     ctx.setTransform(transform)
