@@ -26,7 +26,7 @@ function setEditMode(enterEditMode: boolean) {
     cleanup = handleInput(canvas)
   }
   editing = enterEditMode
-  document.getElementById('entities-bar')!.hidden = !enterEditMode
+  document.body.classList.toggle('editing', editing)
 }
 
 initLevelEditorGUI()

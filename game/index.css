@@ -46,11 +46,17 @@ body {
   font-size: 1.3em;
 }
 
-#entities-bar:not([hidden]) {
+#entities-bar {
   width: 100%;
   display: flex;
   justify-content: center;
   padding: 5px;
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+body:not(.editing) #entities-bar {
+  transform: translateY(-100%);
+  opacity: 0;
 }
 
 .entity-button {

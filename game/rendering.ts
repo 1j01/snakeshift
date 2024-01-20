@@ -13,7 +13,9 @@ export function draw() {
   // Round down to nearest even number to avoid borders between tiles
   // due to anti-aliasing.
   const width = Math.floor(window.innerWidth / 2) * 2
-  const height = Math.floor((window.innerHeight - editorGUI.clientHeight) / 2) * 2
+  const editorGUIRect = editorGUI.getBoundingClientRect()
+  const height = Math.floor((window.innerHeight - editorGUIRect.bottom) / 2) * 2
+  canvas.style.transform = `translateY(${editorGUIRect.top}px)`
   if (canvas.width !== width || canvas.height !== height) {
     canvas.width = width
     canvas.height = height
