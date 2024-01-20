@@ -2,7 +2,7 @@ import Entity from './entity'
 import { entities, postUpdate, undoable } from './game-state'
 import { hitTestAllEntities, makeEntity, sameTile, sortEntities } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
-import { pageToWorldTile } from './rendering'
+import { drawEntities, pageToWorldTile } from './rendering'
 import Snake from './snake'
 import { setHighlight } from './tile-highlight'
 import { CollisionLayer, Tile } from './types'
@@ -20,11 +20,15 @@ export function handleInputForLevelEditing(
   const entitiesBar = document.getElementById('entities-bar')!
   const entityButtons = entitiesBar.querySelectorAll('.entity-button')
   for (const button of entityButtons) {
-    button.addEventListener('click', () => {
-      const entityName = button.getAttribute('data-entity')!
-      const entityColor = button.getAttribute('data-color')!
+    makeEntityButton(button)
+  }
+
+  function makeEntityButton(button: Element) {
+    const entityName = button.getAttribute('data-entity')!
+    const entityColor = button.getAttribute('data-color')!
+    const layer = entityColor === "White" ? CollisionLayer.White : entityColor === "Black" ? CollisionLayer.Black : CollisionLayer.None
+    function makeColoredEntity() {
       const entityInstance = makeEntity(entityName)
-      const layer = entityColor === "White" ? CollisionLayer.White : entityColor === "Black" ? CollisionLayer.Black : CollisionLayer.None
       if (entityInstance instanceof Snake) {
         for (const segment of entityInstance.segments) {
           segment.layer = layer
@@ -32,12 +36,25 @@ export function handleInputForLevelEditing(
       } else if (entityInstance instanceof RectangularEntity) {
         entityInstance.layer = layer
       }
+      return entityInstance
+    }
+    button.addEventListener('click', () => {
       undoable()
+      const entityInstance = makeColoredEntity()
       entities.push(entityInstance)
       sortEntities()
       placing = entityInstance
       postUpdate()
     })
+    const canvas = document.createElement('canvas')
+    canvas.width = 48
+    canvas.height = 48
+    const ctx = canvas.getContext('2d')!
+    button.prepend(canvas)
+    const entityForButton = makeColoredEntity()
+    ctx.translate(8, 8)
+    ctx.scale(32, 32)
+    drawEntities(ctx, [entityForButton])
   }
 
   // ------------

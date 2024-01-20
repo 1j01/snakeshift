@@ -1,3 +1,4 @@
+import Entity from "./entity"
 import { entities, levelInfo } from "./game-state"
 import { Point, Tile } from "./types"
 
@@ -27,6 +28,11 @@ export function draw() {
   ctx.scale(scale, scale)
   ctx.translate(-viewWidth / 2, -viewHeight / 2)
   transform = ctx.getTransform()
+  drawEntities(ctx, entities)
+  ctx.restore()
+}
+
+export function drawEntities(ctx: CanvasRenderingContext2D, entities: Entity[]) {
   for (const entity of entities) {
     entity.draw?.(ctx)
   }
@@ -36,7 +42,6 @@ export function draw() {
   for (const entity of entities) {
     entity.draw3?.(ctx)
   }
-  ctx.restore()
 }
 
 export function viewToWorld(clientPoint: { clientX: number, clientY: number }): Point {

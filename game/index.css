@@ -45,3 +45,31 @@ body {
 #tao-te-ching-quote h2 {
   font-size: 1.3em;
 }
+
+#entities-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+}
+
+.entity-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.entity-button:active {
+  /* background-color: #fff;
+  color: #000; */
+  border-color: transparent;
+  box-shadow: 0 0 0 2px #fff inset;
+}
