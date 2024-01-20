@@ -8,6 +8,21 @@ export function handleInput(
   eventTarget: HTMLElement,
 ) {
 
+  // TODO: DRY/simplify event handling
+  const listenerCleanupFunctions: (() => void)[] = []
+  function on<K extends keyof HTMLElementEventMap>(eventTarget: HTMLElement, type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
+  function on<K extends keyof WindowEventMap>(eventTarget: Window, type: K, listener: (this: Window, ev: WindowEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
+  function on(eventTarget: HTMLElement | Window, type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void {
+    eventTarget.addEventListener(type, listener, options)
+    listenerCleanupFunctions.push(() => eventTarget.removeEventListener(type, listener, options))
+  }
+
+  function removeEventListeners() {
+    for (const cleanup of listenerCleanupFunctions) {
+      cleanup()
+    }
+  }
+
   // ---------------------
   // Reactive highlighting
   // ---------------------
@@ -32,14 +47,13 @@ export function handleInput(
 
   let pointerDownTile: Tile | undefined = undefined
   let mouseHoveredTile: Tile | undefined = undefined
-  eventTarget.addEventListener('pointerdown', (event: MouseEvent) => {
+  on(eventTarget, 'pointerdown', (event: MouseEvent) => {
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile) {
       setControlScheme(ControlScheme.Pointer) // sets highlight
     }
   })
-
-  eventTarget.addEventListener('pointerup', (event: MouseEvent) => {
+  on(eventTarget, 'pointerup', (event: MouseEvent) => {
     const pointerUpTile = pageToWorldTile(event)
     if (
       activePlayer &&
@@ -65,12 +79,12 @@ export function handleInput(
     setHighlight(mouseHoveredTile)
   })
 
-  eventTarget.addEventListener('pointercancel', () => {
+  on(eventTarget, 'pointercancel', () => {
     pointerDownTile = undefined
     setHighlight(mouseHoveredTile)
   })
 
-  eventTarget.addEventListener('pointermove', (event: MouseEvent) => {
+  on(eventTarget, 'pointermove', (event: MouseEvent) => {
     const coordinates = pageToWorldTile(event)
     mouseHoveredTile = undefined
     if (coordinates) {
@@ -94,8 +108,9 @@ export function handleInput(
     activePlayer.takeMove(move)
   }
 
-  addEventListener('keydown', (event: KeyboardEvent) => {
+  on(window, 'keydown', (event: KeyboardEvent) => {
     // Using `event.code` instead of `event.key` since the control scheme relies on the physical key layout, not the letters.
+    // TODO: that's not the case for undo/redo, so use `event.key` for that
     let handling = true
     switch (event.code) {
       case 'ArrowLeft': // arrow keys
@@ -225,6 +240,11 @@ export function handleInput(
       setHighlight(hoveredTile)
     }
   }
-  setInterval(pollGamepads, 1000 / 60)
+  const intervalID = setInterval(pollGamepads, 1000 / 60)
 
+  // ---------------
+  return () => {
+    removeEventListeners()
+    clearInterval(intervalID)
+  }
 }

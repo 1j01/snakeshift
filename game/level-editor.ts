@@ -1,5 +1,5 @@
 import Entity from './entity'
-import { entities, postUpdate, undoable } from './game-state'
+import { entities, postUpdate, redo, undo, undoable } from './game-state'
 import { hitTestAllEntities, makeEntity, sameTile, sortEntities } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
@@ -7,15 +7,9 @@ import Snake from './snake'
 import { setHighlight } from './tile-highlight'
 import { CollisionLayer, Tile } from './types'
 
-export function handleInputForLevelEditing(
-  eventTarget: HTMLElement,
-) {
+let placing: Entity | undefined = undefined
 
-  let placing: Entity | undefined = undefined
-
-  // ------------
-  // Entities bar
-  // ------------
+export function initLevelEditorGUI() {
 
   const entitiesBar = document.getElementById('entities-bar')!
   const entityButtons = entitiesBar.querySelectorAll('.entity-button')
@@ -57,6 +51,27 @@ export function handleInputForLevelEditing(
     drawEntities(ctx, [entityForButton])
   }
 
+}
+
+export function handleInputForLevelEditing(
+  eventTarget: HTMLElement,
+) {
+
+  // TODO: DRY/simplify event handling
+  const listenerCleanupFunctions: (() => void)[] = []
+  function on<K extends keyof HTMLElementEventMap>(eventTarget: HTMLElement, type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
+  function on<K extends keyof WindowEventMap>(eventTarget: Window, type: K, listener: (this: Window, ev: WindowEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
+  function on(eventTarget: HTMLElement | Window, type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void {
+    eventTarget.addEventListener(type, listener, options)
+    listenerCleanupFunctions.push(() => eventTarget.removeEventListener(type, listener, options))
+  }
+
+  function removeEventListeners() {
+    for (const cleanup of listenerCleanupFunctions) {
+      cleanup()
+    }
+  }
+
   // ------------
   // Highlighting
   // ------------
@@ -78,7 +93,7 @@ export function handleInputForLevelEditing(
 
   let pointerDownTile: Tile | undefined = undefined
   let mouseHoveredTile: Tile | undefined = undefined
-  eventTarget.addEventListener('pointerdown', (event: MouseEvent) => {
+  on(eventTarget, 'pointerdown', (event: MouseEvent) => {
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile && !placing) {
       // TODO: consider reversing the array to be topmost first
@@ -96,7 +111,7 @@ export function handleInputForLevelEditing(
     }
   })
 
-  eventTarget.addEventListener('pointerup', (event: MouseEvent) => {
+  on(eventTarget, 'pointerup', (event: MouseEvent) => {
     const pointerUpTile = pageToWorldTile(event)
     if (
       pointerUpTile
@@ -111,14 +126,14 @@ export function handleInputForLevelEditing(
     updateHighlight()
   })
 
-  eventTarget.addEventListener('pointercancel', () => {
+  on(eventTarget, 'pointercancel', () => {
     // TODO: undo and delete undoable?
     pointerDownTile = undefined
     placing = undefined
     updateHighlight()
   })
 
-  eventTarget.addEventListener('pointermove', (event: MouseEvent) => {
+  on(eventTarget, 'pointermove', (event: MouseEvent) => {
     const coordinates = pageToWorldTile(event)
     mouseHoveredTile = undefined
     if (coordinates) {
@@ -144,4 +159,34 @@ export function handleInputForLevelEditing(
     updateHighlight()
   })
 
+  // --------
+  // Keyboard
+  // --------
+
+  on(window, 'keydown', (event: KeyboardEvent) => {
+    // Using `event.code` instead of `event.key` since the control scheme relies on the physical key layout, not the letters.
+    // TODO: that's not the case for undo/redo, so use `event.key` for that
+    let handling = true
+    switch (event.code) {
+      case 'KeyZ':
+        if (event.shiftKey) {
+          redo()
+        } else {
+          undo()
+        }
+        break
+      case 'KeyY':
+        redo()
+        break
+      default:
+        handling = false
+        break
+    }
+    if (handling) {
+      event.preventDefault()
+    }
+  })
+
+  // ------------
+  return removeEventListeners
 }
