@@ -160,6 +160,7 @@ export default class Snake extends Entity {
         Math.atan2(this.segments[1].y - segment.y, this.segments[1].x - segment.x) :
         Math.atan2(segment.y - this.segments[i - 1].y, segment.x - this.segments[i - 1].x)
       ctx.rotate(angle)
+      ctx.scale(1, 0.9)
 
       if (i === 0) {
         // head
