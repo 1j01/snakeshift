@@ -204,9 +204,10 @@ export default class Snake extends Entity {
           })
         } else if (shortestAngle < 0) {
           mirrored(() => {
+            ctx.rotate(-Math.PI / 2)
             ctx.quadraticCurveTo(
-              1 / 2, -1 / 2,
-              -1 / 2, -1 / 2,
+              -1 / 2, 1 / 2,
+              1 / 2, 1 / 2,
             )
           })
         } else {
