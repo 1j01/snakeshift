@@ -13,12 +13,25 @@ export class Crate extends RectangularEntity {
     ctx.stroke()
     ctx.lineWidth = 0.05
     ctx.strokeStyle = this.layer === CollisionLayer.White ? '#000' : '#fff'
-    // ctx.stroke()
-    // ctx.beginPath()
+    ctx.stroke()
+    ctx.clip()
+    ctx.beginPath()
     ctx.moveTo(this.x, this.y)
     ctx.lineTo(this.x + this.size, this.y + this.size)
+    ctx.lineWidth = 0.2
+    ctx.strokeStyle = this.layer === CollisionLayer.White ? '#000' : '#fff'
+    ctx.stroke()
+    ctx.lineWidth = 0.1
+    ctx.strokeStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
+    ctx.stroke()
+    ctx.beginPath()
     ctx.moveTo(this.x + this.size, this.y)
     ctx.lineTo(this.x, this.y + this.size)
+    ctx.lineWidth = 0.2
+    ctx.strokeStyle = this.layer === CollisionLayer.White ? '#000' : '#fff'
+    ctx.stroke()
+    ctx.lineWidth = 0.1
+    ctx.strokeStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
     ctx.stroke()
     ctx.restore()
   }
