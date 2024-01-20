@@ -52,9 +52,6 @@ export function handleInput(
     if (pointerDownTile) {
       setControlScheme(ControlScheme.Pointer) // sets highlight
     }
-    // clear selection, because dragging text can lock up the UI
-    window.getSelection()?.removeAllRanges()
-    event.preventDefault()
   })
   on(eventTarget, 'pointerup', (event: PointerEvent) => {
     const pointerUpTile = pageToWorldTile(event)

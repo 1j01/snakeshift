@@ -112,9 +112,6 @@ export function handleInputForLevelEditing(
       }
       updateHighlight()
     }
-    // clear selection, because dragging text can lock up the UI
-    window.getSelection()?.removeAllRanges()
-    event.preventDefault()
   })
 
   on(eventTarget, 'pointerup', (event: PointerEvent) => {

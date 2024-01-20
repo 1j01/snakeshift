@@ -34,7 +34,7 @@ initLevel()
 setEditMode(true)
 animate(0)
 
-addEventListener('keydown', event => {
+addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {
     setEditMode(!editing)
     event.preventDefault()
@@ -54,4 +54,16 @@ addEventListener('keydown', event => {
     redo()
     event.preventDefault()
   }
+})
+
+canvas.addEventListener('pointerdown', (event) => {
+  event.preventDefault()
+  // clear selection, because dragging text can lock up the UI
+  // and because the default behavior is not just to select text but also deselecting it,
+  // so preventDefault can make it harder to deselect text by default.
+  window.getSelection()?.removeAllRanges()
+})
+
+canvas.addEventListener('contextmenu', (event) => {
+  event.preventDefault()
 })
