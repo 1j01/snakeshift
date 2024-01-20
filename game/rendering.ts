@@ -10,11 +10,10 @@ const editorGUI = document.getElementById('entities-bar')!
 
 let transform: DOMMatrix | undefined = undefined
 export function draw() {
-  // Round down to nearest even number to avoid borders between tiles
-  // due to anti-aliasing.
-  const width = Math.floor(window.innerWidth / 2) * 2
+  const width = Math.floor(window.innerWidth)
   const editorGUIRect = editorGUI.getBoundingClientRect()
-  const height = Math.floor((window.innerHeight - editorGUIRect.bottom) / 2) * 2
+  // DOMRect.bottom is a double, needs rounding (or else the condition below may be true at rest, since canvas.height is an integer)
+  const height = Math.floor((window.innerHeight - editorGUIRect.bottom))
   canvas.style.transform = `translateY(${editorGUIRect.top}px)`
   if (canvas.width !== width || canvas.height !== height) {
     canvas.width = width
