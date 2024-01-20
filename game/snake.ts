@@ -156,14 +156,13 @@ export default class Snake extends Entity {
       const segment = this.segments[i]
       ctx.save()
       ctx.translate(segment.x + segment.size / 2, segment.y + segment.size / 2)
-      const angle = i === 0 ?
-        Math.atan2(this.segments[1].y - segment.y, this.segments[1].x - segment.x) :
-        Math.atan2(segment.y - this.segments[i - 1].y, segment.x - this.segments[i - 1].x)
-      ctx.rotate(angle)
+      const backAngle = Math.atan2(this.segments[i + 1]?.y - segment.y, this.segments[i + 1]?.x - segment.x)
+      const foreAngle = Math.atan2(segment.y - this.segments[i - 1]?.y, segment.x - this.segments[i - 1]?.x)
       ctx.scale(1, 0.9)
 
       if (i === 0) {
         // head
+        ctx.rotate(backAngle)
         // ctx.moveTo(1 / 2, 1 / 2)
         addMirroredPoints(1 / 2, 1 / 2)
         ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
@@ -174,6 +173,7 @@ export default class Snake extends Entity {
         // when two snake heads overlapped, the eye would be invisible.
       } else if (i === this.segments.length - 1) {
         // tail
+        ctx.rotate(foreAngle)
         ctx.lineTo(-1 / 2, 1 / 2)
         const extent = .5
         const pointiness = 0
@@ -181,6 +181,7 @@ export default class Snake extends Entity {
         ctx.quadraticCurveTo(extent * (1 - pointiness), -1 / 2, -1 / 2, -1 / 2)
       } else {
         // body
+        ctx.rotate(foreAngle)
         // ctx.rect(-1 / 2, -1 / 2, 1, 1)
         ctx.scale(0.5, 1)
         addMirroredPoints(-1 / 2, 1 / 2)
