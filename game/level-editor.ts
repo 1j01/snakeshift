@@ -63,7 +63,7 @@ export function handleInputForLevelEditing(
   let mouseHoveredTile: Tile | undefined = undefined
   eventTarget.addEventListener('pointerdown', (event: MouseEvent) => {
     pointerDownTile = pageToWorldTile(event)
-    if (pointerDownTile) {
+    if (pointerDownTile && !placing) {
       // TODO: consider reversing the array to be topmost first
       const hit = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
       placing = hit.entitiesThere[hit.entitiesThere.length - 1]
