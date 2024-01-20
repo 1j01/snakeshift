@@ -86,6 +86,11 @@ export function initLevel() {
   //   }
   // }
   entities.push(new Block(0, 8, 16, 8, CollisionLayer.White))
+  for (let x = 9; x < 15; x++) {
+    for (let y = 9; y < 15; y++) {
+      entities.push(new Block(x, y, 1, 1, CollisionLayer.Black))
+    }
+  }
   for (let x = 4; x < 12; x++) {
     for (let y = 0; y < 8; y++) {
       entities.push(new Collectable(x, y, 1, 1, CollisionLayer.White))
