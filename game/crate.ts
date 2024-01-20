@@ -3,12 +3,14 @@ import { CollisionLayer } from "./types"
 
 export class Crate extends RectangularEntity {
   draw(ctx: CanvasRenderingContext2D) {
+    const pixel = 1 / ctx.getTransform().a
     ctx.save()
-    ctx.lineWidth = 0.1
+    ctx.lineWidth = 0.2
     ctx.strokeStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
     ctx.fillStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
     ctx.beginPath()
-    ctx.rect(this.x, this.y, this.width, this.height)
+    const inset = 0.1
+    ctx.rect(this.x + inset, this.y + inset, this.width - inset * 2 + pixel, this.height - inset * 2 + pixel)
     ctx.fill()
     ctx.stroke()
     ctx.lineWidth = 0.05
