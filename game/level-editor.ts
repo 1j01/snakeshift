@@ -32,14 +32,19 @@ export function initLevelEditorGUI() {
       }
       return entityInstance
     }
-    button.addEventListener('click', () => {
+    function startPlacing() {
+      if (placing) {
+        return // avoid doubly adding from click after pointerdown
+      }
       undoable()
       const entityInstance = makeColoredEntity()
       entities.push(entityInstance)
       sortEntities()
       placing = entityInstance
       postUpdate()
-    })
+    }
+    button.addEventListener('click', startPlacing) // allow for click to work for keyboard/other accessibility
+    button.addEventListener('pointerdown', startPlacing) // allow dragging from button, to place in one gesture
     const canvas = document.createElement('canvas')
     canvas.width = 48
     canvas.height = 48
