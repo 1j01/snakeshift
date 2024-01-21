@@ -273,7 +273,7 @@ export default class Snake extends Entity {
     // you can't double back while inside an inverse snake.
     // Exclude non-solid collectables, since, if you don't eat them (because they're a different color),
     // they should stay visible.
-    // TODO: ensure collectables are on top in the first place
+    // (Collectables are automatically sorted on top at level design time.)
     const ontoIndices = move.entitiesThere.filter(e => e.solid).map(e => entities.indexOf(e))
     const maxIndex = Math.max(...ontoIndices)
     const thisIndex = entities.indexOf(this)
