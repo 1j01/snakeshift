@@ -151,14 +151,21 @@ export function handleInputForLevelEditing(
           placing.x = mouseHoveredTile.x
           placing.y = mouseHoveredTile.y
         } else if (placing instanceof Snake) {
-          placing.segments[0].x = mouseHoveredTile.x
-          placing.segments[0].y = mouseHoveredTile.y
-          for (let i = placing.segments.length - 1; i > 0; i--) {
-            // TODO: work good
-            const segment = placing.segments[i]
-            const previousSegment = placing.segments[i - 1]
-            segment.x = previousSegment.x
-            segment.y = previousSegment.y
+          // TODO: avoid diagonals and longer-than-1 segments,
+          // and maybe warn about overlap, since avoiding collision entirely
+          // would make it get stuck, and this is a level editor.
+          if (
+            placing.segments[0].x !== mouseHoveredTile.x ||
+            placing.segments[0].y !== mouseHoveredTile.y
+          ) {
+            for (let i = placing.segments.length - 1; i > 0; i--) {
+              const follower = placing.segments[i]
+              const leader = placing.segments[i - 1]
+              follower.x = leader.x
+              follower.y = leader.y
+            }
+            placing.segments[0].x = mouseHoveredTile.x
+            placing.segments[0].y = mouseHoveredTile.y
           }
         }
       }
