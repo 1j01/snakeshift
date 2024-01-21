@@ -7,7 +7,7 @@ import Snake from './snake'
 import { setHighlight } from './tile-highlight'
 import { CollisionLayer, Tile } from './types'
 
-let placing: Entity | undefined = undefined
+let dragging: Entity | undefined = undefined
 
 export function initLevelEditorGUI() {
 
@@ -33,14 +33,14 @@ export function initLevelEditorGUI() {
       return entityInstance
     }
     function startPlacing() {
-      if (placing) {
+      if (dragging) {
         return // avoid doubly adding from click after pointerdown
       }
       undoable()
       const entityInstance = makeColoredEntity()
       entities.push(entityInstance)
       sortEntities()
-      placing = entityInstance
+      dragging = entityInstance
       postUpdate()
     }
     button.addEventListener('click', startPlacing) // allow for click to work for keyboard/other accessibility
@@ -103,15 +103,15 @@ export function handleInputForLevelEditing(
   let mouseHoveredTile: Tile | undefined = undefined
   on(eventTarget, 'pointerdown', (event: PointerEvent) => {
     pointerDownTile = pageToWorldTile(event)
-    if (pointerDownTile && !placing) {
+    if (pointerDownTile && !dragging) {
       // TODO: consider reversing the array to be topmost first
       const hit = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
-      placing = hit.entitiesThere[hit.entitiesThere.length - 1]
-      if (placing) {
+      dragging = hit.entitiesThere[hit.entitiesThere.length - 1]
+      if (dragging) {
         undoable()
         // reorder so that the entity is on top
-        entities.splice(entities.indexOf(placing), 1)
-        entities.push(placing)
+        entities.splice(entities.indexOf(dragging), 1)
+        entities.push(dragging)
         // unless it shouldn't be
         sortEntities()
       }
@@ -128,7 +128,7 @@ export function handleInputForLevelEditing(
       // sameTile(pointerUpTile, pointerDownTile)
     ) {
       // undoable is covered at start of drag or addition of a new entity
-      placing = undefined
+      dragging = undefined
     }
     pointerDownTile = undefined
     updateHighlight()
@@ -137,7 +137,7 @@ export function handleInputForLevelEditing(
   on(eventTarget, 'pointercancel', () => {
     // TODO: undo and delete undoable?
     pointerDownTile = undefined
-    placing = undefined
+    dragging = undefined
     updateHighlight()
   })
 
@@ -146,26 +146,26 @@ export function handleInputForLevelEditing(
     mouseHoveredTile = undefined
     if (coordinates) {
       mouseHoveredTile = coordinates
-      if (placing) {
-        if (placing instanceof RectangularEntity) {
-          placing.x = mouseHoveredTile.x
-          placing.y = mouseHoveredTile.y
-        } else if (placing instanceof Snake) {
+      if (dragging) {
+        if (dragging instanceof RectangularEntity) {
+          dragging.x = mouseHoveredTile.x
+          dragging.y = mouseHoveredTile.y
+        } else if (dragging instanceof Snake) {
           // TODO: avoid diagonals and longer-than-1 segments,
           // and maybe warn about overlap, since avoiding collision entirely
           // would make it get stuck, and this is a level editor.
           if (
-            placing.segments[0].x !== mouseHoveredTile.x ||
-            placing.segments[0].y !== mouseHoveredTile.y
+            dragging.segments[0].x !== mouseHoveredTile.x ||
+            dragging.segments[0].y !== mouseHoveredTile.y
           ) {
-            for (let i = placing.segments.length - 1; i > 0; i--) {
-              const follower = placing.segments[i]
-              const leader = placing.segments[i - 1]
+            for (let i = dragging.segments.length - 1; i > 0; i--) {
+              const follower = dragging.segments[i]
+              const leader = dragging.segments[i - 1]
               follower.x = leader.x
               follower.y = leader.y
             }
-            placing.segments[0].x = mouseHoveredTile.x
-            placing.segments[0].y = mouseHoveredTile.y
+            dragging.segments[0].x = mouseHoveredTile.x
+            dragging.segments[0].y = mouseHoveredTile.y
           }
         }
       }
