@@ -110,6 +110,12 @@ export function handleInput(
 
   on(window, 'keydown', (event: KeyboardEvent) => {
     // Using `event.code` instead of `event.key` since the control scheme relies on the physical key layout, not the letters.
+    // Undo/redo is handled separately.
+    // Don't prevent default behavior with modifier keys held,
+    // as there are many useful shortcuts that would block, like Ctrl+L to focus the address bar.
+    if (event.ctrlKey || event.metaKey || event.altKey) {
+      return
+    }
     let handling = true
     switch (event.code) {
       case 'ArrowLeft': // arrow keys
