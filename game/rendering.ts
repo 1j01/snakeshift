@@ -57,8 +57,12 @@ export function viewToWorld(clientPoint: { clientX: number, clientY: number }): 
   const rect = canvas.getBoundingClientRect()
   const x = clientPoint.clientX - rect.left
   const y = clientPoint.clientY - rect.top
-  const point = new DOMPoint(x * devicePixelRatio, y * devicePixelRatio)
-  return point.matrixTransform(transform!.inverse())
+  const point = new DOMPoint(x * devicePixelRatio, y * devicePixelRatio).matrixTransform(transform!.inverse())
+  // Avoid extra z, w properties in case this gets serialized.
+  return {
+    x: point.x,
+    y: point.y,
+  }
 }
 
 export function worldToView(worldPoint: Point): Point {
