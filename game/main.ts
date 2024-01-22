@@ -43,11 +43,6 @@ function setEditMode(enterEditMode: boolean) {
   document.body.classList.toggle('editing', editing)
 }
 
-initLevelEditorGUI()
-initLevel()
-setEditMode(true)
-animate(0)
-
 addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {
     setEditMode(!editing)
@@ -99,3 +94,8 @@ addEventListener('drop', (event) => {
     loadLevel(file)
   }
 })
+
+initLevelEditorGUI()
+initLevel()
+setEditMode(true)
+animate(0)
