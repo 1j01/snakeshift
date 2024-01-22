@@ -79,9 +79,6 @@ export function handleInputForLevelEditing(
   // Highlighting
   // ------------
 
-  // TODO: negotiate highlighting with input.ts
-  // maybe add/remove listeners for editor mode vs. play mode
-
   function updateHighlight() {
     let pressed = false
     if (pointerDownTile && mouseHoveredTile) {
