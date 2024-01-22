@@ -257,9 +257,9 @@ export default class Snake extends Entity {
     // (unless I go wholely the other way, but that's still less consistent overall, considering sideways entrance/exiting)
     // I think I will need to move to a system where the move is simulated and then checked for validity,
     // to avoid the complexity of adding exceptions to game state access, when answering hypotheticals.
-    // This would also help with animation, having both the before and after states,
+    // This could also help with animating undo/redo, which currently replaces all the entities, resetting animation timers,
     // and for the level editor, where I'd like to check for collisions to show warnings,
-    // but allow the collisions to happen so that editing isn't its own puzzle.
+    // (but allow the collisions to happen so that editing isn't its own puzzle.)
     // If moves are analyzed by checking for collisions within a whole game board,
     // it could share some code. Theoretically.
     return {
