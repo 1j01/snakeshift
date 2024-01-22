@@ -35,25 +35,15 @@ export interface Tile extends Point {
   size: number
 }
 
-export interface HitTestResult extends Point {
+// TODO: remove redundant information
+// also favor composition over inheritance, e.g. {to: Point} instead of extends Point
+export interface Move extends Point {
+  valid: boolean
   entitiesThere: Entity[]
   hits: Hit[]
   topLayer: CollisionLayer
 }
 
-export interface Move extends HitTestResult {
-  valid: boolean
-}
-
-// I think I've used inheritance too much here, it becomes hard to reason about.
-// I should favor composition more.
-// I also want to move the game logic to use a whole view of a temporary game state,
-// instead of adding exceptions to the current state to account for hypothetical updates.
-// I have a lot of refactoring to do.
-
-// This is somewhat redundant with HitTestResult for now, while refactoring.
-// I'm thinking of using an array of hits instead of an array of entities, maybe instead of HitTestResult,
-// in order to return snake segment indices so the level editor can drag snakes by any part.
 export interface Hit {
   entity: Entity
   segmentIndex?: number
