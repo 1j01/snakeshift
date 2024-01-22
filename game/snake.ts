@@ -264,8 +264,7 @@ export default class Snake extends Entity {
         (Math.abs(dirX) === 1 || Math.abs(dirY) === 1) &&
         topLayer(hitsAhead) !== head.layer &&
         topLayer(hitsAtTail) === head.layer,
-      x,
-      y,
+      to: { x, y, size: head.size },
       entitiesThere: hitsAhead.map(hit => hit.entity),
       hits: hitsAhead,
       topLayer: topLayer(hitsAhead),
@@ -283,8 +282,9 @@ export default class Snake extends Entity {
       segment.x = prev.x
       segment.y = prev.y
     }
-    head.x = move.x
-    head.y = move.y
+    head.x = move.to.x
+    head.y = move.to.y
+    head.size = move.to.size
     // Sort entities so this is on top of anything it's moving onto.
     // This handles the visual as well as making it so
     // you can't double back while inside an inverse snake.

@@ -36,8 +36,8 @@ export interface Tile extends Point {
 }
 
 // TODO: remove redundant information
-// also favor composition over inheritance, e.g. {to: Point} instead of extends Point
-export interface Move extends Point {
+export interface Move {
+  to: Tile
   valid: boolean
   entitiesThere: Entity[]
   hits: Hit[]
