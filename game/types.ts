@@ -35,13 +35,10 @@ export interface Tile extends Point {
   size: number
 }
 
-// TODO: remove redundant information
 export interface Move {
   to: Tile
   valid: boolean
   entitiesThere: Entity[]
-  hits: Hit[]
-  topLayer: CollisionLayer
 }
 
 export interface Hit {

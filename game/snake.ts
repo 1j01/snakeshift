@@ -266,8 +266,6 @@ export default class Snake extends Entity {
         topLayer(hitsAtTail) === head.layer,
       to: { x, y, size: head.size },
       entitiesThere: hitsAhead.map(hit => hit.entity),
-      hits: hitsAhead,
-      topLayer: topLayer(hitsAhead),
     }
   }
   takeMove(move: Move): void {
