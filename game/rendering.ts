@@ -20,10 +20,10 @@ export function draw() {
   // Needs rounding (or else the condition below may be true at rest, since canvas.height is an integer)
   const resolutionWidth = Math.floor(styleWidth * devicePixelRatio)
   const resolutionHeight = Math.floor(styleHeight * devicePixelRatio)
-  if (canvas.width !== resolutionWidth || canvas.height !== resolutionHeight) {
+  const resized = canvas.width !== resolutionWidth || canvas.height !== resolutionHeight;
+  if (resized) {
     canvas.width = resolutionWidth
     canvas.height = resolutionHeight
-    postUpdate() // update highlight, as grid size has changed
   }
 
   ctx.fillStyle = '#000'
@@ -37,6 +37,11 @@ export function draw() {
   ctx.scale(scale, scale)
   ctx.translate(-viewWidth / 2, -viewHeight / 2)
   transform = ctx.getTransform()
+  if (resized) {
+    // Update highlight, as grid size has changed.
+    // Has to be after `transform` is set, since viewToWorld/WorldToView use it.
+    postUpdate()
+  }
   drawEntities(ctx, entities)
   ctx.restore()
 }
