@@ -1,5 +1,5 @@
 import Entity from './entity'
-import { entities, onUpdate, postUpdate, undoable } from './game-state'
+import { deserialize, entities, onUpdate, postUpdate, serialize, undoable } from './game-state'
 import { hitTestAllEntities, makeEntity, sameTile, sortEntities } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
@@ -188,4 +188,38 @@ export function handleInputForLevelEditing(
 
   // ------------
   return removeEventListeners
+}
+
+export function saveLevel() {
+  const levelJSON = serialize()
+  const blob = new Blob([levelJSON], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'snakeshift-level.json'
+  a.click()
+}
+
+export function loadLevel(file: File) {
+  // TODO: error handling
+  // show message, and don't create an undo state if it can't be loaded
+  const reader = new FileReader()
+  reader.addEventListener('load', () => {
+    undoable()
+    const levelJSON = reader.result as string
+    deserialize(levelJSON)
+  })
+  reader.readAsText(file)
+}
+
+export function openLevel() {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'application/json'
+  input.addEventListener('change', () => {
+    const file = input.files?.[0]
+    if (!file) return
+    loadLevel(file)
+  })
+  input.click()
 }

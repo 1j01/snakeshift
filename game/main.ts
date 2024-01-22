@@ -1,6 +1,6 @@
 import { entities, initLevel, redo, undo } from "./game-state"
 import { handleInput } from "./input"
-import { handleInputForLevelEditing, initLevelEditorGUI } from "./level-editor"
+import { handleInputForLevelEditing, initLevelEditorGUI, loadLevel, openLevel, saveLevel } from "./level-editor"
 import { canvas, draw } from "./rendering"
 
 function step(time: number) {
@@ -53,6 +53,12 @@ addEventListener('keydown', (event) => {
   } else if (event.key === 'y') {
     redo()
     event.preventDefault()
+  } else if (event.key === 's') {
+    saveLevel()
+    event.preventDefault()
+  } else if (event.key === 'o') {
+    openLevel()
+    event.preventDefault()
   }
 })
 
@@ -66,4 +72,16 @@ canvas.addEventListener('pointerdown', (event) => {
 
 canvas.addEventListener('contextmenu', (event) => {
   event.preventDefault()
+})
+
+addEventListener('dragover', (event) => {
+  event.preventDefault()
+})
+
+addEventListener('drop', (event) => {
+  event.preventDefault()
+  const file = event.dataTransfer?.files[0]
+  if (file) {
+    loadLevel(file)
+  }
 })
