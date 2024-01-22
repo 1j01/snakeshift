@@ -1,6 +1,6 @@
 import Entity from './entity'
 import { activePlayer, deserialize, entities, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
-import { hitTestAllEntities, makeEntity, sameTile, sortEntities } from './helpers'
+import { hitTestAllEntities, makeEntity, makeEventListenerGroup, sameTile, sortEntities } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
@@ -64,20 +64,7 @@ export function handleInputForLevelEditing(
   eventTarget: HTMLElement,
 ) {
 
-  // TODO: DRY/simplify event handling
-  const listenerCleanupFunctions: (() => void)[] = []
-  function on<K extends keyof HTMLElementEventMap>(eventTarget: HTMLElement, type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
-  function on<K extends keyof WindowEventMap>(eventTarget: Window, type: K, listener: (this: Window, ev: WindowEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
-  function on(eventTarget: HTMLElement | Window, type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void {
-    eventTarget.addEventListener(type, listener, options)
-    listenerCleanupFunctions.push(() => eventTarget.removeEventListener(type, listener, options))
-  }
-
-  function removeEventListeners() {
-    for (const cleanup of listenerCleanupFunctions) {
-      cleanup()
-    }
-  }
+  const { on, removeEventListeners } = makeEventListenerGroup()
 
   // ------------
   // Highlighting

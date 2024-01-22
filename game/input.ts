@@ -1,5 +1,5 @@
 import { activePlayer, controlScheme, cyclePlayerControl, onUpdate, setControlScheme, undoable } from './game-state'
-import { neighborOf, sameTile } from './helpers'
+import { makeEventListenerGroup, neighborOf, sameTile } from './helpers'
 import { pageToWorldTile } from './rendering'
 import { highlightMove } from './tile-highlight'
 import { ControlScheme, DIRECTIONS, Tile } from './types'
@@ -8,20 +8,7 @@ export function handleInput(
   eventTarget: HTMLElement,
 ) {
 
-  // TODO: DRY/simplify event handling
-  const listenerCleanupFunctions: (() => void)[] = []
-  function on<K extends keyof HTMLElementEventMap>(eventTarget: HTMLElement, type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
-  function on<K extends keyof WindowEventMap>(eventTarget: Window, type: K, listener: (this: Window, ev: WindowEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
-  function on(eventTarget: HTMLElement | Window, type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void {
-    eventTarget.addEventListener(type, listener, options)
-    listenerCleanupFunctions.push(() => eventTarget.removeEventListener(type, listener, options))
-  }
-
-  function removeEventListeners() {
-    for (const cleanup of listenerCleanupFunctions) {
-      cleanup()
-    }
-  }
+  const { on, removeEventListeners } = makeEventListenerGroup()
 
   // ---------------------
   // Reactive highlighting
