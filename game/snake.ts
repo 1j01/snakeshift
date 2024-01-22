@@ -239,9 +239,8 @@ export default class Snake extends Entity {
       }
       return layer
     }
-    // console.log(ahead, trail)
     // TODO: prevent overlapped snake doubling back on itself
-    // I could check if entitiesThere includes this snake,
+    // I could check if hitsAhead includes this snake,
     // but I don't want to add special cases if I don't need to.
     // Also need to prevent snakes swapping depths...
     // There's also the case where the tail is "supporting/housing"
