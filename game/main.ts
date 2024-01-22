@@ -1,7 +1,8 @@
-import { entities, initLevel, redo, undo } from "./game-state"
+import { deserialize, entities, initLevel, redo, redos, serialize, undo, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing, initLevelEditorGUI, loadLevel, openLevel, saveLevel } from "./level-editor"
 import { canvas, draw } from "./rendering"
+import { GameState } from "./types"
 
 function step(time: number) {
   for (const entity of entities) {
@@ -17,13 +18,26 @@ function animate(time: number) {
 }
 
 let editing = true
+const editorUndos: GameState[] = []
+const editorRedos: GameState[] = []
+let editorState: GameState | undefined = undefined
 let cleanup = () => { /* TSILB */ }
 function setEditMode(enterEditMode: boolean) {
   cleanup()
   if (enterEditMode) {
     cleanup = handleInputForLevelEditing(canvas)
+    if (editorState) {
+      undos.splice(0, undos.length, ...editorUndos)
+      redos.splice(0, redos.length, ...editorRedos)
+      deserialize(editorState)
+    }
   } else {
     cleanup = handleInput(canvas)
+    editorUndos.splice(0, editorUndos.length, ...undos)
+    editorRedos.splice(0, editorRedos.length, ...redos)
+    editorState = serialize()
+    undos.length = 0
+    redos.length = 0
   }
   editing = enterEditMode
   document.body.classList.toggle('editing', editing)

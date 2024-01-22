@@ -23,8 +23,8 @@ export let activePlayer: Snake | undefined = undefined
 
 export let controlScheme = ControlScheme.KeyboardAbsoluteDirection
 
-const undos: GameState[] = []
-const redos: GameState[] = []
+export const undos: GameState[] = []
+export const redos: GameState[] = []
 export function undoable() {
   undos.push(serialize())
   redos.length = 0
@@ -118,10 +118,7 @@ export function cyclePlayerControl() {
   // If there is no active player, -1 + 1 naturally gives the first player.
   const index = players.indexOf(activePlayer!)
   const nextIndex = (index + 1) % players.length
-  // If there are no players at all, don't create an undo state,
-  // since it could confuse things slightly when going back into edit mode,
-  // which currently shares the undo/redo stack.
-  // TODO: separate undo/redo stacks for edit mode and play mode; reset level when switching into edit mode.
+  // If there are no players at all, avoid creating a useless undo state or erroring.
   if (!players[nextIndex]) return
   undoable()
   activePlayer = players[nextIndex]
