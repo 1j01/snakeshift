@@ -1,5 +1,5 @@
 import Entity from "./entity"
-import { entities, levelInfo, postUpdate } from "./game-state"
+import { entities, levelInfo, postResize } from "./game-state"
 import { Point, Tile } from "./types"
 
 export const canvas = document.createElement('canvas')
@@ -40,7 +40,7 @@ export function draw() {
   if (resized) {
     // Update highlight, as grid size has changed.
     // Has to be after `transform` is set, since viewToWorld/WorldToView use it.
-    postUpdate()
+    postResize()
   }
   drawEntities(ctx, entities)
   ctx.restore()

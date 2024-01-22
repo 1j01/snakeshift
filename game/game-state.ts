@@ -127,12 +127,21 @@ export function cyclePlayerControl() {
 }
 
 const updateListeners: (() => void)[] = []
+const resizeListeners: (() => void)[] = []
+
 export function onUpdate(listener: () => void) {
   updateListeners.push(listener)
 }
-
+export function onResize(listener: () => void) {
+  resizeListeners.push(listener)
+}
 export function postUpdate() {
   for (const listener of updateListeners) {
+    listener()
+  }
+}
+export function postResize() {
+  for (const listener of resizeListeners) {
     listener()
   }
 }

@@ -1,5 +1,5 @@
 import Entity from './entity'
-import { activePlayer, deserialize, entities, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
+import { activePlayer, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
 import { hitTestAllEntities, makeEntity, makeEventListenerGroup, sameTile, sortEntities } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
@@ -86,9 +86,8 @@ export function handleInputForLevelEditing(
     }
     setHighlight(mouseHoveredTile, { pressed, valid: mouseHoveredTile ? hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y).length > 0 : false })
   }
-
-  // Handles viewport resize... sorta letting this get repurposed. `onUpdate` isn't a good name, it kinda invites over-extension.
   onUpdate(updateHighlight)
+  onResize(updateHighlight)
 
   // -----------------------
   // Mouse/pen/touch support

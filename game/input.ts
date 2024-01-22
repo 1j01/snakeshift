@@ -1,4 +1,4 @@
-import { activePlayer, controlScheme, cyclePlayerControl, onUpdate, setControlScheme, undoable } from './game-state'
+import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, setControlScheme, undoable } from './game-state'
 import { makeEventListenerGroup, neighborOf, sameTile } from './helpers'
 import { pageToWorldTile } from './rendering'
 import { highlightMove } from './tile-highlight'
@@ -14,7 +14,7 @@ export function handleInput(
   // Reactive highlighting
   // ---------------------
 
-  onUpdate(() => {
+  function updateHighlight() {
     if (controlScheme === ControlScheme.KeyboardFacingRelative) {
       // highlightMove(activePlayer.aheadTile())
     } else if (controlScheme === ControlScheme.KeyboardAbsoluteDirection) {
@@ -26,7 +26,9 @@ export function handleInput(
       }
       highlightMove(mouseHoveredTile, { pressed })
     }
-  })
+  }
+  onUpdate(updateHighlight)
+  onResize(updateHighlight)
 
   // -----------------------
   // Mouse/pen/touch support
