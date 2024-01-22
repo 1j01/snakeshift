@@ -114,10 +114,16 @@ export function initLevel() {
 }
 
 export function cyclePlayerControl() {
-  undoable()
   const players = entities.filter(e => e instanceof Snake) as Snake[]
+  // If there is no active player, -1 + 1 naturally gives the first player.
   const index = players.indexOf(activePlayer!)
   const nextIndex = (index + 1) % players.length
+  // If there are no players at all, don't create an undo state,
+  // since it could confuse things slightly when going back into edit mode,
+  // which currently shares the undo/redo stack.
+  // TODO: separate undo/redo stacks for edit mode and play mode; reset level when switching into edit mode.
+  if (!players[nextIndex]) return
+  undoable()
   activePlayer = players[nextIndex]
   activePlayer.highlight()
   postUpdate()
