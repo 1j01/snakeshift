@@ -3,11 +3,12 @@ import { entities, onUpdate, postUpdate, undoable } from './game-state'
 import { hitTestAllEntities, makeEntity, sameTile, sortEntities } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
-import Snake from './snake'
+import Snake, { SnakeSegment } from './snake'
 import { setHighlight } from './tile-highlight'
 import { CollisionLayer, Tile } from './types'
 
 let dragging: Entity | undefined = undefined
+let draggingSegmentIndex = 0
 
 export function initLevelEditorGUI() {
 
@@ -41,6 +42,7 @@ export function initLevelEditorGUI() {
       entities.push(entityInstance)
       sortEntities()
       dragging = entityInstance
+      draggingSegmentIndex = 0
       postUpdate()
     }
     button.addEventListener('click', startPlacing) // allow for click to work for keyboard/other accessibility
@@ -105,8 +107,10 @@ export function handleInputForLevelEditing(
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile && !dragging) {
       // TODO: consider reversing the array to be topmost first
-      const hit = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
-      dragging = hit.entitiesThere[hit.entitiesThere.length - 1]
+      const hitTestResult = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
+      const hit = hitTestResult.hits[hitTestResult.hits.length - 1]
+      dragging = hit?.entity
+      draggingSegmentIndex = hit?.segmentIndex ?? 0
       if (dragging) {
         undoable()
         // reorder so that the entity is on top
@@ -129,6 +133,7 @@ export function handleInputForLevelEditing(
     ) {
       // undoable is covered at start of drag or addition of a new entity
       dragging = undefined
+      draggingSegmentIndex = 0
     }
     pointerDownTile = undefined
     updateHighlight()
@@ -138,6 +143,7 @@ export function handleInputForLevelEditing(
     // TODO: undo and delete undoable?
     pointerDownTile = undefined
     dragging = undefined
+    draggingSegmentIndex = 0
     updateHighlight()
   })
 
@@ -154,18 +160,23 @@ export function handleInputForLevelEditing(
           // TODO: avoid diagonals and longer-than-1 segments,
           // and maybe warn about overlap, since avoiding collision entirely
           // would make it get stuck, and this is a level editor.
+          const draggingSegment = dragging.segments[draggingSegmentIndex]
           if (
-            dragging.segments[0].x !== mouseHoveredTile.x ||
-            dragging.segments[0].y !== mouseHoveredTile.y
+            draggingSegment.x !== mouseHoveredTile.x ||
+            draggingSegment.y !== mouseHoveredTile.y
           ) {
-            for (let i = dragging.segments.length - 1; i > 0; i--) {
+            for (let i = dragging.segments.length - 1; i > draggingSegmentIndex; i--) {
               const follower = dragging.segments[i]
               const leader = dragging.segments[i - 1]
-              follower.x = leader.x
-              follower.y = leader.y
+              lead(leader, follower)
             }
-            dragging.segments[0].x = mouseHoveredTile.x
-            dragging.segments[0].y = mouseHoveredTile.y
+            for (let i = 0; i < draggingSegmentIndex; i++) {
+              const follower = dragging.segments[i]
+              const leader = dragging.segments[i + 1]
+              lead(leader, follower)
+            }
+            draggingSegment.x = mouseHoveredTile.x
+            draggingSegment.y = mouseHoveredTile.y
           }
         }
       }
@@ -173,6 +184,11 @@ export function handleInputForLevelEditing(
     // TODO: only with significant movement, such as moving to a new tile
     updateHighlight()
   })
+
+  function lead(leader: SnakeSegment, follower: SnakeSegment) {
+    follower.x = leader.x
+    follower.y = leader.y
+  }
 
   // ------------
   return removeEventListeners

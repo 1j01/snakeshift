@@ -4,7 +4,7 @@ import { entities } from "./game-state"
 import { hitTestAllEntities } from "./helpers"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
-interface SnakeSegment extends Tile {
+export interface SnakeSegment extends Tile {
   layer: CollisionLayer
 }
 
