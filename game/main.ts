@@ -24,7 +24,9 @@ let editorState: GameState | undefined = undefined
 let cleanup = () => { /* TSILB */ }
 function setEditMode(enterEditMode: boolean) {
   cleanup()
-  if (enterEditMode) {
+  editing = enterEditMode
+  document.body.classList.toggle('editing', editing) // used in deserialize(); I would export a bool, but importing main.ts can cause problems
+  if (editing) {
     cleanup = handleInputForLevelEditing(canvas)
     if (editorState) {
       undos.splice(0, undos.length, ...editorUndos)
@@ -39,8 +41,6 @@ function setEditMode(enterEditMode: boolean) {
     undos.length = 0
     redos.length = 0
   }
-  editing = enterEditMode
-  document.body.classList.toggle('editing', editing)
 }
 
 addEventListener('keydown', (event) => {
