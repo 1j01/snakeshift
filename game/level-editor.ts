@@ -166,14 +166,10 @@ export function handleInputForLevelEditing(
             draggingSegment.y !== mouseHoveredTile.y
           ) {
             for (let i = dragging.segments.length - 1; i > draggingSegmentIndex; i--) {
-              const follower = dragging.segments[i]
-              const leader = dragging.segments[i - 1]
-              lead(leader, follower)
+              lead(dragging.segments[i - 1], dragging.segments[i])
             }
             for (let i = 0; i < draggingSegmentIndex; i++) {
-              const follower = dragging.segments[i]
-              const leader = dragging.segments[i + 1]
-              lead(leader, follower)
+              lead(dragging.segments[i + 1], dragging.segments[i])
             }
             draggingSegment.x = mouseHoveredTile.x
             draggingSegment.y = mouseHoveredTile.y
