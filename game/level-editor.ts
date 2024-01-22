@@ -105,7 +105,7 @@ export function handleInputForLevelEditing(
   let mouseHoveredTile: Tile | undefined = undefined
   on(eventTarget, 'pointerdown', (event: PointerEvent) => {
     pointerDownTile = pageToWorldTile(event)
-    if (pointerDownTile && !dragging) {
+    if (pointerDownTile && !dragging && event.button === 0) {
       // TODO: consider reversing the array to be topmost first
       const hits = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
       const hit = hits[hits.length - 1]
@@ -173,6 +173,17 @@ export function handleInputForLevelEditing(
             }
             draggingSegment.x = mouseHoveredTile.x
             draggingSegment.y = mouseHoveredTile.y
+          }
+        }
+      } else if (event.buttons === 2) {
+        const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
+        for (const hit of hits) {
+          const index = entities.indexOf(hit.entity)
+          if (index >= 0) {
+            // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
+            // TODO: Bresenham's line algorithm
+            undoable()
+            entities.splice(index, 1)
           }
         }
       }
