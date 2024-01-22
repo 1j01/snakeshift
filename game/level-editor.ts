@@ -217,6 +217,10 @@ export function saveLevel() {
 export function loadLevel(file: File) {
   // TODO: error handling
   // show message, and don't create an undo state if it can't be loaded
+  // Can use Blob.text() API by the way.
+  // TODO: switch to editor mode,
+  // before creating an undo state, so that it uses the editor undo stack,
+  // but after reading the file, to avoid a race condition
   const reader = new FileReader()
   reader.addEventListener('load', () => {
     undoable()
