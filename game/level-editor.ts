@@ -48,14 +48,23 @@ export function initLevelEditorGUI() {
     button.addEventListener('click', startPlacing) // allow for click to work for keyboard/other accessibility
     button.addEventListener('pointerdown', startPlacing) // allow dragging from button, to place in one gesture
     const canvas = document.createElement('canvas')
-    canvas.width = 48
-    canvas.height = 48
     const ctx = canvas.getContext('2d')!
     button.prepend(canvas)
-    const entityForButton = makeColoredEntity()
-    ctx.translate(8, 8)
-    ctx.scale(32, 32)
-    drawEntities(ctx, [entityForButton])
+    const styleWidth = 48
+    const styleHeight = 48
+    function renderIcon() {
+      canvas.style.width = `${styleWidth}px`
+      canvas.style.height = `${styleHeight}px`
+      canvas.width = styleWidth * devicePixelRatio
+      canvas.height = styleHeight * devicePixelRatio
+      const entityForButton = makeColoredEntity()
+      ctx.scale(devicePixelRatio, devicePixelRatio)
+      ctx.translate(8, 8)
+      ctx.scale(32, 32)
+      drawEntities(ctx, [entityForButton])
+    }
+    renderIcon()
+    addEventListener('resize', renderIcon)
   }
 
 }

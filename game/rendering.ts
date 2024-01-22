@@ -10,14 +10,19 @@ const editorGUI = document.getElementById('entities-bar')!
 
 let transform: DOMMatrix | undefined = undefined
 export function draw() {
-  const width = Math.floor(window.innerWidth)
+  const styleWidth = window.innerWidth
   const editorGUIRect = editorGUI.getBoundingClientRect()
-  // DOMRect.bottom is a double, needs rounding (or else the condition below may be true at rest, since canvas.height is an integer)
-  const height = Math.floor((window.innerHeight - editorGUIRect.bottom))
+  // Note: DOMRect.bottom is a double
+  const styleHeight = window.innerHeight - editorGUIRect.bottom
   canvas.style.transform = `translateY(${editorGUIRect.top}px)`
-  if (canvas.width !== width || canvas.height !== height) {
-    canvas.width = width
-    canvas.height = height
+  canvas.style.width = `${styleWidth}px`
+  canvas.style.height = `${styleHeight}px`
+  // Needs rounding (or else the condition below may be true at rest, since canvas.height is an integer)
+  const resolutionWidth = Math.floor(styleWidth * devicePixelRatio)
+  const resolutionHeight = Math.floor(styleHeight * devicePixelRatio)
+  if (canvas.width !== resolutionWidth || canvas.height !== resolutionHeight) {
+    canvas.width = resolutionWidth
+    canvas.height = resolutionHeight
     postUpdate() // update highlight, as grid size has changed
   }
 
@@ -52,7 +57,7 @@ export function viewToWorld(clientPoint: { clientX: number, clientY: number }): 
   const rect = canvas.getBoundingClientRect()
   const x = clientPoint.clientX - rect.left
   const y = clientPoint.clientY - rect.top
-  const point = new DOMPoint(x, y)
+  const point = new DOMPoint(x * devicePixelRatio, y * devicePixelRatio)
   return point.matrixTransform(transform!.inverse())
 }
 
@@ -60,8 +65,8 @@ export function worldToView(worldPoint: Point): Point {
   const rect = canvas.getBoundingClientRect()
   const point = new DOMPoint(worldPoint.x, worldPoint.y).matrixTransform(transform)
   return {
-    x: point.x + rect.left,
-    y: point.y + rect.top,
+    x: point.x / devicePixelRatio + rect.left,
+    y: point.y / devicePixelRatio + rect.top,
   }
 }
 
