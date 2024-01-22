@@ -2,7 +2,7 @@ import { Collectable } from "./collectable"
 import Entity from "./entity"
 import { entities } from "./game-state"
 import { hitTestAllEntities } from "./helpers"
-import { CollisionLayer, Move, Tile } from "./types"
+import { CollisionLayer, Hit, Move, Tile } from "./types"
 
 interface SnakeSegment extends Tile {
   layer: CollisionLayer
@@ -203,14 +203,14 @@ export default class Snake extends Entity {
     ctx.closePath()
     ctx.setTransform(transform)
   }
-  at(x: number, y: number, includeHead = true, includeTail = true): CollisionLayer {
+  at(x: number, y: number, includeHead = true, includeTail = true): Hit | null {
     for (let i = (includeHead ? 0 : 1); i < this.segments.length - (includeTail ? 0 : 1); i++) {
       const segment = this.segments[i]
       if (x === segment.x && y === segment.y) {
-        return segment.layer
+        return { entity: this, layer: segment.layer, segmentIndex: i }
       }
     }
-    return CollisionLayer.None
+    return null
   }
   analyzeMoveAbsolute(tile: Tile): Move {
     // Using Math.sign() here would lead to checking if moving to an adjacent tile is valid,
@@ -251,6 +251,7 @@ export default class Snake extends Entity {
       x,
       y,
       entitiesThere: ahead.entitiesThere,
+      hits: ahead.hits,
       topLayer: ahead.topLayer,
     }
   }

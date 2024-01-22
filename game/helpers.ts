@@ -4,7 +4,7 @@ import { Crate } from "./crate"
 import Entity from "./entity"
 import { entities } from "./game-state"
 import Snake from "./snake"
-import { CollisionLayer, HitTestResult, Tile } from "./types"
+import { CollisionLayer, Hit, HitTestResult, Tile } from "./types"
 
 export function sameTile(a: Tile, b: Tile) {
   return a.x === b.x && a.y === b.y && a.size === b.size
@@ -49,29 +49,33 @@ export function hitTestAllEntities(x: number, y: number, options: Partial<{ igno
   // A snake's tail may be leaving the space, so it can be ignored, optionally.
   let foremost = CollisionLayer.Black
   const entitiesThere: Entity[] = []
+  const hits: Hit[] = []
   for (const entity of entities) {
     if (entity instanceof Snake) {
-      const there = entity.at(x, y, true, entity !== options.ignoreTailOfSnake)
-      if (there) {
+      const hit = entity.at(x, y, true, entity !== options.ignoreTailOfSnake)
+      if (hit) {
         if (entity.solid) {
-          foremost = there
+          foremost = hit.layer
         }
         entitiesThere.push(entity)
+        hits.push(hit)
       }
     } else if (entity.at) {
-      const there = entity.at(x, y)
-      if (there) {
+      const hit = entity.at(x, y)
+      if (hit) {
         if (entity.solid) {
-          foremost = there
+          foremost = hit.layer
         }
         entitiesThere.push(entity)
+        hits.push(hit)
       }
     }
   }
   return {
     x,
     y,
-    entitiesThere, // including non-solid entities
-    topLayer: foremost, // top solid entity's color
+    entitiesThere, // including non-solid entities (old, redundant with hits, TODO: remove)
+    hits, // including non-solid entities
+    topLayer: foremost, // top solid entity's color (might remove too)
   }
 }

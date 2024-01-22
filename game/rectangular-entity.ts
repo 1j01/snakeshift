@@ -1,5 +1,5 @@
 import Entity from "./entity"
-import { CollisionLayer } from "./types"
+import { CollisionLayer, Hit } from "./types"
 
 export class RectangularEntity extends Entity {
   constructor(
@@ -12,11 +12,11 @@ export class RectangularEntity extends Entity {
     super()
   }
 
-  at(x: number, y: number): CollisionLayer {
+  at(x: number, y: number): Hit | null {
     if (x >= this.x && x < this.x + this.width && y >= this.y && y < this.y + this.height) {
-      return this.layer
+      return { entity: this, layer: this.layer }
     }
-    return CollisionLayer.None
+    return null
   }
 
   // used as-is by Block, but defined here as a placeholder for new entities as well
