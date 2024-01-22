@@ -91,7 +91,7 @@ export function handleInputForLevelEditing(
     if (pointerDownTile && mouseHoveredTile) {
       pressed = sameTile(mouseHoveredTile, pointerDownTile)
     }
-    setHighlight(mouseHoveredTile, { pressed, valid: mouseHoveredTile ? hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y).entitiesThere.length > 0 : false })
+    setHighlight(mouseHoveredTile, { pressed, valid: mouseHoveredTile ? hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y).length > 0 : false })
   }
 
   // Handles viewport resize... sorta letting this get repurposed. `onUpdate` isn't a good name, it kinda invites over-extension.
@@ -107,8 +107,8 @@ export function handleInputForLevelEditing(
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile && !dragging) {
       // TODO: consider reversing the array to be topmost first
-      const hitTestResult = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
-      const hit = hitTestResult.hits[hitTestResult.hits.length - 1]
+      const hits = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
+      const hit = hits[hits.length - 1]
       dragging = hit?.entity
       draggingSegmentIndex = hit?.segmentIndex ?? 0
       if (dragging) {

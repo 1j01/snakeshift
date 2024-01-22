@@ -4,7 +4,7 @@ import { Crate } from "./crate"
 import Entity from "./entity"
 import { entities } from "./game-state"
 import Snake from "./snake"
-import { CollisionLayer, Hit, HitTestResult, Tile } from "./types"
+import { CollisionLayer, Hit, Tile } from "./types"
 
 export function sameTile(a: Tile, b: Tile) {
   return a.x === b.x && a.y === b.y && a.size === b.size
@@ -45,7 +45,7 @@ export function sortEntities() {
   })
 }
 
-export function hitTestAllEntities(x: number, y: number, options: Partial<{ ignoreTailOfSnake: Snake | undefined }> = {}): HitTestResult {
+export function hitTestAllEntities(x: number, y: number, options: Partial<{ ignoreTailOfSnake: Snake | undefined }> = {}): Hit[] {
   // A snake's tail may be leaving the space, so it can be ignored, optionally.
   let foremost = CollisionLayer.Black
   const entitiesThere: Entity[] = []
@@ -71,11 +71,12 @@ export function hitTestAllEntities(x: number, y: number, options: Partial<{ igno
       }
     }
   }
-  return {
-    x,
-    y,
-    entitiesThere, // including non-solid entities (old, redundant with hits, TODO: remove)
-    hits, // including non-solid entities
-    topLayer: foremost, // top solid entity's color (might remove too)
-  }
+  return hits
+  // return {
+  //   x,
+  //   y,
+  //   entitiesThere, // including non-solid entities (old, redundant with hits, TODO: remove)
+  //   hits, // including non-solid entities
+  //   topLayer: foremost, // top solid entity's color (might remove too)
+  // }
 }

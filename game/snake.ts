@@ -228,8 +228,17 @@ export default class Snake extends Entity {
     const deltaY = dirY * head.size
     const x = head.x + deltaX
     const y = head.y + deltaY
-    const ahead = hitTestAllEntities(x, y, { ignoreTailOfSnake: this.growOnNextMove ? undefined : this })
-    const trail = hitTestAllEntities(tail.x, tail.y)
+    const hitsAhead = hitTestAllEntities(x, y, { ignoreTailOfSnake: this.growOnNextMove ? undefined : this })
+    const hitsAtTail = hitTestAllEntities(tail.x, tail.y)
+    function topLayer(hits: Hit[]): CollisionLayer {
+      let layer = CollisionLayer.Black
+      for (const hit of hits) {
+        if (hit.entity.solid) {
+          layer = hit.layer
+        }
+      }
+      return layer
+    }
     // console.log(ahead, trail)
     // TODO: prevent overlapped snake doubling back on itself
     // I could check if entitiesThere includes this snake,
@@ -246,13 +255,13 @@ export default class Snake extends Entity {
       valid:
         (dirX === 0 || dirY === 0) &&
         (Math.abs(dirX) === 1 || Math.abs(dirY) === 1) &&
-        ahead.topLayer !== head.layer &&
-        trail.topLayer === head.layer,
+        topLayer(hitsAhead) !== head.layer &&
+        topLayer(hitsAtTail) === head.layer,
       x,
       y,
-      entitiesThere: ahead.entitiesThere,
-      hits: ahead.hits,
-      topLayer: ahead.topLayer,
+      entitiesThere: hitsAhead.map(hit => hit.entity),
+      hits: hitsAhead,
+      topLayer: topLayer(hitsAhead),
     }
   }
   takeMove(move: Move): void {
