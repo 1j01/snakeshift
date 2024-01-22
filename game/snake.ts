@@ -112,7 +112,7 @@ export default class Snake extends Entity {
     ctx.save()
     ctx.translate(head.x + head.size / 2, head.y + head.size / 2)
     ctx.scale(head.size, head.size)
-    const angle = Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x)
+    const angle = this.segments[1] ? Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x) : Math.PI / 2
     ctx.rotate(angle)
 
     // eye
@@ -166,14 +166,19 @@ export default class Snake extends Entity {
       const foreAngle = Math.atan2(segment.y - this.segments[i - 1]?.y, segment.x - this.segments[i - 1]?.x)
 
       if (i === 0) {
-        // head
-        ctx.rotate(backAngle)
-        ctx.scale(1, 0.9)
-        // ctx.moveTo(1 / 2, 1 / 2)
-        mirrored(() => ctx.lineTo(1 / 2, 1 / 2))
-        ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
-        ctx.lineTo(1 / 2, -1 / 2)
-        ctx.lineTo(1 / 2, 1 / 2)
+        if (this.segments.length === 1) {
+          // head circle
+          ctx.arc(0, 0, 1 / 2, 0, Math.PI * 2)
+        } else {
+          // head
+          ctx.rotate(backAngle)
+          ctx.scale(1, 0.9)
+          // ctx.moveTo(1 / 2, 1 / 2)
+          mirrored(() => ctx.lineTo(1 / 2, 1 / 2))
+          ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
+          ctx.lineTo(1 / 2, -1 / 2)
+          ctx.lineTo(1 / 2, 1 / 2)
+        }
         // eye and tongue are drawn separately
         // If the eye was rendered as a hole in the head, then
         // when two snake heads overlapped, the eye would be invisible.

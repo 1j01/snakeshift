@@ -176,6 +176,7 @@ export function handleInputForLevelEditing(
           }
         }
       } else if (event.buttons === 2) {
+        // Right click to delete entities, or snake segments
         const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
         for (const hit of hits) {
           const index = entities.indexOf(hit.entity)
@@ -183,9 +184,27 @@ export function handleInputForLevelEditing(
             // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
             // TODO: Bresenham's line algorithm
             undoable()
-            entities.splice(index, 1)
-            if (hit.entity === activePlayer) {
-              setActivePlayer(undefined)
+            if (hit.entity instanceof Snake && hit.entity.segments.length >= 2) {
+              const before = hit.entity.segments.slice(0, hit.segmentIndex)
+              const after = hit.entity.segments.slice(hit.segmentIndex! + 1)
+              hit.entity.segments.length = before.length
+              if (after.length > 0) {
+                const newSnake = new Snake()
+                newSnake.segments.length = 0
+                newSnake.segments.push(...after)
+                entities.push(newSnake)
+                if (hit.entity.segments.length === 0) {
+                  entities.splice(index, 1)
+                  if (hit.entity === activePlayer) {
+                    setActivePlayer(newSnake)
+                  }
+                }
+              }
+            } else {
+              entities.splice(index, 1)
+              if (hit.entity === activePlayer) {
+                setActivePlayer(undefined)
+              }
             }
           }
         }
