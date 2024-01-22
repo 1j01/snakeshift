@@ -67,11 +67,11 @@ export function deserialize(state: GameState) {
     entities.push(instance)
   }
 
-  activePlayer = entities[parsed.activePlayerEntityIndex] as Snake
+  activePlayer = entities[parsed.activePlayerEntityIndex] as Snake | undefined
 
   const whichSnakeAfter = activePlayer?.id ?? ""
   if (whichSnakeBefore !== whichSnakeAfter) {
-    activePlayer.highlight()
+    activePlayer?.highlight()
   }
 
   postUpdate()
@@ -139,3 +139,7 @@ export function setControlScheme(scheme: ControlScheme) {
   postUpdate()
 }
 
+export function setActivePlayer(snake: Snake | undefined) {
+  activePlayer = snake
+  postUpdate()
+}

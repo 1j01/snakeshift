@@ -1,5 +1,5 @@
 import Entity from './entity'
-import { deserialize, entities, onUpdate, postUpdate, serialize, undoable } from './game-state'
+import { activePlayer, deserialize, entities, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
 import { hitTestAllEntities, makeEntity, sameTile, sortEntities } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
@@ -184,6 +184,9 @@ export function handleInputForLevelEditing(
             // TODO: Bresenham's line algorithm
             undoable()
             entities.splice(index, 1)
+            if (hit.entity === activePlayer) {
+              setActivePlayer(undefined)
+            }
           }
         }
       }
