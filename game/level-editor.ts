@@ -21,15 +21,28 @@ let draggingSegmentIndex = 0
 
 export function initLevelEditorGUI() {
 
-  document.querySelector(".tool-button[data-tool='Eraser'")!.addEventListener('click', () => {
-    tool = Tool.Eraser
-  })
-  document.querySelector(".tool-button[data-tool='Move'")!.addEventListener('click', () => {
-    tool = Tool.Move
-  })
-
   const entitiesBar = document.getElementById('entities-bar')!
   const entityButtons = entitiesBar.querySelectorAll('.entity-button')
+  const toolButtons = entitiesBar.querySelectorAll('.tool-button') // includes entity buttons
+
+  function selectButton(button: Element) {
+    for (const button of toolButtons) {
+      button.classList.remove('selected')
+    }
+    button.classList.add('selected')
+  }
+
+  const eraserButton = document.querySelector(".tool-button[data-tool='Eraser'")!
+  const moveButton = document.querySelector(".tool-button[data-tool='Move'")!
+  eraserButton.addEventListener('click', () => {
+    tool = Tool.Eraser
+    selectButton(eraserButton)
+  })
+  moveButton.addEventListener('click', () => {
+    tool = Tool.Move
+    selectButton(moveButton)
+  })
+
   for (const button of entityButtons) {
     makeEntityButton(button)
   }
@@ -70,10 +83,7 @@ export function initLevelEditorGUI() {
       brushEntityClass = makeEntity(entityName).constructor as typeof Entity
       brushColor = layer
       tool = Tool.Brush
-      for (const button of entityButtons) {
-        button.classList.remove('selected')
-      }
-      button.classList.add('selected')
+      selectButton(button)
     })
     button.classList.toggle('selected', entityName === brushEntityClass.name && layer === brushColor)
     const canvas = document.createElement('canvas')

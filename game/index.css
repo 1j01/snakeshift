@@ -59,7 +59,7 @@ body:not(.editing) #entities-bar {
   opacity: 0;
 }
 
-.entity-button {
+.tool-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,14 +74,14 @@ body:not(.editing) #entities-bar {
   user-select: none;
 }
 
-.entity-button:active {
+.tool-button:active {
   /* background-color: #fff;
   color: #000; */
   border-color: transparent;
   box-shadow: 0 0 0 2px #fff inset;
 }
 
-.entity-button.selected {
+.tool-button.selected {
   background-color: #fff;
   color: #000;
   border-color: transparent;
