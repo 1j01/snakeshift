@@ -19,6 +19,7 @@ let brushColor = CollisionLayer.White
 let dragging: Entity | undefined = undefined
 let draggingSegmentIndex = 0
 let defining: Entity | undefined = undefined
+let createdUndoState = false
 
 export function initLevelEditorGUI() {
 
@@ -173,6 +174,7 @@ export function handleInputForLevelEditing(
 
   on(eventTarget, 'pointerup', (event: PointerEvent) => {
     const pointerUpTile = pageToWorldTile(event)
+    // TODO: preventing you from stopping dragging is annoying
     if (
       pointerUpTile
       // pointerUpTile &&
@@ -185,6 +187,10 @@ export function handleInputForLevelEditing(
     }
     pointerDownTile = undefined
     defining = undefined
+    // TODO: preventing you from stopping dragging is annoying
+    if (!dragging) {
+      createdUndoState = false
+    }
     updateHighlight()
   })
 
@@ -195,6 +201,7 @@ export function handleInputForLevelEditing(
     defining = undefined
     dragging = undefined
     draggingSegmentIndex = 0
+    createdUndoState = false
     updateHighlight()
   })
 
@@ -244,10 +251,12 @@ export function handleInputForLevelEditing(
     // Add entities or snake segments
     // TODO: special handling for crates (define width/height via anchor point)
     // and maybe blocks (annihilate inverse color to reduce entity count and avoid antialiasing artifacts)
-    // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
     const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
     if (topLayer(hits) !== brushColor) {
-      undoable()
+      if (!createdUndoState) {
+        undoable()
+        createdUndoState = true
+      }
       const entityInstance = defining ?? new brushEntityClass()
       if (!defining) {
         if (entityInstance instanceof Snake) {
@@ -283,8 +292,10 @@ export function handleInputForLevelEditing(
     for (const hit of hits) {
       const index = entities.indexOf(hit.entity)
       if (index >= 0) {
-        // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
-        undoable()
+        if (!createdUndoState) {
+          undoable()
+          createdUndoState = true
+        }
         if (hit.entity instanceof Snake && hit.entity.segments.length >= 2) {
           const before = hit.entity.segments.slice(0, hit.segmentIndex)
           const after = hit.entity.segments.slice(hit.segmentIndex! + 1)
