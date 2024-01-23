@@ -208,10 +208,13 @@ export function handleInputForLevelEditing(
         handlePointerDownOrMove(event, lastTile, mouseHoveredTile)
       }
     }
-    // TODO: only with significant movement, such as moving to a new tile,
-    // because this replaces the highlight used by gamepad controls (not applicable to editor yet)
-    // and is just a bit inefficient
-    updateHighlight()
+    // only with significant movement (moving to a new tile),
+    // because this replaces the highlight used by gamepad controls
+    // and you don't want it flickering from mouse jitter while using a gamepad (not applicable to the editor YET)
+    // and for efficiency
+    if (lastTile && mouseHoveredTile && !sameTile(lastTile, mouseHoveredTile)) {
+      updateHighlight()
+    }
   })
 
   function handlePointerDownOrMove(event: PointerEvent, from: Tile | undefined, to: Tile | undefined) {
@@ -238,7 +241,7 @@ export function handleInputForLevelEditing(
   // ------------
 
   function brush(mouseHoveredTile: Tile) {
-    // Add entities
+    // Add entities or snake segments
     // TODO: special handling for crates (define width/height via anchor point)
     // and maybe blocks (annihilate inverse color to reduce entity count and avoid antialiasing artifacts)
     // TODO: limit to one undo state per gesture (but don't create one unnecessarily)

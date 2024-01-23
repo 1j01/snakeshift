@@ -74,15 +74,14 @@ export function handleInput(
   })
 
   on(eventTarget, 'pointermove', (event: PointerEvent) => {
-    const coordinates = pageToWorldTile(event)
-    mouseHoveredTile = undefined
-    if (coordinates) {
-      mouseHoveredTile = coordinates
-    }
-    // TODO: only with significant movement, such as moving to a new tile,
+    const lastTile = mouseHoveredTile
+    mouseHoveredTile = pageToWorldTile(event)
+    // only with significant movement (moving to a new tile),
     // because this replaces the highlight used by gamepad controls
-    // (and is a bit inefficient)
-    setControlScheme(ControlScheme.Pointer) // sets highlight
+    // and you don't want it flickering from mouse jitter while using a gamepad
+    if (lastTile && mouseHoveredTile && !sameTile(lastTile, mouseHoveredTile)) {
+      setControlScheme(ControlScheme.Pointer) // sets highlight
+    }
   })
 
   // ----------------
