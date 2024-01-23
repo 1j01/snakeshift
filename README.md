@@ -1,4 +1,4 @@
-# Snakeshift
+# <img src="./game/public/yin-yang-larger-sneks-180px.png" height="60"> Snakeshift
 
 A cross between Snake and Shift.
 
@@ -6,7 +6,7 @@ An inverse space puzzle game.
 
 Shapeshift in makeshift ways. Shift snakes into lakes. Snake wakes into shapes.
 
-Skin and fang. Yin and yang.
+Skin and fang. Yin and yang. Snakes shelter sneks like sheds, then shed kin like skin.
 
 ## Controls
 
