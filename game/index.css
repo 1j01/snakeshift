@@ -94,5 +94,6 @@ body:not(.editing) #entities-bar {
   position: absolute;
   pointer-events: none;
   border: 20px solid #fff;
-  border-image: url(rope.svg) 10% round;
+  border-image: url(rope.svg) 31.25% round;
+  border-image-outset: 20px;
 }
