@@ -19,6 +19,19 @@ export function neighborOf(tile: Tile, direction: { x: number, y: number }) {
   }
 }
 
+// int dx =  abs(x1-x0), sx = x0<x1 ? 1 : -1;
+// int dy = -abs(y1-y0), sy = y0<y1 ? 1 : -1; 
+// int err = dx+dy, e2; /* error value e_xy */
+
+// for(;;){  /* loop */
+//    setPixel(x0,y0);
+//    if (x0==x1 && y0==y1) break;
+//    e2 = 2*err;
+//    if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
+//    if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+// }
+
+
 export function* bresenham(start: Point, end: Point): Generator<Point> {
   const xDist = Math.abs(end.x - start.x)
   const yDist = -Math.abs(end.y - start.y)
@@ -29,23 +42,24 @@ export function* bresenham(start: Point, end: Point): Generator<Point> {
   let y = start.y
   let error = xDist + yDist
 
-  yield { x, y }
+  while (true) {
+    yield { x, y }
 
-  // while (x != end.x || y != end.y) { // may cause infinite loop due to floating point error?
-  while (Math.abs(x - end.x) > 1e-6 || Math.abs(y - end.y) > 1e-6) { // still getting infinite loops...
-    if (2 * error > yDist) {
+    if (x === end.x && y === end.y) {
+      break
+    }
+
+    if (2 * error >= yDist) { // error_xy + error_x > 0
       // horizontal step
       error += yDist
       x += xStep
     }
 
-    if (2 * error < xDist) {
+    if (2 * error <= xDist) { // error_xy + error_y < 0
       // vertical step
       error += xDist
       y += yStep
     }
-
-    yield { x, y }
   }
 }
 
