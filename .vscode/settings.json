@@ -31,4 +31,11 @@
   // Theming
   "workbench.colorTheme": "Simple BW Dark",
   "workbench.iconTheme": "vs-minimal",
+  "workbench.colorCustomizations": {
+    "[Simple BW Dark]": {
+      // Status bar was blue, maybe left unstyled by the theme.
+      "statusBar.background": "#000",
+      "statusBar.debuggingBackground": "#000",
+    },
+  }
 }
