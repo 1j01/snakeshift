@@ -18,6 +18,7 @@ let brushEntityClass: typeof Entity = Block
 let brushColor = CollisionLayer.White
 let dragging: Entity | undefined = undefined
 let draggingSegmentIndex = 0
+let defining: Entity | undefined = undefined
 
 export function initLevelEditorGUI() {
 
@@ -180,12 +181,14 @@ export function handleInputForLevelEditing(
       draggingSegmentIndex = 0
     }
     pointerDownTile = undefined
+    defining = undefined
     updateHighlight()
   })
 
   on(eventTarget, 'pointercancel', () => {
     // TODO: undo and delete undoable?
     pointerDownTile = undefined
+    defining = undefined
     dragging = undefined
     draggingSegmentIndex = 0
     updateHighlight()
@@ -260,24 +263,36 @@ export function handleInputForLevelEditing(
         tool === Tool.Brush
       ) {
         // Add entities
-        // TODO: special handling for snakes and crates
+        // TODO: special handling for crates (define width/height via anchor point)
+        // and maybe blocks (annihilate inverse color to reduce entity count and avoid antialiasing artifacts)
         // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
         // TODO: Bresenham's line algorithm
         const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
         if (topLayer(hits) !== brushColor) {
           undoable()
-          const entityInstance = new brushEntityClass()
+          const entityInstance = defining ?? new brushEntityClass()
+          if (!defining) {
+            if (entityInstance instanceof Snake) {
+              entityInstance.segments.length = 0
+              defining = entityInstance
+            }
+          }
           if (entityInstance instanceof Snake) {
-            entityInstance.segments[0].layer = brushColor
-            entityInstance.segments.length = 1
-            entityInstance.segments[0].x = mouseHoveredTile.x
-            entityInstance.segments[0].y = mouseHoveredTile.y
+            entityInstance.segments.unshift({
+              layer: brushColor,
+              x: mouseHoveredTile.x,
+              y: mouseHoveredTile.y,
+              width: 1,
+              height: 1,
+            })
           } else if (entityInstance instanceof RectangularEntity) {
             entityInstance.layer = brushColor
             entityInstance.x = mouseHoveredTile.x
             entityInstance.y = mouseHoveredTile.y
           }
-          entities.push(entityInstance)
+          if (!entities.includes(entityInstance)) {
+            entities.push(entityInstance)
+          }
           sortEntities()
           postUpdate() // I don't remember why this is needed, I'm just copying tbh, feeling lazy
         }
