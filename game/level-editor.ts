@@ -210,7 +210,7 @@ export function handleInputForLevelEditing(
     mouseHoveredTile = pageToWorldTile(event)
     if (mouseHoveredTile) {
       if (dragging) {
-        drag()
+        drag(mouseHoveredTile)
       } else {
         handlePointerDownOrMove(event, lastTile, mouseHoveredTile)
       }
@@ -250,7 +250,7 @@ export function handleInputForLevelEditing(
   function brush(mouseHoveredTile: Tile) {
     // Add entities or snake segments
     // TODO: special handling for crates (define width/height via anchor point)
-    // and maybe blocks (annihilate inverse color to reduce entity count and avoid antialiasing artifacts)
+    // and maybe blocks (annihilate inverse color to reduce entity count and avoid anti-aliasing artifacts)
     const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
     if (topLayer(hits) !== brushColor) {
       if (!createdUndoState) {
@@ -322,7 +322,7 @@ export function handleInputForLevelEditing(
     }
   }
 
-  function drag() {
+  function drag(mouseHoveredTile: Tile) {
     if (dragging instanceof RectangularEntity) {
       dragging.x = mouseHoveredTile.x
       dragging.y = mouseHoveredTile.y
