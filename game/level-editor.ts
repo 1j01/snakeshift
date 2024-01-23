@@ -315,6 +315,7 @@ export function handleInputForLevelEditing(
                 setActivePlayer(newSnake)
               }
             }
+            sortEntities()
           }
         } else {
           entities.splice(index, 1)
