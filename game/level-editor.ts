@@ -237,7 +237,9 @@ export function handleInputForLevelEditing(
       event.buttons === 1 &&
       tool === Tool.Brush
     ) {
-      for (const point of bresenham(from, to)) {
+      // Don't want diagonals for snake. Do I really want it in general though?
+      const lineFn = brushEntityClass === Snake ? lineNoDiagonals : bresenham
+      for (const point of lineFn(from, to)) {
         brush({ x: point.x, y: point.y, width: 1, height: 1 })
       }
     }
@@ -252,7 +254,9 @@ export function handleInputForLevelEditing(
     // TODO: special handling for crates (define width/height via anchor point)
     // and maybe blocks (annihilate inverse color to reduce entity count and avoid anti-aliasing artifacts)
     const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
-    if (topLayer(hits) !== brushColor) {
+    // Allow placing snake segments in invalid locations, because it's better than jumping over tiles and creating diagonals or long segments.
+    // Don't need to allow starting placement of a snake in an invalid location though.
+    if (topLayer(hits) !== brushColor || (defining instanceof Snake && !sameTile(mouseHoveredTile, defining.segments[0]))) {
       if (!createdUndoState) {
         undoable()
         createdUndoState = true
