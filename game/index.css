@@ -89,3 +89,9 @@ body:not(.editing) #entities-bar {
 .tool-button:not(.selected) img {
   filter: invert();
 }
+
+.level-border {
+  position: absolute;
+  pointer-events: none;
+  border-image: url(rope.svg) 10% round;
+}
