@@ -29,7 +29,7 @@
     "env/**": true,
   },
   // Theming
-  "workbench.colorTheme": "Simple BW Dark",
+  "workbench.colorTheme": "Simple BW Dark", // or "simple dark",
   "workbench.iconTheme": "vs-minimal",
   "workbench.colorCustomizations": {
     "[Simple BW Dark]": {
@@ -37,5 +37,13 @@
       "statusBar.background": "#000",
       "statusBar.debuggingBackground": "#000",
     },
+    "[simple dark]": {
+      // Buttons and links were blue, maybe left unstyled by the theme.
+      "button.background": "#000",
+      "button.foreground": "#fff",
+      "button.hoverBackground": "#252525",
+      "textLink.foreground": "#fff",
+      "textLink.activeForeground": "#fff",
+    }
   }
 }

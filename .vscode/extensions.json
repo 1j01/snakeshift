@@ -2,6 +2,7 @@
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "streetsidesoftware.code-spell-checker",
-    "mujdecisy.simple-light-bw"
+    "mujdecisy.simple-light-bw",
+    "tek256.simple-dark"
   ]
 }
