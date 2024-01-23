@@ -21,7 +21,7 @@ export default class Snake extends Entity {
   constructor() {
     super()
     for (let i = 0; i < 10; i++) {
-      this.segments.push({ x: i, y: 0, size: 1, layer: CollisionLayer.White })
+      this.segments.push({ x: i, y: 0, width: 1, height: 1, layer: CollisionLayer.White })
     }
   }
   toJSON(): object {
@@ -110,8 +110,8 @@ export default class Snake extends Entity {
   private _drawHeadDetails(ctx: CanvasRenderingContext2D): void {
     const head = this.segments[0]
     ctx.save()
-    ctx.translate(head.x + head.size / 2, head.y + head.size / 2)
-    ctx.scale(head.size, head.size)
+    ctx.translate(head.x + head.width / 2, head.y + head.height / 2)
+    ctx.scale(head.width, head.height)
     const angle = this.segments[1] ? Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x) : Math.PI / 2
     ctx.rotate(angle)
 
@@ -161,7 +161,7 @@ export default class Snake extends Entity {
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i]
       ctx.save()
-      ctx.translate(segment.x + segment.size / 2, segment.y + segment.size / 2)
+      ctx.translate(segment.x + segment.width / 2, segment.y + segment.height / 2)
       const backAngle = Math.atan2(this.segments[i + 1]?.y - segment.y, this.segments[i + 1]?.x - segment.x)
       const foreAngle = Math.atan2(segment.y - this.segments[i - 1]?.y, segment.x - this.segments[i - 1]?.x)
 
@@ -229,8 +229,8 @@ export default class Snake extends Entity {
   analyzeMoveRelative(dirX: number, dirY: number): Move {
     const head = this.segments[0]
     const tail = this.segments[this.segments.length - 1]
-    const deltaX = dirX * head.size
-    const deltaY = dirY * head.size
+    const deltaX = dirX * head.width
+    const deltaY = dirY * head.height
     const x = head.x + deltaX
     const y = head.y + deltaY
     const hitsAhead = hitTestAllEntities(x, y, { ignoreTailOfSnake: this.growOnNextMove ? undefined : this })
@@ -260,7 +260,7 @@ export default class Snake extends Entity {
         (Math.abs(dirX) === 1 || Math.abs(dirY) === 1) &&
         topLayer(hitsAhead) !== head.layer &&
         topLayer(hitsAtTail) === head.layer,
-      to: { x, y, size: head.size },
+      to: { x, y, width: head.width, height: head.height },
       entitiesThere: hitsAhead.map(hit => hit.entity),
     }
   }
@@ -278,7 +278,8 @@ export default class Snake extends Entity {
     }
     head.x = move.to.x
     head.y = move.to.y
-    head.size = move.to.size
+    head.width = move.to.width
+    head.height = move.to.height
     // Sort entities so this is on top of anything it's moving onto.
     // This handles the visual as well as making it so
     // you can't double back while inside an inverse snake.

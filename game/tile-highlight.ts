@@ -1,5 +1,5 @@
 import { activePlayer } from "./game-state"
-import { rectOnPage, tileOnPage } from "./rendering"
+import { tileOnPage } from "./rendering"
 import { Tile } from "./types"
 
 let hoverEffect: HTMLDivElement | undefined = undefined
@@ -21,8 +21,8 @@ export function setHighlight(tile: Tile | undefined, options: Partial<HighlightO
     hoverEffect.classList.add('hover-effect')
     hoverEffect.style.left = `${onPage.x}px`
     hoverEffect.style.top = `${onPage.y}px`
-    hoverEffect.style.width = `${onPage.size}px`
-    hoverEffect.style.height = `${onPage.size}px`
+    hoverEffect.style.width = `${onPage.width}px`
+    hoverEffect.style.height = `${onPage.height}px`
     document.body.appendChild(hoverEffect)
     hoverEffect?.classList.toggle("active-effect", options.pressed ?? false)
     hoverEffect?.classList.toggle("valid", options.valid ?? true)
@@ -38,7 +38,7 @@ export function setLevelBorder(levelInfo: { width: number, height: number }) {
     levelBorder.classList.add('level-border')
     document.body.appendChild(levelBorder)
   }
-  const onPage = rectOnPage({ x: 0, y: 0, width: levelInfo.width, height: levelInfo.height })
+  const onPage = tileOnPage({ x: 0, y: 0, width: levelInfo.width, height: levelInfo.height })
   levelBorder.style.left = `${onPage.x}px`
   levelBorder.style.top = `${onPage.y}px`
   levelBorder.style.width = `${onPage.width}px`

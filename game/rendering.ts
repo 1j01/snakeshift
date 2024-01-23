@@ -21,7 +21,7 @@ export function draw() {
   // Needs rounding (or else the condition below may be true at rest, since canvas.height is an integer)
   const resolutionWidth = Math.floor(styleWidth * devicePixelRatio)
   const resolutionHeight = Math.floor(styleHeight * devicePixelRatio)
-  const resized = canvas.width !== resolutionWidth || canvas.height !== resolutionHeight;
+  const resized = canvas.width !== resolutionWidth || canvas.height !== resolutionHeight
   if (resized) {
     canvas.width = resolutionWidth
     canvas.height = resolutionHeight
@@ -141,25 +141,14 @@ export function pageToWorldTile(clientPoint: { clientX: number, clientY: number 
   return {
     x: Math.floor(worldPoint.x),
     y: Math.floor(worldPoint.y),
-    size: 1,
+    width: 1,
+    height: 1,
   }
 }
 
 export function tileOnPage(tile: Tile): Tile {
   const point = worldToView(tile)
-  const point2 = worldToView({ x: tile.x + tile.size, y: tile.y + tile.size })
-  return {
-    x: point.x,
-    y: point.y,
-    size: point2.x - point.x,
-  }
-}
-
-// TODO: DRY, I'm feeling SO LAZY right now
-// I figure I should probably replace Tile with a Box or Rect type with width/height
-export function rectOnPage(rect: { x: number, y: number, width: number, height: number }): { x: number, y: number, width: number, height: number } {
-  const point = worldToView(rect)
-  const point2 = worldToView({ x: rect.x + rect.width, y: rect.y + rect.height })
+  const point2 = worldToView({ x: tile.x + tile.width, y: tile.y + tile.height })
   return {
     x: point.x,
     y: point.y,

@@ -103,7 +103,7 @@ export function initLevel() {
   entities.push(activePlayer)
   const otherSnake = new Snake()
   for (const segment of otherSnake.segments) {
-    segment.y += segment.size * 9
+    segment.y += 9
     segment.layer = CollisionLayer.Black
   }
   entities.push(otherSnake)

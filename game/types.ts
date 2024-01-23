@@ -32,7 +32,8 @@ export interface Point {
 }
 
 export interface Tile extends Point {
-  size: number
+  width: number
+  height: number
 }
 
 export interface Move {

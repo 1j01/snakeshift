@@ -7,14 +7,15 @@ import Snake from "./snake"
 import { CollisionLayer, Hit, Tile } from "./types"
 
 export function sameTile(a: Tile, b: Tile) {
-  return a.x === b.x && a.y === b.y && a.size === b.size
+  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height
 }
 
 export function neighborOf(tile: Tile, direction: { x: number, y: number }) {
   return {
-    x: tile.x + direction.x * tile.size,
-    y: tile.y + direction.y * tile.size,
-    size: tile.size,
+    x: tile.x + direction.x * tile.width,
+    y: tile.y + direction.y * tile.height,
+    width: tile.width,
+    height: tile.height,
   }
 }
 
