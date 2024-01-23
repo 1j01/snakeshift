@@ -1,7 +1,7 @@
 import { Block } from './block'
 import Entity from './entity'
 import { activePlayer, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
-import { bresenham, hitTestAllEntities, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer } from './helpers'
+import { bresenham, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
@@ -322,27 +322,30 @@ export function handleInputForLevelEditing(
     }
   }
 
-  function drag(mouseHoveredTile: Tile) {
+  function drag(to: Tile) {
     if (dragging instanceof RectangularEntity) {
-      dragging.x = mouseHoveredTile.x
-      dragging.y = mouseHoveredTile.y
+      dragging.x = to.x
+      dragging.y = to.y
     } else if (dragging instanceof Snake) {
-      // TODO: avoid diagonals and longer-than-1 segments, using Bresenham's line algorithm (or A* to avoid obstacles)
-      // and maybe warn about overlap, since avoiding collision entirely
-      // would make it get stuck, and this is a level editor.
+      // TODO: warn about overlap (rather than avoiding it, since avoiding collision entirely
+      // would make it get stuck, and this is a level editor. You don't need the editor to be a puzzle.)
       const draggingSegment = dragging.segments[draggingSegmentIndex]
       if (
-        draggingSegment.x !== mouseHoveredTile.x ||
-        draggingSegment.y !== mouseHoveredTile.y
+        draggingSegment.x !== to.x ||
+        draggingSegment.y !== to.y
       ) {
-        for (let i = dragging.segments.length - 1; i > draggingSegmentIndex; i--) {
-          lead(dragging.segments[i - 1], dragging.segments[i])
+        // Avoids diagonals and segments longer than 1 tile
+        const from = { x: draggingSegment.x, y: draggingSegment.y } // needs copy since it's mutated and lineNoDiagonals is a generator, so it computes lazily
+        for (const point of lineNoDiagonals(from, to)) {
+          for (let i = dragging.segments.length - 1; i > draggingSegmentIndex; i--) {
+            lead(dragging.segments[i - 1], dragging.segments[i])
+          }
+          for (let i = 0; i < draggingSegmentIndex; i++) {
+            lead(dragging.segments[i + 1], dragging.segments[i])
+          }
+          draggingSegment.x = point.x
+          draggingSegment.y = point.y
         }
-        for (let i = 0; i < draggingSegmentIndex; i++) {
-          lead(dragging.segments[i + 1], dragging.segments[i])
-        }
-        draggingSegment.x = mouseHoveredTile.x
-        draggingSegment.y = mouseHoveredTile.y
       }
     }
   }
