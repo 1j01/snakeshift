@@ -80,3 +80,10 @@ body:not(.editing) #entities-bar {
   border-color: transparent;
   box-shadow: 0 0 0 2px #fff inset;
 }
+
+.entity-button.selected {
+  background-color: #fff;
+  color: #000;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px #fff inset;
+}

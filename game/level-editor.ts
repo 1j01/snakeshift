@@ -1,16 +1,32 @@
+import { Block } from './block'
 import Entity from './entity'
 import { activePlayer, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
-import { hitTestAllEntities, makeEntity, makeEventListenerGroup, sameTile, sortEntities } from './helpers'
+import { hitTestAllEntities, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
 import { setHighlight } from './tile-highlight'
 import { CollisionLayer, Tile } from './types'
 
+enum Tool {
+  Brush = "Brush",
+  Eraser = "Eraser",
+  Move = "Move",
+}
+let tool = Tool.Brush
+let brushEntityClass: typeof Entity = Block
+let brushColor = CollisionLayer.White
 let dragging: Entity | undefined = undefined
 let draggingSegmentIndex = 0
 
 export function initLevelEditorGUI() {
+
+  document.querySelector(".tool-button[data-tool='Eraser'")!.addEventListener('click', () => {
+    tool = Tool.Eraser
+  })
+  document.querySelector(".tool-button[data-tool='Move'")!.addEventListener('click', () => {
+    tool = Tool.Move
+  })
 
   const entitiesBar = document.getElementById('entities-bar')!
   const entityButtons = entitiesBar.querySelectorAll('.entity-button')
@@ -33,6 +49,7 @@ export function initLevelEditorGUI() {
       }
       return entityInstance
     }
+    /*
     function startPlacing() {
       if (dragging) {
         return // avoid doubly adding from click after pointerdown
@@ -47,6 +64,18 @@ export function initLevelEditorGUI() {
     }
     button.addEventListener('click', startPlacing) // allow for click to work for keyboard/other accessibility
     button.addEventListener('pointerdown', startPlacing) // allow dragging from button, to place in one gesture
+    */
+    button.addEventListener('click', () => {
+      // TODO: XXX: bad code, constructing to get constructor
+      brushEntityClass = makeEntity(entityName).constructor as typeof Entity
+      brushColor = layer
+      tool = Tool.Brush
+      for (const button of entityButtons) {
+        button.classList.remove('selected')
+      }
+      button.classList.add('selected')
+    })
+    button.classList.toggle('selected', entityName === brushEntityClass.name && layer === brushColor)
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')!
     button.prepend(canvas)
@@ -81,10 +110,18 @@ export function handleInputForLevelEditing(
 
   function updateHighlight() {
     let pressed = false
+    let valid = false
     if (pointerDownTile && mouseHoveredTile) {
       pressed = sameTile(mouseHoveredTile, pointerDownTile)
     }
-    setHighlight(mouseHoveredTile, { pressed, valid: mouseHoveredTile ? hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y).length > 0 : false })
+    if (mouseHoveredTile) {
+      if (tool === Tool.Move) {
+        valid = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y).length > 0
+      } else {
+        valid = true // maybe (TODO)
+      }
+    }
+    setHighlight(mouseHoveredTile, { pressed, valid })
   }
   onUpdate(updateHighlight)
   onResize(updateHighlight)
@@ -97,7 +134,12 @@ export function handleInputForLevelEditing(
   let mouseHoveredTile: Tile | undefined = undefined
   on(eventTarget, 'pointerdown', (event: PointerEvent) => {
     pointerDownTile = pageToWorldTile(event)
-    if (pointerDownTile && !dragging && event.button === 0) {
+    if (
+      pointerDownTile &&
+      !dragging &&
+      event.button === 0 &&
+      tool === Tool.Move
+    ) {
       // TODO: consider reversing the array to be topmost first
       const hits = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
       const hit = hits[hits.length - 1]
@@ -167,8 +209,11 @@ export function handleInputForLevelEditing(
             draggingSegment.y = mouseHoveredTile.y
           }
         }
-      } else if (event.buttons === 2) {
-        // Right click to delete entities, or snake segments
+      } else if (
+        event.buttons === 2 ||
+        (tool === Tool.Eraser && event.buttons === 1)
+      ) {
+        // Right click (or use eraser) to delete entities or snake segments
         const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
         for (const hit of hits) {
           const index = entities.indexOf(hit.entity)
@@ -199,6 +244,32 @@ export function handleInputForLevelEditing(
               }
             }
           }
+        }
+      } else if (
+        event.buttons === 1 &&
+        tool === Tool.Brush
+      ) {
+        // Add entities
+        // TODO: special handling for snakes and crates
+        // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
+        // TODO: Bresenham's line algorithm
+        const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
+        if (topLayer(hits) !== brushColor) {
+          undoable()
+          const entityInstance = new brushEntityClass()
+          if (entityInstance instanceof Snake) {
+            entityInstance.segments[0].layer = brushColor
+            entityInstance.segments.length = 1
+            entityInstance.segments[0].x = mouseHoveredTile.x
+            entityInstance.segments[0].y = mouseHoveredTile.y
+          } else if (entityInstance instanceof RectangularEntity) {
+            entityInstance.layer = brushColor
+            entityInstance.x = mouseHoveredTile.x
+            entityInstance.y = mouseHoveredTile.y
+          }
+          entities.push(entityInstance)
+          sortEntities()
+          postUpdate() // I don't remember why this is needed, I'm just copying tbh, feeling lazy
         }
       }
     }

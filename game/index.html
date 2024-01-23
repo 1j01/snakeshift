@@ -24,17 +24,30 @@
     Therefore profit comes from what is there;<br>
     Usefulness from what is not there.
   </blockquote>
-  <div id="entities-bar">
-    <button class="entity-button" data-entity="Snake" data-color="White">Snake (White)</button>
-    <button class="entity-button" data-entity="Snake" data-color="Black">Snake (Black)</button>
-    <button class="entity-button" data-entity="Collectable" data-color="White">Food (White)</button>
-    <button class="entity-button" data-entity="Collectable" data-color="Black">Food (Black)</button>
-    <button class="entity-button" data-entity="Crate" data-color="White">Crate (White)</button>
-    <button class="entity-button" data-entity="Crate" data-color="Black">Crate (Black)</button>
-    <button class="entity-button" data-entity="Block" data-color="White">Wall (White)</button>
-    <button class="entity-button" data-entity="Block" data-color="Black">Wall (Black)</button>
-  </div>
-  <script type="module" src="./main.ts"></script>
+  <div id="level-editor">
+    <div id="entities-bar">
+      <button class="entity-button" data-entity="Snake" data-color="White">Snake (White)</button>
+      <button class="entity-button" data-entity="Snake" data-color="Black">Snake (Black)</button>
+      <button class="entity-button" data-entity="Collectable" data-color="White">Food (White)</button>
+      <button class="entity-button" data-entity="Collectable" data-color="Black">Food (Black)</button>
+      <button class="entity-button" data-entity="Crate" data-color="White">Crate (White)</button>
+      <button class="entity-button" data-entity="Crate" data-color="Black">Crate (Black)</button>
+      <button class="entity-button" data-entity="Block" data-color="White">Wall (White)</button>
+      <button class="entity-button" data-entity="Block" data-color="Black">Wall (Black)</button>
+    </div>
+    <div id="tools-bar">
+      <button class="tool-button" data-tool="Brush">Brush</button>
+      <button class="tool-button" data-tool="Eraser">Erase</button>
+      <button class="tool-button" data-tool="Move">Move</button>
+
+      <!-- <button id="play-button">Play</button>
+      <button id="save-button">Save</button>
+      <button id="load-button">Load</button>
+      <button id="clear-button">Clear</button>
+      <button id="undo-button">Undo</button>
+      <button id="redo-button">Redo</button> -->
+    </div>
+    <script type="module" src="./main.ts"></script>
 </body>
 
 </html>
