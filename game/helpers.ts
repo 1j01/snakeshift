@@ -76,9 +76,9 @@ export function* lineNoDiagonals(start: Point, end: Point): Generator<Point> {
 
   yield { x, y }
 
-  // while (x != end.x || y != end.y) { // may cause infinite loop due to floating point error?
-  while (Math.abs(x - end.x) > 1e-6 || Math.abs(y - end.y) > 1e-6) {
+  while (x != end.x || y != end.y) {
 
+    // if (xDist + yDist < 4 * error) { // alternate form, probably less clear but infinitesimally faster
     if (2 * error - yDist > xDist - 2 * error) {
       // horizontal step
       error += yDist
