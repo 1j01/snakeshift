@@ -79,7 +79,9 @@ export function handleInput(
     if (coordinates) {
       mouseHoveredTile = coordinates
     }
-    // TODO: only with significant movement, such as moving to a new tile
+    // TODO: only with significant movement, such as moving to a new tile,
+    // because this replaces the highlight used by gamepad controls
+    // (and is a bit inefficient)
     setControlScheme(ControlScheme.Pointer) // sets highlight
   })
 

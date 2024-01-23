@@ -1,7 +1,7 @@
 import { Block } from './block'
 import Entity from './entity'
 import { activePlayer, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
-import { hitTestAllEntities, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer } from './helpers'
+import { bresenham, hitTestAllEntities, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
@@ -167,7 +167,7 @@ export function handleInputForLevelEditing(
       }
       updateHighlight()
     } else if (mouseHoveredTile) {
-      handlePointerDownOrMove(event)
+      handlePointerDownOrMove(event, mouseHoveredTile, mouseHoveredTile)
     }
   })
 
@@ -189,7 +189,8 @@ export function handleInputForLevelEditing(
   })
 
   on(eventTarget, 'pointercancel', () => {
-    // TODO: undo and delete undoable?
+    // TODO: undo and delete undoable? or just undo? could allow redoing.
+    // but definitely only undo if an undo state was created for this gesture.
     pointerDownTile = undefined
     defining = undefined
     dragging = undefined
@@ -198,32 +199,37 @@ export function handleInputForLevelEditing(
   })
 
   on(eventTarget, 'pointermove', (event: PointerEvent) => {
-    // TODO: simplify, "coordinates" is leftover from a project of mine that I copied this from
-    const coordinates = pageToWorldTile(event)
-    mouseHoveredTile = undefined
-    if (coordinates) {
-      mouseHoveredTile = coordinates
+    const lastTile = mouseHoveredTile
+    mouseHoveredTile = pageToWorldTile(event)
+    if (mouseHoveredTile) {
       if (dragging) {
         drag()
       } else {
-        handlePointerDownOrMove(event)
+        handlePointerDownOrMove(event, lastTile, mouseHoveredTile)
       }
     }
-    // TODO: only with significant movement, such as moving to a new tile
+    // TODO: only with significant movement, such as moving to a new tile,
+    // because this replaces the highlight used by gamepad controls (not applicable to editor yet)
+    // and is just a bit inefficient
     updateHighlight()
   })
 
-  function handlePointerDownOrMove(event: PointerEvent) {
+  function handlePointerDownOrMove(event: PointerEvent, from: Tile | undefined, to: Tile | undefined) {
+    if (!from || !to) return
     if (
       event.buttons === 2 ||
       (tool === Tool.Eraser && event.buttons === 1)
     ) {
-      erase()
+      for (const point of bresenham(from, to)) {
+        erase({ x: point.x, y: point.y, width: 1, height: 1 })
+      }
     } else if (
       event.buttons === 1 &&
       tool === Tool.Brush
     ) {
-      brush()
+      for (const point of bresenham(from, to)) {
+        brush({ x: point.x, y: point.y, width: 1, height: 1 })
+      }
     }
   }
 
@@ -231,12 +237,11 @@ export function handleInputForLevelEditing(
   // Tool actions
   // ------------
 
-  function brush() {
+  function brush(mouseHoveredTile: Tile) {
     // Add entities
     // TODO: special handling for crates (define width/height via anchor point)
     // and maybe blocks (annihilate inverse color to reduce entity count and avoid antialiasing artifacts)
     // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
-    // TODO: Bresenham's line algorithm
     const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
     if (topLayer(hits) !== brushColor) {
       undoable()
@@ -269,14 +274,13 @@ export function handleInputForLevelEditing(
 
   }
 
-  function erase() {
+  function erase(mouseHoveredTile: Tile) {
     // Right click (or use eraser) to delete entities or snake segments
     const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
     for (const hit of hits) {
       const index = entities.indexOf(hit.entity)
       if (index >= 0) {
         // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
-        // TODO: Bresenham's line algorithm
         undoable()
         if (hit.entity instanceof Snake && hit.entity.segments.length >= 2) {
           const before = hit.entity.segments.slice(0, hit.segmentIndex)

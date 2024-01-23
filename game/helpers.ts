@@ -4,7 +4,7 @@ import { Crate } from "./crate"
 import Entity from "./entity"
 import { entities } from "./game-state"
 import Snake from "./snake"
-import { CollisionLayer, Hit, Tile } from "./types"
+import { CollisionLayer, Hit, Point, Tile } from "./types"
 
 export function sameTile(a: Tile, b: Tile) {
   return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height
@@ -16,6 +16,27 @@ export function neighborOf(tile: Tile, direction: { x: number, y: number }) {
     y: tile.y + direction.y * tile.height,
     width: tile.width,
     height: tile.height,
+  }
+}
+
+export function* bresenham(start: Point, end: Point): Generator<Point> {
+  const dx = Math.abs(end.x - start.x)
+  const dy = Math.abs(end.y - start.y)
+  const sx = start.x < end.x ? 1 : -1
+  const sy = start.y < end.y ? 1 : -1
+  let err = dx - dy
+  while (true) {
+    yield { x: start.x, y: start.y }
+    if (start.x === end.x && start.y === end.y) break
+    const e2 = 2 * err
+    if (e2 > -dy) {
+      err -= dy
+      start.x += sx
+    }
+    if (e2 < dx) {
+      err += dx
+      start.y += sy
+    }
   }
 }
 
