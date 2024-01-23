@@ -200,107 +200,120 @@ export function handleInputForLevelEditing(
     if (coordinates) {
       mouseHoveredTile = coordinates
       if (dragging) {
-        if (dragging instanceof RectangularEntity) {
-          dragging.x = mouseHoveredTile.x
-          dragging.y = mouseHoveredTile.y
-        } else if (dragging instanceof Snake) {
-          // TODO: avoid diagonals and longer-than-1 segments,
-          // and maybe warn about overlap, since avoiding collision entirely
-          // would make it get stuck, and this is a level editor.
-          const draggingSegment = dragging.segments[draggingSegmentIndex]
-          if (
-            draggingSegment.x !== mouseHoveredTile.x ||
-            draggingSegment.y !== mouseHoveredTile.y
-          ) {
-            for (let i = dragging.segments.length - 1; i > draggingSegmentIndex; i--) {
-              lead(dragging.segments[i - 1], dragging.segments[i])
-            }
-            for (let i = 0; i < draggingSegmentIndex; i++) {
-              lead(dragging.segments[i + 1], dragging.segments[i])
-            }
-            draggingSegment.x = mouseHoveredTile.x
-            draggingSegment.y = mouseHoveredTile.y
-          }
-        }
+        drag()
       } else if (
         event.buttons === 2 ||
         (tool === Tool.Eraser && event.buttons === 1)
       ) {
-        // Right click (or use eraser) to delete entities or snake segments
-        const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
-        for (const hit of hits) {
-          const index = entities.indexOf(hit.entity)
-          if (index >= 0) {
-            // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
-            // TODO: Bresenham's line algorithm
-            undoable()
-            if (hit.entity instanceof Snake && hit.entity.segments.length >= 2) {
-              const before = hit.entity.segments.slice(0, hit.segmentIndex)
-              const after = hit.entity.segments.slice(hit.segmentIndex! + 1)
-              hit.entity.segments.length = before.length
-              if (after.length > 0) {
-                const newSnake = new Snake()
-                newSnake.segments.length = 0
-                newSnake.segments.push(...after)
-                entities.push(newSnake)
-                if (hit.entity.segments.length === 0) {
-                  entities.splice(index, 1)
-                  if (hit.entity === activePlayer) {
-                    setActivePlayer(newSnake)
-                  }
-                }
-              }
-            } else {
-              entities.splice(index, 1)
-              if (hit.entity === activePlayer) {
-                setActivePlayer(undefined)
-              }
-            }
-          }
-        }
+        erase()
       } else if (
         event.buttons === 1 &&
         tool === Tool.Brush
       ) {
-        // Add entities
-        // TODO: special handling for crates (define width/height via anchor point)
-        // and maybe blocks (annihilate inverse color to reduce entity count and avoid antialiasing artifacts)
-        // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
-        // TODO: Bresenham's line algorithm
-        const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
-        if (topLayer(hits) !== brushColor) {
-          undoable()
-          const entityInstance = defining ?? new brushEntityClass()
-          if (!defining) {
-            if (entityInstance instanceof Snake) {
-              entityInstance.segments.length = 0
-              defining = entityInstance
-            }
-          }
-          if (entityInstance instanceof Snake) {
-            entityInstance.segments.unshift({
-              layer: brushColor,
-              x: mouseHoveredTile.x,
-              y: mouseHoveredTile.y,
-              width: 1,
-              height: 1,
-            })
-          } else if (entityInstance instanceof RectangularEntity) {
-            entityInstance.layer = brushColor
-            entityInstance.x = mouseHoveredTile.x
-            entityInstance.y = mouseHoveredTile.y
-          }
-          if (!entities.includes(entityInstance)) {
-            entities.push(entityInstance)
-          }
-          sortEntities()
-          postUpdate() // I don't remember why this is needed, I'm just copying tbh, feeling lazy
-        }
+        brush()
       }
     }
     // TODO: only with significant movement, such as moving to a new tile
     updateHighlight()
   })
+
+  function brush() {
+    // Add entities
+    // TODO: special handling for crates (define width/height via anchor point)
+    // and maybe blocks (annihilate inverse color to reduce entity count and avoid antialiasing artifacts)
+    // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
+    // TODO: Bresenham's line algorithm
+    const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
+    if (topLayer(hits) !== brushColor) {
+      undoable()
+      const entityInstance = defining ?? new brushEntityClass()
+      if (!defining) {
+        if (entityInstance instanceof Snake) {
+          entityInstance.segments.length = 0
+          defining = entityInstance
+        }
+      }
+      if (entityInstance instanceof Snake) {
+        entityInstance.segments.unshift({
+          layer: brushColor,
+          x: mouseHoveredTile.x,
+          y: mouseHoveredTile.y,
+          width: 1,
+          height: 1,
+        })
+      } else if (entityInstance instanceof RectangularEntity) {
+        entityInstance.layer = brushColor
+        entityInstance.x = mouseHoveredTile.x
+        entityInstance.y = mouseHoveredTile.y
+      }
+      if (!entities.includes(entityInstance)) {
+        entities.push(entityInstance)
+      }
+      sortEntities()
+      postUpdate() // I don't remember why this is needed, I'm just copying tbh, feeling lazy
+    }
+
+  }
+
+  function erase() {
+    // Right click (or use eraser) to delete entities or snake segments
+    const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
+    for (const hit of hits) {
+      const index = entities.indexOf(hit.entity)
+      if (index >= 0) {
+        // TODO: limit to one undo state per gesture (but don't create one unnecessarily)
+        // TODO: Bresenham's line algorithm
+        undoable()
+        if (hit.entity instanceof Snake && hit.entity.segments.length >= 2) {
+          const before = hit.entity.segments.slice(0, hit.segmentIndex)
+          const after = hit.entity.segments.slice(hit.segmentIndex! + 1)
+          hit.entity.segments.length = before.length
+          if (after.length > 0) {
+            const newSnake = new Snake()
+            newSnake.segments.length = 0
+            newSnake.segments.push(...after)
+            entities.push(newSnake)
+            if (hit.entity.segments.length === 0) {
+              entities.splice(index, 1)
+              if (hit.entity === activePlayer) {
+                setActivePlayer(newSnake)
+              }
+            }
+          }
+        } else {
+          entities.splice(index, 1)
+          if (hit.entity === activePlayer) {
+            setActivePlayer(undefined)
+          }
+        }
+      }
+    }
+  }
+
+  function drag() {
+    if (dragging instanceof RectangularEntity) {
+      dragging.x = mouseHoveredTile.x
+      dragging.y = mouseHoveredTile.y
+    } else if (dragging instanceof Snake) {
+      // TODO: avoid diagonals and longer-than-1 segments,
+      // and maybe warn about overlap, since avoiding collision entirely
+      // would make it get stuck, and this is a level editor.
+      const draggingSegment = dragging.segments[draggingSegmentIndex]
+      if (
+        draggingSegment.x !== mouseHoveredTile.x ||
+        draggingSegment.y !== mouseHoveredTile.y
+      ) {
+        for (let i = dragging.segments.length - 1; i > draggingSegmentIndex; i--) {
+          lead(dragging.segments[i - 1], dragging.segments[i])
+        }
+        for (let i = 0; i < draggingSegmentIndex; i++) {
+          lead(dragging.segments[i + 1], dragging.segments[i])
+        }
+        draggingSegment.x = mouseHoveredTile.x
+        draggingSegment.y = mouseHoveredTile.y
+      }
+    }
+  }
 
   function lead(leader: SnakeSegment, follower: SnakeSegment) {
     follower.x = leader.x
