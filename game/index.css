@@ -87,3 +87,7 @@ body:not(.editing) #entities-bar {
   border-color: transparent;
   box-shadow: 0 0 0 2px #fff inset;
 }
+
+.tool-button:not(.selected) img {
+  filter: invert();
+}
