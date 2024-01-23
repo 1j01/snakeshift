@@ -145,6 +145,7 @@ export function handleInputForLevelEditing(
   let mouseHoveredTile: Tile | undefined = undefined
   on(eventTarget, 'pointerdown', (event: PointerEvent) => {
     pointerDownTile = pageToWorldTile(event)
+    mouseHoveredTile = pointerDownTile // for tool actions
     if (
       pointerDownTile &&
       !dragging &&
@@ -165,6 +166,8 @@ export function handleInputForLevelEditing(
         sortEntities()
       }
       updateHighlight()
+    } else if (mouseHoveredTile) {
+      handlePointerDownOrMove(event)
     }
   })
 
@@ -195,27 +198,38 @@ export function handleInputForLevelEditing(
   })
 
   on(eventTarget, 'pointermove', (event: PointerEvent) => {
+    // TODO: simplify, "coordinates" is leftover from a project of mine that I copied this from
     const coordinates = pageToWorldTile(event)
     mouseHoveredTile = undefined
     if (coordinates) {
       mouseHoveredTile = coordinates
       if (dragging) {
         drag()
-      } else if (
-        event.buttons === 2 ||
-        (tool === Tool.Eraser && event.buttons === 1)
-      ) {
-        erase()
-      } else if (
-        event.buttons === 1 &&
-        tool === Tool.Brush
-      ) {
-        brush()
+      } else {
+        handlePointerDownOrMove(event)
       }
     }
     // TODO: only with significant movement, such as moving to a new tile
     updateHighlight()
   })
+
+  function handlePointerDownOrMove(event: PointerEvent) {
+    if (
+      event.buttons === 2 ||
+      (tool === Tool.Eraser && event.buttons === 1)
+    ) {
+      erase()
+    } else if (
+      event.buttons === 1 &&
+      tool === Tool.Brush
+    ) {
+      brush()
+    }
+  }
+
+  // ------------
+  // Tool actions
+  // ------------
 
   function brush() {
     // Add entities
@@ -295,7 +309,7 @@ export function handleInputForLevelEditing(
       dragging.x = mouseHoveredTile.x
       dragging.y = mouseHoveredTile.y
     } else if (dragging instanceof Snake) {
-      // TODO: avoid diagonals and longer-than-1 segments,
+      // TODO: avoid diagonals and longer-than-1 segments, using Bresenham's line algorithm (or A* to avoid obstacles)
       // and maybe warn about overlap, since avoiding collision entirely
       // would make it get stuck, and this is a level editor.
       const draggingSegment = dragging.segments[draggingSegmentIndex]
