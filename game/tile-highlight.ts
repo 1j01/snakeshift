@@ -33,15 +33,14 @@ export function setLevelBorder(levelInfo: { width: number, height: number }) {
     levelBorder.classList.add('level-border')
     document.body.appendChild(levelBorder)
   }
-  positionElement(levelBorder, { x: 0, y: 0, width: levelInfo.width, height: levelInfo.height })
+  positionElement(levelBorder, tileOnPage({ x: 0, y: 0, width: levelInfo.width, height: levelInfo.height }))
 }
 
-function positionElement(element: HTMLElement, tile: Tile) {
-  const onPage = tileOnPage(tile)
-  element.style.left = `${onPage.x}px`
-  element.style.top = `${onPage.y}px`
-  element.style.width = `${onPage.width}px`
-  element.style.height = `${onPage.height}px`
+function positionElement(element: HTMLElement, rect: Tile) {
+  element.style.left = `${rect.x}px`
+  element.style.top = `${rect.y}px`
+  element.style.width = `${rect.width}px`
+  element.style.height = `${rect.height}px`
 }
 
 // Arguably it would've been simpler to just support valid as an option and && the validity,
