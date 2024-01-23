@@ -29,25 +29,20 @@ export function setHighlight(tile: Tile | undefined, options: Partial<HighlightO
   }
 }
 
-export function setLevelBorder(levelInfo: { width: number, height: number } | undefined) {
+export function setLevelBorder(levelInfo: { width: number, height: number }) {
   // TODO: DRY, I'm feeling SO LAZY right now
   // also this isn't related to "tile highlighting"
   // also I figure I should probably replace Tile with a Box or Rect type with width/height
-  // TODO: don't create a new div every freaking frame!
-  if (levelBorder) {
-    levelBorder.remove()
-    levelBorder = undefined
-  }
-  if (levelInfo && activePlayer) {
-    const onPage = rectOnPage({ x: 0, y: 0, width: levelInfo.width, height: levelInfo.height })
+  if (!levelBorder) {
     levelBorder = document.createElement('div')
     levelBorder.classList.add('level-border')
-    levelBorder.style.left = `${onPage.x}px`
-    levelBorder.style.top = `${onPage.y}px`
-    levelBorder.style.width = `${onPage.width}px`
-    levelBorder.style.height = `${onPage.height}px`
     document.body.appendChild(levelBorder)
   }
+  const onPage = rectOnPage({ x: 0, y: 0, width: levelInfo.width, height: levelInfo.height })
+  levelBorder.style.left = `${onPage.x}px`
+  levelBorder.style.top = `${onPage.y}px`
+  levelBorder.style.width = `${onPage.width}px`
+  levelBorder.style.height = `${onPage.height}px`
 }
 
 // Arguably it would've been simpler to just support valid as an option and && the validity,

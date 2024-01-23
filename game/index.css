@@ -93,5 +93,6 @@ body:not(.editing) #entities-bar {
 .level-border {
   position: absolute;
   pointer-events: none;
+  border: 20px solid #fff;
   border-image: url(rope.svg) 10% round;
 }
