@@ -20,23 +20,61 @@ export function neighborOf(tile: Tile, direction: { x: number, y: number }) {
 }
 
 export function* bresenham(start: Point, end: Point): Generator<Point> {
-  const dx = Math.abs(end.x - start.x)
-  const dy = Math.abs(end.y - start.y)
-  const sx = start.x < end.x ? 1 : -1
-  const sy = start.y < end.y ? 1 : -1
-  let err = dx - dy
-  while (true) {
-    yield { x: start.x, y: start.y }
-    if (start.x === end.x && start.y === end.y) break
-    const e2 = 2 * err
-    if (e2 > -dy) {
-      err -= dy
-      start.x += sx
+  const xDist = Math.abs(end.x - start.x)
+  const yDist = -Math.abs(end.y - start.y)
+  const xStep = (start.x < end.x ? +1 : -1)
+  const yStep = (start.y < end.y ? +1 : -1)
+
+  let x = start.x
+  let y = start.y
+  let error = xDist + yDist
+
+  yield { x, y }
+
+  // while (x != end.x || y != end.y) { // may cause infinite loop due to floating point error?
+  while (Math.abs(x - end.x) > 1e-6 || Math.abs(y - end.y) > 1e-6) { // still getting infinite loops...
+    if (2 * error > yDist) {
+      // horizontal step
+      error += yDist
+      x += xStep
     }
-    if (e2 < dx) {
-      err += dx
-      start.y += sy
+
+    if (2 * error < xDist) {
+      // vertical step
+      error += xDist
+      y += yStep
     }
+
+    yield { x, y }
+  }
+}
+
+export function* lineNoDiagonals(start: Point, end: Point): Generator<Point> {
+  const xDist = Math.abs(end.x - start.x)
+  const yDist = -Math.abs(end.y - start.y)
+  const xStep = (start.x < end.x ? +1 : -1)
+  const yStep = (start.y < end.y ? +1 : -1)
+
+  let x = start.x
+  let y = start.y
+  let error = xDist + yDist
+
+  yield { x, y }
+
+  // while (x != end.x || y != end.y) { // may cause infinite loop due to floating point error?
+  while (Math.abs(x - end.x) > 1e-6 || Math.abs(y - end.y) > 1e-6) {
+
+    if (2 * error - yDist > xDist - 2 * error) {
+      // horizontal step
+      error += yDist
+      x += xStep
+    } else {
+      // vertical step
+      error += xDist
+      y += yStep
+    }
+
+    yield { x, y }
   }
 }
 
