@@ -49,13 +49,14 @@ export function* bresenham(start: Point, end: Point): Generator<Point> {
       break
     }
 
-    if (2 * error >= yDist) { // error_xy + error_x > 0
+    const e2 = 2 * error // must not be inlined in the if statements below since error can change
+    if (e2 >= yDist) { // error_xy + error_x > 0
       // horizontal step
       error += yDist
       x += xStep
     }
 
-    if (2 * error <= xDist) { // error_xy + error_y < 0
+    if (e2 <= xDist) { // error_xy + error_y < 0
       // vertical step
       error += xDist
       y += yStep
