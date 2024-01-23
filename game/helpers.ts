@@ -4,7 +4,7 @@ import { Crate } from "./crate"
 import Entity from "./entity"
 import { entities } from "./game-state"
 import Snake from "./snake"
-import { Hit, Tile } from "./types"
+import { CollisionLayer, Hit, Tile } from "./types"
 
 export function sameTile(a: Tile, b: Tile) {
   return a.x === b.x && a.y === b.y && a.size === b.size
@@ -64,6 +64,15 @@ export function hitTestAllEntities(x: number, y: number, options: Partial<{ igno
   return hits
 }
 
+export function topLayer(hits: Hit[]): CollisionLayer {
+  let layer = CollisionLayer.Black
+  for (const hit of hits) {
+    if (hit.entity.solid) {
+      layer = hit.layer
+    }
+  }
+  return layer
+}
 export function makeEventListenerGroup() {
   // This is a lot of complexity for simply improving the ergonomics of cleanup.
   // Most of the complexity is for type checking.

@@ -1,7 +1,7 @@
 import { Collectable } from "./collectable"
 import Entity from "./entity"
 import { entities } from "./game-state"
-import { hitTestAllEntities } from "./helpers"
+import { hitTestAllEntities, topLayer } from "./helpers"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
 export interface SnakeSegment extends Tile {
@@ -235,15 +235,7 @@ export default class Snake extends Entity {
     const y = head.y + deltaY
     const hitsAhead = hitTestAllEntities(x, y, { ignoreTailOfSnake: this.growOnNextMove ? undefined : this })
     const hitsAtTail = hitTestAllEntities(tail.x, tail.y)
-    function topLayer(hits: Hit[]): CollisionLayer {
-      let layer = CollisionLayer.Black
-      for (const hit of hits) {
-        if (hit.entity.solid) {
-          layer = hit.layer
-        }
-      }
-      return layer
-    }
+
     // TODO: prevent overlapped snake doubling back on itself
     // I could check if hitsAhead includes this snake,
     // but I don't want to add special cases if I don't need to.
