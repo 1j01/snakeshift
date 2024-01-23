@@ -16,33 +16,32 @@ export function setHighlight(tile: Tile | undefined, options: Partial<HighlightO
     hoverEffect = undefined
   }
   if (tile && activePlayer) {
-    const onPage = tileOnPage(tile)
     hoverEffect = document.createElement('div')
     hoverEffect.classList.add('hover-effect')
-    hoverEffect.style.left = `${onPage.x}px`
-    hoverEffect.style.top = `${onPage.y}px`
-    hoverEffect.style.width = `${onPage.width}px`
-    hoverEffect.style.height = `${onPage.height}px`
     document.body.appendChild(hoverEffect)
     hoverEffect?.classList.toggle("active-effect", options.pressed ?? false)
     hoverEffect?.classList.toggle("valid", options.valid ?? true)
+    positionElement(hoverEffect, tileOnPage(tile))
   }
 }
 
 export function setLevelBorder(levelInfo: { width: number, height: number }) {
-  // TODO: DRY, I'm feeling SO LAZY right now
-  // also this isn't related to "tile highlighting"
-  // also I figure I should probably replace Tile with a Box or Rect type with width/height
+  // This isn't related to "tile highlighting"; should I fold this module into rendering.ts?
+  // Or should I rename this module, or move just the unrelated code, or is it fine?
   if (!levelBorder) {
     levelBorder = document.createElement('div')
     levelBorder.classList.add('level-border')
     document.body.appendChild(levelBorder)
   }
-  const onPage = tileOnPage({ x: 0, y: 0, width: levelInfo.width, height: levelInfo.height })
-  levelBorder.style.left = `${onPage.x}px`
-  levelBorder.style.top = `${onPage.y}px`
-  levelBorder.style.width = `${onPage.width}px`
-  levelBorder.style.height = `${onPage.height}px`
+  positionElement(levelBorder, { x: 0, y: 0, width: levelInfo.width, height: levelInfo.height })
+}
+
+function positionElement(element: HTMLElement, tile: Tile) {
+  const onPage = tileOnPage(tile)
+  element.style.left = `${onPage.x}px`
+  element.style.top = `${onPage.y}px`
+  element.style.width = `${onPage.width}px`
+  element.style.height = `${onPage.height}px`
 }
 
 // Arguably it would've been simpler to just support valid as an option and && the validity,
