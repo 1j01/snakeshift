@@ -9,7 +9,7 @@
   // Sort imports on save. Also removes unused imports.
   "[typescript]": {
     "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
+      "source.organizeImports": "always"
     }
   },
   // Prevent accidental editing.
