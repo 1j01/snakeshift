@@ -3,6 +3,7 @@ import { Collectable } from "./collectable"
 import { Crate } from "./crate"
 import Entity from "./entity"
 import { entities } from "./game-state"
+import Portal from "./portal"
 import Snake from "./snake"
 import { CollisionLayer, Hit, Point, Tile } from "./types"
 
@@ -92,19 +93,22 @@ export function makeEntity(entityType: string): Entity {
       return new Collectable()
     case "Crate":
       return new Crate()
+    case "Portal":
+      return new Portal()
     default:
       throw new Error(`Unknown entity type: ${entityType}`)
   }
 }
 
 export function sortEntities() {
-  // Ensure collectables are on top, and crates are below snakes.
+  // Ensure collectables are on top, and crates and portals are below snakes.
   // TODO: rule should be crates are below anything they are not inside of,
   // which is complicated, as in this game, crates can be inside of crates inside of snakes inside of crates.
   entities.sort((a, b) => {
     return (
       (+(a instanceof Collectable) - +(b instanceof Collectable)) ||
-      (+(b instanceof Crate && a instanceof Snake) - +(a instanceof Crate && b instanceof Snake))
+      (+(b instanceof Crate && a instanceof Snake) - +(a instanceof Crate && b instanceof Snake)) ||
+      (+(b instanceof Portal && a instanceof Snake) - +(a instanceof Portal && b instanceof Snake))
     )
   })
 }

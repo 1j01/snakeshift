@@ -2,6 +2,7 @@ import { Block } from './block'
 import Entity from './entity'
 import { activePlayer, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
 import { bresenham, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer } from './helpers'
+import Portal from './portal'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
@@ -55,7 +56,7 @@ export function initLevelEditorGUI() {
     const layer = entityColor === "White" ? CollisionLayer.White : entityColor === "Black" ? CollisionLayer.Black : CollisionLayer.None
     function makeColoredEntity() {
       const entityInstance = makeEntity(entityName)
-      if (entityInstance instanceof Snake) {
+      if (entityInstance instanceof Snake || entityInstance instanceof Portal) {
         for (const segment of entityInstance.segments) {
           segment.layer = layer
         }
@@ -256,19 +257,19 @@ export function handleInputForLevelEditing(
     const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
     // Allow placing snake segments in invalid locations, because it's better than jumping over tiles and creating diagonals or long segments.
     // Don't need to allow starting placement of a snake in an invalid location though.
-    if (topLayer(hits) !== brushColor || (defining instanceof Snake && !sameTile(mouseHoveredTile, defining.segments[0]))) {
+    if (topLayer(hits) !== brushColor || ((defining instanceof Snake || defining instanceof Portal) && !sameTile(mouseHoveredTile, defining.segments[0]))) {
       if (!createdUndoState) {
         undoable()
         createdUndoState = true
       }
       const entityInstance = defining ?? new brushEntityClass()
       if (!defining) {
-        if (entityInstance instanceof Snake) {
+        if (entityInstance instanceof Snake || entityInstance instanceof Portal) {
           entityInstance.segments.length = 0
           defining = entityInstance
         }
       }
-      if (entityInstance instanceof Snake) {
+      if (entityInstance instanceof Snake || entityInstance instanceof Portal) {
         entityInstance.segments.unshift({
           layer: brushColor,
           x: mouseHoveredTile.x,
@@ -300,18 +301,18 @@ export function handleInputForLevelEditing(
           undoable()
           createdUndoState = true
         }
-        if (hit.entity instanceof Snake && hit.entity.segments.length >= 2) {
+        if ((hit.entity instanceof Snake || hit.entity instanceof Portal) && hit.entity.segments.length >= 2) {
           const before = hit.entity.segments.slice(0, hit.segmentIndex)
           const after = hit.entity.segments.slice(hit.segmentIndex! + 1)
           hit.entity.segments.length = before.length
           if (after.length > 0) {
-            const newSnake = new Snake()
+            const newSnake = hit.entity instanceof Snake ? new Snake() : new Portal()
             newSnake.segments.length = 0
             newSnake.segments.push(...after)
             entities.push(newSnake)
             if (hit.entity.segments.length === 0) {
               entities.splice(index, 1)
-              if (hit.entity === activePlayer) {
+              if (hit.entity === activePlayer && newSnake instanceof Snake) {
                 setActivePlayer(newSnake)
               }
             }
@@ -331,7 +332,7 @@ export function handleInputForLevelEditing(
     if (dragging instanceof RectangularEntity) {
       dragging.x = to.x
       dragging.y = to.y
-    } else if (dragging instanceof Snake) {
+    } else if (dragging instanceof Snake || dragging instanceof Portal) {
       // TODO: warn about overlap (rather than avoiding it, since avoiding collision entirely
       // would make it get stuck, and this is a level editor. You don't need the editor to be a puzzle.)
       const draggingSegment = dragging.segments[draggingSegmentIndex]
