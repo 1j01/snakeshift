@@ -14,6 +14,8 @@ Skin and fang. Yin and yang. Snakes shelter sneks like sheds, then shed kin like
 
 Click on a cell to move to it.
 
+NOTE: KEYBOARD IS NEEDED FOR SOME CONTROLS CURRENTLY.
+
 ### Gamepad
 
 Use the left stick to point in the direction you want to move, and then press A to move to the highlighted cell.
@@ -21,9 +23,21 @@ Or use the D-pad to move.
 
 You may need to press a button to activate the gamepad, before the web page can see it.
 
+NOTE: KEYBOARD IS NEEDED FOR SOME CONTROLS CURRENTLY.
+
 ### Keyboard
 
-Use the arrow keys or WASD to move.
+You can use the arrow keys, WASD, HJKL, or the number pad to move.
+
+<kbd>Tab</kbd> switches between snakes.
+
+Press <kbd>Z</kbd> to undo, <kbd>Y</kbd> to redo.
+
+<!-- TODO: Press <kbd>R</kbd> to restart the level. -->
+
+Press <kbd>`</kbd> to toggle the level editor.
+
+Press <kbd>S</kbd> to save the level, and <kbd>O</kbd> to open a level.
 
 ## Project Structure
 
