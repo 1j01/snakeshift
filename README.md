@@ -37,7 +37,7 @@ Press <kbd>Z</kbd> to undo, <kbd>Y</kbd> to redo.
 
 Press <kbd>`</kbd> to toggle the level editor.
 
-Press <kbd>S</kbd> to save the level, and <kbd>O</kbd> to open a level.
+Press <kbd>Ctrl+S</kbd> to save the level, and <kbd>Ctrl+O</kbd> to open a level.
 
 ## Project Structure
 

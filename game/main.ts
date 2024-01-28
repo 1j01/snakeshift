@@ -62,10 +62,10 @@ addEventListener('keydown', (event) => {
   } else if (event.key === 'y') {
     redo()
     event.preventDefault()
-  } else if (event.key === 's') {
+  } else if (event.key === 's' && (event.ctrlKey || event.metaKey)) {
     saveLevel()
     event.preventDefault()
-  } else if (event.key === 'o') {
+  } else if (event.key === 'o' && (event.ctrlKey || event.metaKey)) {
     openLevel()
     event.preventDefault()
   }
