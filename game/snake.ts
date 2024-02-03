@@ -267,7 +267,7 @@ export default class Snake extends Entity {
   takeMove(move: Move): void {
     undoable()
     if (this.growOnNextMove) {
-      this.grow()
+      this._grow()
       this.growOnNextMove = false
     }
     const head = this.segments[0]
@@ -304,7 +304,7 @@ export default class Snake extends Entity {
       }
     }
   }
-  grow(): void {
+  private _grow(): void {
     const tail = this.segments[this.segments.length - 1]
     // This only works because SnakeSegment is a flat object.
     const newTail = { ...tail }
