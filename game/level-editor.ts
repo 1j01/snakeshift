@@ -172,38 +172,21 @@ export function handleInputForLevelEditing(
     }
   })
 
-  on(eventTarget, 'pointerup', (event: PointerEvent) => {
-    const pointerUpTile = pageToWorldTile(event)
-    // TODO: preventing you from stopping dragging is annoying
-    if (
-      pointerUpTile
-      // pointerUpTile &&
-      // pointerDownTile &&
-      // sameTile(pointerUpTile, pointerDownTile)
-    ) {
-      // undoable is covered at start of drag or addition of a new entity
-      dragging = undefined
-      draggingSegmentIndex = 0
-    }
-    pointerDownTile = undefined
-    defining = undefined
-    // TODO: preventing you from stopping dragging is annoying
-    if (!dragging) {
-      createdUndoState = false
-    }
-    updateHighlight()
-  })
+  on(window, 'pointerup', endDrag)
+  on(window, 'pointercancel', endDrag)
 
-  on(eventTarget, 'pointercancel', () => {
-    // TODO: undo and delete undoable? or just undo? could allow redoing.
+  function endDrag(event: PointerEvent) {
+    // undoable is covered at start of drag
+    // TODO: undo and delete undoable for pointercancel? or just undo? could allow redoing.
     // but definitely only undo if an undo state was created for this gesture.
     pointerDownTile = undefined
+    mouseHoveredTile = pageToWorldTile(event)
     defining = undefined
     dragging = undefined
     draggingSegmentIndex = 0
     createdUndoState = false
     updateHighlight()
-  })
+  }
 
   on(eventTarget, 'pointermove', (event: PointerEvent) => {
     const lastTile = mouseHoveredTile
