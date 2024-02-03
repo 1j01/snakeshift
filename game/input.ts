@@ -20,10 +20,7 @@ export function handleInput(
     } else if (controlScheme === ControlScheme.KeyboardAbsoluteDirection) {
       highlightMove(undefined)
     } else if (controlScheme === ControlScheme.Pointer) {
-      let pressed = false
-      if (pointerDownTile && mouseHoveredTile) {
-        pressed = sameTile(mouseHoveredTile, pointerDownTile)
-      }
+      const pressed = pointerDownTile && sameTile(mouseHoveredTile, pointerDownTile)
       highlightMove(mouseHoveredTile, { pressed })
     }
   }
@@ -42,12 +39,11 @@ export function handleInput(
       setControlScheme(ControlScheme.Pointer) // sets highlight
     }
   })
-  on(eventTarget, 'pointerup', (event: PointerEvent) => {
+  on(window, 'pointerup', (event: PointerEvent) => {
     const pointerUpTile = pageToWorldTile(event)
     if (
       activePlayer &&
       pointerUpTile &&
-      pointerDownTile &&
       sameTile(pointerUpTile, pointerDownTile)
     ) {
       const deltaGridX = Math.round(pointerUpTile.x - activePlayer.segments[0].x)
@@ -68,18 +64,18 @@ export function handleInput(
     highlightMove(mouseHoveredTile)
   })
 
-  on(eventTarget, 'pointercancel', () => {
+  on(window, 'pointercancel', () => {
     pointerDownTile = undefined
     highlightMove(mouseHoveredTile)
   })
 
-  on(eventTarget, 'pointermove', (event: PointerEvent) => {
+  on(window, 'pointermove', (event: PointerEvent) => {
     const lastTile = mouseHoveredTile
     mouseHoveredTile = pageToWorldTile(event)
     // only with significant movement (moving to a new tile),
     // because this replaces the highlight used by gamepad controls
     // and you don't want it flickering from mouse jitter while using a gamepad
-    if (lastTile && mouseHoveredTile && !sameTile(lastTile, mouseHoveredTile)) {
+    if (!sameTile(lastTile, mouseHoveredTile)) {
       setControlScheme(ControlScheme.Pointer) // sets highlight
     }
   })

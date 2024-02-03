@@ -2,11 +2,13 @@ import { Block } from "./block"
 import { Collectable } from "./collectable"
 import { Crate } from "./crate"
 import Entity from "./entity"
-import { entities } from "./game-state"
+import { entities, levelInfo } from "./game-state"
 import Snake from "./snake"
 import { CollisionLayer, Hit, Point, Tile } from "./types"
 
-export function sameTile(a: Tile, b: Tile) {
+export function sameTile(a: Tile | undefined, b: Tile | undefined) {
+  if (a === b) return true
+  if (!a || !b) return false
   return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height
 }
 
@@ -14,6 +16,19 @@ export function neighborOf(tile: Tile, direction: { x: number, y: number }) {
   return {
     x: tile.x + direction.x * tile.width,
     y: tile.y + direction.y * tile.height,
+    width: tile.width,
+    height: tile.height,
+  }
+}
+
+export function withinLevel(tile: Tile) {
+  return tile.x >= 0 && tile.y >= 0 && tile.x + tile.width <= levelInfo.width && tile.y + tile.height <= levelInfo.height
+}
+
+export function clampToLevel(tile: Tile) {
+  return {
+    x: Math.max(0, Math.min(levelInfo.width - tile.width, tile.x)),
+    y: Math.max(0, Math.min(levelInfo.height - tile.height, tile.y)),
     width: tile.width,
     height: tile.height,
   }

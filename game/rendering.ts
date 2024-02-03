@@ -133,11 +133,11 @@ export function worldToView(worldPoint: Point): Point {
   }
 }
 
-export function pageToWorldTile(clientPoint: { clientX: number, clientY: number }): Tile | undefined {
+export function pageToWorldTile(clientPoint: { clientX: number, clientY: number }): Tile {
   const worldPoint = viewToWorld(clientPoint)
-  if (worldPoint.x < 0 || worldPoint.x >= levelInfo.width || worldPoint.y < 0 || worldPoint.y >= levelInfo.height) {
-    return undefined
-  }
+  // if (!withinLevel(worldPoint)) {
+  //   return undefined
+  // }
   return {
     x: Math.floor(worldPoint.x),
     y: Math.floor(worldPoint.y),

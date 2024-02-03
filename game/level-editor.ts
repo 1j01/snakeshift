@@ -1,7 +1,7 @@
 import { Block } from './block'
 import Entity from './entity'
 import { activePlayer, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
-import { bresenham, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer } from './helpers'
+import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
@@ -121,15 +121,12 @@ export function handleInputForLevelEditing(
   // ------------
 
   function updateHighlight() {
-    let pressed = false
+    const pressed = pointerDownTile && sameTile(mouseHoveredTile, pointerDownTile)
     let valid = false
-    if (pointerDownTile && mouseHoveredTile) {
-      pressed = sameTile(mouseHoveredTile, pointerDownTile)
-    }
     if (mouseHoveredTile) {
       if (tool === Tool.Move) {
         valid = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y).length > 0
-      } else {
+      } else if (withinLevel(mouseHoveredTile)) {
         valid = true // maybe (TODO)
       }
     }
@@ -146,7 +143,10 @@ export function handleInputForLevelEditing(
   let mouseHoveredTile: Tile | undefined = undefined
   on(eventTarget, 'pointerdown', (event: PointerEvent) => {
     pointerDownTile = pageToWorldTile(event)
-    mouseHoveredTile = pointerDownTile // for tool actions
+    if (!withinLevel(pointerDownTile)) {
+      pointerDownTile = undefined
+    }
+    mouseHoveredTile = pointerDownTile // for tool actions (no longer needed?)
     if (
       pointerDownTile &&
       !dragging &&
@@ -180,17 +180,24 @@ export function handleInputForLevelEditing(
     // TODO: undo and delete undoable for pointercancel? or just undo? could allow redoing.
     // but definitely only undo if an undo state was created for this gesture.
     pointerDownTile = undefined
-    mouseHoveredTile = pageToWorldTile(event)
     defining = undefined
     dragging = undefined
     draggingSegmentIndex = 0
     createdUndoState = false
+    // TODO: DRY/simplify this? (could trigger pointermove handler)
+    mouseHoveredTile = pageToWorldTile(event)
+    if (!withinLevel(mouseHoveredTile)) {
+      mouseHoveredTile = undefined
+    }
     updateHighlight()
   }
 
-  on(eventTarget, 'pointermove', (event: PointerEvent) => {
+  on(window, 'pointermove', (event: PointerEvent) => {
     const lastTile = mouseHoveredTile
     mouseHoveredTile = pageToWorldTile(event)
+    if (!pointerDownTile && !withinLevel(mouseHoveredTile)) {
+      mouseHoveredTile = undefined
+    }
     if (mouseHoveredTile) {
       if (dragging) {
         drag(mouseHoveredTile)
@@ -202,13 +209,13 @@ export function handleInputForLevelEditing(
     // because this replaces the highlight used by gamepad controls
     // and you don't want it flickering from mouse jitter while using a gamepad (not applicable to the editor YET)
     // and for efficiency
-    if (lastTile && mouseHoveredTile && !sameTile(lastTile, mouseHoveredTile)) {
+    if (!sameTile(lastTile, mouseHoveredTile)) {
       updateHighlight()
     }
   })
 
   function handlePointerDownOrMove(event: PointerEvent, from: Tile | undefined, to: Tile | undefined) {
-    if (!from || !to) return
+    if (!from || !to || !pointerDownTile) return
     if (
       event.buttons === 2 ||
       (tool === Tool.Eraser && event.buttons === 1)
@@ -239,7 +246,18 @@ export function handleInputForLevelEditing(
     const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
     // Allow placing snake segments in invalid locations, because it's better than jumping over tiles and creating diagonals or long segments.
     // Don't need to allow starting placement of a snake in an invalid location though.
-    if (topLayer(hits) !== brushColor || (defining instanceof Snake && !sameTile(mouseHoveredTile, defining.segments[0]))) {
+    // TODO: clamp snake to level, but without creating diagonals or long segments
+    // (may need an extra bresenham interpolation from the last clamped position to the new clamped position)
+    // TODO: allow placing food on same color (or else make it color-agnostic, able to be eaten by any snake)
+    if (
+      (
+        withinLevel(mouseHoveredTile) &&
+        topLayer(hits) !== brushColor
+      ) || (
+        defining instanceof Snake &&
+        !sameTile(mouseHoveredTile, defining.segments[0])
+      )
+    ) {
       if (!createdUndoState) {
         undoable()
         createdUndoState = true
@@ -311,6 +329,7 @@ export function handleInputForLevelEditing(
   }
 
   function drag(to: Tile) {
+    to = clampToLevel(to)
     if (dragging instanceof RectangularEntity) {
       dragging.x = to.x
       dragging.y = to.y
