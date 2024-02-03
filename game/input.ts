@@ -1,4 +1,4 @@
-import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, setControlScheme, undoable } from './game-state'
+import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, setControlScheme } from './game-state'
 import { makeEventListenerGroup, neighborOf, sameTile } from './helpers'
 import { pageToWorldTile } from './rendering'
 import { highlightMove } from './tile-highlight'
@@ -50,7 +50,6 @@ export function handleInput(
       const deltaGridY = Math.round(pointerUpTile.y - activePlayer.segments[0].y)
       const move = activePlayer.analyzeMoveRelative(deltaGridX, deltaGridY)
       if (move.valid) {
-        undoable()
         activePlayer.takeMove(move)
         setControlScheme(ControlScheme.Pointer) // sets highlight redundantly
       }
@@ -90,7 +89,6 @@ export function handleInput(
     const move = activePlayer.analyzeMoveRelative(dx, dy)
     setControlScheme(controlScheme)
     if (!move.valid) return
-    undoable()
     activePlayer.takeMove(move)
   }
 
@@ -179,7 +177,6 @@ export function handleInput(
           //   controlScheme: ControlScheme.Gamepad,
           // })
           setControlScheme(ControlScheme.Gamepad)
-          undoable()
           activePlayer.takeMove(move)
           hoveredTile = undefined
           // break // need to update buttonsLast!

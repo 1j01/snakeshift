@@ -1,6 +1,6 @@
 import { Collectable } from "./collectable"
 import Entity from "./entity"
-import { entities } from "./game-state"
+import { entities, undoable } from "./game-state"
 import { hitTestAllEntities, topLayer } from "./helpers"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
@@ -265,6 +265,7 @@ export default class Snake extends Entity {
     }
   }
   takeMove(move: Move): void {
+    undoable()
     if (this.growOnNextMove) {
       this.grow()
       this.growOnNextMove = false
