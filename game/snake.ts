@@ -271,16 +271,7 @@ export default class Snake extends Entity {
       this.growOnNextMove = false
     }
     const head = this.segments[0]
-    for (let i = this.segments.length - 1; i > 0; i--) {
-      const segment = this.segments[i]
-      const prev = this.segments[i - 1]
-      segment.x = prev.x
-      segment.y = prev.y
-    }
-    head.x = move.to.x
-    head.y = move.to.y
-    head.width = move.to.width
-    head.height = move.to.height
+    this.moveSegmentTo(0, move.to)
     // Sort entities so this is on top of anything it's moving onto.
     // This handles the visual as well as making it so
     // you can't double back while inside an inverse snake.
@@ -335,4 +326,6 @@ export default class Snake extends Entity {
 function lead(leader: SnakeSegment, follower: SnakeSegment) {
   follower.x = leader.x
   follower.y = leader.y
+  follower.width = leader.width
+  follower.height = leader.height
 }
