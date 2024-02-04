@@ -1,6 +1,6 @@
 import { Block } from './block'
 import Entity from './entity'
-import { activePlayer, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
+import { activePlayer, clearLevel, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
@@ -36,6 +36,7 @@ export function initLevelEditorGUI() {
 
   const eraserButton = document.querySelector(".tool-button[data-tool='Eraser'")!
   const moveButton = document.querySelector(".tool-button[data-tool='Move'")!
+  const clearButton = document.querySelector("#clear-button")!
   eraserButton.addEventListener('click', () => {
     tool = Tool.Eraser
     selectButton(eraserButton)
@@ -43,6 +44,9 @@ export function initLevelEditorGUI() {
   moveButton.addEventListener('click', () => {
     tool = Tool.Move
     selectButton(moveButton)
+  })
+  clearButton.addEventListener('click', () => {
+    clearLevel()
   })
 
   for (const button of entityButtons) {
