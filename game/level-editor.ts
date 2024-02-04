@@ -236,7 +236,15 @@ export function handleInputForLevelEditing(
       // Don't want diagonals for snake. Do I really want it in general though?
       const lineFn = brushEntityClass === Snake ? lineNoDiagonals : bresenham
       for (const point of lineFn(from, to)) {
-        brush({ x: point.x, y: point.y, width: 1, height: 1 })
+        const tile = { x: point.x, y: point.y, width: 1, height: 1 }
+        // Clamp to level for snake creation, which is, as of writing,
+        // otherwise exempt from level bounds checking, although it may no longer need to be,
+        // since it's now clamped here.
+        if (brushEntityClass === Snake) {
+          brush(clampToLevel(tile))
+        } else {
+          brush(tile)
+        }
       }
     }
   }
@@ -252,8 +260,6 @@ export function handleInputForLevelEditing(
     const hits = hitTestAllEntities(mouseHoveredTile.x, mouseHoveredTile.y)
     // Allow placing snake segments in invalid locations, because it's better than jumping over tiles and creating diagonals or long segments.
     // Don't need to allow starting placement of a snake in an invalid location though.
-    // TODO: clamp snake to level, but without creating diagonals or long segments
-    // (may need an extra bresenham interpolation from the last clamped position to the new clamped position)
     // TODO: allow placing food on same color (or else make it color-agnostic, able to be eaten by any snake)
     if (
       (
