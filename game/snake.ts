@@ -17,7 +17,7 @@ export default class Snake extends Entity {
   private _highlightTime = -Infinity
   private _highlightCanvas = document.createElement('canvas')
   static readonly HIGHLIGHT_DURATION = 500
-  static DEBUG_SNAKE_DRAGGING = true
+  static DEBUG_SNAKE_DRAGGING = false
 
   constructor() {
     super()

@@ -349,7 +349,8 @@ export function handleInputForLevelEditing(
       ) {
         // Avoids diagonals and segments longer than 1 tile
         const from = { x: draggingSegment.x, y: draggingSegment.y } // needs copy since it's mutated and lineNoDiagonals is a generator, so it computes lazily
-        for (const point of lineNoDiagonals(from, to)) {
+        // Skip the first point, since it's the same as the segment's current position
+        for (const point of [...lineNoDiagonals(from, to)].slice(1)) {
           for (let i = dragging.segments.length - 1; i > draggingSegmentIndex; i--) {
             lead(dragging.segments[i - 1], dragging.segments[i])
           }
