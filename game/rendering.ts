@@ -45,6 +45,7 @@ export function draw() {
   }
   // drawBorder(ctx)
   drawEntities(ctx, entities)
+  drawProblems(ctx)
   // drawGrid(ctx)
   setLevelBorder(levelInfo)
   ctx.restore()
@@ -110,6 +111,32 @@ export function drawEntities(ctx: CanvasRenderingContext2D, entities: Entity[]) 
   for (const entity of entities) {
     entity.draw3?.(ctx)
   }
+}
+
+const problems: { tile: Tile, type: "overlap" | "collision" | "out-of-bounds" }[] = []
+export function addProblem(tile: Tile, type: "overlap" | "collision" | "out-of-bounds") {
+  problems.push({ tile, type })
+}
+export function clearProblems() {
+  problems.length = 0
+}
+export function drawProblems(ctx: CanvasRenderingContext2D) {
+  ctx.save()
+  ctx.globalAlpha = 0.5 // makes emoji transparent as well, as opposed to rgba() color, although this may look weird on some platforms, where emoji are multi-layer vector graphics
+  ctx.fillStyle = '#f00'
+  ctx.font = '1px sans-serif'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle' // seems to cause problems with <= 0.5px font size, and isn't very centered anyway...
+  for (const { tile, type } of problems) {
+    const icon = type === "overlap" ? '🗗' : '🛇'
+    const scale = Math.sin(performance.now() / 200) * 0.2 + 1
+    ctx.save()
+    ctx.translate(tile.x + tile.width / 2, tile.y + tile.height / 2)
+    ctx.scale(scale, scale)
+    ctx.fillText(icon, 0, 0)
+    ctx.restore()
+  }
+  ctx.restore()
 }
 
 export function viewToWorld(clientPoint: { clientX: number, clientY: number }): Point {

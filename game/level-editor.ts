@@ -3,7 +3,7 @@ import Entity from './entity'
 import { activePlayer, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
-import { draw, drawEntities, pageToWorldTile } from './rendering'
+import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
 import { setHighlight } from './tile-highlight'
 import { CollisionLayer, Tile } from './types'
@@ -137,9 +137,38 @@ export function handleInputForLevelEditing(
       }
     }
     setHighlight(mouseHoveredTile, { pressed, valid })
+
+    validateLevel()
   }
   onUpdate(updateHighlight)
   onResize(updateHighlight)
+
+  function validateLevel() {
+    clearProblems()
+
+    for (const entity of entities) {
+      if (entity instanceof RectangularEntity) {
+        if (!withinLevel(entity)) {
+          addProblem(entity, "out-of-bounds")
+        }
+      } else if (entity instanceof Snake) {
+        for (const segment of entity.segments) {
+          if (!withinLevel(segment)) {
+            addProblem(segment, "out-of-bounds")
+          }
+          for (const otherSegment of entity.segments) {
+            if (segment !== otherSegment && sameTile(segment, otherSegment)) {
+              addProblem(segment, "overlap")
+            }
+          }
+          const hits = hitTestAllEntities(segment.x, segment.y)
+          if (topLayer(hits.filter(hit => hit.entity !== entity)) === segment.layer) {
+            addProblem(segment, "collision")
+          }
+        }
+      }
+    }
+  }
 
   // -----------------------
   // Mouse/pen/touch support
