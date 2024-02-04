@@ -41,10 +41,11 @@ function stepHistory(from: GameState[], to: GameState[]) {
   to.push(serialize())
   deserialize(state)
 }
+const FORMAT_VERSION = 2
 export function serialize(): GameState {
   return JSON.stringify({
     format: "snakeshift",
-    formatVersion: 1,
+    formatVersion: FORMAT_VERSION,
     entities,
     entityTypes: entities.map(e => e.constructor.name),
     activePlayerEntityIndex: entities.indexOf(activePlayer!),
@@ -56,8 +57,27 @@ export function deserialize(state: GameState) {
 
   const parsed = JSON.parse(state) as ParsedGameState
   if (parsed.format !== "snakeshift") throw new Error("Invalid format")
-  if (parsed.formatVersion > 1) throw new Error("Format version is too new")
-  if (parsed.formatVersion !== 1) throw new Error("Invalid format version")
+  if (parsed.formatVersion > FORMAT_VERSION) throw new Error("Format version is too new")
+  // Upgrade save format, version by version
+  if (parsed.formatVersion === 1) {
+    parsed.formatVersion = 2
+    for (let i = 0; i < parsed.entities.length; i++) {
+      const entDef = parsed.entities[i]
+      if (parsed.entityTypes[i] === "Snake") {
+        // @ts-expect-error doesn't know it's Snake-like
+        for (const segDef of entDef.segments) {
+          if ("width" in segDef) continue // actually already updated data shape before bumping version, so handle that
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+          segDef.width = segDef.height = segDef.size
+        }
+      }
+    }
+  }
+  // if (parsed.formatVersion === 2) {
+  //   parsed.formatVersion = 3
+  //   ...
+  // }
+  if (parsed.formatVersion !== FORMAT_VERSION) throw new Error("Invalid format version")
 
   for (let i = 0; i < parsed.entities.length; i++) {
     const entityData = parsed.entities[i]
