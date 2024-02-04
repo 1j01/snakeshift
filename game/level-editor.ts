@@ -13,7 +13,7 @@ enum Tool {
   Eraser = "Eraser",
   Move = "Move",
 }
-let tool = Tool.Brush
+let tool = Tool.Move
 let brushEntityClass: typeof Entity = Block
 let brushColor = CollisionLayer.White
 let dragging: Entity | undefined = undefined
@@ -47,6 +47,12 @@ export function initLevelEditorGUI() {
 
   for (const button of entityButtons) {
     makeEntityButton(button)
+  }
+  // This is stupid, TODO: DRY initial vs. update
+  if (tool === Tool.Move) {
+    selectButton(moveButton)
+  } else if (tool === Tool.Eraser) {
+    selectButton(eraserButton)
   }
 
   function makeEntityButton(button: Element) {
@@ -87,7 +93,7 @@ export function initLevelEditorGUI() {
       tool = Tool.Brush
       selectButton(button)
     })
-    button.classList.toggle('selected', entityName === brushEntityClass.name && layer === brushColor)
+    button.classList.toggle('selected', entityName === brushEntityClass.name && layer === brushColor && tool === Tool.Brush)
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')!
     button.prepend(canvas)
