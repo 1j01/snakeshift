@@ -97,6 +97,12 @@ export function deserialize(state: GameState) {
   postUpdate()
 }
 
+export function clearLevel() {
+  undoable()
+  entities.length = 0
+  activePlayer = undefined
+  postUpdate()
+}
 
 export function initLevel() {
   entities.length = 0

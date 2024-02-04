@@ -1,4 +1,4 @@
-import { deserialize, entities, initLevel, redo, redos, serialize, undo, undos } from "./game-state"
+import { clearLevel, deserialize, entities, initLevel, redo, redos, serialize, undo, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing, initLevelEditorGUI, loadLevel, openLevel, saveLevel } from "./level-editor"
 import { canvas, draw } from "./rendering"
@@ -67,6 +67,9 @@ addEventListener('keydown', (event) => {
     event.preventDefault()
   } else if (event.key === 'o' && (event.ctrlKey || event.metaKey)) {
     openLevel()
+    event.preventDefault()
+  } else if (event.key === 'n' && editing) { // Ctrl+N is new window and can't be overridden
+    clearLevel()
     event.preventDefault()
   }
 })
