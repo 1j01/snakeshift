@@ -36,7 +36,7 @@ export function handleInput(
   on(eventTarget, 'pointerdown', (event: PointerEvent) => {
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile) {
-      setControlScheme(ControlScheme.Pointer) // sets highlight
+      setControlScheme(ControlScheme.Pointer) // sets highlight; signals level update uselessly
     }
   })
   on(window, 'pointerup', (event: PointerEvent) => {
@@ -51,7 +51,7 @@ export function handleInput(
       const move = activePlayer.analyzeMoveRelative(deltaGridX, deltaGridY)
       if (move.valid) {
         activePlayer.takeMove(move)
-        setControlScheme(ControlScheme.Pointer) // sets highlight redundantly
+        setControlScheme(ControlScheme.Pointer) // signals level update; sets highlight redundantly
       }
       // updateGameState({
       //   playerCoordinates: pointerUpTile,
@@ -75,7 +75,7 @@ export function handleInput(
     // because this replaces the highlight used by gamepad controls
     // and you don't want it flickering from mouse jitter while using a gamepad
     if (!sameTile(lastTile, mouseHoveredTile)) {
-      setControlScheme(ControlScheme.Pointer) // sets highlight
+      setControlScheme(ControlScheme.Pointer) // sets highlight; signals level update uselessly
     }
   })
 
@@ -87,9 +87,12 @@ export function handleInput(
     // TODO: maybe show highlight for invalid move even though normally absolute direction doesn't use a highlight
     if (!activePlayer) return
     const move = activePlayer.analyzeMoveRelative(dx, dy)
-    setControlScheme(controlScheme)
-    if (!move.valid) return
+    if (!move.valid) {
+      setControlScheme(controlScheme) // signals level update uselessly
+      return
+    }
     activePlayer.takeMove(move)
+    setControlScheme(controlScheme) // signals level update
   }
 
   on(window, 'keydown', (event: KeyboardEvent) => {
@@ -176,8 +179,8 @@ export function handleInput(
           //   playerFacing: direction,
           //   controlScheme: ControlScheme.Gamepad,
           // })
-          setControlScheme(ControlScheme.Gamepad)
           activePlayer.takeMove(move)
+          setControlScheme(ControlScheme.Gamepad) // signals level update
           hoveredTile = undefined
           // break // need to update buttonsLast!
         } else {
@@ -206,7 +209,7 @@ export function handleInput(
         }
       }
       if (usingGamepad) {
-        setControlScheme(ControlScheme.Gamepad)
+        setControlScheme(ControlScheme.Gamepad) // may be redundant depending on the above conditions
       }
     }
     if (controlScheme === ControlScheme.Gamepad) {
