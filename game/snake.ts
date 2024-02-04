@@ -1,8 +1,8 @@
 import { Collectable } from "./collectable"
 import Entity from "./entity"
 import { entities, undoable } from "./game-state"
-import { hitTestAllEntities, topLayer } from "./helpers"
-import { CollisionLayer, Hit, Move, Tile } from "./types"
+import { hitTestAllEntities, lineNoDiagonals, topLayer } from "./helpers"
+import { CollisionLayer, Hit, Move, Point, Tile } from "./types"
 
 export interface SnakeSegment extends Tile {
   layer: CollisionLayer
@@ -304,10 +304,35 @@ export default class Snake extends Entity {
       }
     }
   }
+  moveSegmentTo(segmentIndex: number, to: Point): void {
+    const segment = this.segments[segmentIndex]
+    if (
+      segment.x !== to.x ||
+      segment.y !== to.y
+    ) {
+      // Avoids diagonals and segments longer than 1 tile
+      const from = { x: segment.x, y: segment.y } // needs copy since it's mutated and lineNoDiagonals is a generator, so it computes lazily
+      for (const point of lineNoDiagonals(from, to)) {
+        for (let i = this.segments.length - 1; i > segmentIndex; i--) {
+          lead(this.segments[i - 1], this.segments[i])
+        }
+        for (let i = 0; i < segmentIndex; i++) {
+          lead(this.segments[i + 1], this.segments[i])
+        }
+        segment.x = point.x
+        segment.y = point.y
+      }
+    }
+  }
   private _grow(): void {
     const tail = this.segments[this.segments.length - 1]
     // This only works because SnakeSegment is a flat object.
     const newTail = { ...tail }
     this.segments.push(newTail)
   }
+}
+
+function lead(leader: SnakeSegment, follower: SnakeSegment) {
+  follower.x = leader.x
+  follower.y = leader.y
 }

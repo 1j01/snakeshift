@@ -4,7 +4,7 @@ import { activePlayer, deserialize, entities, onResize, onUpdate, postUpdate, se
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { drawEntities, pageToWorldTile } from './rendering'
-import Snake, { SnakeSegment } from './snake'
+import Snake from './snake'
 import { setHighlight } from './tile-highlight'
 import { CollisionLayer, Tile } from './types'
 
@@ -336,30 +336,8 @@ export function handleInputForLevelEditing(
     } else if (dragging instanceof Snake) {
       // TODO: warn about overlap (rather than avoiding it, since avoiding collision entirely
       // would make it get stuck, and this is a level editor. You don't need the editor to be a puzzle.)
-      const draggingSegment = dragging.segments[draggingSegmentIndex]
-      if (
-        draggingSegment.x !== to.x ||
-        draggingSegment.y !== to.y
-      ) {
-        // Avoids diagonals and segments longer than 1 tile
-        const from = { x: draggingSegment.x, y: draggingSegment.y } // needs copy since it's mutated and lineNoDiagonals is a generator, so it computes lazily
-        for (const point of lineNoDiagonals(from, to)) {
-          for (let i = dragging.segments.length - 1; i > draggingSegmentIndex; i--) {
-            lead(dragging.segments[i - 1], dragging.segments[i])
-          }
-          for (let i = 0; i < draggingSegmentIndex; i++) {
-            lead(dragging.segments[i + 1], dragging.segments[i])
-          }
-          draggingSegment.x = point.x
-          draggingSegment.y = point.y
-        }
-      }
+      dragging.moveSegmentTo(draggingSegmentIndex, to)
     }
-  }
-
-  function lead(leader: SnakeSegment, follower: SnakeSegment) {
-    follower.x = leader.x
-    follower.y = leader.y
   }
 
   // ------------
