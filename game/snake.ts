@@ -17,6 +17,7 @@ export default class Snake extends Entity {
   private _highlightTime = -Infinity
   private _highlightCanvas = document.createElement('canvas')
   static readonly HIGHLIGHT_DURATION = 500
+  static DEBUG_SNAKE_DRAGGING = true
 
   constructor() {
     super()
@@ -79,6 +80,24 @@ export default class Snake extends Entity {
         highlightCtx.setTransform(transform)
         highlightCtx.globalAlpha = 1
       })
+    }
+    // debug
+    if (Snake.DEBUG_SNAKE_DRAGGING) {
+      ctx.font = 'bold 0.5px sans-serif'
+      ctx.textAlign = 'center'
+      // ctx.textBaseline = 'middle' // not showing up at all with this, probably to do with the extreme scale
+      ctx.textBaseline = 'alphabetic'
+      for (let i = 0; i < this.segments.length; i++) {
+        const segment = this.segments[i]
+        ctx.fillStyle = `hsl(${i * 360 / this.segments.length}, 100%, 50%)`
+        // const angleDiff = Math.PI * 2 / this.segments.length // puts near indices close together
+        const angleDiff = Math.PI / 2 // puts near indices far apart, in quadrants
+        ctx.fillText(
+          i.toString(),
+          segment.x + segment.width / 2 + Math.sin(i * angleDiff + Math.PI / 4) * 0.3,
+          segment.y + segment.height * 0.7 + Math.cos(i * angleDiff + Math.PI / 4) * 0.3,
+        )
+      }
     }
   }
   private _drawBodyOutline(

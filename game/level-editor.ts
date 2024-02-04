@@ -3,7 +3,7 @@ import Entity from './entity'
 import { activePlayer, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
-import { drawEntities, pageToWorldTile } from './rendering'
+import { draw, drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
 import { setHighlight } from './tile-highlight'
 import { CollisionLayer, Tile } from './types'
@@ -358,6 +358,9 @@ export function handleInputForLevelEditing(
           }
           draggingSegment.x = point.x
           draggingSegment.y = point.y
+          if (Snake.DEBUG_SNAKE_DRAGGING) {
+            draw()
+          }
         }
       }
     }
@@ -366,6 +369,13 @@ export function handleInputForLevelEditing(
   function lead(leader: SnakeSegment, follower: SnakeSegment) {
     follower.x = leader.x
     follower.y = leader.y
+    // Portals may be able to change the size of the snake in the future
+    follower.width = leader.width
+    follower.height = leader.height
+    // Visualize dragging algorithm while paused in the debugger
+    if (Snake.DEBUG_SNAKE_DRAGGING) {
+      draw()
+    }
   }
 
   // ------------
