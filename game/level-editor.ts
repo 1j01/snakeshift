@@ -481,6 +481,16 @@ export function loadLevel(file: Blob) {
     } else {
       try {
         deserialize(fileText)
+        if (!activePlayer) {
+          // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
+          // and anyway I have a bunch of levels saved at this point.
+          for (const entity of entities) {
+            if (entity instanceof Snake) {
+              setActivePlayer(entity)
+              break
+            }
+          }
+        }
       } catch (error) {
         deserialize(before.state)
         undos.splice(0, undos.length, ...before.undos)
