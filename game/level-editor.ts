@@ -439,7 +439,8 @@ export function savePlaythrough() {
   // This format's pretty bad though - JSON strings in JSON, and no format identifier/version.
   // BTW: this function doesn't have to do with level editing, except I suppose I MIGHT allow saving while editing,
   // but it's just similar to saveLevel.
-  const json = JSON.stringify(undos)
+  // New files will include the final state, but old files will be slightly unsatisfying to watch. :P
+  const json = JSON.stringify([...undos, serialize()])
   const blob = new Blob([json], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
