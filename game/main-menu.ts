@@ -1,3 +1,4 @@
+import { setEditMode } from "./game"
 import { clearLevel } from "./game-state"
 import { loadFirstLevel } from "./level-select"
 
@@ -26,8 +27,9 @@ export function initMainMenu() {
   levelEditorButton.addEventListener('click', () => {
     screens.forEach(screen => screen.classList.remove('active'))
     // TODO: clear undos and redos; clearLevel() is undoable
-    // or clear exiting level state
+    // or clear when exiting from a level to the main menu / level select
     clearLevel()
+    setEditMode(true)
   })
 
   creditsButton.addEventListener('click', () => {

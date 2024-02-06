@@ -1,3 +1,4 @@
+import { setEditMode } from "./game"
 import { loadLevel } from "./level-editor"
 
 const levelSelect = document.querySelector('#level-select')!
@@ -17,6 +18,7 @@ export async function loadLevelFile(levelURL: string) {
   const blob = await request.blob()
   loadLevel(blob)
   levelSelect.classList.remove('active')
+  setEditMode(false)
 }
 
 export function loadFirstLevel() {
