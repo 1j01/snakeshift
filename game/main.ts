@@ -1,6 +1,6 @@
 import { clearLevel, deserialize, entities, initLevel, redo, redos, serialize, undo, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
-import { handleInputForLevelEditing, initLevelEditorGUI, loadLevel, openLevel, saveLevel } from "./level-editor"
+import { handleInputForLevelEditing, initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
 import { canvas, draw } from "./rendering"
 import { GameState } from "./types"
 
@@ -71,6 +71,9 @@ addEventListener('keydown', (event) => {
     event.preventDefault()
   } else if (event.key === 'r') {
     restartLevel()
+    event.preventDefault()
+  } else if (event.key === 'p') {
+    savePlaythrough()
     event.preventDefault()
   } else if (event.key === 's' && (event.ctrlKey || event.metaKey)) {
     saveLevel()

@@ -1,6 +1,6 @@
 import { Block } from './block'
 import Entity from './entity'
-import { activePlayer, clearLevel, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable } from './game-state'
+import { activePlayer, clearLevel, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable, undos } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
@@ -429,6 +429,22 @@ export function saveLevel() {
   const a = document.createElement('a')
   a.href = url
   a.download = 'snakeshift-level.json'
+  a.click()
+}
+
+export function savePlaythrough() {
+  // TODO: better playthrough format
+  // Since I've already saved some playthroughs by just copying `JSON.stringify(undos)` from the console,
+  // I figure I might as well make it easy to save them like this for now, as I'll have files to convert anyway.
+  // This format's pretty bad though - JSON strings in JSON, and no format identifier/version.
+  // BTW: this function doesn't have to do with level editing, except I suppose I MIGHT allow saving while editing,
+  // but it's just similar to saveLevel.
+  const json = JSON.stringify(undos)
+  const blob = new Blob([json], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'snakeshift-level-playthrough.json'
   a.click()
 }
 
