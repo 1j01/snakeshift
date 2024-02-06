@@ -1,12 +1,12 @@
 import { Block } from './block'
 import Entity from './entity'
-import { activePlayer, clearLevel, deserialize, entities, onResize, onUpdate, postUpdate, serialize, setActivePlayer, undoable, undos } from './game-state'
+import { activePlayer, clearLevel, deserialize, entities, onResize, onUpdate, postUpdate, redo, redos, serialize, setActivePlayer, undoable, undos } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
 import { setHighlight } from './tile-highlight'
-import { CollisionLayer, Tile } from './types'
+import { CollisionLayer, GameState, Tile } from './types'
 
 enum Tool {
   Brush = "Brush",
@@ -448,6 +448,18 @@ export function savePlaythrough() {
   a.click()
 }
 
+function loadPlaythrough(json: string) {
+  const playthrough = JSON.parse(json) as GameState[]
+  if (!Array.isArray(playthrough)) {
+    throw new Error("Invalid playthrough format")
+  }
+  for (const state of playthrough.toReversed()) {
+    redos.push(state)
+  }
+  redo()
+  alert(`Loaded playthrough with ${playthrough.length} moves. Press 'Y' (Redo) to step through it.`)
+}
+
 export function loadLevel(file: File) {
   // TODO: error handling
   // show message, and don't create an undo state if it can't be loaded
@@ -458,8 +470,13 @@ export function loadLevel(file: File) {
   const reader = new FileReader()
   reader.addEventListener('load', () => {
     undoable()
-    const levelJSON = reader.result as string
-    deserialize(levelJSON)
+    const fileText = reader.result as string
+    // not allowing whitespace but this is just a temporary file format with no proper identifier, for playthroughs
+    if (fileText.startsWith('[')) {
+      loadPlaythrough(fileText)
+    } else {
+      deserialize(fileText)
+    }
   })
   reader.readAsText(file)
 }
