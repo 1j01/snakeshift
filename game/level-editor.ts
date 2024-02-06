@@ -461,7 +461,7 @@ function loadPlaythrough(json: string) {
   alert(`Loaded playthrough with ${playthrough.length} moves. Press 'Y' (Redo) to step through it.`)
 }
 
-export function loadLevel(file: File) {
+export function loadLevel(file: Blob) {
   // TODO: error handling
   // show message, and don't create an undo state if it can't be loaded
   // Can use Blob.text() API by the way.

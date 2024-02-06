@@ -1,6 +1,8 @@
-import { clearLevel, deserialize, entities, initLevel, redo, redos, serialize, undo, undoable, undos } from "./game-state"
+import { clearLevel, deserialize, entities, redo, redos, serialize, undo, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing, initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
+import { initLevelSelect, loadFirstLevel } from "./level-select"
+import { initMainMenu } from "./main-menu"
 import { canvas, draw } from "./rendering"
 import { GameState } from "./types"
 
@@ -111,7 +113,9 @@ addEventListener('drop', (event) => {
   }
 })
 
+initMainMenu()
 initLevelEditorGUI()
-initLevel()
+initLevelSelect()
+loadFirstLevel()
 setEditMode(true)
 animate(0)

@@ -105,6 +105,7 @@ export function clearLevel() {
 }
 
 export function initLevel() {
+  // TODO: remove this test level
   entities.length = 0
   // for (let x = 0; x < 16; x++) {
   //   for (let y = 8; y < 16; y++) {

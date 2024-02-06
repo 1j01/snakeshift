@@ -59,7 +59,7 @@ body:not(.editing) #entities-bar {
   opacity: 0;
 }
 
-.tool-button {
+.bw-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,19 +74,19 @@ body:not(.editing) #entities-bar {
   user-select: none;
 }
 
-.tool-button:active {
+.bw-button:active {
   /* background-color: #fff;
   color: #000; */
   border-color: transparent;
   box-shadow: 0 0 0 2px #fff inset;
 }
 
-.tool-button.selected {
+.bw-button.selected {
   background-color: #fff;
   color: #000;
 }
 
-.tool-button:not(.selected) img {
+.bw-button:not(.selected) img {
   filter: invert();
 }
 
@@ -96,4 +96,37 @@ body:not(.editing) #entities-bar {
   /* border: 20px solid #fff;
   border-image: url(rope.svg) 25% round;
   border-image-outset: 20px; */
+}
+
+#credits a:link,
+#credits a:visited {
+  color: #fff;
+  font-weight: bold;
+}
+
+#main-menu button,
+#level-select button {
+  min-height: 50px;
+  margin: 10px;
+}
+
+#level-select button {
+  display: inline-flex;
+  min-width: 100px;
+}
+
+#main-menu button {
+  min-width: 200px;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.screen:not(.active) {
+  display: none;
 }

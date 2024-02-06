@@ -24,27 +24,65 @@
     Therefore profit comes from what is there;<br>
     Usefulness from what is not there.
   </blockquote>
+  <div class="screen" id="main-menu">
+    <h1>Snakeshift</h1>
+    <button class="bw-button" id="play-button">Play</button>
+    <button class="bw-button" id="level-select-button">Level Select</button>
+    <button class="bw-button" id="level-editor-button">Level Editor</button>
+    <button class="bw-button" id="credits-button">Credits</button>
+  </div>
+  <div class="screen" id="credits">
+    <h1>Credits</h1>
+    <p>
+      <a href="https://isaiahodhner.io">Isaiah Odhner</a> — Programming, Design, Art
+    </p>
+  </div>
+  <div class="screen" id="level-select">
+    <h2>Level Select</h2>
+    <div id="level-list">
+      <h3>Easy</h3>
+      <button class="bw-button level-button" data-level="/levels/easy/lock-and-key.json">Level 1</button>
+      <button class="bw-button level-button" data-level="/levels/easy/proper-lock.json">Level 2</button>
+      <button class="bw-button level-button" data-level="/levels/easy/yin-yang-give-and-take.json">Level 3</button>
+      <h3>Hard</h3>
+      <button class="bw-button level-button" data-level="/levels/relatively-hard/yin-yang-full.json">Level 4</button>
+      <button class="bw-button level-button" data-level="/levels/relatively-hard/security-by-obscurity-lock.json">Level
+        5</button>
+      <div style="opacity: 0.5">
+        <h3>Test Cases</h3>
+        <button class="bw-button level-button" data-level="/levels/tests/possible-bug-unable-to-move-left.json">
+          Possible bug: unable to move left here?
+        </button>
+        <button class="bw-button level-button"
+          data-level="/levels/tests/possible-bug-why-is-it-detecting-this-as-invalid.json">
+          Possible bug: why is it detecting this as invalid?
+        </button>
+      </div>
+    </div>
+  </div>
   <div id="level-editor">
     <div id="entities-bar">
-      <button class="tool-button entity-button" data-entity="Snake" data-color="White">Snake (White)</button>
-      <button class="tool-button entity-button" data-entity="Snake" data-color="Black">Snake (Black)</button>
-      <button class="tool-button entity-button" data-entity="Collectable" data-color="White">Food (White)</button>
-      <button class="tool-button entity-button" data-entity="Collectable" data-color="Black">Food (Black)</button>
-      <button class="tool-button entity-button" data-entity="Crate" data-color="White">Crate (White)</button>
-      <button class="tool-button entity-button" data-entity="Crate" data-color="Black">Crate (Black)</button>
-      <button class="tool-button entity-button" data-entity="Block" data-color="White">Wall (White)</button>
-      <button class="tool-button entity-button" data-entity="Block" data-color="Black">Wall (Black)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="White">Snake (White)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="Black">Snake (Black)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Collectable" data-color="White">Food
+        (White)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Collectable" data-color="Black">Food
+        (Black)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Crate" data-color="White">Crate (White)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Crate" data-color="Black">Crate (Black)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Block" data-color="White">Wall (White)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Block" data-color="Black">Wall (Black)</button>
       <!-- entity buttons are brush tools -->
-      <!-- <button class="tool-button" data-tool="Brush">Brush</button> -->
-      <button class="tool-button" data-tool="Eraser">
+      <!-- <button class="bw-button tool-button" data-tool="Brush">Brush</button> -->
+      <button class="bw-button tool-button" data-tool="Eraser">
         <img src="/eraser.svg" />
         Erase
       </button>
-      <button class="tool-button" data-tool="Move">
+      <button class="bw-button tool-button" data-tool="Move">
         <img src="/move.svg" />
         Move
       </button>
-      <button class="tool-button" id="clear-button">
+      <button class="bw-button" id="clear-button">
         <img src="/trash.svg" />
         Clear
       </button>
