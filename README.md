@@ -33,7 +33,7 @@ You can use the arrow keys, WASD, HJKL, or the number pad to move.
 
 Press <kbd>Z</kbd> to undo, <kbd>Y</kbd> to redo.
 
-<!-- TODO: Press <kbd>R</kbd> to restart the level. -->
+Press <kbd>R</kbd> to restart the level. This is undoable.
 
 Press <kbd>`</kbd> to toggle the level editor.
 

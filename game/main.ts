@@ -1,4 +1,4 @@
-import { clearLevel, deserialize, entities, initLevel, redo, redos, serialize, undo, undos } from "./game-state"
+import { clearLevel, deserialize, entities, initLevel, redo, redos, serialize, undo, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing, initLevelEditorGUI, loadLevel, openLevel, saveLevel } from "./level-editor"
 import { canvas, draw } from "./rendering"
@@ -43,6 +43,13 @@ function setEditMode(enterEditMode: boolean) {
   }
 }
 
+function restartLevel() {
+  if (editing) return
+  if (!editorState) return
+  undoable()
+  deserialize(editorState)
+}
+
 addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {
     setEditMode(!editing)
@@ -61,6 +68,9 @@ addEventListener('keydown', (event) => {
     event.preventDefault()
   } else if (event.key === 'y') {
     redo()
+    event.preventDefault()
+  } else if (event.key === 'r') {
+    restartLevel()
     event.preventDefault()
   } else if (event.key === 's' && (event.ctrlKey || event.metaKey)) {
     saveLevel()
