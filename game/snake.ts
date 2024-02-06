@@ -122,7 +122,16 @@ export default class Snake extends Entity {
     highlightCtx.fill()
     highlightCtx.restore()
     ctx.resetTransform()
-    ctx.drawImage(this._highlightCanvas, 0, 0)
+    try {
+      ctx.drawImage(this._highlightCanvas, 0, 0)
+    } catch (e) {
+      // I'm getting "Uncaught DOMException: CanvasRenderingContext2D.drawImage: Passed-in canvas is empty"
+      // and searching online for this error, there's only one result,
+      // and it's in Chinese,
+      // and it looks AI-generated.
+      // Does this error message literally just mean the canvas is blank?
+      // Who decided to make that an error!? This is in Firefox, by the way.
+    }
     ctx.setTransform(transform)
 
   }
