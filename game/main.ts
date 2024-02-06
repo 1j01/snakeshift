@@ -1,7 +1,7 @@
 import { animate, editing, restartLevel, setEditMode } from "./game"
 import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
-import { currentLevelID, initLevelSelect, loadFirstLevel, loadNextLevel } from "./level-select"
+import { currentLevelID, initLevelSelect, loadNextLevel } from "./level-select"
 import { initMainMenu } from "./main-menu"
 import { canvas } from "./rendering"
 
@@ -62,8 +62,7 @@ addEventListener('drop', (event) => {
   event.preventDefault()
   const file = event.dataTransfer?.files[0]
   if (file) {
-    // TODO: switch to editing mode, if loaded successfully
-    loadLevel(file)
+    loadLevel(file, true)
   }
 })
 
@@ -82,6 +81,5 @@ onUpdate(() => {
 initMainMenu()
 initLevelEditorGUI()
 initLevelSelect()
-loadFirstLevel()
 setEditMode(false)
 animate()

@@ -12,31 +12,35 @@ export function initMainMenu() {
   const levelSelect = document.querySelector('#level-select')!
   const credits = document.querySelector('#credits')!
 
-  const screens = [mainMenu, levelSelect, credits]
-
   playButton.addEventListener('click', () => {
-    screens.forEach(screen => screen.classList.remove('active'))
+    hideScreens()
     loadFirstLevel()
   })
 
   levelSelectButton.addEventListener('click', () => {
-    screens.forEach(screen => screen.classList.remove('active'))
+    hideScreens()
     levelSelect.classList.add('active')
   })
 
   levelEditorButton.addEventListener('click', () => {
-    screens.forEach(screen => screen.classList.remove('active'))
+    hideScreens()
+    setEditMode(true) // before clearing because it switches to separate edit mode undo stacks
     // TODO: clear undos and redos; clearLevel() is undoable
     // or clear when exiting from a level to the main menu / level select
     clearLevel()
-    setEditMode(true)
   })
 
   creditsButton.addEventListener('click', () => {
-    screens.forEach(screen => screen.classList.remove('active'))
+    hideScreens()
     credits.classList.add('active')
   })
 
   mainMenu.classList.add('active')
 
+}
+
+export function hideScreens() {
+  for (const screen of document.querySelectorAll('.screen.active')) {
+    screen.classList.remove('active')
+  }
 }

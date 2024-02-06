@@ -1,7 +1,9 @@
 import { Block } from './block'
 import Entity from './entity'
+import { setEditMode } from './game'
 import { activePlayer, clearLevel, deserialize, entities, onResize, onUpdate, postUpdate, redo, redos, serialize, setActivePlayer, undoable, undos } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
+import { hideScreens } from './main-menu'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
@@ -450,10 +452,14 @@ export function savePlaythrough() {
 }
 
 function loadPlaythrough(json: string) {
+
   const playthrough = JSON.parse(json) as GameState[]
   if (!Array.isArray(playthrough)) {
     throw new Error("Invalid playthrough format")
   }
+  // TODO: simplify with intermediate function like loadLevelFromText
+  const blob = new Blob([playthrough[0]], { type: 'application/json' })
+  loadLevel(blob, false)
   for (const state of playthrough.toReversed()) {
     redos.push(state)
   }
@@ -462,10 +468,13 @@ function loadPlaythrough(json: string) {
 }
 
 // TODO: simplify with promises
-export function loadLevel(file: Blob, loadedCallback?: () => void) {
-  // TODO: switch to editor mode, when appropriate (i.e. not when loading a level to play),
-  // before creating an undo state, so that it uses the editor undo stack,
-  // but after reading the file, to avoid a race condition
+export function loadLevel(file: Blob, forEditing: boolean, loadedCallback?: () => void) {
+  // TODO: handle edit mode vs. play mode undo stacks
+  // This is complicated, in part due to trying to snapshot for transactional error handling.
+  // The snapshot may be of either set of stacks, depending on the previous edit mode state.
+  // I also want to preserve the undo history across levels,
+  // and then there's playthroughs to think about, which, by the way,
+  // should only save the history of one level, NOT across levels.
 
   // Error Message Itself Test
   // Promise.reject(new Error("EMIT oh no!")).then((fileText) => {
@@ -481,6 +490,9 @@ export function loadLevel(file: Blob, loadedCallback?: () => void) {
       loadPlaythrough(fileText)
     } else {
       try {
+        // TODO: set editor level state regardless of edit mode,
+        // MAYBE clear editor undos/redos
+        // TODO: PRESERVE undos/redos while playing, across levels
         deserialize(fileText)
         if (!activePlayer) {
           // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
@@ -499,6 +511,8 @@ export function loadLevel(file: Blob, loadedCallback?: () => void) {
         alert(`Failed to load level. ${(error as Error).toString()}`)
         return
       }
+      setEditMode(forEditing)
+      hideScreens()
       loadedCallback?.()
     }
   }, (error) => {
@@ -513,8 +527,7 @@ export function openLevel() {
   input.addEventListener('change', () => {
     const file = input.files?.[0]
     if (!file) return
-    // TODO: switch to editor mode, if loaded successfully
-    loadLevel(file)
+    loadLevel(file, true)
   })
   input.click()
 }
