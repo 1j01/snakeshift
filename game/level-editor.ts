@@ -462,24 +462,35 @@ function loadPlaythrough(json: string) {
 }
 
 export function loadLevel(file: Blob) {
-  // TODO: error handling
-  // show message, and don't create an undo state if it can't be loaded
-  // Can use Blob.text() API by the way.
-  // TODO: switch to editor mode,
+  // TODO: switch to editor mode, when appropriate (i.e. not when loading a level to play),
   // before creating an undo state, so that it uses the editor undo stack,
   // but after reading the file, to avoid a race condition
-  const reader = new FileReader()
-  reader.addEventListener('load', () => {
+
+  // Error Message Itself Test
+  // Promise.reject(new Error("EMIT oh no!")).then((fileText) => {
+  file.text().then((fileText) => {
+    const before = {
+      state: serialize(),
+      undos: [...undos],
+      redos: [...redos],
+    }
     undoable()
-    const fileText = reader.result as string
     // not allowing whitespace but this is just a temporary file format with no proper identifier, for playthroughs
     if (fileText.startsWith('[')) {
       loadPlaythrough(fileText)
     } else {
-      deserialize(fileText)
+      try {
+        deserialize(fileText)
+      } catch (error) {
+        deserialize(before.state)
+        undos.splice(0, undos.length, ...before.undos)
+        redos.splice(0, redos.length, ...before.redos)
+        alert(`Failed to load level. ${(error as Error).toString()}`)
+      }
     }
+  }, (error) => {
+    alert(`Failed to read level file. ${error}`)
   })
-  reader.readAsText(file)
 }
 
 export function openLevel() {
@@ -489,6 +500,7 @@ export function openLevel() {
   input.addEventListener('change', () => {
     const file = input.files?.[0]
     if (!file) return
+    // TODO: switch to editor mode, if loaded successfully
     loadLevel(file)
   })
   input.click()

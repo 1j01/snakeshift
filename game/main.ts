@@ -62,6 +62,7 @@ addEventListener('drop', (event) => {
   event.preventDefault()
   const file = event.dataTransfer?.files[0]
   if (file) {
+    // TODO: switch to editing mode, if loaded successfully
     loadLevel(file)
   }
 })
