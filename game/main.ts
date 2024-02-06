@@ -1,7 +1,7 @@
 import { animate, editing, restartLevel, setEditMode } from "./game"
-import { clearLevel, redo, undo } from "./game-state"
+import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
-import { initLevelSelect, loadFirstLevel } from "./level-select"
+import { initLevelSelect, loadFirstLevel, loadNextLevel } from "./level-select"
 import { initMainMenu } from "./main-menu"
 import { canvas } from "./rendering"
 
@@ -64,6 +64,14 @@ addEventListener('drop', (event) => {
   if (file) {
     // TODO: switch to editing mode, if loaded successfully
     loadLevel(file)
+  }
+})
+
+onUpdate(() => {
+  if (editing) return
+  // TODO: don't try to move to next level for custom levels
+  if (checkLevelWon()) {
+    loadNextLevel()
   }
 })
 

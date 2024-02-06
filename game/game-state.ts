@@ -183,3 +183,7 @@ export function setActivePlayer(snake: Snake | undefined) {
   activePlayer = snake
   postUpdate()
 }
+
+export function checkLevelWon() {
+  return entities.filter(e => e instanceof Collectable).length === 0
+}
