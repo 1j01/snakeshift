@@ -1,7 +1,7 @@
 import { animate, editing, restartLevel, setEditMode } from "./game"
 import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
-import { initLevelSelect, loadFirstLevel, loadNextLevel } from "./level-select"
+import { currentLevelID, initLevelSelect, loadFirstLevel, loadNextLevel } from "./level-select"
 import { initMainMenu } from "./main-menu"
 import { canvas } from "./rendering"
 
@@ -67,10 +67,14 @@ addEventListener('drop', (event) => {
   }
 })
 
+let wonLevelID = ""
 onUpdate(() => {
   if (editing) return
+  if (wonLevelID === currentLevelID()) return
   // TODO: don't try to move to next level for custom levels
   if (checkLevelWon()) {
+    wonLevelID = currentLevelID()
+    console.log('Level won!', wonLevelID)
     loadNextLevel()
   }
 })

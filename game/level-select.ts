@@ -9,19 +9,23 @@ export function initLevelSelect() {
   const levelButtons = document.querySelectorAll<HTMLButtonElement>('.level-button')
   for (const button of levelButtons) {
     button.addEventListener('click', () => {
-      currentLevelButton = button
       const levelURL = button.getAttribute('data-level')!
-      void loadLevelFile(levelURL)
+      // TODO: error handling; simplify with promises
+      void loadLevelFile(levelURL, () => {
+        currentLevelButton = button
+      })
     })
   }
 }
 
-export async function loadLevelFile(levelURL: string) {
+export async function loadLevelFile(levelURL: string, loadedCallback?: () => void) {
   const request = await fetch(levelURL)
   const blob = await request.blob()
-  loadLevel(blob)
-  levelSelect.classList.remove('active')
-  setEditMode(false)
+  loadLevel(blob, () => {
+    levelSelect.classList.remove('active')
+    setEditMode(false)
+    loadedCallback?.()
+  })
 }
 
 export function loadFirstLevel() {
@@ -43,4 +47,8 @@ export function loadNextLevel() {
     // TODO: fancy win screen
     alert("You win!")
   }
+}
+
+export function currentLevelID() {
+  return currentLevelButton?.getAttribute('data-level') ?? ''
 }

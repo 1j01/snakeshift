@@ -461,7 +461,8 @@ function loadPlaythrough(json: string) {
   alert(`Loaded playthrough with ${playthrough.length} moves. Press 'Y' (Redo) to step through it.`)
 }
 
-export function loadLevel(file: Blob) {
+// TODO: simplify with promises
+export function loadLevel(file: Blob, loadedCallback?: () => void) {
   // TODO: switch to editor mode, when appropriate (i.e. not when loading a level to play),
   // before creating an undo state, so that it uses the editor undo stack,
   // but after reading the file, to avoid a race condition
@@ -496,7 +497,9 @@ export function loadLevel(file: Blob) {
         undos.splice(0, undos.length, ...before.undos)
         redos.splice(0, redos.length, ...before.redos)
         alert(`Failed to load level. ${(error as Error).toString()}`)
+        return
       }
+      loadedCallback?.()
     }
   }, (error) => {
     alert(`Failed to read level file. ${error}`)
