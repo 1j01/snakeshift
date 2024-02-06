@@ -13,7 +13,7 @@ enum Tool {
   Eraser = "Eraser",
   Move = "Move",
 }
-let tool = Tool.Move
+let tool = Tool.Brush
 let brushEntityClass: typeof Entity = Block
 let brushColor = CollisionLayer.White
 let dragging: Entity | undefined = undefined
