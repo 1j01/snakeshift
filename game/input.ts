@@ -33,13 +33,13 @@ export function handleInput(
 
   let pointerDownTile: Tile | undefined = undefined
   let mouseHoveredTile: Tile | undefined = undefined
-  on(eventTarget, 'pointerdown', (event: PointerEvent) => {
+  on(eventTarget, 'pointerdown', (event) => {
     pointerDownTile = pageToWorldTile(event)
     if (pointerDownTile) {
       setControlScheme(ControlScheme.Pointer) // sets highlight; signals level update uselessly
     }
   })
-  on(window, 'pointerup', (event: PointerEvent) => {
+  on(window, 'pointerup', (event) => {
     const pointerUpTile = pageToWorldTile(event)
     if (
       activePlayer &&
@@ -68,7 +68,7 @@ export function handleInput(
     highlightMove(mouseHoveredTile)
   })
 
-  on(window, 'pointermove', (event: PointerEvent) => {
+  on(window, 'pointermove', (event) => {
     const lastTile = mouseHoveredTile
     mouseHoveredTile = pageToWorldTile(event)
     // only with significant movement (moving to a new tile),
@@ -95,7 +95,7 @@ export function handleInput(
     setControlScheme(controlScheme) // signals level update
   }
 
-  on(window, 'keydown', (event: KeyboardEvent) => {
+  on(window, 'keydown', (event) => {
     // Using `event.code` instead of `event.key` since the control scheme relies on the physical key layout, not the letters.
     // Undo/redo is handled separately.
     // Don't prevent default behavior with modifier keys held,

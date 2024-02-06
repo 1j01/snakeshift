@@ -180,7 +180,7 @@ export function handleInputForLevelEditing(
 
   let pointerDownTile: Tile | undefined = undefined
   let mouseHoveredTile: Tile | undefined = undefined
-  on(eventTarget, 'pointerdown', (event: PointerEvent) => {
+  on(eventTarget, 'pointerdown', (event) => {
     pointerDownTile = pageToWorldTile(event)
     if (!withinLevel(pointerDownTile)) {
       pointerDownTile = undefined
@@ -231,7 +231,7 @@ export function handleInputForLevelEditing(
     updateHighlight()
   }
 
-  on(window, 'pointermove', (event: PointerEvent) => {
+  on(window, 'pointermove', (event) => {
     const lastTile = mouseHoveredTile
     mouseHoveredTile = pageToWorldTile(event)
     if (!pointerDownTile && !withinLevel(mouseHoveredTile)) {
