@@ -22,6 +22,7 @@
     ".history",
     "dist",
     "*.svg",
-    "*.sketch"
+    "*.sketch",
+    "levels"
   ]
 }
