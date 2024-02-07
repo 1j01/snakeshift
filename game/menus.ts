@@ -36,11 +36,11 @@ export function initMainMenu() {
     credits.classList.add('active')
   })
 
-  mainMenu.classList.add('active')
-
   for (const backButton of backButtons) {
     backButton.addEventListener('click', showMainMenu)
   }
+
+  showMainMenu()
 }
 
 export function hideScreens() {
