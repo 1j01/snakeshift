@@ -119,6 +119,15 @@ body:not(.editing) #entities-bar {
   min-width: 200px;
 }
 
+button:focus,
+a:focus {
+  outline: 5px solid white;
+}
+
+a:focus {
+  outline-offset: 5px;
+}
+
 .screen {
   display: flex;
   flex-direction: column;
