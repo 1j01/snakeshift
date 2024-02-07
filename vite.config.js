@@ -18,6 +18,7 @@ export default defineConfig({
   plugins: [
     legacy({
       targets: ['defaults'],
+      polyfills: ['es.promise.finally', 'es/map', 'es/set', 'es/json'],
     }),
   ],
 })
