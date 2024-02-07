@@ -46,7 +46,7 @@
     // - `{variableAsKey}` is not supported
     // - Canvas is supported
 
-    const originalConsole = window.consoleFake
+    const originalConsole = window.console
     window.consoleFake = {}
 
     function logOnPage(message) {
@@ -71,6 +71,7 @@
       logOnPage(message)
       // Log on devtools console
       try {
+        const method = "log"
         originalConsole[method].apply(originalConsole, arguments)
       } catch (e) {
         logOnPage(e)
@@ -79,7 +80,8 @@
       try {
         const xhr = new XMLHttpRequest()
         xhr.open('POST', '/log', true)
-        xhr.setRequestHeader('Content-Type', 'application/json')
+        //xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.setRequestHeader('Content-Type', 'text/plain')
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4) {
             if (xhr.status !== 200) {
@@ -87,7 +89,8 @@
             }
           }
         }
-        xhr.send(JSON.stringify({ message: message }))
+        //xhr.send(JSON.stringify({ message: message }))
+        xhr.send(message)
       } catch (e) {
         logOnPage(e)
       }
@@ -118,6 +121,20 @@
     } catch (e) {
       window.consoleFake.error(e)
     }
+
+    const input = document.getElementById('debug-input')
+    input.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        const code = input.value
+        window.consoleFake.log(">", code)
+        try {
+          const result = eval(code)
+          window.consoleFake.log("<", result)
+        } catch (e) {
+          window.consoleFake.error(e)
+        }
+      }
+    })
   </script>
   <button onclick="location.reload()" autofocus>Reload</button>
 
