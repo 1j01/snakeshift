@@ -46,9 +46,16 @@
       div.textContent = message
       pre.appendChild(div)
     }
-    function logEverywhere(message) {
+    function logEverywhere(a, b, c, d) {
       // Log on page
       //const message = Array.from(arguments).join(' ')
+      var message = ''
+      for (var i = 0; i < arguments.length; i++) {
+        message += arguments[i]
+        if (i < arguments.length - 1) {
+          message += ' '
+        }
+      }
       logOnPage(message)
       // Log on devtools console
       try {
@@ -87,6 +94,7 @@
 
     window.consoleFake.log("This is a log message")
     window.consoleFake.warn("This is a warning message")
+    window.consoleFake.log("eval('1 + 1') is", eval('1 + 1'))
     //const methods = ['log', 'warn', 'error', 'debug', 'info', 'trace', 'table', 'group', 'groupCollapsed', 'groupEnd', 'time', 'timeEnd', 'timeLog', 'count', 'assert', 'clear', 'dir', 'dirxml', 'profile', 'profileEnd', 'timeStamp', 'context', 'memory', 'exception', 'table', 'group', 'groupCollapsed', 'groupEnd', 'time', 'timeEnd', 'timeLog', 'count', 'assert', 'clear', 'dir', 'dirxml']
     //for (var i = 0; i < methods.length; i++) {
     //  const method = methods[i]
