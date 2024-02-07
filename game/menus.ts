@@ -11,6 +11,9 @@ const backButtons = document.querySelectorAll<HTMLButtonElement>('.back-to-main-
 const mainMenu = document.querySelector<HTMLDivElement>('#main-menu')!
 const levelSelect = document.querySelector<HTMLDivElement>('#level-select')!
 const credits = document.querySelector<HTMLDivElement>('#credits')!
+const levelSplash = document.querySelector<HTMLDivElement>('#level-splash')!
+const levelSplashTitle = document.querySelector<HTMLHeadingElement>('#level-splash-title')!
+const levelSplashDescription = document.querySelector<HTMLParagraphElement>('#level-splash-description')!
 
 export function initMainMenu() {
   playButton.addEventListener('click', () => {
@@ -67,4 +70,20 @@ export function showMainMenu() {
   mainMenu.classList.add('active')
   setActivityMode("menu")
   playButton.focus()
+}
+
+export function showLevelSplash(levelInfo: { title: string, description: string }) {
+  hideScreens()
+  levelSplash.classList.add('active')
+  levelSplashTitle.textContent = levelInfo.title
+  levelSplashDescription.textContent = levelInfo.description
+  setTimeout(() => {
+    levelSplash.style.transition = "opacity .5s"
+    levelSplash.style.opacity = "0"
+    setTimeout(() => {
+      levelSplash.classList.remove('active')
+      levelSplash.style.transition = ""
+      levelSplash.style.opacity = ""
+    }, 600)
+  }, 2000)
 }

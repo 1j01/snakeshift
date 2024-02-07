@@ -1,4 +1,5 @@
 import { loadLevel } from "./level-editor"
+import { showLevelSplash } from "./menus"
 
 let currentLevelButton: HTMLButtonElement | undefined = undefined
 
@@ -10,6 +11,7 @@ export function initLevelSelect() {
       // TODO: error handling; simplify with promises
       void loadLevelFile(levelURL, () => {
         currentLevelButton = button
+        showLevelSplash({ title: button.textContent ?? "Loading...", description: "" })
       })
     })
   }
