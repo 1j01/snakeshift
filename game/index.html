@@ -11,59 +11,67 @@
 </head>
 
 <body>
-  <pre id="debug"></pre>
+  <pre id="debug"
+    style="position: absolute; top: 0; right: 0; max-height: 100vh; overflow-y: auto; z-index: 1000; width: 50%">
+  Debug Console
+  </pre>
   <script>
+    const originalConsole = window.consoleFake
+    window.consoleFake = {}
 
-    const originalConsole = window.console
-    window.console = {}
-    for (const method of ['log', 'warn', 'error', 'debug', 'info', 'trace']) {
-      window.console[method] = function () {
-        // Log on page
-        const message = Array.from(arguments).join(' ')
-        const pre = document.getElementById('debug')
-        const div = document.createElement('div')
-        div.textContent = message
-        // Log on devtools console
+    function logOnPage(message) {
+      const pre = document.getElementById('debug')
+      const div = document.createElement('div')
+      div.textContent = message
+      pre.appendChild(div)
+    }
+    function logEverywhere(message) {
+      // Log on page
+      //const message = Array.from(arguments).join(' ')
+      logOnPage(message)
+      // Log on devtools console
+      try {
         originalConsole[method].apply(originalConsole, arguments)
-        // Log on server
-        pre.appendChild(div)
+      } catch (e) {
+        logOnPage(e)
+      }
+      // Log on server
+      try {
         const xhr = new XMLHttpRequest()
         xhr.open('POST', '/log', true)
         xhr.setRequestHeader('Content-Type', 'application/json')
-        xhr.send(JSON.stringify({ method, message }))
-      }
-    }
-
-    console.log("Hello, world!")
-
-    let receivingCommands = true
-    function sendCommand(command) {
-      const xhr = new XMLHttpRequest()
-      xhr.open('POST', '/command', true)
-      xhr.setRequestHeader('Content-Type', 'application/json')
-      xhr.send(JSON.stringify(command))
-    }
-
-    function receiveCommands() {
-      if (!receivingCommands) {
-        return
-      }
-      const xhr = new XMLHttpRequest()
-      xhr.open('GET', '/get-command', true)
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          const command = JSON.parse(xhr.responseText)
-          if (command) {
-            console.log('Received command:', command)
-            if (command.type === 'eval') {
-              console.log(eval(command.code))
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status !== 200) {
+              logOnPage('Failed to log on server: ' + xhr.responseText)
             }
           }
-          receiveCommands()
         }
+        xhr.send(JSON.stringify({ method: method, message: message }))
+      } catch (e) {
+        logOnPage(e)
       }
     }
+
+    //for (const method of ['log', 'warn', 'error', 'debug', 'info', 'trace']) {
+    //const methods = ['log', 'warn', 'error', 'debug', 'info', 'trace']
+    //for (var i = 0; i < methods.length; i++) {
+    //  const method = methods[i]
+
+    window.consoleFake.log = logEverywhere
+    window.consoleFake.warn = logEverywhere
+    window.consoleFake.error = logEverywhere
+    window.consoleFake.debug = logEverywhere
+    window.consoleFake.info = logEverywhere
+    window.consoleFake.trace = logEverywhere
+
+    window.consoleFake.log("This is a log message")
+    window.consoleFake.warn("This is a warning message")
   </script>
+  <script>
+  </script>
+  <button onclick="location.reload()" autofocus>Reload</button>
+
   <blockquote id="tao-te-ching-quote" style="display: none;">
     <h2>
       Tao Te Ching — Lao Tzu — Chapter 11
