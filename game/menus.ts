@@ -2,11 +2,11 @@ import { setActivityMode } from "./game"
 import { clearLevel } from "./game-state"
 import { loadFirstLevel } from "./level-select"
 
-const playButton = document.querySelector('#play-button')!
-const levelSelectButton = document.querySelector('#level-select-button')!
-const levelEditorButton = document.querySelector('#level-editor-button')!
-const creditsButton = document.querySelector('#credits-button')!
-const backButtons = document.querySelectorAll('.back-to-main-menu-button')!
+const playButton = document.querySelector<HTMLButtonElement>('#play-button')!
+const levelSelectButton = document.querySelector<HTMLButtonElement>('#level-select-button')!
+const levelEditorButton = document.querySelector<HTMLButtonElement>('#level-editor-button')!
+const creditsButton = document.querySelector<HTMLButtonElement>('#credits-button')!
+const backButtons = document.querySelectorAll<HTMLButtonElement>('.back-to-main-menu-button')!
 
 const mainMenu = document.querySelector<HTMLDivElement>('#main-menu')!
 const levelSelect = document.querySelector<HTMLDivElement>('#level-select')!
@@ -66,4 +66,5 @@ export function showMainMenu() {
   hideScreens()
   mainMenu.classList.add('active')
   setActivityMode("menu")
+  playButton.focus()
 }
