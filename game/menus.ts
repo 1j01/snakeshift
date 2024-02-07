@@ -59,8 +59,11 @@ export function initMainMenu() {
   showMainMenu()
 }
 
-export function hideScreens() {
+export function hideScreens(options: { except?: string[] } = {}) {
   for (const screen of document.querySelectorAll('.screen.active')) {
+    if (options.except?.includes(screen.id)) {
+      continue
+    }
     screen.classList.remove('active')
   }
 }
