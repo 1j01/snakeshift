@@ -25,6 +25,7 @@ const editorRedos: GameState[] = []
 let editorState: GameState | undefined = undefined
 let cleanup = () => { /* TSILB */ }
 export function setEditMode(newMode: "edit" | "play" | "menu") {
+  if (activityMode === newMode) return
   console.log("Switching from", activityMode, "to", newMode)
   cleanup()
   activityMode = newMode
