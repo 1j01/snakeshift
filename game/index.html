@@ -38,6 +38,15 @@
     <b>&gt;</b> <input type="text" id="debug-input">
   </div>
   <script>
+    // Notes on Kindle 4.x browser:
+    // - `const` is supported but may be treated like `var`
+    // - `let` is not supported
+    // - `for...of` is not supported
+    // - `Array.from` and/or `Array.prototype.map` and/or `Array.prototype.join` is not supported
+    // - `JSON` is not supported
+    // - `{variableAsKey}` is not supported
+    // - Canvas is supported
+
     const originalConsole = window.consoleFake
     window.consoleFake = {}
 
@@ -50,6 +59,8 @@
     function logEverywhere(a, b, c, d) {
       // Log on page
       //const message = Array.from(arguments).join(' ')
+      //const args = new Array(arguments.length).map(i => arguments[i])
+      //const message = args.join(' ')
       var message = ''
       for (var i = 0; i < arguments.length; i++) {
         message += arguments[i]
@@ -102,7 +113,6 @@
     //  window.consoleFake.log(method)//, 'is', window.consoleFake[method] === originalConsole[method] ? 'the same as' : 'different from', 'original console.')
     //}
     try {
-      window.consoleFake.log("two", "arguments")
       const method = 'log'
       window.consoleFake.log(method, 'is', window.consoleFake[method] === originalConsole[method] ? 'the same as' : 'different from', 'original console.')
     } catch (e) {
