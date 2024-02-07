@@ -123,17 +123,61 @@
       window.consoleFake.error(e)
     }
 
+    function handleCommand(code) {
+      window.consoleFake.log(">", code)
+      try {
+        const result = eval(code)
+        window.consoleFake.log("<", result)
+      } catch (e) {
+        window.consoleFake.error(e)
+      }
+    }
+
+    function sendCommand(code) {
+      const xhr = new XMLHttpRequest()
+      xhr.open('POST', '/command', true)
+      xhr.setRequestHeader('Content-Type', 'text/plain')
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status !== 200) {
+            logOnPage('Failed to send command to server: ' + xhr.status + ' ' + xhr.statusText + ' ' + xhr.responseText)
+          }
+        }
+      }
+      xhr.send(code)
+    }
+
+    var receivingCommands = true
+    function receiveCommand(code) {
+      if (!receivingCommands) {
+        return
+      }
+
+      const xhr = new XMLHttpRequest()
+      xhr.open('GET', '/get-command', true)
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            const code = xhr.responseText
+            if (code) {
+              handleCommand(code)
+            }
+          } else {
+            logOnPage('Failed to receive command from server: ' + xhr.status + ' ' + xhr.statusText + ' ' + xhr.responseText)
+          }
+        }
+      }
+      xhr.send()
+    }
+    setInterval(receiveCommand, 1000)
+
     const input = document.getElementById('debug-input')
     input.addEventListener('keydown', function (event) {
       if (event.key === 'Enter') {
         const code = input.value
-        window.consoleFake.log(">", code)
-        try {
-          const result = eval(code)
-          window.consoleFake.log("<", result)
-        } catch (e) {
-          window.consoleFake.error(e)
-        }
+        handleCommand(code)
+        receivingCommands = false
+        sendCommand(code)
       }
     })
   </script>
