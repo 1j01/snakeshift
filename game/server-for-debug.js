@@ -1,14 +1,127 @@
-// eslint-env node
+/* eslint-env node */
+
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import express from 'express'
-import { json } from 'body-parser'
+import { createServer as createViteServer } from 'vite'
+import bodyParser from 'body-parser'
+
+const PORT = process.env.PORT ?? 5173
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+async function createServer() {
+  const app = express()
+
+  // Create Vite server in middleware mode and configure the app type as
+  // 'custom', disabling Vite's own HTML serving logic so parent server
+  // can take control
+  const vite = await createViteServer({
+    server: { middlewareMode: true },
+    appType: 'custom'
+  })
+
+  // Use vite's connect instance as middleware. If you use your own
+  // express router (express.Router()), you should use router.use
+  // When the server restarts (for example after the user modifies
+  // vite.config.js), `vite.middlewares` is still going to be the same
+  // reference (with a new internal stack of Vite and plugin-injected
+  // middlewares. The following is valid even after restarts.
+  app.use(vite.middlewares)
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  app.use('*', async (req, res, next) => {
+    const url = req.originalUrl
+
+    try {
+      // 1. Read index.html
+      let template = fs.readFileSync(
+        path.resolve(__dirname, 'index.html'),
+        'utf-8',
+      )
+
+      // 2. Apply Vite HTML transforms. This injects the Vite HMR client,
+      //    and also applies HTML transforms from Vite plugins, e.g. global
+      //    preambles from @vitejs/plugin-react
+      template = await vite.transformIndexHtml(url, template)
+
+      // 3. Load the server entry. ssrLoadModule automatically transforms
+      //    ESM source code to be usable in Node.js! There is no bundling
+      //    required, and provides efficient invalidation similar to HMR.
+      // const { render } = await vite.ssrLoadModule('/src/entry-server.js')
+
+      // 4. render the app HTML. This assumes entry-server.js's exported
+      //     `render` function calls appropriate framework SSR APIs,
+      //    e.g. ReactDOMServer.renderToString()
+      // const appHtml = await render(url)
+
+      // 5. Inject the app-rendered HTML into the template.
+      // const html = template.replace(`<!--ssr-outlet-->`, appHtml)
+
+      const html = template
+
+      // 6. Send the rendered HTML back.
+      res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+    } catch (e) {
+      // If an error is caught, let Vite fix the stack trace so it maps back
+      // to your actual source code.
+      vite.ssrFixStacktrace(e)
+      next(e)
+    }
+  })
+
+  let commandsQueue = []
+
+  // Middleware to parse JSON bodies
+  app.use(bodyParser.json())
+
+  // Endpoint to receive commands from clients
+  app.post('/command', (req, res) => {
+    const { command } = req.body
+    commandsQueue.push(command)
+    res.status(200).send('Command received')
+  })
+
+  // Endpoint for clients to long-poll for commands
+  app.get('/get-command', (req, res) => {
+    if (commandsQueue.length > 0) {
+      const command = commandsQueue.shift()
+      res.status(200).json({ command })
+    } else {
+      // No command available, long-polling - keep the request open
+      setTimeout(() => {
+        res.status(200).json({ command: null })
+      }, 5000) // Example: respond after 5 seconds
+    }
+  })
+
+  // Endpoint to receive console output from clients
+  app.post('/log', (req, res) => {
+    const { message } = req.body
+    console.log(message)
+    res.status(200).send('OK')
+  })
+
+  // Start the server
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`)
+  })
+}
+
+createServer()
+
+/*
+import express from 'express'
+import bodyParser from 'body-parser'
 
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT ?? 5173
 
 let commandsQueue = []
 
 // Middleware to parse JSON bodies
-app.use(json())
+app.use(bodyParser.json())
 
 // Endpoint to receive commands from clients
 app.post('/command', (req, res) => {
@@ -41,3 +154,4 @@ app.post('/log', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`)
 })
+*/
