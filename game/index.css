@@ -128,6 +128,13 @@ a:focus {
   outline-offset: 5px;
 }
 
+.back-to-main-menu-button::before {
+  content: "←";
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+
 .screen {
   display: flex;
   flex-direction: column;
