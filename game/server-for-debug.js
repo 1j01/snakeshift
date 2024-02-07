@@ -16,39 +16,33 @@ async function createServer() {
 
   let commandsQueue = ['console.log("First command: log this text.")']
 
-  // Middleware to parse JSON bodies
-  // app.use(bodyParser.json())
+  // Middleware get body as text (seems silly but okay)
   app.use(bodyParser.text())
 
   // Endpoint to receive commands from clients
   app.post('/command', (req, res) => {
-    // const { command } = req.body
-    const commmand = req.body
+    const command = req.body
     commandsQueue.push(command)
     console.log('Command received:', command)
     res.status(200).send('Command received')
   })
 
-  // Endpoint for clients to long-poll for commands
+  // Endpoint for clients to poll for commands
+  // Note: only two clients are supported, a sender and receiver.
+  // Only one client will receive the command.
   app.get('/get-command', (req, res) => {
     if (commandsQueue.length > 0) {
       const command = commandsQueue.shift()
-      // res.status(200).json({ command })
       res.status(200).send(command)
     } else {
-      // No command available, long-polling - keep the request open
-      setTimeout(() => {
-        // res.status(200).json({ command: null })
-        res.status(200).send(null)
-      }, 5000) // Example: respond after 5 seconds
+      res.status(200).send(null)
     }
   })
 
   // Endpoint to receive console output from clients
   app.post('/log', (req, res) => {
-    // const { message } = req.body
     const message = req.body
-    console.log(message)
+    console.log("Log:", message)
     res.status(200).send('OK')
   })
 
