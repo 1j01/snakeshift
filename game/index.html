@@ -48,7 +48,7 @@
     // - Canvas is supported
 
     const originalConsole = window.console
-    window.consoleFake = {}
+    window.console = {}
 
     function logOnPage(message) {
       const pre = document.getElementById('debug-output')
@@ -101,35 +101,38 @@
     //for (var i = 0; i < methods.length; i++) {
     //  const method = methods[i]
 
-    window.consoleFake.log = logEverywhere
-    window.consoleFake.warn = logEverywhere
-    window.consoleFake.error = logEverywhere
-    window.consoleFake.debug = logEverywhere
-    window.consoleFake.info = logEverywhere
-    window.consoleFake.trace = logEverywhere
+    console.log = logEverywhere
+    console.warn = logEverywhere
+    console.error = logEverywhere
+    console.debug = logEverywhere
+    console.info = logEverywhere
+    console.trace = logEverywhere
 
-    window.consoleFake.log("This is a log message")
-    window.consoleFake.warn("This is a warning message")
-    window.consoleFake.log("eval('1 + 1') is", eval('1 + 1'))
+    console.log("This is a log message")
+    console.warn("This is a warning message")
+    console.log("eval('1 + 1') is", eval('1 + 1'))
+    console.log("window.addEventListener", window.addEventListener)
+    console.log("window.onerror", window.onerror)
+
     //const methods = ['log', 'warn', 'error', 'debug', 'info', 'trace', 'table', 'group', 'groupCollapsed', 'groupEnd', 'time', 'timeEnd', 'timeLog', 'count', 'assert', 'clear', 'dir', 'dirxml', 'profile', 'profileEnd', 'timeStamp', 'context', 'memory', 'exception', 'table', 'group', 'groupCollapsed', 'groupEnd', 'time', 'timeEnd', 'timeLog', 'count', 'assert', 'clear', 'dir', 'dirxml']
     //for (var i = 0; i < methods.length; i++) {
     //  const method = methods[i]
-    //  window.consoleFake.log(method)//, 'is', window.consoleFake[method] === originalConsole[method] ? 'the same as' : 'different from', 'original console.')
+    //  console.log(method)//, 'is', console[method] === originalConsole[method] ? 'the same as' : 'different from', 'original console.')
     //}
     try {
       const method = 'log'
-      window.consoleFake.log(method, 'is', window.consoleFake[method] === originalConsole[method] ? 'the same as' : 'different from', 'original console.')
+      console.log(method, 'is', console[method] === originalConsole[method] ? 'the same as' : 'different from', 'original console.')
     } catch (e) {
-      window.consoleFake.error(e)
+      console.error(e)
     }
 
     function handleCommand(code) {
-      window.consoleFake.log(">", code)
+      console.log(">", code)
       try {
         const result = eval(code)
-        window.consoleFake.log("<", result)
+        console.log("<", result)
       } catch (e) {
-        window.consoleFake.error(e)
+        console.error(e)
       }
     }
 
