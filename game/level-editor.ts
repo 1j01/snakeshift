@@ -1,6 +1,6 @@
 import { Block } from './block'
 import Entity from './entity'
-import { setEditMode } from './game'
+import { setActivityMode } from './game'
 import { activePlayer, clearLevel, deserialize, entities, onResize, onUpdate, postUpdate, redo, redos, serialize, setActivePlayer, undoable, undos } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
 import { hideScreens } from './menus'
@@ -511,7 +511,7 @@ export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?:
         alert(`Failed to load level. ${(error as Error).toString()}`)
         return
       }
-      setEditMode(newMode)
+      setActivityMode(newMode)
       hideScreens()
       loadedCallback?.()
     }

@@ -1,4 +1,4 @@
-import { activityMode, animate, restartLevel, setEditMode } from "./game"
+import { activityMode, animate, restartLevel, setActivityMode } from "./game"
 import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
 import { currentLevelID, initLevelSelect, loadNextLevel } from "./level-select"
@@ -8,9 +8,9 @@ import { canvas } from "./rendering"
 addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {
     if (activityMode === "play") {
-      setEditMode("edit")
+      setActivityMode("edit")
     } else if (activityMode === "edit") {
-      setEditMode("play")
+      setActivityMode("play")
     }
     event.preventDefault()
   } else if (event.key === 'z') {
