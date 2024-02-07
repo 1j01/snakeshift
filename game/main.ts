@@ -2,7 +2,7 @@ import { activityMode, animate, restartLevel, setEditMode } from "./game"
 import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
 import { currentLevelID, initLevelSelect, loadNextLevel } from "./level-select"
-import { initMainMenu } from "./main-menu"
+import { initMainMenu } from "./menus"
 import { canvas } from "./rendering"
 
 addEventListener('keydown', (event) => {
