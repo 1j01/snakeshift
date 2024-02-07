@@ -12,7 +12,8 @@
 </head>
 
 <body>
-  <pre id="debug" style="
+
+  <div id="debug-console" style="
     position: absolute;
     top: 0;
     left: 80px;
@@ -24,14 +25,24 @@
     border: 1px solid black;
     color: black;
   ">
-  Debug Console
-  </pre>
+    <h3>Debug Console</h3>
+    <pre id=" debug-output" style="
+      overflow-y: auto;
+      background-color: white;
+      border: 1px solid black;
+      color: black;
+      margin: 5px;
+      min-height: 100px;
+    ">
+    </pre>
+    <b>&gt;</b> <input type="text" id="debug-input">
+  </div>
   <script>
     const originalConsole = window.consoleFake
     window.consoleFake = {}
 
     function logOnPage(message) {
-      const pre = document.getElementById('debug')
+      const pre = document.getElementById('debug-output')
       const div = document.createElement('div')
       div.textContent = message
       pre.appendChild(div)
