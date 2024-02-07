@@ -74,6 +74,32 @@
         logOnPage(e)
       }
     }
+
+    //const methods = ['log', 'warn', 'error', 'debug', 'info', 'trace']
+    //for (var i = 0; i < methods.length; i++) {
+    //  const method = methods[i]
+
+    window.consoleFake.log = logEverywhere
+    window.consoleFake.warn = logEverywhere
+    window.consoleFake.error = logEverywhere
+    window.consoleFake.debug = logEverywhere
+    window.consoleFake.info = logEverywhere
+    window.consoleFake.trace = logEverywhere
+
+    window.consoleFake.log("This is a log message")
+    window.consoleFake.warn("This is a warning message")
+    //const methods = ['log', 'warn', 'error', 'debug', 'info', 'trace', 'table', 'group', 'groupCollapsed', 'groupEnd', 'time', 'timeEnd', 'timeLog', 'count', 'assert', 'clear', 'dir', 'dirxml', 'profile', 'profileEnd', 'timeStamp', 'context', 'memory', 'exception', 'table', 'group', 'groupCollapsed', 'groupEnd', 'time', 'timeEnd', 'timeLog', 'count', 'assert', 'clear', 'dir', 'dirxml']
+    //for (var i = 0; i < methods.length; i++) {
+    //  const method = methods[i]
+    //  window.consoleFake.log(method)//, 'is', window.consoleFake[method] === originalConsole[method] ? 'the same as' : 'different from', 'original console.')
+    //}
+    try {
+      window.consoleFake.log("two", "arguments")
+      const method = 'log'
+      window.consoleFake.log(method, 'is', window.consoleFake[method] === originalConsole[method] ? 'the same as' : 'different from', 'original console.')
+    } catch (e) {
+      window.consoleFake.error(e)
+    }
   </script>
   <div class="screen safe-center active" id="main-menu">
     <main class="safe-center">
