@@ -124,7 +124,14 @@ body:not(.editing) #entities-bar {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* Absolute position makes menus play nice with the editor transition. */
+  /* Otherwise, the editor UI jumps to the bottom when returning to the main menu. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
+  z-index: 1;
 }
 
 .screen:not(.active) {
