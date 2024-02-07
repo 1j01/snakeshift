@@ -5,12 +5,44 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Snakeshift</title>
-  <link rel="stylesheet" type="text/css" href="./index.css" />
+  <!-- <link rel="stylesheet" type="text/css" href="./index.css" /> -->
   <!-- <link rel="icon" type="image/png" href="/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
   <link rel="icon" type="image/png" href="/yin-yang-larger-sneks-180px.png" sizes="180x180" />
 </head>
 
 <body>
+  <script>
+
+    /*var console = {
+      log: function () {
+        var args = Array.prototype.slice.call(arguments);
+        var message = args.join(" ");
+        ...
+      },
+      error: function () {
+        var args = Array.prototype.slice.call(arguments);
+        var message = args.join(" ");
+        ...
+      }
+    };*/
+
+    // This doesn't help on Kindle 4.x experimental browser
+    window.onerror = function (message, source, lineno, colno, error) {
+      console.error(message, source, lineno, colno, error);
+      document.body.innerHTML = "\
+        <h1>Snakeshift</h1>\
+        <p>\
+          An error occurred. Please try refreshing the page.\
+        </p>\
+        <code><pre></pre></code>\
+      ";
+      document.querySelector("pre").textContent = "\
+" + message + "\
+" + source + ":" + lineno + ":" + colno + "\
+" + error + "\
+";
+    };
+  </script>
   <blockquote id="tao-te-ching-quote" style="display: none;">
     <h2>
       Tao Te Ching — Lao Tzu — Chapter 11
