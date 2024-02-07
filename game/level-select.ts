@@ -9,7 +9,7 @@ export function initLevelSelect() {
     button.addEventListener('click', () => {
       const levelURL = button.getAttribute('data-level')!
       // Show splash before file is loaded to mask loading time
-      showLevelSplash({ title: button.textContent ?? "Loading...", description: "" })
+      showLevelSplash({ title: button.textContent ?? "Loading..." })
       // TODO: error handling; simplify with promises
       void loadLevelFile(levelURL, () => {
         currentLevelButton = button
