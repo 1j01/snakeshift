@@ -128,12 +128,25 @@ a:focus {
   outline-offset: 5px;
 }
 
+.back-to-main-menu-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+
 .back-to-main-menu-button::before {
   content: "←";
   font-size: 1.5rem;
   font-weight: bold;
 }
 
+#main-menu {
+  /* above back button (bit of a hack...) */
+  /* TODO: hide back button properly, for (in)accessibility */
+  z-index: 3;
+  background-color: black;
+}
 
 .screen {
   display: flex;
