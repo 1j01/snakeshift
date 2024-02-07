@@ -2,7 +2,7 @@ import { activityMode, animate, restartLevel, setActivityMode } from "./game"
 import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
 import { currentLevelID, initLevelSelect, loadNextLevel } from "./level-select"
-import { initMainMenu } from "./menus"
+import { initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
 
 addEventListener('keydown', (event) => {
@@ -42,6 +42,13 @@ addEventListener('keydown', (event) => {
     event.preventDefault()
   } else if (event.key === 'n' && activityMode == "edit") { // Ctrl+N is new window and can't be overridden
     clearLevel()
+    event.preventDefault()
+  } else if (event.key === 'Escape') {
+    if (activityMode === "play") {
+      setActivityMode("edit")
+    } else if (activityMode === "edit") {
+      showMainMenu()
+    }
     event.preventDefault()
   }
 })
