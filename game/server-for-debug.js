@@ -35,7 +35,7 @@ async function createServer() {
       const command = commandsQueue.shift()
       res.status(200).send(command)
     } else {
-      res.status(200).send(null)
+      res.status(200).send("")
     }
   })
 
