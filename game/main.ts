@@ -46,7 +46,8 @@ addEventListener('keydown', (event) => {
   } else if (event.key === 'Escape') {
     if (activityMode === "play") {
       setActivityMode("edit")
-    } else if (activityMode === "edit") {
+    } else {
+      // From Level Editor, Level Select, or Credits, go to Main Menu
       showMainMenu()
     }
     event.preventDefault()
