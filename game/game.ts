@@ -1,4 +1,4 @@
-import { deserialize, entities, redos, serialize, undoable, undos } from "./game-state"
+import { clearLevel, deserialize, entities, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
 import { canvas, draw } from "./rendering"
@@ -45,6 +45,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     undos.length = 0
     redos.length = 0
   } else {
+    clearLevel(false)
     undos.length = 0
     redos.length = 0
     editorUndos.length = 0

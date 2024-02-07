@@ -98,8 +98,10 @@ export function deserialize(state: GameState) {
   postUpdate()
 }
 
-export function clearLevel() {
-  undoable()
+export function clearLevel(shouldBeUndoable = true) {
+  // Hm, using an adjective for a function name makes this a bit awkward.
+  // (Not that I really need to make this a parameter.)
+  if (shouldBeUndoable) undoable()
   entities.length = 0
   activePlayer = undefined
   postUpdate()
