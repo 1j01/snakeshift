@@ -18,7 +18,7 @@ export function initLevelSelect() {
 export async function loadLevelFile(levelURL: string, loadedCallback?: () => void) {
   const request = await fetch(levelURL)
   const blob = await request.blob()
-  loadLevel(blob, false, loadedCallback)
+  loadLevel(blob, "play", loadedCallback)
 }
 
 export function loadFirstLevel() {

@@ -459,7 +459,7 @@ function loadPlaythrough(json: string) {
   }
   // TODO: simplify with intermediate function like loadLevelFromText
   const blob = new Blob([playthrough[0]], { type: 'application/json' })
-  loadLevel(blob, false)
+  loadLevel(blob, "play")
   for (const state of playthrough.toReversed()) {
     redos.push(state)
   }
@@ -468,7 +468,7 @@ function loadPlaythrough(json: string) {
 }
 
 // TODO: simplify with promises
-export function loadLevel(file: Blob, forEditing: boolean, loadedCallback?: () => void) {
+export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?: () => void) {
   // TODO: handle edit mode vs. play mode undo stacks
   // This is complicated, in part due to trying to snapshot for transactional error handling.
   // The snapshot may be of either set of stacks, depending on the previous edit mode state.
@@ -511,7 +511,7 @@ export function loadLevel(file: Blob, forEditing: boolean, loadedCallback?: () =
         alert(`Failed to load level. ${(error as Error).toString()}`)
         return
       }
-      setEditMode(forEditing)
+      setEditMode(newMode)
       hideScreens()
       loadedCallback?.()
     }
@@ -527,7 +527,7 @@ export function openLevel() {
   input.addEventListener('change', () => {
     const file = input.files?.[0]
     if (!file) return
-    loadLevel(file, true)
+    loadLevel(file, "edit")
   })
   input.click()
 }

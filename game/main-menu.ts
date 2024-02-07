@@ -24,7 +24,7 @@ export function initMainMenu() {
 
   levelEditorButton.addEventListener('click', () => {
     hideScreens()
-    setEditMode(true) // before clearing because it switches to separate edit mode undo stacks
+    setEditMode("edit") // before clearing because it switches to separate edit mode undo stacks
     // TODO: clear undos and redos; clearLevel() is undoable
     // or clear when exiting from a level to the main menu / level select
     clearLevel()

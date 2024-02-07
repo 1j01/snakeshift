@@ -18,35 +18,43 @@ export function animate(time = 0) {
   draw()
 }
 
-export let editing = true
+export let activityMode: "edit" | "play" | "menu" = "menu"
 
 const editorUndos: GameState[] = []
 const editorRedos: GameState[] = []
 let editorState: GameState | undefined = undefined
 let cleanup = () => { /* TSILB */ }
-export function setEditMode(enterEditMode: boolean) {
+export function setEditMode(newMode: "edit" | "play" | "menu") {
+  console.log("Switching from", activityMode, "to", newMode)
   cleanup()
-  editing = enterEditMode
-  document.body.classList.toggle('editing', editing)
-  if (editing) {
+  activityMode = newMode
+  document.body.classList.toggle('editing', activityMode === "edit")
+  if (activityMode === "edit") {
     cleanup = handleInputForLevelEditing(canvas)
     if (editorState) {
       undos.splice(0, undos.length, ...editorUndos)
       redos.splice(0, redos.length, ...editorRedos)
       deserialize(editorState)
     }
-  } else {
+  } else if (activityMode === "play") {
     cleanup = handleInput(canvas)
     editorUndos.splice(0, editorUndos.length, ...undos)
     editorRedos.splice(0, editorRedos.length, ...redos)
     editorState = serialize()
     undos.length = 0
     redos.length = 0
+  } else {
+    undos.length = 0
+    redos.length = 0
+    editorUndos.length = 0
+    editorRedos.length = 0
+    editorState = undefined
+    cleanup = () => { /* TSILB */ }
   }
 }
 
 export function restartLevel() {
-  if (editing) return
+  if (activityMode !== "play") return
   if (!editorState) return
   undoable()
   deserialize(editorState)

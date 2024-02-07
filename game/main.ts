@@ -1,4 +1,4 @@
-import { animate, editing, restartLevel, setEditMode } from "./game"
+import { activityMode, animate, restartLevel, setEditMode } from "./game"
 import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
 import { currentLevelID, initLevelSelect, loadNextLevel } from "./level-select"
@@ -7,7 +7,11 @@ import { canvas } from "./rendering"
 
 addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {
-    setEditMode(!editing)
+    if (activityMode === "play") {
+      setEditMode("edit")
+    } else if (activityMode === "edit") {
+      setEditMode("play")
+    }
     event.preventDefault()
   } else if (event.key === 'z') {
     // Shift by itself cycling players breaks (Ctrl+)Shift+Z redo in play mode.
@@ -36,7 +40,7 @@ addEventListener('keydown', (event) => {
   } else if (event.key === 'o' && (event.ctrlKey || event.metaKey)) {
     openLevel()
     event.preventDefault()
-  } else if (event.key === 'n' && editing) { // Ctrl+N is new window and can't be overridden
+  } else if (event.key === 'n' && activityMode == "edit") { // Ctrl+N is new window and can't be overridden
     clearLevel()
     event.preventDefault()
   }
@@ -62,13 +66,13 @@ addEventListener('drop', (event) => {
   event.preventDefault()
   const file = event.dataTransfer?.files[0]
   if (file) {
-    loadLevel(file, true)
+    loadLevel(file, "edit")
   }
 })
 
 let wonLevelID = ""
 onUpdate(() => {
-  if (editing) return
+  if (activityMode !== "play") return
   if (wonLevelID === currentLevelID()) return
   // TODO: don't try to move to next level for custom levels
   if (checkLevelWon()) {
@@ -81,5 +85,4 @@ onUpdate(() => {
 initMainMenu()
 initLevelEditorGUI()
 initLevelSelect()
-setEditMode(false)
 animate()

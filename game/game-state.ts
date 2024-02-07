@@ -2,7 +2,7 @@ import { Block } from "./block"
 import { Collectable } from "./collectable"
 import { Crate } from "./crate"
 import Entity from "./entity"
-import { editing } from "./game"
+import { activityMode } from "./game"
 import { makeEntity, sortEntities } from "./helpers"
 import Snake from "./snake"
 import { CollisionLayer, ControlScheme, GameState, ParsedGameState } from "./types"
@@ -91,7 +91,7 @@ export function deserialize(state: GameState) {
   activePlayer = entities[parsed.activePlayerEntityIndex] as Snake | undefined
 
   const whichSnakeAfter = activePlayer?.id ?? ""
-  if (whichSnakeBefore !== whichSnakeAfter && !editing) {
+  if (whichSnakeBefore !== whichSnakeAfter && activityMode == "play") {
     activePlayer?.highlight()
   }
 
