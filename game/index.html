@@ -43,7 +43,7 @@
     // - `let` is not supported
     // - `for...of` is not supported
     // - `Array.from` and/or `Array.prototype.map` and/or `Array.prototype.join` is not supported
-    // - `JSON` is not supported
+    // - `JSON` is not supported (I've tried to include a polyfill with @vitejs/plugin-legacy, but that's not working, maybe because this is just a script tag and not a module?)
     // - `{variableAsKey}` is not supported
     // - Canvas is supported
 
@@ -57,7 +57,7 @@
       pre.appendChild(div)
     }
     function logEverywhere(a, b, c, d) {
-      // Log on page
+      // Format message
       //const message = Array.from(arguments).join(' ')
       //const args = new Array(arguments.length).map(i => arguments[i])
       //const message = args.join(' ')
@@ -68,6 +68,7 @@
           message += ' '
         }
       }
+      // Log on page
       logOnPage(message)
       // Log on devtools console
       try {
@@ -83,11 +84,11 @@
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4) {
             if (xhr.status !== 200) {
-              logOnPage('Failed to log on server: ' + xhr.responseText)
+              logOnPage('Failed to log on server: ' + xhr.status + ' ' + xhr.statusText + ' ' + xhr.responseText)
             }
           }
         }
-        xhr.send(JSON.stringify({ method: method, message: message }))
+        xhr.send(JSON.stringify({ message: message }))
       } catch (e) {
         logOnPage(e)
       }
@@ -119,6 +120,8 @@
       window.consoleFake.error(e)
     }
   </script>
+  <button onclick="location.reload()" autofocus>Reload</button>
+
   <div class="screen safe-center active" id="main-menu">
     <main class="safe-center">
       <h1>Snake<span class="logo-shift">Shift</span></h1>
