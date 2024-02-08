@@ -34,16 +34,24 @@ body {
   /* cursor: not-allowed; */
 }
 
-#tao-te-ching-quote {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  user-select: none;
+#tao-te-ching-quote footer {
+  margin-top: 2em;
 }
 
-#tao-te-ching-quote h2 {
+/*#tao-te-ching-quote .line-a {
   font-size: 1.3em;
+}*/
+
+#tao-te-ching-quote {
+  transform: skewX(10deg);
+}
+
+#tao-te-ching-quote>* {
+  transform: skewX(-10deg);
+}
+
+#tao-te-ching-quote .line-b {
+  margin-left: 1em;
 }
 
 #entities-bar {
