@@ -16,7 +16,10 @@ const storageKeys = {
   volume: 'snakeshift:volume',
 }
 
-const resources = {}
+const loadProgress = document.getElementById("load-progress")!
+const muteButton = document.getElementById("mute-button")!
+
+const resources: Record<string, AudioBuffer> = {}
 
 const resourcePaths = {
   move: 'move.wav',
@@ -28,11 +31,16 @@ const resourcePaths = {
 
 const totalResources = Object.keys(resourcePaths).length
 let loadedResources = 0
+const numProgressBricks = 14
+const progressBricks = []
+
 // This function can load all resources or just the hot resource bundle, but progress
 // will be indicated for the total set of resources.
-const loadResources = async (resourcePathsByID: Record<string, string>) => {
+export const loadResources = async (resourcePathsByID: Record<string, string>) => {
   const entries = Object.entries(resourcePathsByID)
   let silenceErrors = false
+  // SILENCING JUST SO I CAN SEE THE CODE, it's a big underline
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return Object.fromEntries(await Promise.all(entries.map(async ([id, path]) => {
     let resource
     try {
@@ -62,7 +70,7 @@ const loadResources = async (resourcePathsByID: Record<string, string>) => {
     return [id, resource]
   })))
 }
-let allResourcesLoadedPromise
+// export let allResourcesLoadedPromise
 
 export let muted = false
 
@@ -101,13 +109,24 @@ export const setVolume = (volume: number) => {
   }
 }
 
-export const loadSound = async (path: string) => {
+const updateMuteButton = () => {
+  muteButton.textContent = muted ? "Unmute" : "Mute"
+}
+
+const loadSound = async (path: string) => {
   const response = await fetch(path)
   if (response.ok) {
     return await audioCtx.decodeAudioData(await response.arrayBuffer())
   } else {
     throw new Error(`got HTTP ${response.status} fetching '${path}'`)
   }
+}
+
+const loadResource = loadSound // only resource type for now
+
+const showErrorMessage = (message: string, error: unknown) => {
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  alert(`${message}\n\n${error}`)
 }
 
 export const playSound = (soundName: string, playbackRate = 1, cutOffEndFraction = 0) => {
