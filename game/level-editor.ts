@@ -473,13 +473,18 @@ export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?:
   // Error Message Itself Test
   // Promise.reject(new Error("EMIT oh no!")).then((fileText) => {
   file.text().then((fileText) => {
-    loadLevelFromText(fileText, newMode, loadedCallback)
+    if (loadLevelFromText(fileText, newMode)) {
+      loadedCallback?.()
+    }
   }, (error) => {
     alert(`Failed to read level file. ${error}`)
   })
 }
 
-function loadLevelFromText(fileText: string, newMode: "edit" | "play", loadedCallback?: () => void) {
+function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean {
+  // Load level or playthrough, and return whether it succeeded...
+  // Or, may throw an error while loading a playthrough.
+
   // TODO: handle edit mode vs. play mode undo stacks
   // This is complicated, in part due to trying to snapshot for transactional error handling.
   // The snapshot may be of either set of stacks, depending on the previous edit mode state.
@@ -495,7 +500,12 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play", loadedCal
   undoable()
   // not allowing whitespace but this is just a temporary file format with no proper identifier, for playthroughs
   if (fileText.startsWith('[')) {
+    // TODO: error handling; also, I just realized loadLevelFromText will be at
+    // two places in the call stack in this case. Might be able to simplify by having
+    // loadPlaythrough (or a replacement with a new name) return the GameState string to load,
+    // which would be loaded subsequently in this function, but not recursively.
     loadPlaythrough(fileText)
+    return true // it's not a lie because it didn't throw an error™ (if it got here)
   } else {
     try {
       // TODO: set editor level state regardless of edit mode,
@@ -517,11 +527,11 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play", loadedCal
       undos.splice(0, undos.length, ...before.undos)
       redos.splice(0, redos.length, ...before.redos)
       alert(`Failed to load level. ${(error as Error).toString()}`)
-      return
+      return false
     }
     setActivityMode(newMode)
     hideScreens({ except: ["level-splash"] }) // level splash is shown early to mask loading time
-    loadedCallback?.()
+    return true
   }
 }
 
