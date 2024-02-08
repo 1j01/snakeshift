@@ -136,11 +136,14 @@ a:focus {
   outline-offset: 5px;
 }
 
-.back-to-main-menu-button {
+#game-options-bar {
   position: absolute;
   top: 10px;
   left: 10px;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .back-to-main-menu-button::before {

@@ -65,6 +65,9 @@
       </div>
     </div>
   </div>
+  <div class="screen" id="loading-screen">
+    <div id="load-progress"></div>
+  </div>
   <div class="screen" id="level-splash">
     <h1 id="level-splash-title"></h1>
   </div>
@@ -85,8 +88,16 @@
       </footer>
     </blockquote>
   </div>
-  <!-- TODO: make class an id or use a second button to better integrate with the entities bar -->
-  <button class="bw-button back-to-main-menu-button">Back</button>
+  <div id="game-options-bar">
+    <!-- TODO: make class an id or use a second button to better integrate with the entities bar -->
+    <button class="bw-button back-to-main-menu-button" aria-keyshortcuts="Escape">Back</button>
+    <button class="bw-button" id="restart-level-button" aria-keyshortcuts="R">Restart Level</button>
+    <!-- <button class="bw-button" id="undo-button" aria-keyshortcuts="Z">Undo</button> -->
+    <!-- <button class="bw-button" id="redo-button" aria-keyshortcuts="Y">Redo</button> -->
+    <!-- <button class="bw-button" id="switch-snakes-button" aria-keyshortcuts="Tab">Switch Snakes</button> -->
+    <button class="bw-button" id="mute-button" aria-keyshortcuts="M" aria-pressed="false">Mute</button>
+    <!-- <button class="bw-button" id="fullscreen-button" aria-keyshortcuts="F">Fullscreen</button> -->
+  </div>
   <div id="level-editor">
     <div id="entities-bar">
       <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="White">Snake (White)</button>

@@ -1,9 +1,14 @@
+import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
 import { activityMode, animate, restartLevel, setActivityMode } from "./game"
 import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
 import { currentLevelID, initLevelSelect, loadNextLevel } from "./level-select"
 import { initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
+
+const restartLevelButton = document.querySelector<HTMLButtonElement>('#restart-level-button')!
+
+restartLevelButton.addEventListener('click', restartLevel)
 
 addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {
@@ -51,7 +56,11 @@ addEventListener('keydown', (event) => {
       showMainMenu()
     }
     event.preventDefault()
+  } else if (event.key === 'm') {
+    toggleMute()
+    event.preventDefault()
   }
+  enableAudioViaUserGesture()
 })
 
 canvas.addEventListener('pointerdown', (event) => {
@@ -60,6 +69,8 @@ canvas.addEventListener('pointerdown', (event) => {
   // and because the default behavior is not just to select text but also deselecting it,
   // so preventDefault can make it harder to deselect text by default.
   window.getSelection()?.removeAllRanges()
+
+  enableAudioViaUserGesture()
 })
 
 canvas.addEventListener('contextmenu', (event) => {
@@ -93,4 +104,5 @@ onUpdate(() => {
 initMainMenu()
 initLevelEditorGUI()
 initLevelSelect()
+Object.assign(resources, await loadResources(resourcePaths))
 animate()
