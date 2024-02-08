@@ -37,7 +37,7 @@ export function loadNextLevel() {
   const levelButtons = [...document.querySelectorAll<HTMLButtonElement>('.level-button')]
   const index = levelButtons.indexOf(currentLevelButton)
   const levelButton = levelButtons[index + 1]
-  if (levelButton) {
+  if (levelButton && !levelButton.closest('#test-cases-not-real-levels')) {
     levelButton.click()
   } else {
     // TODO: fancy win screen
