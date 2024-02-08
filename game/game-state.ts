@@ -187,5 +187,9 @@ export function setActivePlayer(snake: Snake | undefined) {
 }
 
 export function checkLevelWon() {
+  if (window._winLevelCheat) {
+    window._winLevelCheat = false
+    return true
+  }
   return entities.filter(e => e instanceof Collectable).length === 0
 }
