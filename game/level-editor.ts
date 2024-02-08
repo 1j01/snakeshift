@@ -457,9 +457,10 @@ function loadPlaythrough(json: string) {
   if (!Array.isArray(playthrough)) {
     throw new Error("Invalid playthrough format")
   }
-  // TODO: simplify with intermediate function like loadLevelFromText
-  const blob = new Blob([playthrough[0]], { type: 'application/json' })
-  loadLevel(blob, "play")
+  // TODO: make "replay" a separate activity mode, where you can only step through the history?
+  // Not sure if I want to limit it like that, might be useful to continue playing from replay,
+  // if only for testing purposes.
+  loadLevelFromText(playthrough[0], "play")
   for (const state of playthrough.toReversed()) {
     redos.push(state)
   }
@@ -469,6 +470,16 @@ function loadPlaythrough(json: string) {
 
 // TODO: simplify with promises
 export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?: () => void) {
+  // Error Message Itself Test
+  // Promise.reject(new Error("EMIT oh no!")).then((fileText) => {
+  file.text().then((fileText) => {
+    loadLevelFromText(fileText, newMode, loadedCallback)
+  }, (error) => {
+    alert(`Failed to read level file. ${error}`)
+  })
+}
+
+function loadLevelFromText(fileText: string, newMode: "edit" | "play", loadedCallback?: () => void) {
   // TODO: handle edit mode vs. play mode undo stacks
   // This is complicated, in part due to trying to snapshot for transactional error handling.
   // The snapshot may be of either set of stacks, depending on the previous edit mode state.
@@ -476,48 +487,42 @@ export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?:
   // and then there's playthroughs to think about, which, by the way,
   // should only save the history of one level, NOT across levels.
 
-  // Error Message Itself Test
-  // Promise.reject(new Error("EMIT oh no!")).then((fileText) => {
-  file.text().then((fileText) => {
-    const before = {
-      state: serialize(),
-      undos: [...undos],
-      redos: [...redos],
-    }
-    undoable()
-    // not allowing whitespace but this is just a temporary file format with no proper identifier, for playthroughs
-    if (fileText.startsWith('[')) {
-      loadPlaythrough(fileText)
-    } else {
-      try {
-        // TODO: set editor level state regardless of edit mode,
-        // MAYBE clear editor undos/redos
-        // TODO: PRESERVE undos/redos while playing, across levels
-        deserialize(fileText)
-        if (!activePlayer) {
-          // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
-          // and anyway I have a bunch of levels saved at this point.
-          for (const entity of entities) {
-            if (entity instanceof Snake) {
-              setActivePlayer(entity)
-              break
-            }
+  const before = {
+    state: serialize(),
+    undos: [...undos],
+    redos: [...redos],
+  }
+  undoable()
+  // not allowing whitespace but this is just a temporary file format with no proper identifier, for playthroughs
+  if (fileText.startsWith('[')) {
+    loadPlaythrough(fileText)
+  } else {
+    try {
+      // TODO: set editor level state regardless of edit mode,
+      // MAYBE clear editor undos/redos
+      // TODO: PRESERVE undos/redos while playing, across levels
+      deserialize(fileText)
+      if (!activePlayer) {
+        // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
+        // and anyway I have a bunch of levels saved at this point.
+        for (const entity of entities) {
+          if (entity instanceof Snake) {
+            setActivePlayer(entity)
+            break
           }
         }
-      } catch (error) {
-        deserialize(before.state)
-        undos.splice(0, undos.length, ...before.undos)
-        redos.splice(0, redos.length, ...before.redos)
-        alert(`Failed to load level. ${(error as Error).toString()}`)
-        return
       }
-      setActivityMode(newMode)
-      hideScreens({ except: ["level-splash"] }) // level splash is shown early to mask loading time
-      loadedCallback?.()
+    } catch (error) {
+      deserialize(before.state)
+      undos.splice(0, undos.length, ...before.undos)
+      redos.splice(0, redos.length, ...before.redos)
+      alert(`Failed to load level. ${(error as Error).toString()}`)
+      return
     }
-  }, (error) => {
-    alert(`Failed to read level file. ${error}`)
-  })
+    setActivityMode(newMode)
+    hideScreens({ except: ["level-splash"] }) // level splash is shown early to mask loading time
+    loadedCallback?.()
+  }
 }
 
 export function openLevel() {
