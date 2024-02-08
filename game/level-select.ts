@@ -40,8 +40,8 @@ export function loadNextLevel() {
   if (levelButton && !levelButton.closest('#test-cases-not-real-levels')) {
     levelButton.click()
   } else {
-    // TODO: fancy win screen
-    alert("You win!")
+    const quote = document.querySelector<HTMLDivElement>('#tao-te-ching-quote')!
+    quote.classList.add('active')
   }
 }
 
