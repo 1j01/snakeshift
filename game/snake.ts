@@ -264,10 +264,27 @@ export default class Snake extends Entity {
     const hitsAhead = hitTestAllEntities(x, y, { ignoreTailOfSnake: this.growOnNextMove ? undefined : this })
     const hitsAtTail = hitTestAllEntities(tail.x, tail.y)
 
-    // TODO: prevent overlapped snake doubling back on itself
+    // Prevent moving backwards when two segments long
+    // (When one segment long, you can plausibly move in any direction,
+    // and when more than two segments long, a body segment will be in the way,
+    // but when two segments, normally the tail is excluded from hit testing,
+    // so you would be allowed to double back, but it feels weird to do a 180° turn.)
+    // This also prevents an overlapped snake from doubling back on itself,
+    // by moving into a tile occupied by a snake which is on top of this snake.
+    // (But that is just a special case of the rule that you shouldn't
+    // be able to move into a tile occupied by a snake which is on top of this snake.)
+    const movingBackwards =
+      this.segments.length > 1 &&
+      dirX === Math.sign(this.segments[1].x - head.x) &&
+      dirY === Math.sign(this.segments[1].y - head.y)
+
+    // TODO: Prevent snakes swapping depths...
+    // `movingBackwards` handles one case, but you can still
+    // loop around to a tile occupied by a snake which is on top of this snake
+    // that is not directly behind the head.
     // I could check if hitsAhead includes this snake,
     // but I don't want to add special cases if I don't need to.
-    // Also need to prevent snakes swapping depths...
+
     // There's also the case where the tail is "supporting/housing"
     // a snake but the tail will be filled with the head within the move;
     // should that allow the move, or should the head/tail seam act as a barrier?
@@ -282,10 +299,12 @@ export default class Snake extends Entity {
     // (but allow the collisions to happen so that editing isn't its own puzzle.)
     // If moves are analyzed by checking for collisions within a whole game board,
     // it could share some code. Theoretically.
+
     return {
       valid:
         (dirX === 0 || dirY === 0) &&
         (Math.abs(dirX) === 1 || Math.abs(dirY) === 1) &&
+        !movingBackwards &&
         topLayer(hitsAhead) !== head.layer &&
         topLayer(hitsAtTail) === head.layer,
       to: { x, y, width: head.width, height: head.height },
