@@ -512,7 +512,7 @@ export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?:
         return
       }
       setActivityMode(newMode)
-      hideScreens({ except: "level-splash" }) // level splash is shown early to mask loading time
+      hideScreens({ except: ["level-splash"] }) // level splash is shown early to mask loading time
       loadedCallback?.()
     }
   }, (error) => {
