@@ -25,14 +25,14 @@ const storageKeys = {
 const loadProgress = document.getElementById("load-progress")!
 const muteButton = document.getElementById("mute-button")!
 
-const resources: Record<string, AudioBuffer> = {}
+export const resources: Record<string, AudioBuffer> = {}
 
 export const resourcePaths = {
-  // move: 'audio/sound-effects/move.wav',
-  undo: 'audio/sound-effects/undo.wav',
-  redo: 'audio/sound-effects/redo.wav',
-  // winGame: 'audio/sound-effects/win-game.wav',
-  // levelStart: 'audio/sound-effects/level-start.wav',
+  // move: '/audio/sound-effects/move.wav',
+  undo: '/audio/sound-effects/undo.wav',
+  redo: '/audio/sound-effects/redo.wav',
+  // winGame: '/audio/sound-effects/win-game.wav',
+  // levelStart: '/audio/sound-effects/level-start.wav',
 }
 
 const totalResources = Object.keys(resourcePaths).length

@@ -1,4 +1,4 @@
-import { enableAudioViaUserGesture, loadResources, resourcePaths } from "./audio"
+import { enableAudioViaUserGesture, loadResources, resourcePaths, resources } from "./audio"
 import { activityMode, animate, restartLevel, setActivityMode } from "./game"
 import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
@@ -97,5 +97,5 @@ onUpdate(() => {
 initMainMenu()
 initLevelEditorGUI()
 initLevelSelect()
-await loadResources(resourcePaths)
+Object.assign(resources, await loadResources(resourcePaths))
 animate()
