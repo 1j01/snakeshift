@@ -1,4 +1,4 @@
-import { enableAudioViaUserGesture, loadResources, resourcePaths, resources } from "./audio"
+import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
 import { activityMode, animate, restartLevel, setActivityMode } from "./game"
 import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
@@ -51,6 +51,9 @@ addEventListener('keydown', (event) => {
       // From Level Editor, Level Select, or Credits, go to Main Menu
       showMainMenu()
     }
+    event.preventDefault()
+  } else if (event.key === 'm') {
+    toggleMute()
     event.preventDefault()
   }
   enableAudioViaUserGesture()
