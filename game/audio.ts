@@ -25,6 +25,20 @@ const storageKeys = {
 const loadProgress = document.getElementById("load-progress")!
 const muteButton = document.getElementById("mute-button")!
 
+export let muted = false
+
+try {
+  muted = localStorage[storageKeys.muteSoundEffects] === "true"
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  let volume = parseFloat(localStorage[storageKeys.volume])
+  if (!isFinite(volume) || volume < 0 || volume > 1) {
+    volume = 0.5
+  }
+  mainGain.gain.value = volume
+} catch (error) {
+  console.error("Couldn't initialize preferences:", error)
+}
+
 export const resources: Record<string, AudioBuffer> = {}
 
 export const resourcePaths = {
@@ -42,10 +56,9 @@ const progressBricks = []
 
 // This function can load all resources or just the hot resource bundle, but progress
 // will be indicated for the total set of resources.
-export const loadResources = async (resourcePathsByID: Record<string, string>) => {
+export const loadResources = async (resourcePathsByID: Record<string, string>): Promise<Record<string, AudioBuffer>> => {
   const entries = Object.entries(resourcePathsByID)
   let silenceErrors = false
-  // SILENCING JUST SO I CAN SEE THE CODE, it's a big underline
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return Object.fromEntries(await Promise.all(entries.map(async ([id, path]) => {
     let resource
@@ -77,8 +90,6 @@ export const loadResources = async (resourcePathsByID: Record<string, string>) =
   })))
 }
 // export let allResourcesLoadedPromise
-
-export let muted = false
 
 export const enableAudioViaUserGesture = () => {
   if (!muted) {
