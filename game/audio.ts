@@ -165,3 +165,7 @@ export const playSound = (soundName: keyof typeof resourcePaths, playbackRate = 
   }
   source.start(0)
 }
+
+muteButton.addEventListener("click", () => {
+  toggleMute()
+})
