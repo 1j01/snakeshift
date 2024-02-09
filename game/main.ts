@@ -6,6 +6,10 @@ import { currentLevelID, initLevelSelect, loadNextLevel } from "./level-select"
 import { initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
 
+const restartLevelButton = document.querySelector<HTMLButtonElement>('#restart-level-button')!
+
+restartLevelButton.addEventListener('click', restartLevel)
+
 addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {
     if (activityMode === "play") {
