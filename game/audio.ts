@@ -6,6 +6,12 @@
 // █   █ █████ ████  ███ █████       \_| '  /
 //                                         '
 
+declare global {
+  interface Window {
+    webkitAudioContext: typeof AudioContext
+  }
+}
+
 window.AudioContext ??= window.webkitAudioContext
 const audioCtx = new AudioContext()
 const mainGain = audioCtx.createGain()
@@ -21,12 +27,12 @@ const muteButton = document.getElementById("mute-button")!
 
 const resources: Record<string, AudioBuffer> = {}
 
-const resourcePaths = {
-  move: 'move.wav',
-  undo: 'undo.wav',
-  redo: 'redo.wav',
-  winGame: 'win-game.wav',
-  levelStart: 'level-start.wav',
+export const resourcePaths = {
+  // move: 'audio/sound-effects/move.wav',
+  undo: 'audio/sound-effects/undo.wav',
+  redo: 'audio/sound-effects/redo.wav',
+  // winGame: 'audio/sound-effects/win-game.wav',
+  // levelStart: 'audio/sound-effects/level-start.wav',
 }
 
 const totalResources = Object.keys(resourcePaths).length
@@ -129,7 +135,7 @@ const showErrorMessage = (message: string, error: unknown) => {
   alert(`${message}\n\n${error}`)
 }
 
-export const playSound = (soundName: string, playbackRate = 1, cutOffEndFraction = 0) => {
+export const playSound = (soundName: keyof typeof resourcePaths, playbackRate = 1, cutOffEndFraction = 0) => {
   const audioBuffer = resources[soundName]
   if (!audioBuffer) {
     throw new Error(`No AudioBuffer loaded for sound '${soundName}'`)

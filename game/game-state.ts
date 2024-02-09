@@ -1,3 +1,4 @@
+import { playSound } from "./audio"
 import { Block } from "./block"
 import { Collectable } from "./collectable"
 import { Crate } from "./crate"
@@ -30,17 +31,34 @@ export function undoable() {
   undos.push(serialize())
   redos.length = 0
 }
+let recentUndoSound = 0
+let recentRedoSound = 0
 export function undo() {
-  stepHistory(undos, redos)
+  const didSomething = stepHistory(undos, redos)
+  if (didSomething) {
+    playSound("undo", 1 / (1 + recentUndoSound / 2), Math.min(0.2, recentUndoSound / 5))
+    recentUndoSound += 1
+    setTimeout(() => {
+      recentUndoSound -= 1
+    }, 400)
+  }
 }
 export function redo() {
-  stepHistory(redos, undos)
+  const didSomething = stepHistory(redos, undos)
+  if (didSomething) {
+    playSound("redo", (1 + recentRedoSound / 10))
+    recentRedoSound += 1
+    setTimeout(() => {
+      recentRedoSound -= 1
+    }, 400)
+  }
 }
 function stepHistory(from: GameState[], to: GameState[]) {
   const state = from.pop()
-  if (!state) return
+  if (!state) return false
   to.push(serialize())
   deserialize(state)
+  return true
 }
 const FORMAT_VERSION = 2
 export function serialize(): GameState {
