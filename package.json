@@ -11,6 +11,8 @@
     "lint": "cspell-cli lint . && tsc --noEmit && eslint -c .eslintrc.cjs --ext .ts game"
   },
   "devDependencies": {
+    "@playwright/test": "^1.45.1",
+    "@types/node": "^20.14.10",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "cspell-cli": "^8.3.0",

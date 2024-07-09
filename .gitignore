@@ -1,4 +1,10 @@
 
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # Temporary backup files from text editors
 *~
 
