@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5569",
     "build": "vite build",
     "serve": "vite preview",
     "lint": "cspell-cli lint . && tsc --noEmit && eslint -c .eslintrc.cjs --ext .ts game"
