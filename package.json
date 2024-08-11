@@ -8,7 +8,8 @@
     "dev": "vite --port 5569",
     "build": "vite build",
     "serve": "vite preview",
-    "lint": "cspell-cli lint . && tsc --noEmit && eslint -c .eslintrc.cjs --ext .ts game"
+    "lint": "cspell-cli lint . && tsc --noEmit && eslint -c .eslintrc.cjs --ext .ts game",
+    "test": "playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.45.1",
