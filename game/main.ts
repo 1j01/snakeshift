@@ -18,7 +18,7 @@ addEventListener('keydown', (event) => {
       setActivityMode("play")
     }
     event.preventDefault()
-  } else if (event.key === 'z') {
+  } else if (event.key === 'z' || event.key === 'Z') {
     // Shift by itself cycling players breaks (Ctrl+)Shift+Z redo in play mode.
     // I could handle it specially, preserving redos in a separate stack
     // until you release Shift, or I could make it not cycle players
