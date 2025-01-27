@@ -30,6 +30,10 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
   cleanup()
   activityMode = newMode
   document.body.classList.toggle('editing', activityMode === "edit")
+
+  // TODO: handle setting tab title in one place; maybe unset `currentLevelButton` in level-select.ts
+  document.title = "Snakeshift" + (activityMode === "edit" ? " - Level Editor" : "")
+
   if (activityMode === "edit") {
     cleanup = handleInputForLevelEditing(canvas)
     if (editorState) {

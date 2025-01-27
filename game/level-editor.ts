@@ -490,7 +490,8 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
   // The snapshot may be of either set of stacks, depending on the previous edit mode state.
   // I also want to preserve the undo history across levels,
   // and then there's playthroughs to think about, which, by the way,
-  // should only save the history of one level, NOT across levels.
+  // should only save the history of one level, NOT across levels,
+  // in order to store proof of playability for a level without unnecessary data.
 
   const before = {
     state: serialize(),

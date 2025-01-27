@@ -13,6 +13,7 @@ export function initLevelSelect() {
       // TODO: error handling; simplify with promises
       void loadLevelFile(levelURL, () => {
         currentLevelButton = button
+        document.title = `Snakeshift - ${button.textContent}`
       })
     })
   }
