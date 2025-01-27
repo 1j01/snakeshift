@@ -48,6 +48,11 @@ export function loadNextLevel() {
   }
 }
 
+// Would've called it unloadCurrentLevel, but it doesn't do much unloading...
+export function unsetCurrentLevel() {
+  currentLevelButton = undefined
+}
+
 export function currentLevelID() {
   return currentLevelButton?.getAttribute('data-level') ?? ''
 }

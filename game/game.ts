@@ -1,6 +1,7 @@
 import { clearLevel, deserialize, entities, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
+import { unsetCurrentLevel } from "./level-select"
 import { canvas, draw } from "./rendering"
 import { GameState } from "./types"
 
@@ -31,7 +32,8 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
   activityMode = newMode
   document.body.classList.toggle('editing', activityMode === "edit")
 
-  // TODO: handle setting tab title in one place; maybe unset `currentLevelButton` in level-select.ts
+  unsetCurrentLevel()
+  // TODO: handle setting tab title in one place?
   document.title = "Snakeshift" + (activityMode === "edit" ? " - Level Editor" : "")
 
   if (activityMode === "edit") {
