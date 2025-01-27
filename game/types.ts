@@ -19,6 +19,7 @@ export interface ParsedGameState {
   entities: Entity[]
   entityTypes: string[]
   activePlayerEntityIndex: number
+  levelId?: string
 }
 export type GameState = string
 

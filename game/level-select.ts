@@ -1,3 +1,4 @@
+import { activityMode } from "./game"
 import { loadLevel } from "./level-editor"
 import { showLevelSplash } from "./menus"
 
@@ -13,7 +14,7 @@ export function initLevelSelect() {
       // TODO: error handling; simplify with promises
       void loadLevelFile(levelURL, () => {
         currentLevelButton = button
-        document.title = `Snakeshift - ${button.textContent}`
+        updatePageTitle()
       })
     })
   }
@@ -53,6 +54,24 @@ export function unsetCurrentLevel() {
   currentLevelButton = undefined
 }
 
+export function setCurrentLevel(id?: string) {
+  if (!id) {
+    unsetCurrentLevel()
+    return
+  }
+  currentLevelButton = document.querySelector<HTMLButtonElement>(`[data-level="${id}"]`) ?? undefined
+}
+
 export function currentLevelID() {
   return currentLevelButton?.getAttribute('data-level') ?? ''
+}
+
+export function updatePageTitle() {
+  if (currentLevelButton) {
+    document.title = `Snakeshift - ${currentLevelButton.textContent}`
+  } else if (activityMode === "edit") {
+    document.title = "Snakeshift - Level Editor"
+  } else {
+    document.title = "Snakeshift"
+  }
 }

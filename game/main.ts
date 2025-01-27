@@ -98,6 +98,8 @@ onUpdate(() => {
     wonLevelID = currentLevelID()
     console.log('Level won!', wonLevelID)
     loadNextLevel()
+  } else {
+    wonLevelID = ""
   }
 })
 

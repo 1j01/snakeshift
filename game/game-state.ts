@@ -5,6 +5,7 @@ import { Crate } from "./crate"
 import Entity from "./entity"
 import { activityMode } from "./game"
 import { makeEntity, sortEntities } from "./helpers"
+import { currentLevelID, setCurrentLevel, updatePageTitle } from "./level-select"
 import Snake from "./snake"
 import { CollisionLayer, ControlScheme, GameState, ParsedGameState } from "./types"
 
@@ -34,7 +35,7 @@ export function undoable() {
 let recentUndoSound = 0
 let recentRedoSound = 0
 export function undo() {
-  const didSomething = stepHistory(undos, redos)
+  const didSomething = stepHistory(undos, redos, true)
   if (didSomething) {
     playSound("undo", 1 / (1 + recentUndoSound / 2), Math.min(0.2, recentUndoSound / 5))
     recentUndoSound += 1
@@ -53,10 +54,19 @@ export function redo() {
     }, 400)
   }
 }
-function stepHistory(from: GameState[], to: GameState[]) {
+function stepHistory(from: GameState[], to: GameState[], skipOverWinState = false) {
   const state = from.pop()
   if (!state) return false
-  to.push(serialize())
+  const oldState = serialize()
+  to.push(oldState)
+  // TODO: being lazy with extra parsing here
+  // console.log("skipOverWinState", skipOverWinState, JSON.parse(oldState).levelId, JSON.parse(state).levelId)
+  if (skipOverWinState && JSON.parse(oldState).levelId !== JSON.parse(state).levelId) {
+    // Skip over the state where the level was won
+    // Don't pass on skipOverWinState because we don't want to recurse more than once.
+    stepHistory(from, to)
+    return true
+  }
   deserialize(state)
   return true
 }
@@ -68,6 +78,7 @@ export function serialize(): GameState {
     entities,
     entityTypes: entities.map(e => e.constructor.name),
     activePlayerEntityIndex: entities.indexOf(activePlayer!),
+    levelId: currentLevelID(),
   })
 }
 export function deserialize(state: GameState) {
@@ -112,6 +123,9 @@ export function deserialize(state: GameState) {
   if (whichSnakeBefore !== whichSnakeAfter && activityMode == "play") {
     activePlayer?.highlight()
   }
+
+  setCurrentLevel(parsed.levelId)
+  updatePageTitle()
 
   postUpdate()
 }
