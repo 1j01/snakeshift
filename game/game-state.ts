@@ -211,3 +211,9 @@ export function checkLevelWon() {
   }
   return entities.filter(e => e instanceof Collectable).length === 0
 }
+
+declare global {
+  interface Window {
+    _winLevelCheat?: boolean;
+  }
+}
