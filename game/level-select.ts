@@ -38,7 +38,9 @@ export function loadNextLevel() {
   const levelButtons = [...document.querySelectorAll<HTMLButtonElement>('.level-button')]
   const index = levelButtons.indexOf(currentLevelButton)
   const levelButton = levelButtons[index + 1]
-  if (levelButton && !levelButton.closest('#test-cases-not-real-levels')) {
+  // Don't progress from real levels to the test set of levels, but do progress within either set
+  // Could make this clearer by having a separate set for navigation tests, and/or overriding the main set of levels for the tests...
+  if (levelButton && (!!currentLevelButton.closest('#test-cases-not-real-levels') || !levelButton.closest('#test-cases-not-real-levels'))) {
     levelButton.click()
   } else {
     const winScreen = document.querySelector<HTMLDivElement>('#game-win-screen')!

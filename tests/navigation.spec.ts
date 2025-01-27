@@ -38,5 +38,16 @@ test('test', async ({ page }) => {
     }
   });
   await page.getByRole('button', { name: 'Snake (White)' }).press('ControlOrMeta+z');
-  await page.goto('http://localhost:5569/');
+  // TODO: test that snake was added and then removed
+  // and split this into multiple tests, probably multiple files since this is navigation.spec.ts
+});
+
+test('undoing should go back a level without immediately winning it', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await page.keyboard.press('ArrowRight');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move right to win\)$/);
+  await page.keyboard.press('ControlOrMeta+z');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
 });
