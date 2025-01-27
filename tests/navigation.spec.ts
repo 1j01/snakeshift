@@ -47,7 +47,7 @@ test('undoing should go back a level without immediately winning it', async ({ p
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
   await page.keyboard.press('ArrowRight');
-  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move right to win\)$/);
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
   await page.keyboard.press('ControlOrMeta+z');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
 });
