@@ -143,12 +143,17 @@ export default class Snake extends Entity {
     const angle = this.segments[1] ? Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x) : Math.PI / 2
     ctx.rotate(angle)
 
-    // eye
-    const eyeRadius = 1 / 7
+    // eyes
     ctx.beginPath()
-    ctx.arc(0, 0, eyeRadius, 0, Math.PI * 2, true)
+    // const eyeRadius = 1 / 7  // for single eye
+    // ctx.arc(0, 0, eyeRadius, 0, Math.PI * 2, true)  // single eye
+    const eyeRadius = 1 / 8
+    const eyeDistance = 0.45
+    ctx.arc(0, eyeDistance / 2, eyeRadius, 0, Math.PI * 2, true)
+    ctx.arc(0, -eyeDistance / 2, eyeRadius, 0, Math.PI * 2, true)
     ctx.fillStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
     ctx.fill()
+
     // tongue
     const msSinceHighlight = performance.now() - this._highlightTime
     const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))

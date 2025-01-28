@@ -7,7 +7,7 @@
   - probably need texture-based rendering to sort this out
   - oh, could prevent key repeat on switching snakes, and make it keep the highlight as long as the key is held
 - feels like you shouldn't be able to go on top of another snake's head, like you'd eat the snake
-  - I have since made collectables more distinct from snake eyes by making them bigger, changing their shape to be pointy, and animating them, but I could also try giving the snake two eyes
+  - I have since made collectables more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
 
 - test that when switching from play to edit mode, should always stay on the same level
 - test that reset (R) should never move to a different level
