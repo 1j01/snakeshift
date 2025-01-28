@@ -22,6 +22,10 @@ export function initLevelSelect() {
 
 export async function loadLevelFile(levelURL: string, loadedCallback?: () => void) {
   const request = await fetch(levelURL)
+  if (!request.ok) {
+    alert(`Failed to load level ${JSON.stringify(levelURL)}: ${request.statusText}`)
+    return
+  }
   const blob = await request.blob()
   loadLevel(blob, "play", loadedCallback)
 }
