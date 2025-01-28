@@ -2,9 +2,15 @@ import { RectangularEntity } from "./rectangular-entity"
 import { CollisionLayer } from "./types"
 
 export class Collectable extends RectangularEntity {
-  static readonly VISUAL_SIZE = 0.2
+  static readonly VISUAL_SIZE = 0.8
 
   solid = false
+
+  _time = 0
+
+  step(time: number): void { // weird that this isn't a delta
+    this._time = time
+  }
 
   draw(ctx: CanvasRenderingContext2D) {
     ctx.save()
@@ -14,10 +20,13 @@ export class Collectable extends RectangularEntity {
     ctx.translate(this.x, this.y)
     ctx.scale(this.width, this.height)
     ctx.translate(1 / 2, 1 / 2)
-    ctx.rotate(Math.PI / 4)
+    ctx.rotate(Math.sin(this._time / 1000 + this.x / 10 + this.y / 10) * Math.PI / 12)
     ctx.beginPath()
-    // Don't use scale() as it will scale the stroke width
-    ctx.rect(-Collectable.VISUAL_SIZE / 2, -Collectable.VISUAL_SIZE / 2, Collectable.VISUAL_SIZE, Collectable.VISUAL_SIZE)
+    ctx.moveTo(0, -Collectable.VISUAL_SIZE / 2)
+    for (let i = 0; i < 4; i++) {
+      ctx.rotate(Math.PI / 2)
+      ctx.quadraticCurveTo(0, 0, 0, -Collectable.VISUAL_SIZE / 2)
+    }
     ctx.stroke()
     ctx.fill()
     ctx.restore()
