@@ -2,7 +2,7 @@ import { RectangularEntity } from "./rectangular-entity"
 import { CollisionLayer } from "./types"
 
 export class Collectable extends RectangularEntity {
-  static readonly VISUAL_SIZE = 0.8
+  static readonly VISUAL_SIZE = 0.5
 
   solid = false
 
@@ -20,7 +20,13 @@ export class Collectable extends RectangularEntity {
     ctx.translate(this.x, this.y)
     ctx.scale(this.width, this.height)
     ctx.translate(1 / 2, 1 / 2)
-    ctx.rotate(Math.sin(this._time / 1000 + this.x / 10 + this.y / 10) * Math.PI / 12)
+    // ctx.rotate(Math.sin(this._time / 1000 + this.x / 10 + this.y / 10) * Math.PI / 12)
+    const scale = Math.sin(this._time / 1000 + this.x / 5 + this.y / 5) * 0.3 + 1
+    ctx.scale(scale, scale)
+    // ctx.scale(
+    //   Math.sin(this._time / 1000 + this.x / 5 + this.y / 5) * 0.3 + 1,
+    //   Math.sin(this._time / 1000 + this.x / 5 - this.y / 5) * 0.3 + 1
+    // )
     ctx.beginPath()
     ctx.moveTo(0, -Collectable.VISUAL_SIZE / 2)
     for (let i = 0; i < 4; i++) {
