@@ -4,20 +4,21 @@ test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/');
 });
 
-test('has title', async ({ page }) => {
+test('basic navigation', async ({ page }) => {
   await expect(page).toHaveTitle(/Snakeshift/);
-});
-
-test('test', async ({ page }) => {
   await page.getByRole('button', { name: 'Play' }).click();
   await page.keyboard.press('ArrowRight');
   await page.getByRole('button', { name: '← Back' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift$/);
   await page.getByRole('button', { name: 'Play' }).click();
   await page.getByRole('button', { name: '← Back' }).click();
   await page.getByRole('button', { name: 'Level Select' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift$/);
   await page.getByRole('button', { name: 'Security by Obscurity' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Security by Obscurity$/);
   await page.getByRole('button', { name: '← Back' }).click();
   await page.getByRole('button', { name: 'Level Editor' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
   await page.getByRole('button', { name: 'Snake (White)' }).click();
   await page.locator('.editing > canvas').click({
     position: {
@@ -42,7 +43,7 @@ test('test', async ({ page }) => {
   // and split this into multiple tests, probably multiple files since this is navigation.spec.ts
 });
 
-test('undoing should go back a level without immediately winning it', async ({ page }) => {
+test('undoing should go back a level without immediately winning it (and it should still be winnable)', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
@@ -50,4 +51,14 @@ test('undoing should go back a level without immediately winning it', async ({ p
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
   await page.keyboard.press('ControlOrMeta+z');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await page.keyboard.press('ArrowRight');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+});
+
+test.skip('you should be able to win a level after returning to it via undo... even if some unknown conditions occur', async ({ page }) => {
+  // not sure when the problem occurs
+});
+
+test.skip('undoing/redoing across level changes should not drop or add extra history states', async ({ page }) => {
+  // not sure how to test this yet
 });
