@@ -1,7 +1,7 @@
 import { Block } from './block'
 import Entity from './entity'
 import { setActivityMode } from './game'
-import { activePlayer, clearLevel, deserialize, entities, onResize, onUpdate, postUpdate, redo, redos, serialize, setActivePlayer, undoable, undos } from './game-state'
+import { activePlayer, clearLevel, deserialize, entities, levelInfo, onResize, onUpdate, postUpdate, redo, redos, serialize, setActivePlayer, undoable, undos } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
 import { hideScreens } from './menus'
 import { RectangularEntity } from './rectangular-entity'
@@ -39,6 +39,10 @@ export function initLevelEditorGUI() {
   const eraserButton = document.querySelector(".tool-button[data-tool='Eraser'")!
   const moveButton = document.querySelector(".tool-button[data-tool='Move'")!
   const clearButton = document.querySelector("#clear-button")!
+  const levelInfoButton = document.querySelector<HTMLButtonElement>("#level-info-button")!
+  const levelInfoEditor = document.querySelector<HTMLDialogElement>('#level-info-editor')!
+  const levelInfoEditorOKButton = document.querySelector<HTMLDialogElement>('#level-info-editor-ok-button')!
+  const levelInfoEditorCancelButton = document.querySelector<HTMLDialogElement>('#level-info-editor-cancel-button')!
   eraserButton.addEventListener('click', () => {
     tool = Tool.Eraser
     selectButton(eraserButton)
@@ -49,6 +53,36 @@ export function initLevelEditorGUI() {
   })
   clearButton.addEventListener('click', () => {
     clearLevel()
+  })
+  levelInfoButton.addEventListener('click', () => {
+    // The dialog is already shown/hidden automatically with popover and popovertarget attributes,
+    // but we need to update the form fields.
+    const widthInput = levelInfoEditor.querySelector<HTMLInputElement>('#level-width')!
+    const heightInput = levelInfoEditor.querySelector<HTMLInputElement>('#level-height')!
+    // const nameInput = levelInfoEditor.querySelector<HTMLInputElement>('#level-name')!
+    // const authorInput = levelInfoEditor.querySelector<HTMLInputElement>('#level-author')!
+    // const descriptionInput = levelInfoEditor.querySelector<HTMLInputElement>('#level-description')!
+    widthInput.value = levelInfo.width.toString()
+    heightInput.value = levelInfo.height.toString()
+  })
+  levelInfoEditor.addEventListener('close', () => {
+    console.log(levelInfoEditor.returnValue)
+  })
+  levelInfoEditorOKButton.addEventListener('click', (event) => {
+    event.preventDefault()
+    levelInfo.width = parseInt(levelInfoEditor.querySelector<HTMLInputElement>('#level-width')!.value)
+    levelInfo.height = parseInt(levelInfoEditor.querySelector<HTMLInputElement>('#level-height')!.value)
+    // levelInfo.name = nameInput.value
+    // levelInfo.author = authorInput.value
+    // levelInfo.description = descriptionInput.value
+    postUpdate() // I guess.
+    // levelInfoEditor.close() // doesn't work. Ugh, OK, I guess I shouldn't use popover for this.
+    levelInfoEditor.hidePopover()
+  })
+  levelInfoEditorCancelButton.addEventListener('click', (event) => {
+    event.preventDefault()
+    // levelInfoEditor.close()
+    levelInfoEditor.hidePopover()
   })
 
   for (const button of entityButtons) {

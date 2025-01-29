@@ -67,6 +67,21 @@ body:not(.editing) #entities-bar {
   opacity: 0;
 }
 
+#level-info-editor .control-row {
+  display: flex;
+  margin: 5px 0;
+}
+
+#level-info-editor .control-row label {
+  width: 130px;
+  display: inline-block;
+}
+
+#level-info-editor .control-row input,
+#level-info-editor .control-row textarea {
+  width: 200px;
+}
+
 .bw-button {
   display: flex;
   align-items: center;
