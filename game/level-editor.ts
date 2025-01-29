@@ -55,8 +55,7 @@ export function initLevelEditorGUI() {
     clearLevel()
   })
   levelInfoButton.addEventListener('click', () => {
-    // The dialog is already shown/hidden automatically with popover and popovertarget attributes,
-    // but we need to update the form fields.
+    levelInfoEditor.showModal()
     const widthInput = levelInfoEditor.querySelector<HTMLInputElement>('#level-width')!
     const heightInput = levelInfoEditor.querySelector<HTMLInputElement>('#level-height')!
     // const nameInput = levelInfoEditor.querySelector<HTMLInputElement>('#level-name')!
@@ -76,13 +75,11 @@ export function initLevelEditorGUI() {
     // levelInfo.author = authorInput.value
     // levelInfo.description = descriptionInput.value
     postUpdate() // I guess.
-    // levelInfoEditor.close() // doesn't work. Ugh, OK, I guess I shouldn't use popover for this.
-    levelInfoEditor.hidePopover()
+    levelInfoEditor.close()
   })
   levelInfoEditorCancelButton.addEventListener('click', (event) => {
     event.preventDefault()
-    // levelInfoEditor.close()
-    levelInfoEditor.hidePopover()
+    levelInfoEditor.close()
   })
 
   for (const button of entityButtons) {
