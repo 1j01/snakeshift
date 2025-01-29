@@ -195,3 +195,20 @@ a:focus {
   align-items: center;
   /* justify-content: center; */
 }
+
+kbd:not(.grouping-kbd) {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  line-height: 10px;
+  color: #000000;
+  vertical-align: middle;
+  background-color: #dddddd;
+  border: 1px solid #fefbf0;
+  border-left-color: #dddddd;
+  border-bottom-color: #dddddd;
+  border-radius: 6px;
+  box-shadow: 1px -1px 0 #fefbf0, 3px 2px 0 #808080;
+  margin-right: 2px;
+  text-shadow: none;
+}
