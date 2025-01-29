@@ -149,13 +149,17 @@
         <td style="text-align: left;">
           Use the arrow keys
           <span style="display: inline-block;">
-            <kbd style="margin-left: calc(1.45em + 4px);margin-bottom:-0.1em">↑</kbd><br aria-hidden="true">
-            <kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd>
+            <kbd style="opacity:0;user-select:none;margin-bottom:-0.1em" aria-hidden="true">_</kbd><!--
+            --><kbd style="margin-bottom:-0.1em">↑</kbd><!--
+            --><br style="user-select:none" aria-hidden="true"><!--
+            --><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd>
           </span>
           or
           <span style="display: inline-block;">
-            <kbd style="margin-left: calc(1.2em + 4px);margin-bottom:-0.1em">W</kbd><br aria-hidden="true">
-            <kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+            <kbd style="opacity:0;user-select:none;margin-bottom:-0.1em;margin-left:-0.2em" aria-hidden="true">Q</kbd><!--
+            --><kbd style="margin-bottom:-0.1em">W</kbd><!--
+            --><br style="user-select:none" aria-hidden="true"><!--
+            --><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
           </span>
           or
           <!-- vi-style -->
@@ -165,11 +169,15 @@
           </span>
           or numpad
           <span style="display: inline-block;">
-            <kbd style="margin-left: calc(1.45em + 4px);margin-bottom:-0.1em">8</kbd><br aria-hidden="true">
-            <kbd>4</kbd><kbd style="opacity: 0;" aria-hidden="true">5</kbd><kbd>6</kbd><br aria-hidden="true">
-            <kbd style="margin-left: calc(1.45em + 4px);margin-top:-0.1em">2</kbd>
+            <kbd style="opacity:0;user-select:none;margin-bottom:-0.1em" aria-hidden="true">7</kbd><!--
+            --><kbd style="margin-bottom:-0.1em">8</kbd><br style="user-select:none" aria-hidden="true"><!--
+            --><kbd>4</kbd><kbd style="opacity:0;user-select:none;" aria-hidden="true">5</kbd><kbd>6</kbd><!--
+            --><br style="user-select:none" aria-hidden="true"><!--
+            why does this one line break sneak into the clipboard whereas user-select:none works for the others?
+            --><kbd style="opacity:0;user-select:none;margin-top:-0.1em" aria-hidden="true">1</kbd><!--
+            --><kbd style="margin-top:-0.1em">2</kbd>
+          </span>
         </td>
-        </p>
       </tr>
       <tr>
         <td style="text-align: right;"><strong>Gamepad:</strong></td>

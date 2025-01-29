@@ -199,7 +199,8 @@ a:focus {
 kbd:not(.grouping-kbd) {
   display: inline-block;
   padding: 3px 5px;
-  font: 11px SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 0.8em;
   line-height: 10px;
   color: #000000;
   vertical-align: middle;
