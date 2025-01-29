@@ -1,7 +1,7 @@
 import { clearLevel, deserialize, entities, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
-import { unsetCurrentLevel, updatePageTitle } from "./level-select"
+import { unsetCurrentLevel, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { canvas, draw } from "./rendering"
 import { GameState } from "./types"
 
@@ -33,7 +33,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
   document.body.classList.toggle('editing', activityMode === "edit")
 
   unsetCurrentLevel()
-  updatePageTitle()
+  updatePageTitleAndLevelSpecificOverlays()
 
   if (activityMode === "edit") {
     cleanup = handleInputForLevelEditing(canvas)

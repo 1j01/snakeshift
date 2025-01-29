@@ -140,7 +140,7 @@ a:focus {
   position: absolute;
   top: 10px;
   left: 10px;
-  z-index: 2;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -155,7 +155,7 @@ a:focus {
 #main-menu {
   /* above back button (bit of a hack...) */
   /* TODO: hide back button properly, for (in)accessibility */
-  z-index: 3;
+  z-index: 4;
 }
 
 .screen {
@@ -170,11 +170,28 @@ a:focus {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 2;
   background-color: #000;
   color: #fff;
 }
 
 .screen:not(.active) {
   display: none;
+}
+
+.level-specific-overlay:not([hidden]) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  color: #fff;
+  text-shadow: calc(0.0em / 50) calc(10.0em / 50) calc(0.02em / 50) #000, calc(9.8em / 50) calc(2.1em / 50) calc(0.02em / 50) #000, calc(4.2em / 50) calc(-9.1em / 50) calc(0.02em / 50) #000, calc(-8.0em / 50) calc(-6.0em / 50) calc(0.02em / 50) #000, calc(-7.6em / 50) calc(6.5em / 50) calc(0.02em / 50) #000, calc(4.8em / 50) calc(8.8em / 50) calc(0.02em / 50) #000, calc(9.6em / 50) calc(-2.8em / 50) calc(0.02em / 50) #000, calc(-0.7em / 50) calc(-10.0em / 50) calc(0.02em / 50) #000, calc(-9.9em / 50) calc(-1.5em / 50) calc(0.02em / 50) #000, calc(-3.5em / 50) calc(9.4em / 50) calc(0.02em / 50) #000, calc(8.4em / 50) calc(5.4em / 50) calc(0.02em / 50) #000, calc(7.1em / 50) calc(-7.0em / 50) calc(0.02em / 50) #000, calc(-5.4em / 50) calc(-8.4em / 50) calc(0.02em / 50) #000, calc(-9.4em / 50) calc(3.5em / 50) calc(0.02em / 50) #000, calc(1.4em / 50) calc(9.9em / 50) calc(0.02em / 50) #000, calc(10.0em / 50) calc(0.8em / 50) calc(0.02em / 50) #000, calc(2.9em / 50) calc(-9.6em / 50) calc(0.02em / 50) #000, calc(-8.7em / 50) calc(-4.8em / 50) calc(0.02em / 50) #000, calc(-6.6em / 50) calc(7.5em / 50) calc(0.02em / 50) #000, calc(5.9em / 50) calc(8.0em / 50) calc(0.02em / 50) #000, calc(9.1em / 50) calc(-4.1em / 50) calc(0.02em / 50) #000, calc(-2.1em / 50) calc(-9.8em / 50) calc(0.02em / 50) #000, calc(-10.0em / 50) calc(-0.1em / 50) calc(0.02em / 50) #000, calc(-2.2em / 50) calc(9.8em / 50) calc(0.02em / 50) #000, calc(9.1em / 50) calc(4.2em / 50) calc(0.02em / 50) #000, calc(6.1em / 50) calc(-8.0em / 50) calc(0.02em / 50) #000, calc(-6.5em / 50) calc(-7.6em / 50) calc(0.02em / 50) #000, calc(-8.8em / 50) calc(4.7em / 50) calc(0.02em / 50) #000, calc(2.7em / 50) calc(9.6em / 50) calc(0.02em / 50) #000, calc(10.0em / 50) calc(-0.6em / 50) calc(0.02em / 50) #000, calc(1.5em / 50) calc(-9.9em / 50) calc(0.02em / 50) #000, calc(-9.3em / 50) calc(-3.6em / 50) calc(0.02em / 50) #000, calc(-5.5em / 50) calc(8.4em / 50) calc(0.02em / 50) #000, calc(7.0em / 50) calc(7.2em / 50) calc(0.02em / 50) #000, calc(8.5em / 50) calc(-5.3em / 50) calc(0.02em / 50) #000, calc(-3.4em / 50) calc(-9.4em / 50) calc(0.02em / 50) #000, calc(-9.9em / 50) calc(1.3em / 50) calc(0.02em / 50) #000, calc(-0.8em / 50) calc(10.0em / 50) calc(0.02em / 50) #000, calc(9.6em / 50) calc(2.9em / 50) calc(0.02em / 50) #000, calc(4.9em / 50) calc(-8.7em / 50) calc(0.02em / 50) #000, calc(-7.5em / 50) calc(-6.7em / 50) calc(0.02em / 50) #000, calc(-8.1em / 50) calc(5.9em / 50) calc(0.02em / 50) #000, calc(4.0em / 50) calc(9.2em / 50) calc(0.02em / 50) #000, calc(9.8em / 50) calc(-2.0em / 50) calc(0.02em / 50) #000, calc(0.2em / 50) calc(-10.0em / 50) calc(0.02em / 50) #000, calc(-9.7em / 50) calc(-2.3em / 50) calc(0.02em / 50) #000, calc(-4.3em / 50) calc(9.0em / 50) calc(0.02em / 50) #000, calc(7.9em / 50) calc(6.1em / 50) calc(0.02em / 50) #000;
+  font-size: 2vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
 }

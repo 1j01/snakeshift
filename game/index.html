@@ -140,6 +140,20 @@
       <button id="redo-button">Redo</button>
     </div> -->
   </div>
+  <div class="level-specific-overlay" data-for-level="/levels/easy/001-movement.json" hidden>
+    <h2>How to Move</h2>
+    <!-- <p>You can use a gamepad, keyboard, mouse, pen, or touch to play.</p> -->
+    <p><strong>Keyboard</strong>: Arrow keys, WASD, HJKL, or numpad</p>
+    <p><strong>Gamepad</strong>: Either use the ✜ D-pad, or press Ⓐ while holding the left stick in a direction.</p>
+    <p><strong>Mouse/pen/touch</strong>: Click on the cell you want to move to.</p>
+  </div>
+  <div class="level-specific-overlay" data-for-level="/levels/easy/lock-and-key.json" hidden>
+    <!-- It is actually possible to get stuck on this level. TODO: detect this? I don't want to clutter the tutorial text...-->
+    <p>Press <kbd>Tab</kbd> to switch snakes.</p>
+  </div>
+  <div class="level-specific-overlay" data-for-level="/levels/easy/bridge-out-of-multiple-snakes.json" hidden>
+    <p>Press <kbd>Z</kbd> to undo, or <kbd>R</kbd> to restart the level.</p>
+  </div>
   <script type="module" src="./main.ts"></script>
 </body>
 

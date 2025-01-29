@@ -14,7 +14,7 @@ export function initLevelSelect() {
       // TODO: error handling; simplify with promises
       void loadLevelFile(levelURL, () => {
         currentLevelButton = button
-        updatePageTitle()
+        updatePageTitleAndLevelSpecificOverlays()
       })
     })
   }
@@ -63,19 +63,22 @@ export function setCurrentLevel(id?: string) {
     unsetCurrentLevel()
     return
   }
-  currentLevelButton = document.querySelector<HTMLButtonElement>(`[data-level="${id}"]`) ?? undefined
+  currentLevelButton = document.querySelector<HTMLButtonElement>(`button[data-level="${id}"]`) ?? undefined
 }
 
 export function currentLevelID() {
   return currentLevelButton?.getAttribute('data-level') ?? ''
 }
 
-export function updatePageTitle() {
+export function updatePageTitleAndLevelSpecificOverlays() {
   if (currentLevelButton) {
     document.title = `Snakeshift - ${currentLevelButton.textContent}`
   } else if (activityMode === "edit") {
     document.title = "Snakeshift - Level Editor"
   } else {
     document.title = "Snakeshift"
+  }
+  for (const overlayElement of document.querySelectorAll<HTMLDivElement>('.level-specific-overlay')) {
+    overlayElement.hidden = overlayElement.dataset.forLevel !== currentLevelID()
   }
 }

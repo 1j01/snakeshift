@@ -5,7 +5,7 @@ import { Crate } from "./crate"
 import Entity from "./entity"
 import { activityMode } from "./game"
 import { makeEntity, sortEntities } from "./helpers"
-import { currentLevelID, setCurrentLevel, updatePageTitle } from "./level-select"
+import { currentLevelID, setCurrentLevel, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import Snake from "./snake"
 import { CollisionLayer, ControlScheme, GameState, ParsedGameState } from "./types"
 
@@ -125,7 +125,7 @@ export function deserialize(state: GameState) {
   }
 
   setCurrentLevel(parsed.levelId)
-  updatePageTitle()
+  updatePageTitleAndLevelSpecificOverlays()
 
   postUpdate()
 }
