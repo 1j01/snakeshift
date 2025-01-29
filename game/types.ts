@@ -16,6 +16,10 @@ export enum CollisionLayer {
 export interface ParsedGameState {
   format: string
   formatVersion: number
+  levelInfo: {
+    width: number
+    height: number
+  }
   entities: Entity[]
   entityTypes: string[]
   activePlayerEntityIndex: number

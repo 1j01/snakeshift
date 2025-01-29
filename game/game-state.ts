@@ -11,12 +11,17 @@ import { CollisionLayer, ControlScheme, GameState, ParsedGameState } from "./typ
 
 export const entities: Entity[] = []
 
+const defaultLevelInfo = {
+  width: 16,
+  height: 16,
+}
+
 export const levelInfo = {
   // name: "Level 1",
   // description: "This is a level.",
   // par: 10,
-  width: 16,
-  height: 16,
+  width: defaultLevelInfo.width,
+  height: defaultLevelInfo.height,
 }
 
 // Note: entities can be reordered, so this is safer than
@@ -70,11 +75,12 @@ function stepHistory(from: GameState[], to: GameState[], skipOverWinState = fals
   deserialize(state)
   return true
 }
-const FORMAT_VERSION = 2
+const FORMAT_VERSION = 3
 export function serialize(): GameState {
   return JSON.stringify({
     format: "snakeshift",
     formatVersion: FORMAT_VERSION,
+    levelInfo,
     entities,
     entityTypes: entities.map(e => e.constructor.name),
     activePlayerEntityIndex: entities.indexOf(activePlayer!),
@@ -103,10 +109,10 @@ export function deserialize(state: GameState) {
       }
     }
   }
-  // if (parsed.formatVersion === 2) {
-  //   parsed.formatVersion = 3
-  //   ...
-  // }
+  if (parsed.formatVersion === 2) {
+    parsed.formatVersion = 3
+    parsed.levelInfo = { width: 16, height: 16 } // Don't use defaultLevelInfo because this is the historical size
+  }
   if (parsed.formatVersion !== FORMAT_VERSION) throw new Error("Invalid format version")
 
   for (let i = 0; i < parsed.entities.length; i++) {
@@ -116,6 +122,9 @@ export function deserialize(state: GameState) {
     Object.assign(instance, entityData)
     entities.push(instance)
   }
+
+  levelInfo.width = parsed.levelInfo.width
+  levelInfo.height = parsed.levelInfo.height
 
   activePlayer = entities[parsed.activePlayerEntityIndex] as Snake | undefined
 
@@ -135,6 +144,9 @@ export function clearLevel(shouldBeUndoable = true) {
   // (Not that I really need to make this a parameter.)
   if (shouldBeUndoable) undoable()
   entities.length = 0
+  // TODO: Don't really want to reset the level size with the clear button (but I do when entering the editor)
+  levelInfo.width = defaultLevelInfo.width
+  levelInfo.height = defaultLevelInfo.height
   activePlayer = undefined
   postUpdate()
 }
