@@ -101,9 +101,11 @@ body:not(.editing) #entities-bar {
 .level-border {
   position: absolute;
   pointer-events: none;
-  /* border: 20px solid #fff;
-  border-image: url(rope.svg) 25% round;
-  border-image-outset: 20px; */
+  border: 30px solid #fff;
+  border-image: url(border-2.png) calc(15/32*100%) round;
+  border-image-outset: 9px;
+  image-rendering: pixelated;
+  box-sizing: border-box;
 }
 
 #credits a:link,

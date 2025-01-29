@@ -35,11 +35,14 @@ export function draw() {
 
   ctx.save()
   ctx.translate(canvas.width / 2, canvas.height / 2)
-  const viewWidth = levelInfo.width
-  const viewHeight = levelInfo.height
+  const borderSize = 0.2
+  const viewWidth = levelInfo.width + borderSize * 2
+  const viewHeight = levelInfo.height + borderSize * 2
+  const viewCenterX = levelInfo.width / 2
+  const viewCenterY = levelInfo.height / 2
   const scale = Math.min(canvas.width / viewWidth, canvas.height / viewHeight)
   ctx.scale(scale, scale)
-  ctx.translate(-viewWidth / 2, -viewHeight / 2)
+  ctx.translate(-viewCenterX, -viewCenterY)
   transform = ctx.getTransform()
   if (resized) {
     // Update highlight, as grid size has changed.
