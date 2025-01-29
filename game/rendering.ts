@@ -1,6 +1,6 @@
 import Entity from "./entity"
 import { entities, levelInfo, postResize } from "./game-state"
-import { setLevelBorder } from "./tile-highlight"
+import { positionElement, setLevelBorder } from "./tile-highlight"
 import { Point, Tile } from "./types"
 
 export const canvas = document.createElement('canvas')
@@ -52,6 +52,11 @@ export function draw() {
   // drawGrid(ctx)
   setLevelBorder(levelInfo)
   ctx.restore()
+
+  for (const overlayElement of document.querySelectorAll<HTMLDivElement>('.level-specific-overlay')) {
+    positionElement(overlayElement, tileOnPage({ x: 0, y: 0, width: levelInfo.width, height: levelInfo.height }))
+  }
+
 }
 
 // function drawBorder(ctx: CanvasRenderingContext2D) {

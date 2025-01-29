@@ -36,7 +36,7 @@ export function setLevelBorder(levelInfo: { width: number, height: number }) {
   positionElement(levelBorder, tileOnPage({ x: 0, y: 0, width: levelInfo.width, height: levelInfo.height }))
 }
 
-function positionElement(element: HTMLElement, rect: Tile) {
+export function positionElement(element: HTMLElement, rect: Tile) {
   element.style.left = `${rect.x}px`
   element.style.top = `${rect.y}px`
   element.style.width = `${rect.width}px`
