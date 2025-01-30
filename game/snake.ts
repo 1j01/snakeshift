@@ -17,6 +17,7 @@ export default class Snake extends Entity {
 
   private _highlightTime = -Infinity
   private _highlightCanvas = document.createElement('canvas')
+  private _melodyIndex = 0
   static readonly HIGHLIGHT_DURATION = 500
   static DEBUG_SNAKE_DRAGGING = false
 
@@ -355,8 +356,44 @@ export default class Snake extends Entity {
         this.growOnNextMove = true
         // const eatPlaybackRate = Math.pow(2, this.segments.length / 10) / 10
         // const eatPlaybackRate = [1, 2, 3, 4, 5, 6, 4, 3, 2][this.segments.length % 8] * 10
-        const scale = [1, 9 / 8, 5 / 4, 4 / 3, 3 / 2, 5 / 3, 15 / 8, 2]
-        const eatPlaybackRate = scale[this.segments.length % scale.length]
+        // const scale = [1, 9 / 8, 5 / 4, 4 / 3, 3 / 2, 5 / 3, 15 / 8, 2]
+        // const eatPlaybackRate = scale[this.segments.length % scale.length]
+
+        const midiToFreq = (midiNote: number) => 440 * Math.pow(2, (midiNote - 69) / 12)
+        const songABC = `
+X:231
+T:The Snake Charmer Song
+T:The Streets of Cairo
+Z:Jack Campin, http://www.campin.me.uk/
+F:Jack Campin's Nine-Note Tunebook
+% last edit 03-02-2013
+C:Sol Bloom and James Thornton, 1893 
+H:see http://www.shira.net/streets-of-cairo.htm
+M:4/4
+L:1/8
+Q:1/4=120
+K:DMin
+DE| F2 E2 D2 DE|FA  EF  D2   :|\
+z2| AA AB AG EF|
+                GG  GA  GF     \
+DE| FF FG FE DE|F2  EE  D2 z2||
+K:F
+  |:A4    A3  F|G>A G>F D2 C2 |\
+[1  F2 A2 c2 d2|
+                c2  d2  cA G2:|\
+[2  F2 AF G2 A2|F4      z2   |]
+`
+        const melodyMidi = [...songABC.split("K:DMin")[1].matchAll(/([A-G])([,'])*/gi)].map(match => {
+          const letter = match[1]
+          const octaveModifier = match[2] === "'" ? 1 : match[2] === "," ? -1 : 0
+          const octave = (letter === letter.toUpperCase() ? 1 : 0) + octaveModifier
+          const midiNote = 12 * (octave + 6) + 'CDEFGAB'.indexOf(letter.toUpperCase())
+          return midiNote
+        })
+        const melodyFrequencies = melodyMidi.map(midiToFreq)
+        // const eatPlaybackRate = melodyFrequencies[this.segments.length % melodyFrequencies.length] / 440
+        const eatPlaybackRate = melodyFrequencies[this._melodyIndex++ % melodyFrequencies.length] / 440
+
         if (!checkLevelWon()) {
           playSound('eat', { playbackRate: eatPlaybackRate })
         }
