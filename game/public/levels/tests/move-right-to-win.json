@@ -1,6 +1,10 @@
 {
   "format": "snakeshift",
-  "formatVersion": 2,
+  "formatVersion": 4,
+  "levelInfo": {
+    "width": 16,
+    "height": 16
+  },
   "entities": [
     {
       "id": "04f13bbb-2635-4470-9849-eaaecc079201",
@@ -42,5 +46,6 @@
     "Snake",
     "Collectable"
   ],
-  "activePlayerEntityIndex": -1
+  "activePlayerEntityIndex": 0,
+  "levelId": ""
 }
