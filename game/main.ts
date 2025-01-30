@@ -69,7 +69,10 @@ canvas.addEventListener('pointerdown', (event) => {
   // and because the default behavior is not just to select text but also deselecting it,
   // so preventDefault can make it harder to deselect text by default.
   window.getSelection()?.removeAllRanges()
-
+})
+// This should be triggered by clicking in menus as well, not just on the canvas,
+// in order for the first level start sound effect to play.
+window.addEventListener('pointerdown', () => {
   enableAudioViaUserGesture()
 })
 
