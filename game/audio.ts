@@ -42,7 +42,6 @@ try {
 export const resources: Record<string, AudioBuffer> = {}
 
 export const resourcePaths = {
-  // move: '/audio/sound-effects/move.wav',
   undo: '/audio/sound-effects/undo.wav',
   redo: '/audio/sound-effects/redo.wav',
   gong: '/audio/sound-effects/gong-2-232435.mp3',
@@ -50,8 +49,6 @@ export const resourcePaths = {
   eat: '/audio/sound-effects/kayageum1_c3-91074.mp3',
   move: '/audio/sound-effects/tiny-drip.wav',
   switchSnakes: '/audio/sound-effects/snake-hissing-6092.mp3',
-  // winGame: '/audio/sound-effects/win-game.wav',
-  // levelStart: '/audio/sound-effects/level-start.wav',
 }
 
 const totalResources = Object.keys(resourcePaths).length
