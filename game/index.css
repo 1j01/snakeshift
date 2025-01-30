@@ -229,3 +229,35 @@ kbd:not(.grouping-kbd) {
   margin-right: 2px;
   text-shadow: none;
 }
+
+#level-splash.active::before,
+#game-win-screen.active::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(100vw, 100vh);
+  height: min(100vw, 100vh);
+  border-radius: 50%;
+  border: 10px solid #fff;
+  box-sizing: border-box;
+  transform: translate(-50%, -50%);
+  animation: gong 1s ease forwards;
+}
+
+#game-win-screen.active::before {
+  animation-duration: 8s;
+  animation-delay: -0.5s;
+}
+
+@keyframes gong {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    border-width: 10px;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    border-width: 0;
+  }
+}
