@@ -1,4 +1,4 @@
-import { enableAudioViaUserGesture, loadResources, playSound, resourcePaths, resources, toggleMute } from "./audio"
+import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
 import { activityMode, animate, restartLevel, setActivityMode } from "./game"
 import { checkLevelWon, clearLevel, onUpdate, redo, undo } from "./game-state"
 import { initLevelEditorGUI, loadLevel, openLevel, saveLevel, savePlaythrough } from "./level-editor"
@@ -97,7 +97,6 @@ onUpdate(() => {
   if (checkLevelWon()) {
     wonLevelID = currentLevelID()
     console.log('Level won!', wonLevelID)
-    playSound('win')
     loadNextLevel()
   } else {
     wonLevelID = ""

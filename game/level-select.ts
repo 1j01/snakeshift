@@ -1,3 +1,4 @@
+import { playSound } from "./audio"
 import { activityMode } from "./game"
 import { loadLevel } from "./level-editor"
 import { showLevelSplash } from "./menus"
@@ -50,6 +51,7 @@ export function loadNextLevel() {
   } else {
     const winScreen = document.querySelector<HTMLDivElement>('#game-win-screen')!
     winScreen.classList.add('active')
+    playSound('gongBrilliant')
   }
 }
 

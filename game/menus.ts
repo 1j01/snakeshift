@@ -1,3 +1,4 @@
+import { playSound } from "./audio"
 import { setActivityMode } from "./game"
 import { clearLevel } from "./game-state"
 import { loadFirstLevel } from "./level-select"
@@ -78,6 +79,7 @@ export function showLevelSplash(levelInfo: { title: string }) {
   hideScreens()
   levelSplash.classList.add('active')
   levelSplashTitle.textContent = levelInfo.title
+  playSound('gong')
   setTimeout(() => {
     levelSplash.style.transition = "opacity .5s"
     levelSplash.style.opacity = "0"
