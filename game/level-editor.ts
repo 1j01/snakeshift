@@ -69,6 +69,7 @@ export function initLevelEditorGUI() {
   })
   levelInfoEditorOKButton.addEventListener('click', (event) => {
     event.preventDefault()
+    undoable()
     levelInfo.width = parseInt(levelInfoEditor.querySelector<HTMLInputElement>('#level-width')!.value)
     levelInfo.height = parseInt(levelInfoEditor.querySelector<HTMLInputElement>('#level-height')!.value)
     // levelInfo.name = nameInput.value
