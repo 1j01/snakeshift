@@ -790,14 +790,6 @@
       "width": 1,
       "height": 1,
       "layer": 1
-    },
-    {
-      "solid": false,
-      "x": 8,
-      "y": 10,
-      "width": 1,
-      "height": 1,
-      "layer": 1
     }
   ],
   "entityTypes": [
@@ -894,7 +886,6 @@
     "Block",
     "Block",
     "Snake",
-    "Collectable",
     "Collectable"
   ],
   "activePlayerEntityIndex": 92,
