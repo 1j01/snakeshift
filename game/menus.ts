@@ -43,18 +43,19 @@ export function initMainMenu() {
     backButton.addEventListener('click', showMainMenu)
   }
 
-  addEventListener("keydown", (event) => {
-    if (mainMenu.classList.contains("active")) {
-      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-        event.preventDefault()
-        const buttons = mainMenu.querySelectorAll("button")
-        const index = Array.from(buttons).indexOf(document.activeElement as HTMLButtonElement)
-        const delta = event.key === "ArrowDown" ? 1 : -1
-        const nextIndex = index === -1 ? 0 : (index + delta + buttons.length) % buttons.length
-        buttons[nextIndex].focus()
-      }
-    }
-  })
+  // This is now handled in input.ts with general focus management
+  // addEventListener("keydown", (event) => {
+  //   if (mainMenu.classList.contains("active")) {
+  //     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+  //       event.preventDefault()
+  //       const buttons = mainMenu.querySelectorAll("button")
+  //       const index = Array.from(buttons).indexOf(document.activeElement as HTMLButtonElement)
+  //       const delta = event.key === "ArrowDown" ? 1 : -1
+  //       const nextIndex = index === -1 ? 0 : (index + delta + buttons.length) % buttons.length
+  //       buttons[nextIndex].focus()
+  //     }
+  //   }
+  // })
 
   showMainMenu()
 }

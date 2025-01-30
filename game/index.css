@@ -261,3 +261,9 @@ kbd:not(.grouping-kbd) {
     border-width: 0;
   }
 }
+
+/* Debug visualization */
+[data-score]::after {
+  content: "Score: " attr(data-score);
+  font-size: 1.5em;
+}
