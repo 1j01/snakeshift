@@ -1,7 +1,7 @@
 import { playSound } from "./audio"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
-import { entities, undoable } from "./game-state"
+import { checkLevelWon, entities, undoable } from "./game-state"
 import { hitTestAllEntities, topLayer } from "./helpers"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
@@ -357,8 +357,9 @@ export default class Snake extends Entity {
         // const eatPlaybackRate = [1, 2, 3, 4, 5, 6, 4, 3, 2][this.segments.length % 8] * 10
         const scale = [1, 9 / 8, 5 / 4, 4 / 3, 3 / 2, 5 / 3, 15 / 8, 2]
         const eatPlaybackRate = scale[this.segments.length % scale.length]
-        // playSound('eat', eatPlaybackRate)
-        playSound('eat', { volume: 0.1, playbackRate: eatPlaybackRate })
+        if (!checkLevelWon()) {
+          playSound('eat', { volume: 0.1, playbackRate: eatPlaybackRate })
+        }
       }
     }
   }
