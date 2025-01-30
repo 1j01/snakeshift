@@ -24,7 +24,7 @@ export let activityMode: "edit" | "play" | "menu" = "menu"
 const editorUndos: GameState[] = []
 const editorRedos: GameState[] = []
 let editorState: GameState | undefined = undefined
-let cleanup = () => { /* TSILB */ }
+let cleanup = handleInput(canvas)
 export function setActivityMode(newMode: "edit" | "play" | "menu") {
   if (activityMode === newMode) return
   console.log("Switching from", activityMode, "to", newMode)
@@ -50,13 +50,13 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     undos.length = 0
     redos.length = 0
   } else {
+    cleanup = handleInput(canvas)
     clearLevel(false)
     undos.length = 0
     redos.length = 0
     editorUndos.length = 0
     editorRedos.length = 0
     editorState = undefined
-    cleanup = () => { /* TSILB */ }
   }
 }
 

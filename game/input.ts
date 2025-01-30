@@ -1,4 +1,4 @@
-import { restartLevel } from './game'
+import { activityMode, restartLevel } from './game'
 import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, redo, setControlScheme, undo } from './game-state'
 import { makeEventListenerGroup, neighborOf, sameTile } from './helpers'
 import { pageToWorldTile } from './rendering'
@@ -32,61 +32,91 @@ export function handleInput(
   // Mouse/pen/touch support
   // -----------------------
 
-  let pointerDownTile: Tile | undefined = undefined
-  let mouseHoveredTile: Tile | undefined = undefined
-  on(eventTarget, 'pointerdown', (event) => {
-    pointerDownTile = pageToWorldTile(event)
-    if (pointerDownTile) {
-      setControlScheme(ControlScheme.Pointer) // sets highlight; signals level update uselessly
-    }
-  })
-  on(window, 'pointerup', (event) => {
-    const pointerUpTile = pageToWorldTile(event)
-    if (
-      activePlayer &&
-      pointerUpTile &&
-      sameTile(pointerUpTile, pointerDownTile)
-    ) {
-      const deltaGridX = Math.round(pointerUpTile.x - activePlayer.segments[0].x)
-      const deltaGridY = Math.round(pointerUpTile.y - activePlayer.segments[0].y)
-      const move = activePlayer.analyzeMoveRelative(deltaGridX, deltaGridY)
-      if (move.valid) {
-        activePlayer.takeMove(move)
-        setControlScheme(ControlScheme.Pointer) // signals level update; sets highlight redundantly
+  if (activityMode !== "menu") {
+    let pointerDownTile: Tile | undefined = undefined
+    let mouseHoveredTile: Tile | undefined = undefined
+    on(eventTarget, 'pointerdown', (event) => {
+      pointerDownTile = pageToWorldTile(event)
+      if (pointerDownTile) {
+        setControlScheme(ControlScheme.Pointer) // sets highlight; signals level update uselessly
       }
-      // updateGameState({
-      //   playerCoordinates: pointerUpTile,
-      //   playerFacing: activePlayer.directionOfMove(pointerUpTile)!,
-      //   controlScheme: ControlScheme.Pointer
-      // })
-    }
-    pointerDownTile = undefined
-    highlightMove(mouseHoveredTile)
-  })
+    })
+    on(window, 'pointerup', (event) => {
+      const pointerUpTile = pageToWorldTile(event)
+      if (
+        activePlayer &&
+        pointerUpTile &&
+        sameTile(pointerUpTile, pointerDownTile)
+      ) {
+        const deltaGridX = Math.round(pointerUpTile.x - activePlayer.segments[0].x)
+        const deltaGridY = Math.round(pointerUpTile.y - activePlayer.segments[0].y)
+        const move = activePlayer.analyzeMoveRelative(deltaGridX, deltaGridY)
+        if (move.valid) {
+          activePlayer.takeMove(move)
+          setControlScheme(ControlScheme.Pointer) // signals level update; sets highlight redundantly
+        }
+        // updateGameState({
+        //   playerCoordinates: pointerUpTile,
+        //   playerFacing: activePlayer.directionOfMove(pointerUpTile)!,
+        //   controlScheme: ControlScheme.Pointer
+        // })
+      }
+      pointerDownTile = undefined
+      highlightMove(mouseHoveredTile)
+    })
 
-  on(window, 'pointercancel', () => {
-    pointerDownTile = undefined
-    highlightMove(mouseHoveredTile)
-  })
+    on(window, 'pointercancel', () => {
+      pointerDownTile = undefined
+      highlightMove(mouseHoveredTile)
+    })
 
-  on(window, 'pointermove', (event) => {
-    const lastTile = mouseHoveredTile
-    mouseHoveredTile = pageToWorldTile(event)
-    // only with significant movement (moving to a new tile),
-    // because this replaces the highlight used by gamepad controls
-    // and you don't want it flickering from mouse jitter while using a gamepad
-    if (!sameTile(lastTile, mouseHoveredTile)) {
-      setControlScheme(ControlScheme.Pointer) // sets highlight; signals level update uselessly
-    }
-  })
+    on(window, 'pointermove', (event) => {
+      const lastTile = mouseHoveredTile
+      mouseHoveredTile = pageToWorldTile(event)
+      // only with significant movement (moving to a new tile),
+      // because this replaces the highlight used by gamepad controls
+      // and you don't want it flickering from mouse jitter while using a gamepad
+      if (!sameTile(lastTile, mouseHoveredTile)) {
+        setControlScheme(ControlScheme.Pointer) // sets highlight; signals level update uselessly
+      }
+    })
+  }
 
   // ----------------
-  // Keyboard support
+  // Shared between keyboard and gamepad
   // ----------------
 
   function move(dx: number, dy: number, controlScheme = ControlScheme.KeyboardAbsoluteDirection) {
     // TODO: maybe show highlight for invalid move even though normally absolute direction doesn't use a highlight
-    if (!activePlayer) return
+    console.log('move', dx, dy, controlScheme, activePlayer)
+    if (!activePlayer) {
+      const currentFocus = document.activeElement
+      if (!currentFocus) return
+      const currentRect = currentFocus.getBoundingClientRect()
+      const currentCenter = { x: currentRect.x + currentRect.width / 2, y: currentRect.y + currentRect.height / 2 }
+      const score = (element: Element) => {
+        const rect = element.getBoundingClientRect()
+        const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
+        const distanceX = center.x - currentCenter.x
+        const distanceY = center.y - currentCenter.y
+        console.log('score', element, distanceX, distanceY, dx * distanceX, dy * distanceY)
+        return -(dx * distanceX + dy * distanceY)
+      }
+      // TODO: consider other focusable elements like links
+      const focusableElements = [...document.querySelectorAll<HTMLElement>('button')]
+        .filter((element) => element !== currentFocus && score(element) < 0)
+
+      for (const element of focusableElements) {
+        // element.style.outline = `2px solid hsl(${score(element) * 50 + 180}, 100%, 50%)`
+        element.style.boxShadow = `0 0 0 2px hsl(${score(element) * 50 + 180}, 100%, 50%)`
+        element.dataset.score = String(score(element))
+      }
+      focusableElements.sort((a, b) => score(b) - score(a))
+      if (focusableElements.length) {
+        focusableElements[0].focus()
+      }
+      return
+    }
     const move = activePlayer.analyzeMoveRelative(dx, dy)
     if (!move.valid) {
       setControlScheme(controlScheme) // signals level update uselessly
@@ -95,6 +125,10 @@ export function handleInput(
     activePlayer.takeMove(move)
     setControlScheme(controlScheme) // signals level update
   }
+
+  // ----------------
+  // Keyboard support
+  // ----------------
 
   on(window, 'keydown', (event) => {
     // Using `event.code` instead of `event.key` since the control scheme relies on the physical key layout, not the letters.
@@ -133,7 +167,11 @@ export function handleInput(
       case 'Tab':
       case 'ShiftLeft':
       case 'ShiftRight':
-        cyclePlayerControl()
+        if (activityMode === "play") {
+          cyclePlayerControl()
+        } else {
+          handling = false
+        }
         break
       default:
         handling = false
