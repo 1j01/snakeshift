@@ -55,6 +55,24 @@ test('undoing should go back a level without immediately winning it (and it shou
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
 });
 
+test.fixme('you should be able to win the last level twice in a row, after returning to it via level select', async ({ page }) => {
+  // The win condition should trigger if you win the last level, then go back to the menu and go to the same last level from the level select and win it again
+  // This doesn't work if the level that was won is stored in order to prevent spamming the level win sound effect / splash screen animation.
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
+  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#game-win-screen')).toBeVisible();
+  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
+  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#game-win-screen')).toBeVisible();
+});
+
 test.skip('you should be able to win a level after returning to it via undo... even if some unknown conditions occur', async ({ page }) => {
   // not sure when the problem occurs
 });

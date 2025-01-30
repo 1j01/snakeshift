@@ -13,13 +13,15 @@
   - simplest but most limiting would be to prevent moving while a snake is on top; need to see if this affects any puzzles
 - enforce level boundaries
 - detect immobile state and show a message about restarting/undoing
-- win condition should trigger if you win the last level, then go back to the menu and go to the same level from the level select and win it again
+- win condition should trigger if you win the last level, then go back to the menu and go to the same level from the level select and win it again (I've added a test for this)
 - test that when switching from play to edit mode, should always stay on the same level
 - test that reset (R) should never move to a different level
 - handle opening levels while in play mode or menu, and test saving as well
 - prompt before discarding unsaved level
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
 - should be able to undo to hide the game win screen
+- indicate when you've won a custom level from level editor (there's no next level to go to, which is what normally plays a sound and shows a splash screen)
+- skip/merge extra undo steps for switching snakes
 
 - saving playthroughs:
   - limit to undos pertaining to the current level (using `levelId` which is now in the undo shape)
