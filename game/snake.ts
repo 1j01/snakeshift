@@ -1,3 +1,4 @@
+import { playSound } from "./audio"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
 import { entities, undoable } from "./game-state"
@@ -316,6 +317,7 @@ export default class Snake extends Entity {
   }
   takeMove(move: Move): void {
     undoable()
+    playSound('move')
     if (this.growOnNextMove) {
       this._grow()
       this.growOnNextMove = false
@@ -351,6 +353,12 @@ export default class Snake extends Entity {
       if (entity instanceof Collectable && entity.layer === head.layer) {
         entities.splice(entities.indexOf(entity), 1)
         this.growOnNextMove = true
+        // const eatPlaybackRate = Math.pow(2, this.segments.length / 10) / 10
+        // const eatPlaybackRate = [1, 2, 3, 4, 5, 6, 4, 3, 2][this.segments.length % 8] * 10
+        const scale = [1, 9 / 8, 5 / 4, 4 / 3, 3 / 2, 5 / 3, 15 / 8, 2]
+        const eatPlaybackRate = scale[this.segments.length % scale.length]
+        // playSound('eat', eatPlaybackRate)
+        playSound('eat', { volume: 0.1, playbackRate: eatPlaybackRate })
       }
     }
   }
