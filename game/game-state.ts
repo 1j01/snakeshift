@@ -75,7 +75,7 @@ function stepHistory(from: GameState[], to: GameState[], skipOverWinState = fals
   deserialize(state)
   return true
 }
-const FORMAT_VERSION = 3
+const FORMAT_VERSION = 4
 export function serialize(): GameState {
   return JSON.stringify({
     format: "snakeshift",
@@ -111,7 +111,17 @@ export function deserialize(state: GameState) {
   }
   if (parsed.formatVersion === 2) {
     parsed.formatVersion = 3
-    parsed.levelInfo = { width: 16, height: 16 } // Don't use defaultLevelInfo because this is the historical size
+    // Levels now store their size in the levelInfo object.
+    // Don't use defaultLevelInfo here because it could change in the future, and this should use the historical default size.
+    parsed.levelInfo = { width: 16, height: 16 }
+  }
+  if (parsed.formatVersion === 3) {
+    parsed.formatVersion = 4
+    // Remove accidentally serialized _time properties from Collectable entities
+    for (const entDef of parsed.entities) {
+      // @ts-expect-error property is not defined on Entity
+      delete entDef._time
+    }
   }
   if (parsed.formatVersion !== FORMAT_VERSION) throw new Error("Invalid format version")
 

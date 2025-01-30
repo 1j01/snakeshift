@@ -6,10 +6,10 @@ export class Collectable extends RectangularEntity {
 
   solid = false
 
-  _time = 0
+  #time = 0
 
   step(time: number): void { // weird that this isn't a delta
-    this._time = time
+    this.#time = time
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -20,7 +20,7 @@ export class Collectable extends RectangularEntity {
     ctx.translate(this.x, this.y)
     ctx.scale(this.width, this.height)
     ctx.translate(1 / 2, 1 / 2)
-    ctx.rotate(Math.sin(this._time / 1000 + this.x / 10 + this.y / 10) * Math.PI / 12)
+    ctx.rotate(Math.sin(this.#time / 1000 + this.x / 10 + this.y / 10) * Math.PI / 12)
     ctx.beginPath()
     ctx.moveTo(0, -Collectable.VISUAL_SIZE / 2)
     for (let i = 0; i < 4; i++) {
