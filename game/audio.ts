@@ -164,24 +164,28 @@ const showErrorMessage = (message: string, error: unknown) => {
 }
 
 export const playSound = (soundName: keyof typeof resourcePaths, { playbackRate = 1, volume = 1, cutOffEndFraction = 0 } = {}) => {
-  const audioBuffer = resources[soundName]
-  if (!audioBuffer) {
-    throw new Error(`No AudioBuffer loaded for sound '${soundName}'`)
+  try {
+    const audioBuffer = resources[soundName]
+    if (!audioBuffer) {
+      throw new Error(`No AudioBuffer loaded for sound '${soundName}'`)
+    }
+    if (muted || audioCtx.state !== "running") {
+      return
+    }
+    const gain = audioCtx.createGain()
+    const source = audioCtx.createBufferSource()
+    source.buffer = audioBuffer
+    source.connect(gain)
+    gain.connect(mainGain)
+    gain.gain.value = volume
+    source.playbackRate.value = playbackRate
+    if (cutOffEndFraction) {
+      gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + audioBuffer.duration * (1 - cutOffEndFraction))
+    }
+    source.start(0)
+  } catch (error) {
+    console.error(`Failed to play sound '${soundName}':`, error)
   }
-  if (muted || audioCtx.state !== "running") {
-    return
-  }
-  const gain = audioCtx.createGain()
-  const source = audioCtx.createBufferSource()
-  source.buffer = audioBuffer
-  source.connect(gain)
-  gain.connect(mainGain)
-  gain.gain.value = volume
-  source.playbackRate.value = playbackRate
-  if (cutOffEndFraction) {
-    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + audioBuffer.duration * (1 - cutOffEndFraction))
-  }
-  source.start(0)
 }
 
 muteButton.addEventListener("click", () => {
