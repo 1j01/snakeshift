@@ -1,4 +1,5 @@
 import { Block } from './block'
+import { Collectable } from './collectable'
 import Entity from './entity'
 import { setActivityMode } from './game'
 import { activePlayer, clearLevel, deserialize, entities, levelInfo, onResize, onUpdate, postUpdate, redo, redos, serialize, setActivePlayer, undoable, undos } from './game-state'
@@ -184,7 +185,14 @@ export function handleInputForLevelEditing(
   function validateLevel() {
     clearProblems()
 
+    const entitiesByPosition = new Map<string, Entity[]>()
     for (const entity of entities) {
+      // @ts-expect-error (x and y don't exist for snakes for example)
+      const key = `${entity.x ?? "?"},${entity.y ?? "?"}`
+      const bucket = entitiesByPosition.get(key) ?? []
+      bucket.push(entity)
+      entitiesByPosition.set(key, bucket)
+
       if (entity instanceof RectangularEntity) {
         if (!withinLevel(entity)) {
           addProblem(entity, "out-of-bounds")
@@ -206,6 +214,13 @@ export function handleInputForLevelEditing(
         }
       }
     }
+    for (const bucket of entitiesByPosition.values()) {
+      const collectablesHere = bucket.filter(entity => entity instanceof Collectable)
+      if (collectablesHere.length > 1) {
+        addProblem(collectablesHere[1], "overlap")
+      }
+    }
+
   }
 
   // -----------------------
