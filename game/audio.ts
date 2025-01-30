@@ -48,6 +48,7 @@ export const resourcePaths = {
   win: '/audio/sound-effects/gong-2-232435.mp3',
   eat: '/audio/sound-effects/kayageum1_c3-91074.mp3',
   move: '/audio/sound-effects/tiny-drip.wav',
+  switchSnakes: '/audio/sound-effects/snake-hissing-6092.mp3',
   // winGame: '/audio/sound-effects/win-game.wav',
   // levelStart: '/audio/sound-effects/level-start.wav',
 }

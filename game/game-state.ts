@@ -206,6 +206,7 @@ export function cyclePlayerControl() {
   if (!players[nextIndex]) return
   undoable()
   activePlayer = players[nextIndex]
+  playSound("switchSnakes")
   activePlayer.highlight()
   postUpdate()
 }
