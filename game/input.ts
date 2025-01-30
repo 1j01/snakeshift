@@ -1,4 +1,5 @@
-import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, setControlScheme } from './game-state'
+import { restartLevel } from './game'
+import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, redo, setControlScheme, undo } from './game-state'
 import { makeEventListenerGroup, neighborOf, sameTile } from './helpers'
 import { pageToWorldTile } from './rendering'
 import { highlightMove } from './tile-highlight'
@@ -201,6 +202,26 @@ export function handleInput(
       } else if (justPressed(15, gamepad)) {
         move(1, 0, ControlScheme.Gamepad)
       }
+      // Bumpers
+      if (justPressed(4, gamepad)) {
+        cyclePlayerControl()
+      } else if (justPressed(5, gamepad)) {
+        cyclePlayerControl(true)
+      }
+      // Face buttons
+      // (Should undo/redo be moved to the bumpers?)
+      if (justPressed(2, gamepad)) {
+        undo()
+      } else if (justPressed(1, gamepad)) {
+        redo()
+      } else if (justPressed(3, gamepad)) {
+        restartLevel()
+      }
+      // Start button
+      // (Should this be back/select button instead?)
+      // if (justPressed(9, gamepad)) {
+      //   showMainMenu()
+      // }
 
       buttonsLast.set(gamepad.index, new Map(gamepad.buttons.map((button, index) => [index, button.pressed])))
       for (const button of gamepad.buttons) {

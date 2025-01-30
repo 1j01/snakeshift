@@ -198,6 +198,7 @@
   </div>
   </div>
   <div class="level-specific-overlay" data-for-level="/levels/easy/001-movement.json" hidden>
+    <!-- It is actually possible to get stuck on this level. TODO: detect this or limit the size of the snake -->
     <h2>How to Move</h2>
     <!-- <p>You can use a gamepad, keyboard, mouse, pen, or touch to play.</p> -->
     <table>
@@ -249,10 +250,13 @@
   </div>
   <div class="level-specific-overlay" data-for-level="/levels/easy/002-bridge.json" hidden>
     <!-- It is actually possible to get stuck on this level. TODO: detect this? I don't want to clutter the tutorial text...-->
-    <p>Press <kbd>Tab</kbd> to switch snakes.</p>
+    <!-- TODO: show controls specific to the active control scheme -->
+    <p>Press <kbd>Tab</kbd> to switch snakes, or use shoulder buttons on a gamepad.</p>
   </div>
   <div class="level-specific-overlay" data-for-level="/levels/easy/003-ferry.json" hidden>
-    <p>Press <kbd>Z</kbd> to undo, or <kbd>R</kbd> to restart the level.</p>
+    <!-- TODO: show controls specific to the active control scheme -->
+    <!-- <p>Press <kbd>Z</kbd>/ⓧ to undo, or <kbd>R</kbd>/Ⓨ to restart the level.</p> -->
+    <p>Press <kbd>Z</kbd> to undo, or <kbd>R</kbd> to restart the level, or ⓧ/Ⓨ on a gamepad.</p>
   </div>
   <script type="module" src="./main.ts"></script>
 </body>

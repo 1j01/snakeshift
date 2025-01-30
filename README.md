@@ -21,9 +21,14 @@ NOTE: KEYBOARD IS NEEDED FOR SOME CONTROLS CURRENTLY.
 Use the left stick to point in the direction you want to move, and then press A to move to the highlighted cell.
 Or use the D-pad to move.
 
+Shoulder buttons switch snakes.
+
+Press ⓧ to undo, Ⓑ to redo.  
+Press Ⓨ to restart the level.
+
 You may need to press a button to activate the gamepad, before the web page can see it.
 
-NOTE: KEYBOARD IS NEEDED FOR SOME CONTROLS CURRENTLY.
+NOTE: Gamepad is not yet supported in the menus or the level editor.
 
 ### Keyboard
 

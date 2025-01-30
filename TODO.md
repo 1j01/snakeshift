@@ -33,7 +33,6 @@
   - key repeat, also for dpad, and (after simplifying the gamepad movement scheme) joysticks
   - cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
   - for touch, could have a virtual joystick/dpad or allow gliding anywhere on the screen; could then allow switching snakes by tapping on them without conflicting with movement
-  - gamepad needs a way to switch snakes
   - gamepad support for menus etc.
   - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
 

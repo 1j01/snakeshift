@@ -197,11 +197,11 @@ export function initLevel() {
   postUpdate() // might matter to clear a highlight if level is reset
 }
 
-export function cyclePlayerControl() {
+export function cyclePlayerControl(reverse = false) {
   const players = entities.filter(e => e instanceof Snake) as Snake[]
   // If there is no active player, -1 + 1 naturally gives the first player.
   const index = players.indexOf(activePlayer!)
-  const nextIndex = (index + 1) % players.length
+  const nextIndex = ((index + (reverse ? -1 : 1)) + players.length) % players.length
   // If there are no players at all, avoid creating a useless undo state or erroring.
   if (!players[nextIndex]) return
   undoable()
