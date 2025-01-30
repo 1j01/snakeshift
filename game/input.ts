@@ -94,26 +94,51 @@ export function handleInput(
       if (!currentFocus) return
       const currentRect = currentFocus.getBoundingClientRect()
       const currentCenter = { x: currentRect.x + currentRect.width / 2, y: currentRect.y + currentRect.height / 2 }
-      const score = (element: Element) => {
+      const normalizedInput = { x: dx / Math.hypot(dx, dy), y: dy / Math.hypot(dx, dy) }
+      const directionalScore = (element: Element) => {
         const rect = element.getBoundingClientRect()
         const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
         const distanceX = center.x - currentCenter.x
         const distanceY = center.y - currentCenter.y
-        console.log('score', element, distanceX, distanceY, dx * distanceX, dy * distanceY)
-        return -(dx * distanceX + dy * distanceY)
+        const vector = { x: distanceX / Math.hypot(distanceX, distanceY), y: distanceY / Math.hypot(distanceX, distanceY) }
+        // return dx * distanceX + dy * distanceY
+        return normalizedInput.x * vector.x + normalizedInput.y * vector.y
+      }
+      const distanceScore = (element: Element) => {
+        const rect = element.getBoundingClientRect()
+        const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
+        const distanceX = center.x - currentCenter.x
+        const distanceY = center.y - currentCenter.y
+        return Math.hypot(distanceX, distanceY)
+      }
+      const combinedScore = (element: Element) => {
+        return distanceScore(element) / directionalScore(element)
+      }
+      const isVisible = (element: Element) => {
+        const rect = element.getBoundingClientRect()
+        const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
+        return document.elementFromPoint(center.x, center.y) === element
       }
       // TODO: consider other focusable elements like links
       const focusableElements = [...document.querySelectorAll<HTMLElement>('button')]
-        .filter((element) => element !== currentFocus && score(element) < 0)
+        .filter((element) =>
+          element !== currentFocus &&
+          isVisible(element) &&
+          directionalScore(element) > 0
+        )
 
       for (const element of focusableElements) {
         // element.style.outline = `2px solid hsl(${score(element) * 50 + 180}, 100%, 50%)`
-        element.style.boxShadow = `0 0 0 2px hsl(${score(element) * 50 + 180}, 100%, 50%)`
-        element.dataset.score = String(score(element))
+        // element.style.boxShadow = `0 0 0 2px hsl(${directionalScore(element) * 50 + 180}, 100%, 50%)`
+        // element.dataset.score = String(directionalScore(element))
       }
-      focusableElements.sort((a, b) => score(b) - score(a))
+      // focusableElements.sort((a, b) => directionalScore(a) - directionalScore(b))
+      // focusableElements.sort((a, b) => distanceScore(a) - distanceScore(b))
+      focusableElements.sort((a, b) => combinedScore(a) - combinedScore(b))
+
       if (focusableElements.length) {
         focusableElements[0].focus()
+        console.log('focus', focusableElements[0])
       }
       return
     }
