@@ -358,7 +358,7 @@ export default class Snake extends Entity {
         const scale = [1, 9 / 8, 5 / 4, 4 / 3, 3 / 2, 5 / 3, 15 / 8, 2]
         const eatPlaybackRate = scale[this.segments.length % scale.length]
         if (!checkLevelWon()) {
-          playSound('eat', { volume: 0.1, playbackRate: eatPlaybackRate })
+          playSound('eat', { playbackRate: eatPlaybackRate })
         }
       }
     }
