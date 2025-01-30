@@ -85,7 +85,7 @@ export function serialize(): GameState {
     entityTypes: entities.map(e => e.constructor.name),
     activePlayerEntityIndex: entities.indexOf(activePlayer!),
     levelId: currentLevelID(),
-  })
+  }, null, 2) + "\n"
 }
 export function deserialize(state: GameState) {
   const whichSnakeBefore = activePlayer?.id ?? ""
