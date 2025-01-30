@@ -66,7 +66,7 @@ function stepHistory(from: GameState[], to: GameState[], skipOverWinState = fals
   to.push(oldState)
   // TODO: being lazy with extra parsing here
   // console.log("skipOverWinState", skipOverWinState, JSON.parse(oldState).levelId, JSON.parse(state).levelId)
-  if (skipOverWinState && JSON.parse(oldState).levelId !== JSON.parse(state).levelId) {
+  if (skipOverWinState && (JSON.parse(oldState) as ParsedGameState).levelId !== (JSON.parse(state) as ParsedGameState).levelId) {
     // Skip over the state where the level was won
     // Don't pass on skipOverWinState because we don't want to recurse more than once.
     stepHistory(from, to)

@@ -215,7 +215,7 @@ export function handleInputForLevelEditing(
       }
     }
     for (const bucket of entitiesByPosition.values()) {
-      const collectablesHere = bucket.filter(entity => entity instanceof Collectable)
+      const collectablesHere = bucket.filter(entity => entity instanceof Collectable) as Collectable[]
       if (collectablesHere.length > 1) {
         addProblem(collectablesHere[1], "overlap")
         // Automatically delete
