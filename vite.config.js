@@ -5,6 +5,11 @@ export default defineConfig({
   base: '',
   build: {
     target: 'esnext',
+    minify: 'esbuild',
+  },
+  esbuild: {
+    minifyIdentifiers: false, // need to keep class names in tact for (de)serialization to work
+    // pure: ['console.log'],    // example: have esbuild remove any console.log
   },
   server: {
     watch: {
