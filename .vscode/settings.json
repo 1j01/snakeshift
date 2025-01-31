@@ -1,16 +1,14 @@
 {
-  "editor.tabSize": 2,
-  "editor.insertSpaces": true,
-  "editor.detectIndentation": false,
-  "editor.formatOnSave": true,
-  // npm respects different indent styles, but always adds a newline at the end of package.json/package-lock.json,
-  // so this avoids ping-ponging changes in git.
-  "files.insertFinalNewline": true,
-  // Sort imports on save. Also removes unused imports.
-  "[typescript]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "always"
-    }
+  // .----------------------------.
+  // | Filtering                  |
+  // '----------------------------'
+  // This hides files from the file tree as well as search results.
+  "files.exclude": {
+    // TODO
+  },
+  // This affects Find In Files (Ctrl+Shift+F), Go To File (Ctrl+P), and Quick Search.
+  "search.exclude": {
+    // TODO
   },
   // Prevent accidental editing.
   // This can always be overridden with the command "File: Toggle Active Editor Read-only in Session"
@@ -28,7 +26,25 @@
     ".env/**": true,
     "env/**": true,
   },
-  // Theming
+  // .----------------------------.
+  // | Formatting                 |
+  // '----------------------------'
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  // npm respects different indent styles, but always adds a newline at the end of package.json/package-lock.json,
+  // so this avoids ping-ponging changes in git.
+  "files.insertFinalNewline": true,
+  // Sort imports on save. Also removes unused imports.
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
+  // .----------------------------.
+  // | Theming                    |
+  // '----------------------------'
   "workbench.colorTheme": "Simple BW Dark", // or "simple dark",
   "workbench.iconTheme": "vs-minimal",
   "workbench.colorCustomizations": {
@@ -45,5 +61,8 @@
       "textLink.foreground": "#fff",
       "textLink.activeForeground": "#fff",
     }
-  }
+  },
+  // .------------------------- - .
+  // | Uncategorised settings
+  // '------------------------- - .
 }
