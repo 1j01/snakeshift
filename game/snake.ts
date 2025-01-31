@@ -1,7 +1,7 @@
 import { playSound } from "./audio"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
-import { checkLevelWon, entities, undoable } from "./game-state"
+import { checkLevelWon, entities, levelInfo, undoable } from "./game-state"
 import { hitTestAllEntities, topLayer } from "./helpers"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
@@ -309,6 +309,8 @@ export default class Snake extends Entity {
       valid:
         (dirX === 0 || dirY === 0) &&
         (Math.abs(dirX) === 1 || Math.abs(dirY) === 1) &&
+        x >= 0 && y >= 0 &&
+        x + head.width <= levelInfo.width && y + head.height <= levelInfo.height &&
         !movingBackwards &&
         topLayer(hitsAhead) !== head.layer &&
         topLayer(hitsAtTail) === head.layer,

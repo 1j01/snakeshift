@@ -11,7 +11,6 @@
 
 - prevent snakes from swapping depths while overlapped
   - simplest but most limiting would be to prevent moving while a snake is on top; need to see if this affects any puzzles
-- enforce level boundaries
 - detect immobile state and show a message about restarting/undoing
 - win condition should trigger if you win the last level, then go back to the menu and go to the same level from the level select and win it again (I've added a test for this)
 - fix bug where switching from play to edit mode switches to the first level after previously winning a level (I have a test for this)
