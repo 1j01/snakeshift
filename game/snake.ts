@@ -319,6 +319,11 @@ export default class Snake extends Entity {
     }
   }
   canMove(): boolean {
+    console.log("snake at", this.segments[0].x, this.segments[0].y, "can move:")
+    console.log("  right:", this.analyzeMoveRelative(1, 0).valid)
+    console.log("  left:", this.analyzeMoveRelative(-1, 0).valid)
+    console.log("  down:", this.analyzeMoveRelative(0, 1).valid)
+    console.log("  up:", this.analyzeMoveRelative(0, -1).valid)
     return this.analyzeMoveRelative(1, 0).valid ||
       this.analyzeMoveRelative(-1, 0).valid ||
       this.analyzeMoveRelative(0, 1).valid ||

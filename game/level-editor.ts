@@ -589,6 +589,7 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
       // MAYBE clear editor undos/redos
       // TODO: PRESERVE undos/redos while playing, across levels
       deserialize(fileText)
+      console.log(activePlayer)
       if (!activePlayer) {
         // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
         // and anyway I have a bunch of levels saved at this point.
