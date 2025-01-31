@@ -22,6 +22,7 @@
 - should be able to undo to hide the game win screen
 - indicate when you've won a custom level from level editor (there's no next level to go to, which is what normally plays a sound and shows a splash screen)
 - skip/merge extra undo steps for switching snakes
+- selection tool for level editor (really often I want to move sections around as modules and need to make space to avoid snakes bridging gaps)
 
 - saving playthroughs:
   - limit to undos pertaining to the current level (using `levelId` which is now in the undo shape)
