@@ -2,6 +2,9 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   root: 'game',
+  build: {
+    target: 'esnext',
+  },
   server: {
     watch: {
       ignored: [
