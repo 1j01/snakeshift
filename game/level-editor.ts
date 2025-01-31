@@ -352,7 +352,11 @@ export function handleInputForLevelEditing(
     if (
       (
         withinLevel(mouseHoveredTile) &&
-        topLayer(hits) !== brushColor
+        // topLayer only looks at solid entities
+        topLayer(hits) !== brushColor &&
+        // so we need to also prevent collectables from being placed on top of each other
+        // (I guess it's enough to prevent anything from being placed where there's a collectable...)
+        !hits.some(hit => hit.entity instanceof Collectable)
       ) || (
         defining instanceof Snake &&
         !sameTile(mouseHoveredTile, defining.segments[0])
