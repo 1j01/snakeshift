@@ -1,6 +1,7 @@
 import { playSound } from "./audio"
 import { setActivityMode } from "./game"
-import { clearLevel } from "./game-state"
+import { clearLevel, redos, undos } from "./game-state"
+import { confirmLoseUnsavedChanges } from "./level-editor"
 import { loadFirstLevel } from "./level-select"
 
 const playButton = document.querySelector<HTMLButtonElement>('#play-button')!
@@ -29,9 +30,10 @@ export function initMainMenu() {
   levelEditorButton.addEventListener('click', () => {
     hideScreens()
     setActivityMode("edit") // before clearing because it switches to separate edit mode undo stacks
-    // TODO: clear undos and redos; clearLevel() is undoable
-    // or clear when exiting from a level to the main menu / level select
     clearLevel()
+    // clear undos and redos because clearLevel() is undoable
+    undos.length = 0
+    redos.length = 0
   })
 
   creditsButton.addEventListener('click', () => {
@@ -70,10 +72,12 @@ export function hideScreens(options: { except?: string[] } = {}) {
 }
 
 export function showMainMenu() {
+  if (!confirmLoseUnsavedChanges()) return false
   hideScreens()
   mainMenu.classList.add('active')
   setActivityMode("menu")
   playButton.focus()
+  return true
 }
 
 export function showLevelSplash(levelInfo: { title: string }) {

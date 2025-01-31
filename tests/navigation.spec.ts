@@ -148,6 +148,106 @@ test('should show "Level Complete" when finishing a custom level (via level edit
   await expect(page.getByText('Level Complete')).toBeVisible();
 });
 
+test('should confirm discarding unsaved changes in edit mode', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Editor' }).click();
+  const filePath = 'game/public/levels/tests/move-left-to-win.json';
+  await dragAndDropFile(page, 'body', filePath, 'move-left-to-win.json');
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+
+  await page.locator('.editing > canvas').click({
+    position: {
+      x: 341,
+      y: 317
+    }
+  });
+
+  // This should show a dialog which will be automatically dismissed
+  await page.getByRole('button', { name: '← Back' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+
+  // Should still show dialog if you have no undos but you have redos
+  await page.keyboard.press('ControlOrMeta+z');
+
+  // This should show a dialog which will be automatically dismissed
+  await page.getByRole('button', { name: '← Back' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+
+  // Should go back if you confirm
+  page.on('dialog', dialog => dialog.accept());
+  await page.getByRole('button', { name: '← Back' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift$/);
+});
+
+test('should confirm discarding unsaved changes when play-testing a level after editing', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Editor' }).click();
+  const filePath = 'game/public/levels/tests/move-left-to-win.json';
+  await dragAndDropFile(page, 'body', filePath, 'move-left-to-win.json');
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+
+  await page.locator('.editing > canvas').click({
+    position: {
+      x: 341,
+      y: 317
+    }
+  });
+
+  // Start play-testing the level
+  await page.keyboard.press('Backquote');
+
+  // This should show a dialog which will be automatically dismissed
+  await page.getByRole('button', { name: '← Back' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Custom Level$/);
+
+  // Should still show dialog if you have no undos but you have redos
+  await page.keyboard.press('ControlOrMeta+z');
+
+  // This should show a dialog which will be automatically dismissed
+  await page.getByRole('button', { name: '← Back' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Custom Level$/);
+
+  // Should go back if you confirm
+  page.on('dialog', dialog => dialog.accept());
+  await page.getByRole('button', { name: '← Back' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift$/);
+});
+
+test('should not show confirmation dialog if there are no unsaved changes (after drag and drop to load level)', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Editor' }).click();
+  const filePath = 'game/public/levels/tests/move-left-to-win.json';
+  await dragAndDropFile(page, 'body', filePath, 'move-left-to-win.json');
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+  await page.getByRole('button', { name: '← Back' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift$/);
+});
+
+test.fixme('should not show confirmation dialog if there are no unsaved changes (after switching to edit mode from a built-in level)', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 002 (Just move left to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  await page.keyboard.press('Backquote');
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+  await page.getByRole('button', { name: '← Back' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift$/);
+});
+
+test('should not show confirmation dialog if playing a built-in level', async ({ page }) => {
+  // The game itself has undo/redo, but you're not editing the level.
+
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+
+  // Don't win the level, just move, creating an undo state.
+  await page.keyboard.press('ArrowUp');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+
+  await page.getByRole('button', { name: '← Back' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift$/);
+});
+
+
+
+
 test.skip('you should be able to win a level after returning to it via undo... even if some unknown conditions occur', async ({ page }) => {
   // not sure when the problem occurs
 });

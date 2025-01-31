@@ -95,6 +95,8 @@ export function updatePageTitleAndLevelSpecificOverlays() {
     document.title = `Snakeshift - ${currentLevelButton.textContent}`
   } else if (activityMode === "edit") {
     document.title = "Snakeshift - Level Editor"
+  } else if (activityMode === "play") {
+    document.title = "Snakeshift - Custom Level"
   } else {
     document.title = "Snakeshift"
   }

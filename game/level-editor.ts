@@ -1,9 +1,10 @@
 import { Block } from './block'
 import { Collectable } from './collectable'
 import Entity from './entity'
-import { setActivityMode } from './game'
+import { activityMode, editorRedos, editorUndos, setActivityMode } from './game'
 import { activePlayer, clearLevel, deserialize, entities, levelInfo, onResize, onUpdate, postUpdate, redo, redos, serialize, setActivePlayer, undoable, undos } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
+import { currentLevelID } from './level-select'
 import { hideScreens } from './menus'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
@@ -533,9 +534,30 @@ export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?:
   })
 }
 
+export function confirmLoseUnsavedChanges() {
+  // When play-testing a level, the undo/redo stacks are swapped into `editorUndos`/`editorRedos`.
+  // `editorUndos`/`editorRedos` only represent the editor's history while in play mode.
+  // While in edit mode, the editor's history is stored in `undos`/`redos`.
+
+  // This is a bit messy with state ownership.
+  // Before adding this confirmation dialog, the editor didn't have to know about `editorUndos`/`editorRedos`.
+
+  if (activityMode === "menu") {
+    return true
+  } else if (activityMode === "edit") {
+    if (undos.length === 0 && redos.length === 0) return true
+  } else if (activityMode === "play") {
+    if (currentLevelID()) return true
+    if (editorUndos.length === 0 && editorRedos.length === 0) return true
+  }
+  return confirm("This will discard any unsaved changes. Are you sure?")
+}
+
 function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean {
   // Load level or playthrough, and return whether it succeeded...
   // Or, may throw an error while loading a playthrough.
+
+  if (!confirmLoseUnsavedChanges()) return false
 
   // TODO: handle edit mode vs. play mode undo stacks
   // This is complicated, in part due to trying to snapshot for transactional error handling.
@@ -550,7 +572,9 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
     undos: [...undos],
     redos: [...redos],
   }
-  undoable()
+  if (newMode === "play") {
+    undoable()
+  }
   // not allowing whitespace but this is just a temporary file format with no proper identifier, for playthroughs
   if (fileText.startsWith('[')) {
     // TODO: error handling; also, I just realized loadLevelFromText will be at

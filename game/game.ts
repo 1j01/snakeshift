@@ -21,8 +21,8 @@ export function animate(time = 0) {
 
 export let activityMode: "edit" | "play" | "menu" = "menu"
 
-const editorUndos: GameState[] = []
-const editorRedos: GameState[] = []
+export const editorUndos: GameState[] = []
+export const editorRedos: GameState[] = []
 let editorState: GameState | undefined = undefined
 let cleanup = handleInput(canvas)
 export function setActivityMode(newMode: "edit" | "play" | "menu") {
