@@ -32,10 +32,8 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
   activityMode = newMode
   document.body.classList.toggle('editing', activityMode === "edit")
 
-  unsetCurrentLevel()
-  updatePageTitleAndLevelSpecificOverlays()
-
   if (activityMode === "edit") {
+    unsetCurrentLevel()
     cleanup = handleInputForLevelEditing(canvas)
     if (editorState) {
       undos.splice(0, undos.length, ...editorUndos)
@@ -50,6 +48,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     undos.length = 0
     redos.length = 0
   } else {
+    unsetCurrentLevel()
     cleanup = handleInput(canvas)
     clearLevel(false)
     undos.length = 0
@@ -58,6 +57,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     editorRedos.length = 0
     editorState = undefined
   }
+  updatePageTitleAndLevelSpecificOverlays()
 }
 
 export function restartLevel() {
