@@ -576,7 +576,10 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
     undos: [...undos],
     redos: [...redos],
   }
-  if (newMode === "play") {
+  // Allow undoing/redoing across levels
+  // But don't create an extraneous undo state when loading a level into level editor
+  // or loading a level from the level select screen.
+  if (activityMode === "play" && newMode === "play") {
     undoable()
   }
   // not allowing whitespace but this is just a temporary file format with no proper identifier, for playthroughs

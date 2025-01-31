@@ -220,7 +220,7 @@ test('should not show confirmation dialog if there are no unsaved changes (after
   await expect(page).toHaveTitle(/^Snakeshift$/);
 });
 
-test.fixme('should not show confirmation dialog if there are no unsaved changes (after switching to edit mode from a built-in level)', async ({ page }) => {
+test('should not show confirmation dialog if there are no unsaved changes (after switching to edit mode from a built-in level)', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 002 (Just move left to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
