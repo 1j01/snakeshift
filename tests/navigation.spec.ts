@@ -1,5 +1,5 @@
-import { expect, Page, test } from '@playwright/test';
-import { readFile } from 'node:fs/promises';
+import { expect, test } from '@playwright/test';
+import { dragAndDropFile, saveLevelFileAndCompareContent } from './test-helpers';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/');
@@ -74,60 +74,6 @@ test.fixme('you should be able to win the last level twice in a row, after retur
   await expect(page.locator('#game-win-screen')).toBeVisible();
 });
 
-
-const dragAndDropFile = async (
-  page: Page,
-  selector: string,
-  filePath: string,
-  fileName: string,
-  fileType = ''
-) => {
-  const buffer = (await readFile(filePath)).toString('base64');
-
-  const dataTransfer = await page.evaluateHandle(
-    async ({ bufferData, localFileName, localFileType }) => {
-      const dt = new DataTransfer();
-
-      const blobData = await fetch(bufferData).then((res) => res.blob());
-
-      const file = new File([blobData], localFileName, { type: localFileType });
-      dt.items.add(file);
-      return dt;
-    },
-    {
-      bufferData: `data:application/octet-stream;base64,${buffer}`,
-      localFileName: fileName,
-      localFileType: fileType,
-    }
-  );
-
-  await page.dispatchEvent(selector, 'drop', { dataTransfer });
-};
-
-async function streamToString(stream: ReadableStream): Promise<string> {
-  const chunks: Buffer[] = [];
-  for await (const chunk of stream) {
-    chunks.push(Buffer.from(chunk));
-  }
-  return Buffer.concat(chunks).toString("utf-8");
-}
-
-async function saveLevelFileAndGetContent(page: Page) {
-  const downloadPromise = page.waitForEvent('download');
-  await page.keyboard.down('Control');
-  await page.keyboard.press('KeyS');
-  await page.keyboard.up('Control');
-  const download = await downloadPromise;
-  // @ts-ignore
-  const levelFileContent = await streamToString(await download.createReadStream());
-  return levelFileContent;
-}
-
-async function saveLevelFileAndCompareContent(page: Page, filePath: string) {
-  const expectedContent = await readFile(filePath, 'utf8');
-  const actualContent = await saveLevelFileAndGetContent(page);
-  expect(actualContent).toEqual(expectedContent);
-}
 
 test('should open a level for editing with drag and drop, while in level editor', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Editor' }).click();
