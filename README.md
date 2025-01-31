@@ -84,6 +84,13 @@ To update all levels to the new format, run:
 node update-level-format.js
 ```
 
+### Deployment
+
+To build for production and push to GitHub Pages:
+```sh
+npm run deploy
+```
+
 ### Ideas
 
 - slicing snakes
