@@ -537,6 +537,8 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
   // Load level or playthrough, and return whether it succeeded...
   // Or, may throw an error while loading a playthrough.
 
+  if (!setActivityMode(newMode)) return false
+
   // TODO: handle edit mode vs. play mode undo stacks
   // This is complicated, in part due to trying to snapshot for transactional error handling.
   // The snapshot may be of either set of stacks, depending on the previous edit mode state.
@@ -582,7 +584,6 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
       alert(`Failed to load level. ${(error as Error).toString()}`)
       return false
     }
-    setActivityMode(newMode)
     hideScreens({ except: ["level-splash"] }) // level splash is shown early to mask loading time
     return true
   }

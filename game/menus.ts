@@ -70,9 +70,9 @@ export function hideScreens(options: { except?: string[] } = {}) {
 }
 
 export function showMainMenu() {
+  if (!setActivityMode("menu")) return
   hideScreens()
   mainMenu.classList.add('active')
-  setActivityMode("menu")
   playButton.focus()
 }
 
