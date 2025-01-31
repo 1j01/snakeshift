@@ -74,6 +74,16 @@ This command runs the spell checker, the typescript compiler, and eslint:
 npm run lint
 ```
 
+### File Format Versioning
+
+When the file format changes, increment `FORMAT_VERSION` and add an upgrade step for backwards compatibility in `game-state.ts`.
+
+To update all levels to the new format, run:
+
+```sh
+node update-level-format.js
+```
+
 ### Ideas
 
 - slicing snakes
