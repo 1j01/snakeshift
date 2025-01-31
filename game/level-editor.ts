@@ -592,9 +592,6 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
     return true // it's not a lie because it didn't throw an error™ (if it got here)
   } else {
     try {
-      // TODO: set editor level state regardless of edit mode,
-      // MAYBE clear editor undos/redos
-      // TODO: PRESERVE undos/redos while playing, across levels
       deserialize(fileText)
       if (!activePlayer) {
         // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
