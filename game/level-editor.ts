@@ -594,7 +594,9 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
         // and anyway I have a bunch of levels saved at this point.
         for (const entity of entities) {
           if (entity instanceof Snake) {
-            setActivePlayer(entity)
+            if (entity.canMove()) {
+              setActivePlayer(entity)
+            }
             break
           }
         }

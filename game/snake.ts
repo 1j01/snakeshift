@@ -318,6 +318,12 @@ export default class Snake extends Entity {
       entitiesThere: hitsAhead.map(hit => hit.entity),
     }
   }
+  canMove(): boolean {
+    return this.analyzeMoveRelative(1, 0).valid ||
+      this.analyzeMoveRelative(-1, 0).valid ||
+      this.analyzeMoveRelative(0, 1).valid ||
+      this.analyzeMoveRelative(0, -1).valid
+  }
   takeMove(move: Move): void {
     undoable()
     playSound('move')
