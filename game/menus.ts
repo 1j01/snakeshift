@@ -1,6 +1,6 @@
 import { playSound } from "./audio"
 import { setActivityMode } from "./game"
-import { clearLevel, redos, undos } from "./game-state"
+import { clearLevel } from "./game-state"
 import { confirmLoseUnsavedChanges } from "./level-editor"
 import { loadFirstLevel } from "./level-select"
 
@@ -30,10 +30,7 @@ export function initMainMenu() {
   levelEditorButton.addEventListener('click', () => {
     hideScreens()
     setActivityMode("edit") // before clearing because it switches to separate edit mode undo stacks
-    clearLevel()
-    // clear undos and redos because clearLevel() is undoable
-    undos.length = 0
-    redos.length = 0
+    clearLevel(false)
   })
 
   creditsButton.addEventListener('click', () => {
