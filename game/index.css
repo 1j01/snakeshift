@@ -117,7 +117,7 @@ body:not(.editing) #entities-bar {
   position: absolute;
   pointer-events: none;
   border: 30px solid #fff;
-  border-image: url(border-2.png) calc(15/32*100%) round;
+  border-image: url(/border-2.png) calc(15/32*100%) round;
   border-image-outset: 9px;
   image-rendering: pixelated;
   box-sizing: border-box;
