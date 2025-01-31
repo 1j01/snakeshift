@@ -182,6 +182,26 @@ test.fixme('should stay on the same level when pressing R after winning a prior 
   // TODO: also test that it restarts the level
 });
 
+test('should show "Level Complete" when finishing a custom level (via level editor)', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await page.keyboard.press('Backquote');
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+  await page.keyboard.press('Backquote');
+  await expect(page.getByText('Level Complete')).not.toBeVisible();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByText('Level Complete')).toBeVisible();
+  // it should then automatically hide
+  await expect(page.getByText('Level Complete')).not.toBeVisible();
+  // The level should be restarted.
+  // Undoing should let you go back before the level was won.
+  await page.keyboard.press('ControlOrMeta+z');
+  await expect(page.getByText('Level Complete')).not.toBeVisible();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByText('Level Complete')).toBeVisible();
+});
+
 test.skip('you should be able to win a level after returning to it via undo... even if some unknown conditions occur', async ({ page }) => {
   // not sure when the problem occurs
 });
@@ -189,3 +209,5 @@ test.skip('you should be able to win a level after returning to it via undo... e
 test.skip('undoing/redoing across level changes should not drop or add extra history states', async ({ page }) => {
   // not sure how to test this yet
 });
+
+// TODO: test navigating menus with keyboard/gamepad

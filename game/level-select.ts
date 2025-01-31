@@ -1,5 +1,6 @@
 import { playSound } from "./audio"
-import { activityMode } from "./game"
+import { activityMode, restartLevel } from "./game"
+import { undo } from "./game-state"
 import { loadLevel } from "./level-editor"
 import { showLevelSplash } from "./menus"
 
@@ -38,7 +39,24 @@ export function loadFirstLevel() {
 
 export function loadNextLevel() {
   if (!currentLevelButton) {
-    // Likely a custom level; TODO: handle winning custom levels, even after currentLevelButton is set
+    // Custom level editor level
+    // Undo the action that won the level so that you can undo restarting the level
+    // without immediately winning, blocking you from undoing further back.
+    undo()
+    restartLevel()
+    // TODO: DRY with showLevelSplash
+    const winScreen = document.querySelector<HTMLDivElement>('#standalone-level-win-screen')!
+    winScreen.classList.add('active')
+    playSound('gong')
+    setTimeout(() => {
+      winScreen.style.transition = "opacity .5s"
+      winScreen.style.opacity = "0"
+      setTimeout(() => {
+        winScreen.classList.remove('active')
+        winScreen.style.transition = ""
+        winScreen.style.opacity = ""
+      }, 600)
+    }, 800)
     return
   }
   const levelButtons = [...document.querySelectorAll<HTMLButtonElement>('.level-button')]

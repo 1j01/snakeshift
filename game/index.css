@@ -231,6 +231,7 @@ kbd:not(.grouping-kbd) {
 }
 
 #level-splash.active::before,
+#standalone-level-win-screen.active::before,
 #game-win-screen.active::before {
   content: "";
   position: absolute;

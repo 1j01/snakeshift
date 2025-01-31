@@ -95,7 +95,7 @@ addEventListener('drop', (event) => {
 let wonLevelID = ""
 onUpdate(() => {
   if (activityMode !== "play") return
-  if (wonLevelID === currentLevelID()) return
+  if (wonLevelID && wonLevelID === currentLevelID()) return
   // TODO: don't try to move to next level for custom levels
   if (checkLevelWon()) {
     wonLevelID = currentLevelID()
