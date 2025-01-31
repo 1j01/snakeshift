@@ -14,8 +14,8 @@
 - enforce level boundaries
 - detect immobile state and show a message about restarting/undoing
 - win condition should trigger if you win the last level, then go back to the menu and go to the same level from the level select and win it again (I've added a test for this)
-- test that when switching from play to edit mode, should always stay on the same level
-- test that reset (R) should never move to a different level
+- fix bug where switching from play to edit mode switches to the first level after previously winning a level (I have a test for this)
+- fix bug where reset (R) switches to the first level after previously winning a level (I have a test for this)
 - handle opening levels while in play mode or menu, and test saving as well
 - prompt before discarding unsaved level
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)

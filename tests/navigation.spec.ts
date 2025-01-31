@@ -156,6 +156,32 @@ test('should open a level for editing with drag and drop, while in a menu', asyn
   await saveLevelFileAndCompareContent(page, filePath);
 });
 
+test.fixme('should stay on the same level when switching to edit mode after winning a prior level', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await page.keyboard.press('ArrowRight');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  await page.keyboard.press('Backquote');
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+  await page.keyboard.press('Backquote');
+  // It doesn't and shouldn't necessarily preserve the title because it's a potentially edited level.
+  // await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  // We can compare the file content instead.
+  await saveLevelFileAndCompareContent(page, 'game/public/levels/tests/move-left-to-win.json');
+});
+
+test.fixme('should stay on the same level when pressing R after winning a prior level', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await page.keyboard.press('ArrowRight');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  await page.keyboard.press('r');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  // TODO: also test that it restarts the level
+});
+
 test.skip('you should be able to win a level after returning to it via undo... even if some unknown conditions occur', async ({ page }) => {
   // not sure when the problem occurs
 });
