@@ -1,0 +1,49 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  // npm respects different indent styles, but always adds a newline at the end of package.json/package-lock.json,
+  // so this avoids ping-ponging changes in git.
+  "files.insertFinalNewline": true,
+  // Sort imports on save. Also removes unused imports.
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
+  // Prevent accidental editing.
+  // This can always be overridden with the command "File: Toggle Active Editor Read-only in Session"
+  "files.readonlyInclude": {
+    // Vite
+    "dist/**": true,
+    // Node.js
+    "node_modules/**": true,
+    "package-lock.json": true,
+    // Python
+    "lib/**": true,
+    "lib64/**": true,
+    ".venv/**": true,
+    "venv/**": true,
+    ".env/**": true,
+    "env/**": true,
+  },
+  // Theming
+  "workbench.colorTheme": "Simple BW Dark", // or "simple dark",
+  "workbench.iconTheme": "vs-minimal",
+  "workbench.colorCustomizations": {
+    "[Simple BW Dark]": {
+      // Status bar was blue, maybe left unstyled by the theme.
+      "statusBar.background": "#000",
+      "statusBar.debuggingBackground": "#000",
+    },
+    "[simple dark]": {
+      // Buttons and links were blue, maybe left unstyled by the theme.
+      "button.background": "#000",
+      "button.foreground": "#fff",
+      "button.hoverBackground": "#252525",
+      "textLink.foreground": "#fff",
+      "textLink.activeForeground": "#fff",
+    }
+  }
+}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Snakeshift</title>
+  <!-- <link rel="icon" type="image/png" href="/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
+  <link rel="icon" type="image/png" href="/yin-yang-larger-sneks-180px.png" sizes="180x180" />
+  <script type="module" crossorigin src="/assets/index-E0AbVphS.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-z_b1Ginr.css">
+</head>
+
+<body>
+  <div class="screen" id="main-menu">
+    <h1>Snakeshift</h1>
+    <button class="bw-button" id="play-button" autofocus>Play</button>
+    <button class="bw-button" id="level-select-button">Level Select</button>
+    <button class="bw-button" id="level-editor-button">Level Editor</button>
+    <button class="bw-button" id="credits-button">Credits</button>
+  </div>
+  <div class="screen" id="credits">
+    <h1>Credits</h1>
+    <p>
+      <a href="https://isaiahodhner.io">Isaiah Odhner</a> — Programming, Design, Art
+    </p>
+    <h2>Sound Effects</h2>
+    <p>
+      <a href="https://freesound.org/people/schreibsel/sounds/540162/">schreibsel (Freesound) — Snake hiss</a>
+    </p>
+    <p>
+      <a href="https://freesound.org/people/spt3125/sounds/24558/">spt3125 (Freesound) — Kayageum</a>
+    </p>
+    <p>
+      <a href="https://pixabay.com/sound-effects/gong-2-232435/">LazyChillZone (Pixabay) — Gong</a>
+    </p>
+    <p>
+      <a href="https://freesound.org/people/JensZygar/sounds/486629/">JensZygar (Freesound) — Final Gong</a>
+    </p>
+    <p>
+      <a href="https://en.wikipedia.org/wiki/Lego_Creator_(video_game)">LEGO Creator</a> — Undo/Redo (temporary)
+    </p>
+  </div>
+  <div class="screen" id="level-select">
+    <h2>Level Select</h2>
+    <div id="level-list">
+      <h3>Easy</h3>
+      <button class="bw-button level-button" data-level="/levels/easy/001-movement.json">
+        Movement
+      </button>
+      <button class="bw-button level-button" data-level="/levels/easy/002-bridge.json">
+        Bridge
+      </button>
+      <button class="bw-button level-button" data-level="/levels/easy/003-ferry.json">
+        Ferry
+      </button>
+      <button class="bw-button level-button" data-level="/levels/easy/004-yin-yang-give-and-take.json">
+        Yin and Yang: Give and Take
+      </button>
+      <button class="bw-button level-button" data-level="/levels/easy/005-balls.json">
+        Balls
+      </button>
+      <h3>Medium</h3>
+      <button class="bw-button level-button" data-level="/levels/medium/fill-the-box-further-too-many-solutions.json">
+        Fill The Box
+      </button>
+      <button class="bw-button level-button" data-level="/levels/medium/proper-lock.json">
+        Lock Picking
+      </button>
+      <h3>Hard</h3>
+      <button class="bw-button level-button" data-level="/levels/hard/yin-yang-full.json">
+        Yin and Yang: Challenge
+      </button>
+      <button class="bw-button level-button" data-level="/levels/hard/security-by-obscurity-lock.json">
+        Security by Obscurity
+      </button>
+      <div style="opacity: 0.5" id="test-cases-not-real-levels">
+        <h3>Test Cases</h3>
+        <button class="bw-button level-button" data-level="/levels/tests/move-right-to-win.json">
+          Test Level 001 (Just move right to win)
+        </button>
+        <button class="bw-button level-button" data-level="/levels/tests/move-left-to-win.json">
+          Test Level 002 (Just move left to win)
+        </button>
+        <button class="bw-button level-button" data-level="/levels/tests/possible-bug-unable-to-move-left.json">
+          Possible bug: unable to move left here?
+        </button>
+        <button class="bw-button level-button"
+          data-level="/levels/tests/possible-bug-why-is-it-detecting-this-as-invalid.json">
+          Possible bug: why is it detecting this as invalid?
+        </button>
+        <button class="bw-button level-button" data-level="/levels/tests/format-version-too-new.json">
+          EMIT Format version too new (Error Message Itself Test)
+        </button>
+        <button class="bw-button level-button" data-level="/levels/tests/999-last-level-move-right-to-win.json">
+          Test Level 999 (Just move right to win)
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="screen" id="loading-screen">
+    <div id="load-progress"></div>
+  </div>
+  <div class="screen" id="level-splash">
+    <h1 id="level-splash-title"></h1>
+  </div>
+  <div class="screen" id="game-win-screen">
+    <h1>You Win!</h1>
+    <blockquote id="tao-te-ching-quote">
+      <div class="line-a">Thirty spokes share the wheel's hub;</div><br>
+      <div class="line-b">It is the center hole that makes it useful.</div><br>
+      <div class="line-a">Shape clay into a vessel;</div><br>
+      <div class="line-b">It is the space within that makes it useful.</div><br>
+      <div class="line-a">Cut doors and windows for a room;</div><br>
+      <div class="line-b">It is the holes which make it useful.</div><br>
+      <div class="line-a">Therefore profit comes from what is there;</div><br>
+      <div class="line-b">Usefulness from what is not there.</div>
+
+      <footer>
+        &mdash; <cite>Tao Te Ching, Chapter 11</cite>
+      </footer>
+    </blockquote>
+  </div>
+  <div id="game-options-bar">
+    <!-- TODO: make class an id or use a second button to better integrate with the entities bar -->
+    <button class="bw-button back-to-main-menu-button" aria-keyshortcuts="Escape">Back</button>
+    <button class="bw-button" id="restart-level-button" aria-keyshortcuts="R">Restart Level</button>
+    <!-- <button class="bw-button" id="undo-button" aria-keyshortcuts="Z">Undo</button> -->
+    <!-- <button class="bw-button" id="redo-button" aria-keyshortcuts="Y">Redo</button> -->
+    <!-- <button class="bw-button" id="switch-snakes-button" aria-keyshortcuts="Tab">Switch Snakes</button> -->
+    <button class="bw-button" id="mute-button" aria-keyshortcuts="M" aria-pressed="false">Mute</button>
+    <!-- <button class="bw-button" id="fullscreen-button" aria-keyshortcuts="F">Fullscreen</button> -->
+  </div>
+  <div id="level-editor">
+    <div id="entities-bar">
+      <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="White">Snake (White)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="Black">Snake (Black)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Collectable" data-color="White">Food
+        (White)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Collectable" data-color="Black">Food
+        (Black)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Crate" data-color="White">Crate (White)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Crate" data-color="Black">Crate (Black)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Block" data-color="White">Wall (White)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Block" data-color="Black">Wall (Black)</button>
+      <!-- entity buttons are brush tools -->
+      <!-- <button class="bw-button tool-button" data-tool="Brush">Brush</button> -->
+      <button class="bw-button tool-button" data-tool="Eraser">
+        <img src="/eraser.svg" alt="" />
+        Erase
+      </button>
+      <button class="bw-button tool-button" data-tool="Move">
+        <img src="/move.svg" alt="" />
+        Move
+      </button>
+      <button class="bw-button" id="clear-button">
+        <img src="/trash.svg" alt="" />
+        Clear
+      </button>
+      <button class="bw-button" id="level-info-button" aria-controls="level-info-editor">
+        <img src="/cog.svg" alt="" />
+        Level Info
+      </button>
+    </div>
+    <!-- <div id="toolbar">
+      <button id="play-button">Play</button>
+      <button id="save-button">Save</button>
+      <button id="load-button">Load</button>
+      <button id="clear-button">Clear</button>
+      <button id="undo-button">Undo</button>
+      <button id="redo-button">Redo</button>
+    </div> -->
+    <dialog id="level-info-editor">
+      <h2>Level Info</h2>
+      <form method="dialog">
+        <!-- <div class="control-row">
+          <label for="level-title">Title:</label>
+          <input type="text" id="level-title" />
+        </div>
+        <div class="control-row">
+          <label for="level-author">Author:</label>
+          <input type="text" id="level-author" />
+        </div>
+        <div class="control-row">
+          <label for="level-description">Description:</label>
+          <textarea id="level-description"></textarea>
+        </div> -->
+        <div class="control-row">
+          <label for="level-width">Width:</label>
+          <input type="number" id="level-width" />
+        </div>
+        <div class="control-row">
+          <label for="level-height">Height:</label>
+          <input type="number" id="level-height" />
+        </div>
+        <div class="control-row">
+          <button value="ok" class="bw-button" id="level-info-editor-ok-button">OK</button>
+          <button value="cancel" formmethod="dialog" class="bw-button"
+            id="level-info-editor-cancel-button">Cancel</button>
+        </div>
+      </form>
+  </div>
+  </div>
+  <div class="level-specific-overlay" data-for-level="/levels/easy/001-movement.json" hidden>
+    <!-- It is actually possible to get stuck on this level. TODO: detect this or limit the size of the snake -->
+    <h2>How to Move</h2>
+    <!-- <p>You can use a gamepad, keyboard, mouse, pen, or touch to play.</p> -->
+    <table>
+      <tr>
+        <td style="text-align: right; vertical-align: bottom;"><strong>Keyboard:</strong></td>
+        <td style="text-align: left;">
+          Use the arrow keys
+          <span style="display: inline-block;">
+            <kbd style="opacity:0;user-select:none;margin-bottom:-0.1em" aria-hidden="true">_</kbd><!--
+            --><kbd style="margin-bottom:-0.1em">↑</kbd><!--
+            --><br style="user-select:none" aria-hidden="true"><!--
+            --><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd>
+          </span>
+          or
+          <span style="display: inline-block;">
+            <kbd style="opacity:0;user-select:none;margin-bottom:-0.1em;margin-left:-0.2em" aria-hidden="true">Q</kbd><!--
+            --><kbd style="margin-bottom:-0.1em">W</kbd><!--
+            --><br style="user-select:none" aria-hidden="true"><!--
+            --><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+          </span>
+          or
+          <!-- vi-style -->
+          <!-- vi keys -->
+          <span style="display: inline-block;">
+            <kbd>H</kbd><kbd>J</kbd><kbd>K</kbd><kbd>L</kbd>
+          </span>
+          or numpad
+          <span style="display: inline-block;">
+            <kbd style="opacity:0;user-select:none;margin-bottom:-0.1em" aria-hidden="true">7</kbd><!--
+            --><kbd style="margin-bottom:-0.1em">8</kbd><br style="user-select:none" aria-hidden="true"><!--
+            --><kbd>4</kbd><kbd style="opacity:0;user-select:none;" aria-hidden="true">5</kbd><kbd>6</kbd><!--
+            --><br style="user-select:none" aria-hidden="true"><!--
+            why does this one line break sneak into the clipboard whereas user-select:none works for the others?
+            --><kbd style="opacity:0;user-select:none;margin-top:-0.1em" aria-hidden="true">1</kbd><!--
+            --><kbd style="margin-top:-0.1em">2</kbd>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: right;"><strong>Gamepad:</strong></td>
+        <td style="text-align: left;">Either use the ✜ D-pad, or press Ⓐ while holding the left stick in a direction.
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: right;"><strong>Mouse/pen/touch:</strong></td>
+        <td style="text-align: left;">Click on the cell you want to move to.</td>
+      </tr>
+    </table>
+  </div>
+  <div class="level-specific-overlay" data-for-level="/levels/easy/002-bridge.json" hidden>
+    <!-- It is actually possible to get stuck on this level. TODO: detect this? I don't want to clutter the tutorial text...-->
+    <!-- TODO: show controls specific to the active control scheme -->
+    <p>Press <kbd>Tab</kbd> to switch snakes, or use shoulder buttons on a gamepad.</p>
+  </div>
+  <div class="level-specific-overlay" data-for-level="/levels/easy/003-ferry.json" hidden>
+    <!-- TODO: show controls specific to the active control scheme -->
+    <!-- <p>Press <kbd>Z</kbd>/ⓧ to undo, or <kbd>R</kbd>/Ⓨ to restart the level.</p> -->
+    <p>Press <kbd>Z</kbd> to undo, or <kbd>R</kbd> to restart the level, or ⓧ/Ⓨ on a gamepad.</p>
+  </div>
+</body>
+
+</html>

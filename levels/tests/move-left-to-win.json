@@ -1,0 +1,51 @@
+{
+  "format": "snakeshift",
+  "formatVersion": 4,
+  "levelInfo": {
+    "width": 16,
+    "height": 16
+  },
+  "entities": [
+    {
+      "id": "41314df2-f98c-40e6-bfa9-a9fd146a4a58",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 10,
+          "y": 7,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 11,
+          "y": 7,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 12,
+          "y": 7,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    },
+    {
+      "solid": false,
+      "x": 9,
+      "y": 7,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    }
+  ],
+  "entityTypes": [
+    "Snake",
+    "Collectable"
+  ],
+  "activePlayerEntityIndex": 0,
+  "levelId": ""
+}
