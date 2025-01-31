@@ -593,6 +593,7 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
   } else {
     try {
       deserialize(fileText)
+      setBaseLevelState(fileText)
       if (!activePlayer) {
         // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
         // and anyway I have a bunch of levels saved at this point.
@@ -610,7 +611,6 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
       alert(`Failed to load level. ${(error as Error).toString()}`)
       return false
     }
-    setBaseLevelState(fileText)
     setActivityMode(newMode)
     hideScreens({ except: ["level-splash"] }) // level splash is shown early to mask loading time
     return true
