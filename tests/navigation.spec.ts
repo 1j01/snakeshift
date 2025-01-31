@@ -84,7 +84,7 @@ test('should open a level for editing with drag and drop, while in level editor'
   await saveLevelFileAndCompareContent(page, filePath);
 });
 
-test.fixme('should open a level for editing with drag and drop, while in play mode', async ({ page }) => {
+test('should open a level for editing with drag and drop, while in play mode', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
@@ -102,7 +102,7 @@ test('should open a level for editing with drag and drop, while in a menu', asyn
   await saveLevelFileAndCompareContent(page, filePath);
 });
 
-test.fixme('should stay on the same level when switching to edit mode after winning a prior level', async ({ page }) => {
+test('should stay on the same level when switching to edit mode after winning a prior level', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);

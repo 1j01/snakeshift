@@ -1,7 +1,7 @@
 import { Block } from './block'
 import { Collectable } from './collectable'
 import Entity from './entity'
-import { activityMode, editorRedos, editorUndos, setActivityMode } from './game'
+import { activityMode, editorRedos, editorUndos, setActivityMode, setBaseLevelState } from './game'
 import { activePlayer, clearLevel, deserialize, entities, levelInfo, onResize, onUpdate, postUpdate, redo, redos, serialize, setActivePlayer, undoable, undos } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
 import { currentLevelID } from './level-select'
@@ -613,6 +613,7 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
       alert(`Failed to load level. ${(error as Error).toString()}`)
       return false
     }
+    setBaseLevelState(fileText)
     setActivityMode(newMode)
     hideScreens({ except: ["level-splash"] }) // level splash is shown early to mask loading time
     return true

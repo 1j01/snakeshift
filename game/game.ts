@@ -60,6 +60,10 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
   }
 }
 
+export function setBaseLevelState(state: GameState) {
+  editorState = state
+}
+
 export function restartLevel() {
   if (activityMode !== "play") return
   if (!editorState) return
