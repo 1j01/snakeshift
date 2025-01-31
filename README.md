@@ -89,3 +89,7 @@ npm run lint
   - shown as conic (hourglass-like when 1 cell) twist with black/white braided wormhole leading to other portal (which can be the same cell) and which can be the same or a different color and the same or a different size and the same or a different orientation
   - what if it could act as the slicer too, with razor-sharp sections of the wormhole aligned to grid edges? you would go through the wormhole with a snake to slice a snake crossing the wormhole blades
 
+## License
+
+This project is licensed under the MIT License. See the [LICENSE.txt](./LICENSE.txt) file for details.
+
