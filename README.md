@@ -74,6 +74,12 @@ This command runs the spell checker, the typescript compiler, and eslint:
 npm run lint
 ```
 
+There are also tests written using Playwright:
+
+```sh
+npm run test
+```
+
 ### File Format Versioning
 
 When the file format changes, increment `FORMAT_VERSION` and add an upgrade step for backwards compatibility in `game-state.ts`.
