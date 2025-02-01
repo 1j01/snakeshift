@@ -28,7 +28,7 @@ export async function loadLevelFile(levelURL: string, loadedCallback?: () => voi
     return
   }
   const blob = await request.blob()
-  loadLevel(blob, "play", loadedCallback)
+  loadLevel(blob, "play", loadedCallback, levelURL)
 }
 
 export function loadFirstLevel() {
@@ -90,10 +90,10 @@ export function currentLevelID() {
 }
 
 export function updatePageTitleAndLevelSpecificOverlays() {
-  if (currentLevelButton) {
-    document.title = `Snakeshift - ${currentLevelButton.textContent}`
-  } else if (activityMode === "edit") {
+  if (activityMode === "edit") {
     document.title = "Snakeshift - Level Editor"
+  } else if (currentLevelButton) {
+    document.title = `Snakeshift - ${currentLevelButton.textContent}`
   } else if (activityMode === "play") {
     document.title = "Snakeshift - Custom Level"
   } else {

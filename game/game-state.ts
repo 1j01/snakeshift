@@ -88,7 +88,7 @@ export function serialize(): GameState {
     levelId: currentLevelID(),
   }, null, 2) + "\n"
 }
-export function deserialize(state: GameState) {
+export function deserialize(state: GameState, levelId: string | null = null) {
   const whichSnakeBefore = activePlayer?.id ?? ""
   entities.length = 0
 
@@ -144,7 +144,8 @@ export function deserialize(state: GameState) {
     activePlayer?.highlight()
   }
 
-  setCurrentLevel(parsed.levelId)
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  setCurrentLevel(levelId || parsed.levelId)
   updatePageTitleAndLevelSpecificOverlays()
 
   postUpdate()
@@ -264,11 +265,11 @@ function loadPlaythrough(json: string) {
 }
 // TODO: simplify with promises
 
-export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?: () => void) {
+export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?: () => void, levelId: string | null = null) {
   // Error Message Itself Test
   // Promise.reject(new Error("EMIT oh no!")).then((fileText) => {
   file.text().then((fileText) => {
-    if (loadLevelFromText(fileText, newMode)) {
+    if (loadLevelFromText(fileText, newMode, levelId)) {
       loadedCallback?.()
     }
   }, (error) => {
@@ -292,7 +293,7 @@ export function confirmLoseUnsavedChanges() {
   }
   return confirm("This will discard any unsaved changes. Are you sure?")
 }
-function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean {
+function loadLevelFromText(fileText: string, newMode: "edit" | "play", levelId: string | null = null): boolean {
   // Load level or playthrough, and return whether it succeeded...
   // Or, may throw an error while loading a playthrough.
   if (!confirmLoseUnsavedChanges()) return false
@@ -325,8 +326,8 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean 
     return true // it's not a lie because it didn't throw an error™ (if it got here)
   } else {
     try {
-      deserialize(fileText)
-      setBaseLevelState(fileText)
+      deserialize(fileText, levelId)
+      setBaseLevelState(serialize())
       if (!activePlayer) {
         // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
         // and anyway I have a bunch of levels saved at this point.

@@ -12,7 +12,6 @@
 - prevent snakes from swapping depths while overlapped
   - simplest but most limiting would be to prevent moving while a snake is on top; need to see if this affects any puzzles
 - detect immobile state and show a message about restarting/undoing
-- fix bug where reset (R) switches to the first level after previously winning a level (I have a test for this)
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
 - skip/merge extra undo steps for switching snakes
 
