@@ -21,12 +21,20 @@ test.describe('level editor', () => {
   test.describe('selection tool', () => {
     test.skip('selection tool should let you delete entities')
     test.skip('selection tool should let you move entities')
-    test.skip('copy/paste should be supported')
-    test.skip('cut should be supported')
+    test.skip('an empty selection should still be movable and deletable')
+    test.skip('copy/paste')
+    test.skip('cut/paste')
+    test.skip('arrow keys should translate selection')
+    test.skip('clicking should create a 1x1 selection and immediately select entities (no drag required)')
+    test.skip('1x1 selection should translate like normal (must not use equal references for start/end positions)')
+    test.skip('right click should not erase entities while there is a selection')
+    test.skip('undo/redo should hide the selection box')
+    test.skip('resizing the level should update the selection box position visually')
   })
   test.describe('erase tool', () => {
     test.skip('erase tool should let you delete entities')
     test.skip('erase tool should partially delete snakes, and split them if necessary')
+    test.skip('right click should also erase entities, without eraser tool selected')
   })
   test.describe('clear button', () => {
     test.skip('clear button should clear the level if there is no selection (undoable)')
