@@ -268,7 +268,7 @@ export function handleInputForLevelEditing(
     pointerDownTile = pageToWorldTile(event)
     const selectionBox = getSelectionBox()
     const shouldDragSelection = selectionBox && pointerDownTile && within(pointerDownTile, selectionBox)
-    if (!withinLevel(pointerDownTile) && !shouldDragSelection) {
+    if (!withinLevel(pointerDownTile) && tool !== Tool.Select) {
       pointerDownTile = undefined
     }
     mouseHoveredTile = pointerDownTile // for tool actions (no longer needed?)
