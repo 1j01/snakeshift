@@ -3,6 +3,7 @@ import { Collectable } from "./collectable"
 import Entity from "./entity"
 import { checkLevelWon, entities, levelInfo, undoable } from "./game-state"
 import { hitTestAllEntities, topLayer } from "./helpers"
+import { selectedEntities } from "./level-editor"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
 export interface SnakeSegment extends Tile {
@@ -46,18 +47,23 @@ export default class Snake extends Entity {
     ctx.fill()
   }
   draw2(ctx: CanvasRenderingContext2D): void {
+    const selectedInLevelEditor = selectedEntities.includes(this)
     // eye and tongue
     // Tongue should always go on top of other snakes.
     this._drawHeadDetails(ctx)
     // Restful outlines for general clarity
     this._drawBodyOutline(ctx, (highlightCtx, transform) => {
-      // highlightCtx.setLineDash([0.1, 0.2])
+      // if (selectedInLevelEditor) {
+      //   highlightCtx.setLineDash([0.1, 0.2])
+      // }
       highlightCtx.strokeStyle = this.segments[0].layer === CollisionLayer.White ? '#fff' : '#000'
       highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
       highlightCtx.stroke()
     })
     this._drawBodyOutline(ctx, (highlightCtx, transform) => {
-      // highlightCtx.setLineDash([0.1, 0.2])
+      if (selectedInLevelEditor) {
+        highlightCtx.setLineDash([0.1, 0.2])
+      }
       highlightCtx.strokeStyle = this.segments[0].layer === CollisionLayer.White ? '#000' : '#fff'
       highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
       highlightCtx.stroke()

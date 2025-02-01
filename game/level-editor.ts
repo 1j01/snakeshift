@@ -23,7 +23,7 @@ let draggingSegmentIndex = 0
 let defining: Entity | undefined = undefined
 let createdUndoState = false
 let selectionRange: { startTile: Tile, endTile: Tile, defining: boolean } | undefined = undefined
-let selectedEntities: Entity[] = []
+export let selectedEntities: Entity[] = []
 
 function getSelectionBox(): Tile | undefined {
   if (selectionRange) {
