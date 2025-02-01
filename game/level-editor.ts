@@ -18,7 +18,8 @@ enum Tool {
 let tool = Tool.Brush
 let brushEntityClass: typeof Entity = Block
 let brushColor = CollisionLayer.White
-let dragging: Entity | undefined = undefined
+let draggingEntities: Entity[] = []
+// let draggingOffsets: { x: number, y: number }[] = []
 let draggingSegmentIndex = 0
 let defining: Entity | undefined = undefined
 let createdUndoState = false
@@ -271,21 +272,23 @@ export function handleInputForLevelEditing(
     mouseHoveredTile = pointerDownTile // for tool actions (no longer needed?)
     if (
       pointerDownTile &&
-      !dragging &&
+      !draggingEntities.length &&
       event.button === 0 &&
       tool === Tool.Move
     ) {
       // TODO: consider reversing the array to be topmost first
       const hits = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
       const hit = hits[hits.length - 1]
-      dragging = hit?.entity
+      draggingEntities = [hit?.entity].filter(Boolean)
       draggingSegmentIndex = hit?.segmentIndex ?? 0
-      if (dragging) {
+      if (draggingEntities.length) {
         undoable()
-        // reorder so that the entity is on top
-        entities.splice(entities.indexOf(dragging), 1)
-        entities.push(dragging)
-        // unless it shouldn't be
+        // reorder so that the dragged entities are on top
+        for (const entity of draggingEntities) {
+          entities.splice(entities.indexOf(entity), 1)
+        }
+        entities.push(...draggingEntities)
+        // unless some of them shouldn't be
         sortEntities()
       }
       updateHighlight()
@@ -316,7 +319,7 @@ export function handleInputForLevelEditing(
     // but definitely only undo if an undo state was created for this gesture.
     pointerDownTile = undefined
     defining = undefined
-    dragging = undefined
+    draggingEntities = []
     draggingSegmentIndex = 0
     createdUndoState = false
     if (selectionRange?.defining) {
@@ -337,8 +340,10 @@ export function handleInputForLevelEditing(
       mouseHoveredTile = undefined
     }
     if (mouseHoveredTile) {
-      if (dragging) {
-        drag(mouseHoveredTile)
+      if (draggingEntities.length) {
+        for (const entity of draggingEntities) {
+          drag(entity, mouseHoveredTile)
+        }
       } else if (selectionRange?.defining && pointerDownTile) {
         selectionRange.endTile = mouseHoveredTile
         selectEntitiesInSelectionBox()
@@ -479,7 +484,7 @@ export function handleInputForLevelEditing(
     }
   }
 
-  function drag(to: Tile) {
+  function drag(dragging: Entity, to: Tile) {
     to = clampToLevel(to)
     if (dragging instanceof RectangularEntity) {
       dragging.x = to.x
