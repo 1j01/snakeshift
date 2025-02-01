@@ -306,7 +306,7 @@ export function handleInputForLevelEditing(
       event.button === 0 &&
       tool === Tool.Select
     ) {
-      selectionRange = { startTile: pointerDownTile, endTile: pointerDownTile, defining: true }
+      selectionRange = { startTile: { ...pointerDownTile }, endTile: { ...pointerDownTile }, defining: true }
       selectEntitiesInSelectionBox()
       updateHighlight()
     } else if (mouseHoveredTile) {
@@ -363,7 +363,7 @@ export function handleInputForLevelEditing(
           }
         }
       } else if (selectionRange?.defining && pointerDownTile) {
-        selectionRange.endTile = mouseHoveredTile
+        selectionRange.endTile = { ...mouseHoveredTile }
         selectEntitiesInSelectionBox()
       } else {
         handlePointerDownOrMove(event, lastTile, mouseHoveredTile)
