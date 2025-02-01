@@ -1,7 +1,7 @@
-import { clearLevel, deserialize, entities, redos, serialize, undoable, undos } from "./game-state"
+import { checkLevelWon, clearLevel, deserialize, entities, onUpdate, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
-import { unsetCurrentLevel, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
+import { currentLevelID, loadNextLevel, unsetCurrentLevel, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { canvas, draw } from "./rendering"
 import { GameState } from "./types"
 
@@ -69,4 +69,19 @@ export function restartLevel() {
   if (!editorState) return
   undoable()
   deserialize(editorState)
+}
+
+export function handleLevelCompletion() {
+  let wonLevelID = ""
+  onUpdate(() => {
+    if (activityMode !== "play") return
+    if (wonLevelID && wonLevelID === currentLevelID()) return
+    if (checkLevelWon()) {
+      wonLevelID = currentLevelID()
+      console.log('Level won!', wonLevelID)
+      loadNextLevel()
+    } else {
+      wonLevelID = ""
+    }
+  })
 }

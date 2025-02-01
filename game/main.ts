@@ -1,8 +1,8 @@
 import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
-import { activityMode, animate, restartLevel, setActivityMode } from "./game"
-import { checkLevelWon, clearLevel, loadLevel, onUpdate, openLevel, redo, saveLevel, savePlaythrough, undo } from "./game-state"
+import { activityMode, animate, handleLevelCompletion, restartLevel, setActivityMode } from "./game"
+import { clearLevel, loadLevel, openLevel, redo, saveLevel, savePlaythrough, undo } from "./game-state"
 import { initLevelEditorGUI } from "./level-editor"
-import { currentLevelID, initLevelSelect, loadNextLevel } from "./level-select"
+import { initLevelSelect } from "./level-select"
 import { initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
 
@@ -92,19 +92,7 @@ addEventListener('drop', (event) => {
   }
 })
 
-let wonLevelID = ""
-onUpdate(() => {
-  if (activityMode !== "play") return
-  if (wonLevelID && wonLevelID === currentLevelID()) return
-  if (checkLevelWon()) {
-    wonLevelID = currentLevelID()
-    console.log('Level won!', wonLevelID)
-    loadNextLevel()
-  } else {
-    wonLevelID = ""
-  }
-})
-
+handleLevelCompletion()
 initMainMenu()
 initLevelEditorGUI()
 initLevelSelect()
