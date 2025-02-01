@@ -1,13 +1,11 @@
 import { playSound } from "./audio"
-import { Block } from "./block"
 import { Collectable } from "./collectable"
-import { Crate } from "./crate"
 import Entity from "./entity"
 import { activityMode } from "./game"
-import { makeEntity, sortEntities } from "./helpers"
+import { makeEntity } from "./helpers"
 import { currentLevelID, setCurrentLevel, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import Snake from "./snake"
-import { CollisionLayer, ControlScheme, GameState, ParsedGameState } from "./types"
+import { ControlScheme, GameState, ParsedGameState } from "./types"
 
 export const entities: Entity[] = []
 
@@ -159,42 +157,6 @@ export function clearLevel(shouldBeUndoable = true) {
   levelInfo.height = defaultLevelInfo.height
   activePlayer = undefined
   postUpdate()
-}
-
-export function initLevel() {
-  // TODO: remove this test level
-  entities.length = 0
-  // for (let x = 0; x < 16; x++) {
-  //   for (let y = 8; y < 16; y++) {
-  //     entities.push(new Block(x, y, 1, 1, CollisionLayer.White))
-  //   }
-  // }
-  entities.push(new Block(0, 8, 16, 8, CollisionLayer.White))
-  for (let x = 9; x < 15; x++) {
-    for (let y = 9; y < 15; y++) {
-      entities.push(new Block(x, y, 1, 1, CollisionLayer.Black))
-    }
-  }
-  for (let x = 4; x < 12; x++) {
-    for (let y = 0; y < 8; y++) {
-      entities.push(new Collectable(x, y, 1, 1, CollisionLayer.White))
-    }
-    for (let y = 8; y < 16; y++) {
-      entities.push(new Collectable(x, y, 1, 1, CollisionLayer.Black))
-    }
-  }
-  activePlayer = new Snake()
-  entities.push(activePlayer)
-  const otherSnake = new Snake()
-  for (const segment of otherSnake.segments) {
-    segment.y += 9
-    segment.layer = CollisionLayer.Black
-  }
-  entities.push(otherSnake)
-  entities.push(new Crate(3, 3, 1, 1, CollisionLayer.White))
-  entities.push(new Crate(3, 13, 1, 1, CollisionLayer.Black))
-  sortEntities() // because I don't care to manage the order of this code more than I need to
-  postUpdate() // might matter to clear a highlight if level is reset
 }
 
 export function cyclePlayerControl(reverse = false) {
