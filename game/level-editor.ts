@@ -307,7 +307,7 @@ export function handleInputForLevelEditing(
       tool === Tool.Select
     ) {
       selectionRange = { startTile: pointerDownTile, endTile: pointerDownTile, defining: true }
-      selectedEntities = []
+      selectEntitiesInSelectionBox()
       updateHighlight()
     } else if (mouseHoveredTile) {
       handlePointerDownOrMove(event, mouseHoveredTile, mouseHoveredTile)
