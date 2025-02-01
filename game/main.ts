@@ -1,7 +1,7 @@
 import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
 import { activityMode, animate, handleLevelCompletion, restartLevel, setActivityMode } from "./game"
-import { clearLevel, loadLevel, openLevel, redo, saveLevel, savePlaythrough, undo } from "./game-state"
-import { deleteSelectedEntities, initLevelEditorGUI } from "./level-editor"
+import { clearLevel, loadLevel, openLevel, redo, saveLevel, savePlaythrough, undo, undoable } from "./game-state"
+import { deleteSelectedEntities, initLevelEditorGUI, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
 import { initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
@@ -50,6 +50,12 @@ addEventListener('keydown', (event) => {
     event.preventDefault()
   } else if (event.key === 'Delete' && activityMode == "edit") {
     deleteSelectedEntities()
+    event.preventDefault()
+  } else if ((event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowDown') && activityMode == "edit") {
+    const dx = (event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0)
+    const dy = (event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0)
+    undoable()
+    translateSelection(dx, dy)
     event.preventDefault()
   } else if (event.key === 'Escape') {
     if (activityMode === "play") {

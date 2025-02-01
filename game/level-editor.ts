@@ -347,15 +347,7 @@ export function handleInputForLevelEditing(
     if (mouseHoveredTile) {
       if (dragGestureLastTile) {
         if (selectionRange && dragGestureLastTile) {
-          const dx = mouseHoveredTile.x - dragGestureLastTile.x
-          const dy = mouseHoveredTile.y - dragGestureLastTile.y
-          for (const entity of draggingEntities) {
-            nudge(entity, dx, dy)
-          }
-          selectionRange.startTile.x += dx
-          selectionRange.startTile.y += dy
-          selectionRange.endTile.x += dx
-          selectionRange.endTile.y += dy
+          translateSelection(mouseHoveredTile.x - dragGestureLastTile.x, mouseHoveredTile.y - dragGestureLastTile.y)
           dragGestureLastTile = mouseHoveredTile
         } else {
           for (const entity of draggingEntities) {
@@ -502,18 +494,6 @@ export function handleInputForLevelEditing(
     }
   }
 
-  function nudge(dragging: Entity, dx: number, dy: number) {
-    if (dragging instanceof RectangularEntity) {
-      dragging.x += dx
-      dragging.y += dy
-    } else if (dragging instanceof Snake) {
-      for (const segment of dragging.segments) {
-        segment.x += dx
-        segment.y += dy
-      }
-    }
-  }
-
   function drag(dragging: Entity, to: Tile) {
     to = clampToLevel(to)
     if (dragging instanceof RectangularEntity) {
@@ -591,4 +571,29 @@ export function deleteSelectedEntities() {
     setHighlight(undefined) // updateHighlight()? not accessible out here...
     postUpdate() // I guess?
   }
+}
+
+function translateEntity(dragging: Entity, dx: number, dy: number) {
+  if (dragging instanceof RectangularEntity) {
+    dragging.x += dx
+    dragging.y += dy
+  } else if (dragging instanceof Snake) {
+    for (const segment of dragging.segments) {
+      segment.x += dx
+      segment.y += dy
+    }
+  }
+}
+
+export function translateSelection(dx: number, dy: number) {
+  if (!selectionRange) return
+  for (const entity of selectedEntities) {
+    translateEntity(entity, dx, dy)
+  }
+  selectionRange.startTile.x += dx
+  selectionRange.startTile.y += dy
+  selectionRange.endTile.x += dx
+  selectionRange.endTile.y += dy
+  // updateHighlight() // not available here... TODO: refactor (I don't know if the selection should really be a "highlight", but, regardless, it's certainly awkward how it is now...)
+  setHighlight(getSelectionBox(), { isSelection: true, valid: true })
 }
