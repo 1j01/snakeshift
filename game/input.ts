@@ -43,6 +43,7 @@ export function handleInput(
 
   if (activityMode !== "menu") {
     let pointerDownSnake: Snake | undefined = undefined
+    let movedSincePointerDown = false
 
     const snakeUnderPointer = (event: { clientX: number, clientY: number }): Snake | undefined => {
       const mouseTile = pageToWorldTile(event)
@@ -57,12 +58,13 @@ export function handleInput(
       lastPointerPosition = { x: event.clientX, y: event.clientY }
       setControlScheme(ControlScheme.Pointer)
       pointerDownSnake = snakeUnderPointer(event)
+      movedSincePointerDown = false
     })
 
     on(window, "pointerup", (event) => {
       dragging = false
       lastPointerPosition = undefined
-      if (pointerDownSnake && snakeUnderPointer(event) === pointerDownSnake) {
+      if (pointerDownSnake && snakeUnderPointer(event) === pointerDownSnake && !movedSincePointerDown) {
         // TODO: DRY, shouldn't the sfx and highlight be handled by setActivePlayer? maybe with a flag if needed?
         setActivePlayer(pointerDownSnake)
         playSound("switchSnakes")
@@ -111,6 +113,8 @@ export function handleInput(
             // lastPointerPosition.y += moveY * MOVE_THRESHOLD
             lastPointerPosition.y = event.clientY
           }
+
+          movedSincePointerDown = true
         }
       }
     })
