@@ -18,9 +18,9 @@ test.describe('level editor', () => {
     test.skip('move tool should let you drag snakes by the head')
     test.skip('move tool should let you drag snakes by the tail')
   })
-  test.describe('selection tool', () => {
-    test.skip('selection tool should let you delete entities')
-    test.skip('selection tool should let you move entities')
+  test.describe('select tool', () => {
+    test.skip('select tool should let you delete entities')
+    test.skip('select tool should let you move entities')
     test.skip('an empty selection should still be movable and deletable')
     test.skip('copy/paste')
     test.skip('cut/paste')
@@ -31,9 +31,9 @@ test.describe('level editor', () => {
     test.skip('undo/redo should hide the selection box')
     test.skip('resizing the level should update the selection box position visually')
   })
-  test.describe('erase tool', () => {
-    test.skip('erase tool should let you delete entities')
-    test.skip('erase tool should partially delete snakes, and split them if necessary')
+  test.describe('eraser tool', () => {
+    test.skip('eraser tool should let you delete entities')
+    test.skip('eraser tool should partially delete snakes, and split them if necessary')
     test.skip('right click should also erase entities, without eraser tool selected')
   })
   test.describe('clear button', () => {
