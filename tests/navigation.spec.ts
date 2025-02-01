@@ -74,6 +74,19 @@ test('you should be able to win the last level twice in a row, after returning t
   await expect(page.locator('#game-win-screen')).toBeVisible();
 });
 
+test('you should be able to hide the game win screen by undoing, and then win again', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#game-win-screen')).toBeVisible();
+  await page.keyboard.press('ControlOrMeta+z');
+  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  test.fixme(true, 'should be able to win the level again after undoing');
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#game-win-screen')).toBeVisible();
+});
+
 
 test('should open a level for editing with drag and drop, while in level editor', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Editor' }).click();

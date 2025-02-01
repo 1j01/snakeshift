@@ -14,7 +14,6 @@
 - detect immobile state and show a message about restarting/undoing
 - fix bug where reset (R) switches to the first level after previously winning a level (I have a test for this)
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
-- should be able to undo to hide the game win screen
 - skip/merge extra undo steps for switching snakes
 
 - saving playthroughs:

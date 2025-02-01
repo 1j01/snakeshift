@@ -46,6 +46,8 @@ export function undo() {
     setTimeout(() => {
       recentUndoSound -= 1
     }, 400)
+    // Special behavior to hide the game win screen
+    document.getElementById("game-win-screen")?.classList.remove("active")
   }
 }
 export function redo() {
