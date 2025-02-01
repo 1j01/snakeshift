@@ -345,7 +345,7 @@ export function handleInputForLevelEditing(
       mouseHoveredTile = undefined
     }
     if (mouseHoveredTile) {
-      if (draggingEntities.length) {
+      if (dragGestureLastTile) {
         if (selectionRange && dragGestureLastTile) {
           const dx = mouseHoveredTile.x - dragGestureLastTile.x
           const dy = mouseHoveredTile.y - dragGestureLastTile.y
