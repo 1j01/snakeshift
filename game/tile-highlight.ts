@@ -1,3 +1,4 @@
+import { activityMode } from "./game"
 import { activePlayer } from "./game-state"
 import { tileOnPage } from "./rendering"
 import { Tile } from "./types"
@@ -15,7 +16,7 @@ export function setHighlight(tile: Tile | undefined, options: Partial<HighlightO
     hoverEffect.remove()
     hoverEffect = undefined
   }
-  if (tile && activePlayer) {
+  if (tile && (!!activePlayer || activityMode === "edit")) {
     hoverEffect = document.createElement('div')
     hoverEffect.classList.add('hover-effect')
     document.body.appendChild(hoverEffect)
