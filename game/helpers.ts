@@ -25,6 +25,10 @@ export function withinLevel(tile: Tile) {
   return tile.x >= 0 && tile.y >= 0 && tile.x + tile.width <= levelInfo.width && tile.y + tile.height <= levelInfo.height
 }
 
+export function within(tile: Tile, container: Tile) {
+  return tile.x >= container.x && tile.y >= container.y && tile.x + tile.width <= container.x + container.width && tile.y + tile.height <= container.y + container.height
+}
+
 export function clampToLevel(tile: Tile) {
   return {
     x: Math.max(0, Math.min(levelInfo.width - tile.width, tile.x)),

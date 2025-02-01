@@ -2,7 +2,7 @@ import { Block } from './block'
 import { Collectable } from './collectable'
 import Entity from './entity'
 import { activePlayer, clearLevel, entities, levelInfo, onResize, onUpdate, postUpdate, setActivePlayer, undoable } from './game-state'
-import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, withinLevel } from './helpers'
+import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, within, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
@@ -13,6 +13,7 @@ enum Tool {
   Brush = "Brush",
   Eraser = "Eraser",
   Move = "Move",
+  Select = "Select",
 }
 let tool = Tool.Brush
 let brushEntityClass: typeof Entity = Block
@@ -21,6 +22,19 @@ let dragging: Entity | undefined = undefined
 let draggingSegmentIndex = 0
 let defining: Entity | undefined = undefined
 let createdUndoState = false
+let selectionRange: { startTile: Tile, endTile: Tile, defining: boolean } | undefined = undefined
+let selectedEntities: Entity[] = []
+
+function getSelectionBox(): Tile | undefined {
+  if (selectionRange) {
+    return {
+      x: Math.min(selectionRange.startTile.x, selectionRange.endTile.x),
+      y: Math.min(selectionRange.startTile.y, selectionRange.endTile.y),
+      width: Math.abs(selectionRange.startTile.x - selectionRange.endTile.x) + 1,
+      height: Math.abs(selectionRange.startTile.y - selectionRange.endTile.y) + 1,
+    }
+  }
+}
 
 export function initLevelEditorGUI() {
 
@@ -28,7 +42,7 @@ export function initLevelEditorGUI() {
   const entityButtons = entitiesBar.querySelectorAll('.entity-button')
   const toolButtons = entitiesBar.querySelectorAll('.tool-button') // includes entity buttons
 
-  function selectButton(button: Element) {
+  function setSelectedButton(button: Element) {
     for (const button of toolButtons) {
       button.classList.remove('selected')
     }
@@ -37,6 +51,7 @@ export function initLevelEditorGUI() {
 
   const eraserButton = document.querySelector(".tool-button[data-tool='Eraser'")!
   const moveButton = document.querySelector(".tool-button[data-tool='Move'")!
+  const selectButton = document.querySelector(".tool-button[data-tool='Select'")!
   const clearButton = document.querySelector("#clear-button")!
   const levelInfoButton = document.querySelector<HTMLButtonElement>("#level-info-button")!
   const levelInfoEditor = document.querySelector<HTMLDialogElement>('#level-info-editor')!
@@ -44,14 +59,22 @@ export function initLevelEditorGUI() {
   const levelInfoEditorCancelButton = document.querySelector<HTMLDialogElement>('#level-info-editor-cancel-button')!
   eraserButton.addEventListener('click', () => {
     tool = Tool.Eraser
-    selectButton(eraserButton)
+    setSelectedButton(eraserButton)
   })
   moveButton.addEventListener('click', () => {
     tool = Tool.Move
-    selectButton(moveButton)
+    setSelectedButton(moveButton)
+  })
+  selectButton.addEventListener('click', () => {
+    tool = Tool.Select
+    setSelectedButton(selectButton)
   })
   clearButton.addEventListener('click', () => {
-    clearLevel()
+    if (selectedEntities.length || selectionRange) {
+      deleteSelectedEntities()
+    } else {
+      clearLevel()
+    }
   })
   levelInfoButton.addEventListener('click', () => {
     levelInfoEditor.showModal()
@@ -87,9 +110,11 @@ export function initLevelEditorGUI() {
   }
   // This is stupid, TODO: DRY initial vs. update
   if (tool === Tool.Move) {
-    selectButton(moveButton)
+    setSelectedButton(moveButton)
   } else if (tool === Tool.Eraser) {
-    selectButton(eraserButton)
+    setSelectedButton(eraserButton)
+  } else if (tool === Tool.Select) {
+    setSelectedButton(selectButton)
   }
 
   function makeEntityButton(button: Element) {
@@ -128,7 +153,7 @@ export function initLevelEditorGUI() {
       brushEntityClass = makeEntity(entityName).constructor as typeof Entity
       brushColor = layer
       tool = Tool.Brush
-      selectButton(button)
+      setSelectedButton(button)
     })
     button.classList.toggle('selected', entityName === brushEntityClass.name && layer === brushColor && tool === Tool.Brush)
     const canvas = document.createElement('canvas')
@@ -173,7 +198,11 @@ export function handleInputForLevelEditing(
         valid = true // maybe (TODO)
       }
     }
-    setHighlight(mouseHoveredTile, { pressed, valid })
+    if (tool === Tool.Select) {
+      setHighlight(getSelectionBox(), { isSelection: true, valid: true })
+    } else {
+      setHighlight(mouseHoveredTile, { pressed, valid })
+    }
 
     validateLevel()
   }
@@ -258,6 +287,19 @@ export function handleInputForLevelEditing(
         sortEntities()
       }
       updateHighlight()
+    } else if (
+      pointerDownTile &&
+      event.button === 0 &&
+      tool === Tool.Select
+    ) {
+      const selectionBox = getSelectionBox()
+      if (selectionBox && within(pointerDownTile, selectionBox)) {
+        alert("Selection dragging not implemented yet. So far you can select and delete.")
+      } else {
+        selectionRange = { startTile: pointerDownTile, endTile: pointerDownTile, defining: true }
+        selectedEntities = []
+        updateHighlight()
+      }
     } else if (mouseHoveredTile) {
       handlePointerDownOrMove(event, mouseHoveredTile, mouseHoveredTile)
     }
@@ -275,6 +317,9 @@ export function handleInputForLevelEditing(
     dragging = undefined
     draggingSegmentIndex = 0
     createdUndoState = false
+    if (selectionRange?.defining) {
+      selectionRange.defining = false
+    }
     // TODO: DRY/simplify this? (could trigger pointermove handler)
     mouseHoveredTile = pageToWorldTile(event)
     if (!withinLevel(mouseHoveredTile)) {
@@ -292,6 +337,9 @@ export function handleInputForLevelEditing(
     if (mouseHoveredTile) {
       if (dragging) {
         drag(mouseHoveredTile)
+      } else if (selectionRange?.defining && pointerDownTile) {
+        selectionRange.endTile = mouseHoveredTile
+        selectEntitiesInSelectionBox()
       } else {
         handlePointerDownOrMove(event, lastTile, mouseHoveredTile)
       }
@@ -474,6 +522,36 @@ export function handleInputForLevelEditing(
     }
   }
 
+  function selectEntitiesInSelectionBox() {
+    const selectionBox = getSelectionBox()
+    if (!selectionBox) return
+    selectedEntities = entities.filter(entity => {
+      if (entity instanceof RectangularEntity) {
+        return within(entity, selectionBox)
+      } else if (entity instanceof Snake) {
+        return entity.segments.some(segment => within(segment, selectionBox))
+      }
+      return false
+    })
+    postUpdate() // I guess?
+  }
+
   // ------------
   return removeEventListeners
+}
+
+export function deleteSelectedEntities() {
+  if (selectedEntities.length) {
+    undoable()
+    for (const entity of selectedEntities) {
+      const index = entities.indexOf(entity)
+      if (index >= 0) {
+        entities.splice(index, 1)
+      }
+    }
+    selectedEntities.length = 0
+    selectionRange = undefined
+    setHighlight(undefined) // updateHighlight()? not accessible out here...
+    postUpdate() // I guess?
+  }
 }

@@ -21,11 +21,21 @@ body {
   box-sizing: border-box;
   pointer-events: none;
   /* cursor: pointer; */
+  /* TODO: use outline with outline-offset instead of scale transform */
   transform: scale(1.1);
 }
 
 .hover-effect.active-effect {
   transform: scale(1);
+}
+
+.hover-effect.selection {
+  transform: scale(1);
+  /* border: 3px dashed white; */
+  border: none;
+  /* border-radius: 0; */
+  outline: 3px dashed white;
+  mix-blend-mode: difference;
 }
 
 .hover-effect:not(.valid) {

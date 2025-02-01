@@ -9,6 +9,7 @@ let levelBorder: HTMLDivElement | undefined = undefined
 interface HighlightOptions {
   pressed: boolean
   valid: boolean
+  isSelection: boolean
 }
 
 export function setHighlight(tile: Tile | undefined, options: Partial<HighlightOptions> = {}) {
@@ -22,6 +23,7 @@ export function setHighlight(tile: Tile | undefined, options: Partial<HighlightO
     document.body.appendChild(hoverEffect)
     hoverEffect?.classList.toggle("active-effect", options.pressed ?? false)
     hoverEffect?.classList.toggle("valid", options.valid ?? true)
+    hoverEffect?.classList.toggle("selection", options.isSelection ?? false)
     positionElement(hoverEffect, tileOnPage(tile))
   }
 }
