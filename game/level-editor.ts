@@ -19,7 +19,7 @@ let tool = Tool.Brush
 let brushEntityClass: typeof Entity = Block
 let brushColor = CollisionLayer.White
 let draggingEntities: Entity[] = []
-// let draggingOffsets: { x: number, y: number }[] = []
+let dragGestureLastTile: Tile | undefined = undefined
 let draggingSegmentIndex = 0
 let defining: Entity | undefined = undefined
 let createdUndoState = false
@@ -266,21 +266,30 @@ export function handleInputForLevelEditing(
   let mouseHoveredTile: Tile | undefined = undefined
   on(eventTarget, 'pointerdown', (event) => {
     pointerDownTile = pageToWorldTile(event)
-    if (!withinLevel(pointerDownTile)) {
+    const selectionBox = getSelectionBox()
+    const shouldDragSelection = selectionBox && pointerDownTile && within(pointerDownTile, selectionBox)
+    if (!withinLevel(pointerDownTile) && !shouldDragSelection) {
       pointerDownTile = undefined
     }
     mouseHoveredTile = pointerDownTile // for tool actions (no longer needed?)
     if (
-      pointerDownTile &&
+      pointerDownTile && // maybe shouldn't require this if shouldDragSelection
       !draggingEntities.length &&
       event.button === 0 &&
-      tool === Tool.Move
+      (tool === Tool.Move || shouldDragSelection)
     ) {
-      // TODO: consider reversing the array to be topmost first
-      const hits = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
-      const hit = hits[hits.length - 1]
-      draggingEntities = [hit?.entity].filter(Boolean)
-      draggingSegmentIndex = hit?.segmentIndex ?? 0
+      if (shouldDragSelection) {
+        draggingEntities = [...selectedEntities]
+        draggingSegmentIndex = 0 // This doesn't apply; snakes are dragged as a whole
+        dragGestureLastTile = pointerDownTile
+      } else {
+        // TODO: consider reversing the array to be topmost first
+        const hits = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
+        const hit = hits[hits.length - 1]
+        draggingEntities = [hit?.entity].filter(Boolean)
+        draggingSegmentIndex = hit?.segmentIndex ?? 0
+        dragGestureLastTile = undefined
+      }
       if (draggingEntities.length) {
         undoable()
         // reorder so that the dragged entities are on top
@@ -297,14 +306,9 @@ export function handleInputForLevelEditing(
       event.button === 0 &&
       tool === Tool.Select
     ) {
-      const selectionBox = getSelectionBox()
-      if (selectionBox && within(pointerDownTile, selectionBox)) {
-        alert("Selection dragging not implemented yet. So far you can select and delete.")
-      } else {
-        selectionRange = { startTile: pointerDownTile, endTile: pointerDownTile, defining: true }
-        selectedEntities = []
-        updateHighlight()
-      }
+      selectionRange = { startTile: pointerDownTile, endTile: pointerDownTile, defining: true }
+      selectedEntities = []
+      updateHighlight()
     } else if (mouseHoveredTile) {
       handlePointerDownOrMove(event, mouseHoveredTile, mouseHoveredTile)
     }
@@ -321,6 +325,7 @@ export function handleInputForLevelEditing(
     defining = undefined
     draggingEntities = []
     draggingSegmentIndex = 0
+    dragGestureLastTile = undefined
     createdUndoState = false
     if (selectionRange?.defining) {
       selectionRange.defining = false
@@ -341,8 +346,21 @@ export function handleInputForLevelEditing(
     }
     if (mouseHoveredTile) {
       if (draggingEntities.length) {
-        for (const entity of draggingEntities) {
-          drag(entity, mouseHoveredTile)
+        if (selectionRange && dragGestureLastTile) {
+          const dx = mouseHoveredTile.x - dragGestureLastTile.x
+          const dy = mouseHoveredTile.y - dragGestureLastTile.y
+          for (const entity of draggingEntities) {
+            nudge(entity, dx, dy)
+          }
+          selectionRange.startTile.x += dx
+          selectionRange.startTile.y += dy
+          selectionRange.endTile.x += dx
+          selectionRange.endTile.y += dy
+          dragGestureLastTile = mouseHoveredTile
+        } else {
+          for (const entity of draggingEntities) {
+            drag(entity, mouseHoveredTile)
+          }
         }
       } else if (selectionRange?.defining && pointerDownTile) {
         selectionRange.endTile = mouseHoveredTile
@@ -480,6 +498,18 @@ export function handleInputForLevelEditing(
             setActivePlayer(undefined)
           }
         }
+      }
+    }
+  }
+
+  function nudge(dragging: Entity, dx: number, dy: number) {
+    if (dragging instanceof RectangularEntity) {
+      dragging.x += dx
+      dragging.y += dy
+    } else if (dragging instanceof Snake) {
+      for (const segment of dragging.segments) {
+        segment.x += dx
+        segment.y += dy
       }
     }
   }
