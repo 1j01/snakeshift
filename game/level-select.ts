@@ -1,7 +1,6 @@
 import { playSound } from "./audio"
 import { activityMode, restartLevel } from "./game"
-import { undo } from "./game-state"
-import { loadLevel } from "./level-editor"
+import { loadLevel, undo } from "./game-state"
 import { showLevelSplash } from "./menus"
 
 let currentLevelButton: HTMLButtonElement | undefined = undefined

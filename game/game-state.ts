@@ -1,9 +1,10 @@
 import { playSound } from "./audio"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
-import { activityMode } from "./game"
+import { activityMode, editorRedos, editorUndos, setActivityMode, setBaseLevelState } from "./game"
 import { makeEntity } from "./helpers"
 import { currentLevelID, setCurrentLevel, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
+import { hideScreens } from "./menus"
 import Snake from "./snake"
 import { ControlScheme, GameState, ParsedGameState } from "./types"
 
@@ -216,3 +217,146 @@ declare global {
     _winLevelCheat?: boolean;
   }
 }
+
+export function saveLevel() {
+  const levelJSON = serialize()
+  const blob = new Blob([levelJSON], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'snakeshift-level.json'
+  a.click()
+}
+
+export function savePlaythrough() {
+  // TODO: better playthrough format
+  // Since I've already saved some playthroughs by just copying `JSON.stringify(undos)` from the console,
+  // I figure I might as well make it easy to save them like this for now, as I'll have files to convert anyway.
+  // This format's pretty bad though - JSON strings in JSON, and no format identifier/version.
+  // BTW: this function doesn't have to do with level editing, except I suppose I MIGHT allow saving while editing,
+  // but it's just similar to saveLevel.
+  // New files will include the final state, but old files will be slightly unsatisfying to watch. :P
+  const json = JSON.stringify([...undos, serialize()])
+  const blob = new Blob([json], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'snakeshift-level-playthrough.json'
+  a.click()
+}
+function loadPlaythrough(json: string) {
+
+  const playthrough = JSON.parse(json) as GameState[]
+  if (!Array.isArray(playthrough)) {
+    throw new Error("Invalid playthrough format")
+  }
+  // TODO: make "replay" a separate activity mode, where you can only step through the history?
+  // Not sure if I want to limit it like that, might be useful to continue playing from replay,
+  // if only for testing purposes.
+  loadLevelFromText(playthrough[0], "play")
+  for (const state of playthrough.toReversed()) {
+    redos.push(state)
+  }
+  redo()
+  alert(`Loaded playthrough with ${playthrough.length} moves. Press 'Y' (Redo) to step through it.`)
+}
+// TODO: simplify with promises
+
+export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?: () => void) {
+  // Error Message Itself Test
+  // Promise.reject(new Error("EMIT oh no!")).then((fileText) => {
+  file.text().then((fileText) => {
+    if (loadLevelFromText(fileText, newMode)) {
+      loadedCallback?.()
+    }
+  }, (error) => {
+    alert(`Failed to read level file. ${error}`)
+  })
+}
+
+export function confirmLoseUnsavedChanges() {
+  // When play-testing a level, the undo/redo stacks are swapped into `editorUndos`/`editorRedos`.
+  // `editorUndos`/`editorRedos` only represent the editor's history while in play mode.
+  // While in edit mode, the editor's history is stored in `undos`/`redos`.
+  // This is a bit messy with state ownership.
+  // Before adding this confirmation dialog, the editor didn't have to know about `editorUndos`/`editorRedos`.
+  if (activityMode === "menu") {
+    return true
+  } else if (activityMode === "edit") {
+    if (undos.length === 0 && redos.length === 0) return true
+  } else if (activityMode === "play") {
+    if (currentLevelID()) return true
+    if (editorUndos.length === 0 && editorRedos.length === 0) return true
+  }
+  return confirm("This will discard any unsaved changes. Are you sure?")
+}
+function loadLevelFromText(fileText: string, newMode: "edit" | "play"): boolean {
+  // Load level or playthrough, and return whether it succeeded...
+  // Or, may throw an error while loading a playthrough.
+  if (!confirmLoseUnsavedChanges()) return false
+
+  // TODO: handle edit mode vs. play mode undo stacks
+  // This is complicated, in part due to trying to snapshot for transactional error handling.
+  // The snapshot may be of either set of stacks, depending on the previous edit mode state.
+  // I also want to preserve the undo history across levels,
+  // and then there's playthroughs to think about, which, by the way,
+  // should only save the history of one level, NOT across levels,
+  // in order to store proof of playability for a level without unnecessary data.
+  const before = {
+    state: serialize(),
+    undos: [...undos],
+    redos: [...redos],
+  }
+  // Allow undoing/redoing across levels
+  // But don't create an extraneous undo state when loading a level into level editor
+  // or loading a level from the level select screen.
+  if (activityMode === "play" && newMode === "play") {
+    undoable()
+  }
+  // not allowing whitespace but this is just a temporary file format with no proper identifier, for playthroughs
+  if (fileText.startsWith('[')) {
+    // TODO: error handling; also, I just realized loadLevelFromText will be at
+    // two places in the call stack in this case. Might be able to simplify by having
+    // loadPlaythrough (or a replacement with a new name) return the GameState string to load,
+    // which would be loaded subsequently in this function, but not recursively.
+    loadPlaythrough(fileText)
+    return true // it's not a lie because it didn't throw an error™ (if it got here)
+  } else {
+    try {
+      deserialize(fileText)
+      setBaseLevelState(fileText)
+      if (!activePlayer) {
+        // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
+        // and anyway I have a bunch of levels saved at this point.
+        for (const entity of entities) {
+          if (entity instanceof Snake) {
+            setActivePlayer(entity)
+            break
+          }
+        }
+      }
+    } catch (error) {
+      deserialize(before.state)
+      undos.splice(0, undos.length, ...before.undos)
+      redos.splice(0, redos.length, ...before.redos)
+      alert(`Failed to load level. ${(error as Error).toString()}`)
+      return false
+    }
+    setActivityMode(newMode)
+    hideScreens({ except: ["level-splash"] }) // level splash is shown early to mask loading time
+    return true
+  }
+}
+
+export function openLevel() {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'application/json'
+  input.addEventListener('change', () => {
+    const file = input.files?.[0]
+    if (!file) return
+    loadLevel(file, "edit")
+  })
+  input.click()
+}
+
