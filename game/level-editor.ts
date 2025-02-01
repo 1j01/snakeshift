@@ -43,6 +43,8 @@ export function initLevelEditorGUI() {
   const toolButtons = entitiesBar.querySelectorAll('.tool-button') // includes entity buttons
 
   function setSelectedButton(button: Element) {
+    selectionRange = undefined
+    setHighlight(undefined) // updateHighlight()? not accessible here...
     for (const button of toolButtons) {
       button.classList.remove('selected')
     }
