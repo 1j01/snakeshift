@@ -4,6 +4,7 @@ import { positionElement, setLevelBorder } from "./tile-highlight"
 import { Point, Tile } from "./types"
 
 export const canvas = document.createElement('canvas')
+canvas.style.touchAction = 'none'
 const ctx = canvas.getContext('2d')!
 document.body.appendChild(canvas)
 
