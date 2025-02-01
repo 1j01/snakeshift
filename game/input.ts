@@ -1,8 +1,7 @@
 import { activityMode, restartLevel } from './game'
-import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, redo, setControlScheme, undo } from './game-state'
-import { makeEventListenerGroup, neighborOf, sameTile } from './helpers'
+import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, postUpdate, redo, setControlScheme, undo } from './game-state'
+import { makeEventListenerGroup, neighborOf } from './helpers'
 import { showMainMenu } from './menus'
-import { pageToWorldTile } from './rendering'
 import { highlightMove } from './tile-highlight'
 import { ControlScheme, DIRECTIONS, Tile } from './types'
 
@@ -21,9 +20,6 @@ export function handleInput(
       // highlightMove(activePlayer.aheadTile())
     } else if (controlScheme === ControlScheme.KeyboardAbsoluteDirection) {
       highlightMove(undefined)
-    } else if (controlScheme === ControlScheme.Pointer) {
-      const pressed = pointerDownTile && sameTile(mouseHoveredTile, pointerDownTile)
-      highlightMove(mouseHoveredTile, { pressed })
     }
   }
   onUpdate(updateHighlight)
@@ -33,52 +29,69 @@ export function handleInput(
   // Mouse/pen/touch support
   // -----------------------
 
-  let pointerDownTile: Tile | undefined = undefined
-  let mouseHoveredTile: Tile | undefined = undefined
+  // Minimum drag distance before moving.
+  // Should this be based on the tile size on screen?
+  // Maybe not since you need to be able to easily move one tile, even if the level is large.
+  // Maybe it should be based on the screen size though. Could be nice if it was configurable as a "move sensitivity" setting.
+  const MOVE_THRESHOLD = 40
+
+  let dragging = false
+  let lastPointerPosition: { x: number; y: number } | undefined = undefined
+
   if (activityMode !== "menu") {
-    on(eventTarget, 'pointerdown', (event) => {
-      pointerDownTile = pageToWorldTile(event)
-      if (pointerDownTile) {
-        setControlScheme(ControlScheme.Pointer) // sets highlight; signals level update uselessly
-      }
+    on(eventTarget, "pointerdown", (event) => {
+      dragging = true
+      lastPointerPosition = { x: event.clientX, y: event.clientY }
+      setControlScheme(ControlScheme.Pointer)
     })
-    on(window, 'pointerup', (event) => {
-      const pointerUpTile = pageToWorldTile(event)
-      if (
-        activePlayer &&
-        pointerUpTile &&
-        sameTile(pointerUpTile, pointerDownTile)
-      ) {
-        const deltaGridX = Math.round(pointerUpTile.x - activePlayer.segments[0].x)
-        const deltaGridY = Math.round(pointerUpTile.y - activePlayer.segments[0].y)
-        const move = activePlayer.analyzeMoveRelative(deltaGridX, deltaGridY)
+
+    on(window, "pointerup", () => {
+      dragging = false
+      lastPointerPosition = undefined
+    })
+
+    on(window, "pointercancel", () => {
+      dragging = false
+      lastPointerPosition = undefined
+    })
+
+    on(window, "pointermove", (event) => {
+      if (!dragging || !activePlayer || !lastPointerPosition) return
+      event.preventDefault()
+
+      const deltaX = event.clientX - lastPointerPosition.x
+      const deltaY = event.clientY - lastPointerPosition.y
+
+      if (Math.abs(deltaX) < MOVE_THRESHOLD && Math.abs(deltaY) < MOVE_THRESHOLD) {
+        return
+      }
+
+      let moveX = 0
+      let moveY = 0
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        moveX = Math.sign(deltaX) // Move left or right
+      } else {
+        moveY = Math.sign(deltaY) // Move up or down
+      }
+
+      if (moveX !== 0 || moveY !== 0) { // Should always be true
+        const move = activePlayer.analyzeMoveRelative(moveX, moveY)
         if (move.valid) {
           activePlayer.takeMove(move)
-          setControlScheme(ControlScheme.Pointer) // signals level update; sets highlight redundantly
+          postUpdate() // for level win condition (weirdly, this was handled via setControlScheme previously)
+
+          // Should this update both x and y or just one coordinate of the reference point?
+          // Also, shouldn't it update the reference point even if the move is invalid? Otherwise you have to move the pointer weirdly far in some cases, right?
+          // lastPointerPosition = { x: event.clientX, y: event.clientY }
+          if (moveX !== 0) {
+            // lastPointerPosition.x += moveX * MOVE_THRESHOLD
+            lastPointerPosition.x = event.clientX
+          }
+          if (moveY !== 0) {
+            // lastPointerPosition.y += moveY * MOVE_THRESHOLD
+            lastPointerPosition.y = event.clientY
+          }
         }
-        // updateGameState({
-        //   playerCoordinates: pointerUpTile,
-        //   playerFacing: activePlayer.directionOfMove(pointerUpTile)!,
-        //   controlScheme: ControlScheme.Pointer
-        // })
-      }
-      pointerDownTile = undefined
-      highlightMove(mouseHoveredTile)
-    })
-
-    on(window, 'pointercancel', () => {
-      pointerDownTile = undefined
-      highlightMove(mouseHoveredTile)
-    })
-
-    on(window, 'pointermove', (event) => {
-      const lastTile = mouseHoveredTile
-      mouseHoveredTile = pageToWorldTile(event)
-      // only with significant movement (moving to a new tile),
-      // because this replaces the highlight used by gamepad controls
-      // and you don't want it flickering from mouse jitter while using a gamepad
-      if (!sameTile(lastTile, mouseHoveredTile)) {
-        setControlScheme(ControlScheme.Pointer) // sets highlight; signals level update uselessly
       }
     })
   }
