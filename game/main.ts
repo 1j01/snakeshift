@@ -7,8 +7,12 @@ import { initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
 
 const restartLevelButton = document.querySelector<HTMLButtonElement>('#restart-level-button')!
+const undoButton = document.querySelector<HTMLButtonElement>('#undo-button')!
+const redoButton = document.querySelector<HTMLButtonElement>('#redo-button')!
 
 restartLevelButton.addEventListener('click', restartLevel)
+undoButton.addEventListener('click', undo)
+redoButton.addEventListener('click', redo)
 
 addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {
