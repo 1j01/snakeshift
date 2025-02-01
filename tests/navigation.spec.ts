@@ -82,7 +82,6 @@ test('you should be able to hide the game win screen by undoing, and then win ag
   await expect(page.locator('#game-win-screen')).toBeVisible();
   await page.keyboard.press('ControlOrMeta+z');
   await expect(page.locator('#game-win-screen')).not.toBeVisible();
-  test.fixme(true, 'should be able to win the level again after undoing');
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#game-win-screen')).toBeVisible();
 });

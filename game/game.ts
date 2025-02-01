@@ -78,13 +78,14 @@ export function restartLevel() {
 export function handleLevelCompletion() {
   onUpdate(() => {
     if (activityMode !== "play") return
-    if (wonLevel) return
-    if (checkLevelWon()) {
+    if (!wonLevel && checkLevelWon()) {
       wonLevel = true
       console.log('Level won!', currentLevelID())
       loadNextLevel()
     } else {
-      wonLevel = false // might not need this
+      // in case you undo the winning move
+      // Might need to disable movement while the level is won though, if I'm unsetting this...
+      wonLevel = false
     }
   })
 }
