@@ -1,7 +1,10 @@
+import { playSound } from './audio'
 import { activityMode, restartLevel } from './game'
-import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, postUpdate, redo, setControlScheme, undo } from './game-state'
-import { makeEventListenerGroup, neighborOf } from './helpers'
+import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, postUpdate, redo, setActivePlayer, setControlScheme, undo } from './game-state'
+import { hitTestAllEntities, makeEventListenerGroup, neighborOf } from './helpers'
 import { showMainMenu } from './menus'
+import { pageToWorldTile } from './rendering'
+import Snake from './snake'
 import { highlightMove } from './tile-highlight'
 import { ControlScheme, DIRECTIONS, Tile } from './types'
 
@@ -39,15 +42,32 @@ export function handleInput(
   let lastPointerPosition: { x: number; y: number } | undefined = undefined
 
   if (activityMode !== "menu") {
+    let pointerDownSnake: Snake | undefined = undefined
+
+    const snakeUnderPointer = (event: { clientX: number, clientY: number }): Snake | undefined => {
+      const mouseTile = pageToWorldTile(event)
+      const hits = hitTestAllEntities(mouseTile.x, mouseTile.y)
+      hits.reverse() // prioritize higher z-index; TODO: consider reversing the order returned by hitTestAllEntities instead
+      const snakeHit = hits.find((hit) => hit.entity instanceof Snake)
+      return snakeHit?.entity as Snake | undefined
+    }
+
     on(eventTarget, "pointerdown", (event) => {
       dragging = true
       lastPointerPosition = { x: event.clientX, y: event.clientY }
       setControlScheme(ControlScheme.Pointer)
+      pointerDownSnake = snakeUnderPointer(event)
     })
 
-    on(window, "pointerup", () => {
+    on(window, "pointerup", (event) => {
       dragging = false
       lastPointerPosition = undefined
+      if (pointerDownSnake && snakeUnderPointer(event) === pointerDownSnake) {
+        // TODO: DRY, shouldn't the sfx and highlight be handled by setActivePlayer? maybe with a flag if needed?
+        setActivePlayer(pointerDownSnake)
+        playSound("switchSnakes")
+        pointerDownSnake.highlight()
+      }
     })
 
     on(window, "pointercancel", () => {

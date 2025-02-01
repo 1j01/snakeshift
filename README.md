@@ -14,7 +14,7 @@ Skin and fang. Yin and yang. Snakes shelter sneks like sheds, then shed kin like
 
 Drag anywhere to move the snake in the direction of the drag.
 
-NOTE: KEYBOARD IS NEEDED FOR SOME CONTROLS CURRENTLY.
+Click on a snake to switch to it.
 
 ### Gamepad
 
