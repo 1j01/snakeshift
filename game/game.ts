@@ -20,6 +20,7 @@ export function animate(time = 0) {
 }
 
 export let activityMode: "edit" | "play" | "menu" = "menu"
+let wonLevel = false
 
 export const editorUndos: GameState[] = []
 export const editorRedos: GameState[] = []
@@ -58,10 +59,12 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     editorRedos.length = 0
     editorState = undefined
   }
+  wonLevel = false // might not need this
 }
 
 export function setBaseLevelState(state: GameState) {
   editorState = state
+  wonLevel = false
 }
 
 export function restartLevel() {
@@ -69,19 +72,19 @@ export function restartLevel() {
   if (!editorState) return
   undoable()
   deserialize(editorState)
+  wonLevel = false
 }
 
 export function handleLevelCompletion() {
-  let wonLevelID = ""
   onUpdate(() => {
     if (activityMode !== "play") return
-    if (wonLevelID && wonLevelID === currentLevelID()) return
+    if (wonLevel) return
     if (checkLevelWon()) {
-      wonLevelID = currentLevelID()
-      console.log('Level won!', wonLevelID)
+      wonLevel = true
+      console.log('Level won!', currentLevelID())
       loadNextLevel()
     } else {
-      wonLevelID = ""
+      wonLevel = false // might not need this
     }
   })
 }

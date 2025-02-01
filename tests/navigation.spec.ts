@@ -56,7 +56,7 @@ test('undoing should go back a level without immediately winning it (and it shou
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
 });
 
-test.fixme('you should be able to win the last level twice in a row, after returning to it via level select', async ({ page }) => {
+test('you should be able to win the last level twice in a row, after returning to it via level select', async ({ page }) => {
   // The win condition should trigger if you win the last level, then go back to the menu and go to the same last level from the level select and win it again
   // This doesn't work if the level that was won is stored in order to prevent spamming the level win sound effect / splash screen animation.
   await page.getByRole('button', { name: 'Level Select' }).click();
