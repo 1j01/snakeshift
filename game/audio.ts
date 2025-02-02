@@ -46,7 +46,8 @@ export const resourcePaths = {
   redo: 'audio/sound-effects/redo.wav',
   gong: 'audio/sound-effects/gong-2-232435.mp3',
   gongBrilliant: 'audio/sound-effects/486629__jenszygar__gong-brilliant-paiste-32.mp3',
-  eat: 'audio/sound-effects/kayageum1_c3-91074.mp3',
+  // eat: 'audio/sound-effects/kayageum1_c3-91074.mp3',
+  eat: 'audio/sound-effects/glockenspiel_a-102771.mp3',
   move: 'audio/sound-effects/tiny-drip.wav',
   switchSnakes: 'audio/sound-effects/snake-hissing-6092.mp3',
 }
