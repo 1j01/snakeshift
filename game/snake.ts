@@ -274,6 +274,9 @@ export default class Snake extends Entity {
     const y = head.y + deltaY
     const hitsAhead = hitTestAllEntities(x, y, { ignoreTailOfSnake: this.growOnNextMove ? undefined : this })
     const hitsAtTail = hitTestAllEntities(tail.x, tail.y)
+    const hitsAllAlong = this.segments.flatMap(segment => hitTestAllEntities(segment.x, segment.y))
+    // Note: snakesOnTop may include duplicates
+    const snakesOnTop = hitsAllAlong.filter(hit => hit.entity instanceof Snake && hit.entity !== this && entities.indexOf(hit.entity) > entities.indexOf(this))
 
     // Prevent moving backwards when two segments long
     // (When one segment long, you can plausibly move in any direction,
@@ -289,20 +292,6 @@ export default class Snake extends Entity {
       dirX === Math.sign(this.segments[1].x - head.x) &&
       dirY === Math.sign(this.segments[1].y - head.y)
 
-    // TODO: Prevent snakes swapping depths...
-    // `movingBackwards` handles one case, but you can still
-    // loop around to a tile occupied by a snake which is on top of this snake
-    // that is not directly behind the head.
-    // I could check if hitsAhead includes this snake,
-    // but I don't want to add special cases if I don't need to.
-
-    // There's also the case where the tail is "supporting/housing"
-    // a snake but the tail will be filled with the head within the move;
-    // should that allow the move, or should the head/tail seam act as a barrier?
-    // I feel like I'd lean towards freedom of movement
-    // (but I may be overdoing it on that front in this game design...)
-    // Well, you can normally pass through it, so for consistency it should be allowed
-    // (unless I go wholely the other way, but that's still less consistent overall, considering sideways entrance/exiting)
     // I think I will need to move to a system where the move is simulated and then checked for validity,
     // to avoid the complexity of adding exceptions to game state access, when answering hypotheticals.
     // This could also help with animating undo/redo, which currently replaces all the entities, resetting animation timers,
@@ -318,6 +307,7 @@ export default class Snake extends Entity {
         x >= 0 && y >= 0 &&
         x + head.width <= levelInfo.width && y + head.height <= levelInfo.height &&
         !movingBackwards &&
+        snakesOnTop.length === 0 &&
         topLayer(hitsAhead) !== head.layer &&
         topLayer(hitsAtTail) === head.layer,
       to: { x, y, width: head.width, height: head.height },
