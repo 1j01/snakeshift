@@ -150,6 +150,19 @@ test('should stay on the same level when pressing R after winning a prior level'
   // TODO: also test that it restarts the level
 });
 
+test.fixme('should stay on the same level when pressing R after winning a level and undoing back to the previous level', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await page.keyboard.press('ArrowRight');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  await page.keyboard.press('ControlOrMeta+z');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await page.keyboard.press('r');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  // TODO: also test that it restarts the level
+});
+
 test('should show "Level Complete" when finishing a custom level (via level editor)', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
