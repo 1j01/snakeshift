@@ -3,6 +3,11 @@ import { test } from '@playwright/test';
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/');
   await page.getByRole('button', { name: 'Level Editor' }).click();
+
+  // Fail test on any page error
+  page.on('pageerror', (error) => {
+    throw new Error(`Uncaught exception: ${error.stack}`);
+  });
 });
 
 test.describe('level editor', () => {

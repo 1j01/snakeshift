@@ -2,6 +2,11 @@ import { test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/');
+
+  // Fail test on any page error
+  page.on('pageerror', (error) => {
+    throw new Error(`Uncaught exception: ${error.stack}`);
+  });
 });
 
 test.skip('snake should not move past level boundaries')
