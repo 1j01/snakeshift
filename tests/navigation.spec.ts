@@ -3,6 +3,11 @@ import { dragAndDropFile, saveLevelFileAndCompareContent } from './test-helpers'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/');
+
+  // Fail test on any page error
+  page.on('pageerror', (error) => {
+    throw new Error(`Page error: ${error.stack}`);
+  });
 });
 
 test('basic navigation', async ({ page }) => {
@@ -182,6 +187,47 @@ test('should show "Level Complete" when finishing a custom level (via level edit
   await page.keyboard.press('ArrowRight');
   await expect(page.getByText('Level Complete')).toBeVisible();
 });
+
+test.fixme('should not show "Level Complete" when a custom level has no goal', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level With No Goal' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level With No Goal$/);
+  await page.keyboard.press('Backquote');
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+  await page.keyboard.press('Backquote');
+  await expect(page).toHaveTitle(/^Snakeshift - Custom Level$/);
+  await expect(page.getByText('Level Complete')).not.toBeVisible();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByText('Level Complete')).not.toBeVisible();
+  await page.keyboard.press('ControlOrMeta+z');
+  await expect(page.getByText('Level Complete')).not.toBeVisible();
+  await page.keyboard.press('ArrowUp');
+  await expect(page.getByText('Level Complete')).not.toBeVisible();
+});
+
+test.skip('should not allow movement after a level is won before the next level is loaded', async ({ page }) => { });
+// easier to test the last level, since it doesn't have a next level which may load immediately,
+// but it might be best to test both cases...
+test.fixme('should not allow movement after the game is won', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#game-win-screen')).toBeVisible();
+
+  // Force hide the win screen by removing .active
+  // Note that this doesn't make sense if the code uses the "active" class to store whether the level was won.
+  // Not an ideal test.
+  await page.evaluate(() => document.querySelector('#game-win-screen')!.classList.remove('active'));
+  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  await page.keyboard.press('ArrowUp');
+  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+})
 
 test('should confirm discarding unsaved changes in edit mode', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Editor' }).click();
