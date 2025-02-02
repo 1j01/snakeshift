@@ -130,7 +130,7 @@ test('should stay on the same level when switching to edit mode after winning a 
   await saveLevelFileAndCompareContent(page, 'game/public/levels/tests/move-left-to-win.json');
 });
 
-test.fixme('should stay on the same level when pressing R', async ({ page }) => {
+test('should stay on the same level when pressing R', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);

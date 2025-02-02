@@ -1,7 +1,7 @@
 import { checkLevelWon, clearLevel, deserialize, entities, onUpdate, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
-import { currentLevelID, loadNextLevel, unsetCurrentLevel, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
+import { currentLevelID, loadNextLevel, setStandaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { canvas, draw } from "./rendering"
 import { GameState } from "./types"
 
@@ -33,10 +33,8 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
   activityMode = newMode
   document.body.classList.toggle('editing', activityMode === "edit")
 
-  unsetCurrentLevel()
-  updatePageTitleAndLevelSpecificOverlays()
-
   if (activityMode === "edit") {
+    setStandaloneLevelMode()
     cleanup = handleInputForLevelEditing(canvas)
     if (editorState) {
       undos.splice(0, undos.length, ...editorUndos)
@@ -51,6 +49,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     undos.length = 0
     redos.length = 0
   } else {
+    setStandaloneLevelMode()
     cleanup = handleInput(canvas)
     clearLevel(false)
     undos.length = 0
@@ -60,6 +59,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     editorState = undefined
   }
   wonLevel = false // might not need this
+  updatePageTitleAndLevelSpecificOverlays()
 }
 
 export function setBaseLevelState(state: GameState) {

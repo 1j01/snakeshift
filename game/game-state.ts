@@ -3,7 +3,7 @@ import { Collectable } from "./collectable"
 import Entity from "./entity"
 import { activityMode, editorRedos, editorUndos, setActivityMode, setBaseLevelState } from "./game"
 import { makeEntity } from "./helpers"
-import { currentLevelID, setCurrentLevel, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
+import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { hideScreens } from "./menus"
 import Snake from "./snake"
 import { ControlScheme, GameState, ParsedGameState } from "./types"
@@ -144,8 +144,10 @@ export function deserialize(state: GameState, levelId: string | null = null) {
     activePlayer?.highlight()
   }
 
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  setCurrentLevel(levelId || parsed.levelId)
+  if (!standaloneLevelMode) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    setCurrentLevel(levelId || parsed.levelId)
+  }
   updatePageTitleAndLevelSpecificOverlays()
 
   postUpdate()
@@ -269,6 +271,12 @@ export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?:
   // Error Message Itself Test
   // Promise.reject(new Error("EMIT oh no!")).then((fileText) => {
   file.text().then((fileText) => {
+    // TODO: I noticed that without this condition, all the tests passed. Might be good to try to add a test that fails without it.
+    // Also if the setStandaloneLevelMode was called before the file was loaded, that would be a race condition, right? Not caught by tests either.
+    if (levelId) {
+      // We're loading a campaign level
+      setStandaloneLevelMode(false)
+    }
     if (loadLevelFromText(fileText, newMode, levelId)) {
       loadedCallback?.()
     }
