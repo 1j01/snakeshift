@@ -150,7 +150,7 @@ test('should stay on the same level when pressing R after winning a prior level'
   // TODO: also test that it restarts the level
 });
 
-test.fixme('should stay on the same level when pressing R after winning a level and undoing back to the previous level', async ({ page }) => {
+test('should stay on the same level when pressing R after winning a level and undoing back to the previous level', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);

@@ -1,7 +1,7 @@
 import { checkLevelWon, clearLevel, deserialize, entities, onUpdate, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
-import { currentLevelID, loadNextLevel, setStandaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
+import { currentLevelID, loadLevelFile, loadNextLevel, setStandaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { canvas, draw } from "./rendering"
 import { GameState } from "./types"
 
@@ -69,6 +69,16 @@ export function setBaseLevelState(state: GameState) {
 
 export function restartLevel() {
   if (activityMode !== "play") return
+  if (currentLevelID()) {
+    // I don't want to special case this, but I'm so tired from whacking moles
+    // TODO: XXX: refactor
+    void loadLevelFile(currentLevelID(), () => {
+      // currentLevelButton = button
+      // setStandaloneLevelMode(false)
+      updatePageTitleAndLevelSpecificOverlays()
+    })
+    return
+  }
   if (!editorState) return
   undoable()
   deserialize(editorState)
