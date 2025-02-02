@@ -42,8 +42,8 @@ try {
 export const resources: Record<string, AudioBuffer> = {}
 
 export const resourcePaths = {
-  undo: 'audio/sound-effects/undo.wav',
-  redo: 'audio/sound-effects/redo.wav',
+  undo: 'audio/sound-effects/715070__xkeril__sfx-reverse-time.wav',
+  redo: 'audio/sound-effects/715070__xkeril__sfx-reverse-time.wav',
   gong: 'audio/sound-effects/gong-2-232435.mp3',
   gongBrilliant: 'audio/sound-effects/486629__jenszygar__gong-brilliant-paiste-32.mp3',
   // eat: 'audio/sound-effects/kayageum1_c3-91074.mp3',

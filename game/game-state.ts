@@ -41,7 +41,7 @@ let recentRedoSound = 0
 export function undo() {
   const didSomething = stepHistory(undos, redos, true)
   if (didSomething) {
-    playSound("undo", { playbackRate: 1 / (1 + recentUndoSound / 2), cutOffEndFraction: Math.min(0.2, recentUndoSound / 5) })
+    playSound("undo", { playbackRate: 1 / (1 + recentUndoSound / 2), cutOffEndFraction: Math.max(0.5, Math.min(0.2, recentUndoSound / 5)) })
     recentUndoSound += 1
     setTimeout(() => {
       recentUndoSound -= 1
