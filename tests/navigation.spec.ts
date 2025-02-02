@@ -123,7 +123,8 @@ test('should stay on the same level when switching to edit mode after winning a 
   await page.keyboard.press('Backquote');
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
   await page.keyboard.press('Backquote');
-  // It doesn't and shouldn't necessarily preserve the title because it's a potentially edited level.
+  // Might change the title in the future to say the level name + " (Edited)" or something
+  await expect(page).toHaveTitle(/^Snakeshift - Custom Level$/);
   // await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
   // We can compare the file content instead.
   await saveLevelFileAndCompareContent(page, 'game/public/levels/tests/move-left-to-win.json');
