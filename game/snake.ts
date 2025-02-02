@@ -368,7 +368,8 @@ export default class Snake extends Entity {
         !movingBackwards &&
         snakesOnTop.length === 0 &&
         topLayer(hitsAhead) !== head.layer &&
-        topLayer(hitsAtTail) === head.layer &&
+        topLayer(hitsAhead) !== CollisionLayer.Both && // might want a function canMoveOnto
+        // topLayer(hitsAtTail) === head.layer && // obsolete since you can no longer move with snakes on top, and was probably meant to check that no snakes were on top of the tail, but would fail if there were two snakes on top of the tail, alternating colors, right?
         // HACK: This isn't the place for this. Should really prevent it at the input level.
         shouldInputBeAllowed(),
       encumbered: snakesOnTop.length > 0,

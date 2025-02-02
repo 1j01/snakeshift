@@ -146,7 +146,7 @@ export function initLevelEditorGUI() {
   function makeEntityButton(button: Element) {
     const entityName = button.getAttribute('data-entity')!
     const entityColor = button.getAttribute('data-color')!
-    const layer = entityColor === "White" ? CollisionLayer.White : entityColor === "Black" ? CollisionLayer.Black : CollisionLayer.None
+    const layer = entityColor === "White" ? CollisionLayer.White : entityColor === "Black" ? CollisionLayer.Black : entityColor === "Both" ? CollisionLayer.Both : CollisionLayer.None
     function makeColoredEntity() {
       const entityInstance = makeEntity(entityName)
       if (entityInstance instanceof Snake) {
@@ -615,16 +615,26 @@ export function selectAll() {
   postUpdate() // I guess???
 }
 
+function invertCollisionLayer(layer: CollisionLayer) {
+  if (layer === CollisionLayer.White) {
+    return CollisionLayer.Black
+  } else if (layer === CollisionLayer.Black) {
+    return CollisionLayer.White
+  } else {
+    return layer
+  }
+}
+
 export function invert() {
   undoable()
   const targetEntities = (selectedEntities.length || selectionRange) ? selectedEntities : entities
   const targetRegion = getSelectionBox() ?? { x: 0, y: 0, width: levelInfo.width, height: levelInfo.height }
   for (const entity of targetEntities) {
     if (entity instanceof RectangularEntity) {
-      entity.layer = entity.layer === CollisionLayer.White ? CollisionLayer.Black : CollisionLayer.White
+      entity.layer = invertCollisionLayer(entity.layer)
     } else if (entity instanceof Snake) {
       for (const segment of entity.segments) {
-        segment.layer = segment.layer === CollisionLayer.White ? CollisionLayer.Black : CollisionLayer.White
+        segment.layer = invertCollisionLayer(segment.layer)
       }
     }
   }

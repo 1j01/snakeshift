@@ -84,8 +84,6 @@ puzzles:
 - lock levels are cheese-able; you can bridge the left and middle vertical lanes with the black snake; the intentionally cheese-able "security by obscurity" version can also be solved in two different ways, bridging it vertically (intended) or horizontally (in the same way as the prior level); I've got a more solid version in `proper-lock-v2` but want to consider if it makes the difference between the two levels too obvious, and maybe adjust the latter level as well (but it might be fine)
 
 mechanics:
-- a wall tile that is impassable to snakes of either color (checkered?)
-- a ground/floor tile that allows either color of snake to pass through (grass pattern?)
 - crates
   - could be fun if collectables on top of crates are pushed along with the crate
 - slicing snakes
