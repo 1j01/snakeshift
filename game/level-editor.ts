@@ -123,7 +123,7 @@ export function initLevelEditorGUI() {
   function makeEntityButton(button: Element) {
     const entityName = button.getAttribute('data-entity')!
     const entityColor = button.getAttribute('data-color')!
-    const layer = entityColor === "White" ? CollisionLayer.White : entityColor === "Black" ? CollisionLayer.Black : CollisionLayer.None
+    const layer = entityColor === "White" ? CollisionLayer.White : entityColor === "Black" ? CollisionLayer.Black : entityColor === "Both" ? CollisionLayer.Both : CollisionLayer.None
     function makeColoredEntity() {
       const entityInstance = makeEntity(entityName)
       if (entityInstance instanceof Snake) {

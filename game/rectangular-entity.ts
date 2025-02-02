@@ -38,7 +38,17 @@ export class RectangularEntity extends Entity {
     // rather than one extending to cover the other.
 
     const pixel = 1 / ctx.getTransform().a
-    ctx.fillStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
-    ctx.fillRect(this.x, this.y, this.width + pixel, this.height + pixel)
+    if (this.layer === CollisionLayer.Both) {
+      const checkerCount = 4
+      for (let i = 0; i < checkerCount; i++) {
+        for (let j = 0; j < checkerCount; j++) {
+          ctx.fillStyle = (i + j) % 2 === 0 ? '#fff' : '#000'
+          ctx.fillRect(this.x + i * this.width / checkerCount, this.y + j * this.height / checkerCount, this.width / checkerCount + pixel, this.height / checkerCount + pixel)
+        }
+      }
+    } else {
+      ctx.fillStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
+      ctx.fillRect(this.x, this.y, this.width + pixel, this.height + pixel)
+    }
   }
 }
