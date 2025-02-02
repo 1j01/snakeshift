@@ -381,7 +381,7 @@ K:F
                 c2  d2  cA G2:|\
 [2  F2 AF G2 A2|F4      z2   |]
 `
-        const melodyMidi = [...songABC.split("K:DMin")[1].matchAll(/([A-G])([,'])*/gi)].map(match => {
+        const melodyMidi = [...songABC.replace(/^([A-Z]:|%).*$/gim, "").matchAll(/([A-G])([,'])*/gi)].map(match => {
           const letter = match[1]
           const octaveModifier = match[2] === "'" ? 1 : match[2] === "," ? -1 : 0
           const octave = (letter === letter.toUpperCase() ? 1 : 0) + octaveModifier
