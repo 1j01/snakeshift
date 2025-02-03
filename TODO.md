@@ -9,8 +9,6 @@
 - feels like you shouldn't be able to go on top of another snake's head, like you'd eat the snake
   - I have since made collectables more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
 
-- prevent snakes from swapping depths while overlapped
-  - simplest but most limiting would be to prevent moving while a snake is on top; need to see if this affects any puzzles
 - detect immobile state and show a message about restarting/undoing
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
 - skip/merge extra undo steps for switching snakes
