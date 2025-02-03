@@ -2,7 +2,7 @@
 
 - hard to see/understand snakes' shapes when overlapping
   - outline shouldn't intersect 
-  - might help to change the style back to originally intended style
+  - might help to change the style back to originally intended style (i.e. rounded corners, instead of boxy creases)
   - might help to add scales
   - probably need texture-based rendering to sort this out
   - oh, could prevent key repeat on switching snakes, and make it keep the highlight as long as the key is held
@@ -21,18 +21,21 @@
       - use Move, but include the Snake's id in the Move structure
 
 - controls:
-  - separate highlight visuals for edit mode/play mode, maybe an arrow in play mode (might do away with the highlight altogether in play mode by changing the touch controls)
-  - key repeat, also for dpad, and (after simplifying the gamepad movement scheme) joysticks
-  - cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
-  - for touch, could try a virtual joystick/dpad as an alternative to gliding anywhere on the screen
+  - gamepad: use joystick directly instead of requiring a button press to move each tile (this should also do away with the highlight visual which is the only thing not black and white during gameplay)
+  - gamepad: key repeat
+  - keyboard: key repeat
+  - keyboard: cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
+  - touch: could try a virtual joystick/dpad as an alternative to gliding anywhere on the screen
   - gamepad/touch support for level editor (currently requires keyboard/mouse)
   - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
 
 - less important:
   - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
   - make black block behave identically with white in the editor, where you can't tell which is an entity and which is empty space (maybe even treat it as a 1bpp image, drawn with nearest neighbor interpolation)
+    - "erase" on black to add white
+    - selection tool should be able to drag black onto white even if it's not formed from entities
   - handle edge case of toggling edit mode while dragging something
   - reign in `onUpdate` over-extension/repurposing/overuse, maybe adding an onResize in renderer or something
   - preload levels
-  - would be nice to preview levels in the level select (prerequisite: preload levels)
+  - would be nice to preview levels in the level select (prerequisite: preload levels in a caching way)
 
