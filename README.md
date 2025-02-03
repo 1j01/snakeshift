@@ -49,10 +49,12 @@ Press <kbd>Ctrl+S</kbd> to save the level, and <kbd>Ctrl+O</kbd> to open a level
 This project uses [Vite](https://vitejs.dev/) and [TypeScript](https://www.typescriptlang.org/).
 
 - `/game/` — the source code.
-- `/dist/` — the built files, which could be deployed to a static web server.
-- Files in `/public/` will be copied to the `/dist/` directory when building. These are referenced as absolute paths, without the `/public` prefix, since they're copied to the root of the `/dist/` directory.
+- `/game/dist/` — the built files, which could be deployed to a static web server.
+- `/public/`  — Files in this folder will be copied to the `dist` directory when building. These are referenced with absolute paths in CSS, but relative paths in HTML and JS, without the `/public` prefix in either case.
+- `/tests/` — Playwright tests.
 - `/tsconfig.json` — Typescript settings.
 - `/eslintrc.cjs` — ESLint settings.
+- `/vite.config.js` — Vite settings.
 - `/package.json` — dependencies and scripts.
   - `/package-lock.json` — generated file, used for reproducible builds.
 - `/cspell.json` — spell check settings and dictionary.
