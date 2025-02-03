@@ -8,6 +8,10 @@ Shapeshift in makeshift ways. Shift snakes into lakes. Snake wakes into shapes.
 
 Skin and fang. Yin and yang. Snakes shelter sneks like sheds, then shed kin like skin.
 
+## Play the Game
+
+[Play Snakeshift](https://1j01.github.io/snakeshift/) in your browser.
+
 ## Controls
 
 ### Mouse/Pen/Touch
