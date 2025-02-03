@@ -1,7 +1,7 @@
 import { Block } from './block'
 import { Collectable } from './collectable'
 import Entity from './entity'
-import { activePlayer, clearLevel, entities, levelInfo, onResize, onUpdate, postUpdate, setActivePlayer, undoable } from './game-state'
+import { activePlayer, clearLevel, entities, levelInfo, onResize, onUpdate, openLevel, postUpdate, saveLevel, setActivePlayer, undoable } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, within, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
@@ -60,6 +60,10 @@ export function initLevelEditorGUI() {
   const levelInfoEditor = document.querySelector<HTMLDialogElement>('#level-info-editor')!
   const levelInfoEditorOKButton = document.querySelector<HTMLDialogElement>('#level-info-editor-ok-button')!
   const levelInfoEditorCancelButton = document.querySelector<HTMLDialogElement>('#level-info-editor-cancel-button')!
+  const saveButton = document.querySelector<HTMLButtonElement>('#save-button')!
+  const openButton = document.querySelector<HTMLButtonElement>('#open-button')!
+  saveButton.addEventListener('click', saveLevel)
+  openButton.addEventListener('click', openLevel)
   eraserButton.addEventListener('click', () => {
     tool = Tool.Eraser
     setSelectedButton(eraserButton)
