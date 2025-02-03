@@ -1,7 +1,7 @@
 import { playSound } from "./audio"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
-import { activityMode, editorRedos, editorUndos, setActivityMode, setBaseLevelState } from "./game"
+import { activityMode, editorRedos, editorState, editorUndos, setActivityMode, setBaseLevelState } from "./game"
 import { makeEntity } from "./helpers"
 import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { hideScreens } from "./menus"
@@ -213,6 +213,12 @@ export function checkLevelWon() {
   if (window._winLevelCheat) {
     window._winLevelCheat = false
     return true
+  }
+  // HACK: parsing the editor state every time is inefficient, I just didn't want to bother with a separate flag for this.
+  if (editorState && !(JSON.parse(editorState) as ParsedGameState).entityTypes.includes("Collectable")) {
+    // No goal, so don't declare victory. It's useful to be able to test incomplete levels.
+    console.log("No goal; level is unwinnable.")
+    return false
   }
   return entities.filter(e => e instanceof Collectable).length === 0
 }

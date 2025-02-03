@@ -24,7 +24,7 @@ let wonLevel = false
 
 export const editorUndos: GameState[] = []
 export const editorRedos: GameState[] = []
-let editorState: GameState | undefined = undefined
+export let editorState: GameState | undefined = undefined
 let cleanup = handleInput(canvas)
 export function setActivityMode(newMode: "edit" | "play" | "menu") {
   if (activityMode === newMode) return

@@ -188,7 +188,7 @@ test('should show "Level Complete" when finishing a custom level (via level edit
   await expect(page.getByText('Level Complete')).toBeVisible();
 });
 
-test.fixme('should not show "Level Complete" when a custom level has no goal', async ({ page }) => {
+test('should not show "Level Complete" when a custom level has no goal', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level With No Goal' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level With No Goal$/);
