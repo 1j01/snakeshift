@@ -10,6 +10,8 @@ const playEditToggleButton = document.querySelector<HTMLButtonElement>('#play-ed
 const restartLevelButton = document.querySelector<HTMLButtonElement>('#restart-level-button')!
 const undoButton = document.querySelector<HTMLButtonElement>('#undo-button')!
 const redoButton = document.querySelector<HTMLButtonElement>('#redo-button')!
+const saveButton = document.querySelector<HTMLButtonElement>('#save-button')!
+const openButton = document.querySelector<HTMLButtonElement>('#open-button')!
 
 playEditToggleButton.addEventListener('click', () => {
   setActivityMode(activityMode === "play" ? "edit" : "play")
@@ -17,6 +19,8 @@ playEditToggleButton.addEventListener('click', () => {
 restartLevelButton.addEventListener('click', restartLevel)
 undoButton.addEventListener('click', undo)
 redoButton.addEventListener('click', redo)
+saveButton.addEventListener('click', saveLevel)
+openButton.addEventListener('click', openLevel)
 
 addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {

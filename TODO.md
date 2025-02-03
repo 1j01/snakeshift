@@ -33,7 +33,6 @@
   - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
 
 level editor:
-  - add save and open buttons (currently you have to press Ctrl+S and Ctrl+O)
   - add an invert button, with shortcut I, which inverts the colors of the selection or level
   - auto-save and/or onbeforeunload
   - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
