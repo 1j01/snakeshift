@@ -1,8 +1,6 @@
 # <img src="./game/public/yin-yang-larger-sneks-180px.png" height="60"> Snakeshift
 
-A cross between Snake and Shift.
-
-An inverse space puzzle game.
+A negative space puzzle game inspired by Snake and Shift.
 
 Shapeshift in makeshift ways. Shift snakes into lakes. Snake wakes into shapes.
 
