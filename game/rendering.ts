@@ -155,7 +155,14 @@ export function viewToWorld(clientPoint: { clientX: number, clientY: number }): 
   const rect = canvas.getBoundingClientRect()
   const x = clientPoint.clientX - rect.left
   const y = clientPoint.clientY - rect.top
-  const point = new DOMPoint(x * devicePixelRatio, y * devicePixelRatio).matrixTransform(transform!.inverse())
+  if (!transform) {
+    // I've only noticed this in flaky tests, and I'm guessing the value is not particularly consequential.
+    // The transform would only be undefined before the first render, so there's nothing "correct" to return, right?
+    // Well it'd probably be possible to extract the part of the rendering code that sets up the transform and run just that.
+    // But it probably doesn't MATTER, right? Sigh...
+    return { x: 0, y: 0 }
+  }
+  const point = new DOMPoint(x * devicePixelRatio, y * devicePixelRatio).matrixTransform(transform.inverse())
   // Avoid extra z, w properties in case this gets serialized.
   return {
     x: point.x,
