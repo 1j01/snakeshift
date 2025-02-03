@@ -134,6 +134,15 @@
   <div id="game-options-bar">
     <!-- TODO: make class an id or use a second button to better integrate with the entities bar -->
     <button class="bw-button back-to-main-menu-button" aria-keyshortcuts="Escape">Back</button>
+    <button class="bw-button" id="play-edit-toggle-button">
+      <!-- I have sketched out an animation where the play icon triangle becomes the tip of a pencil and the whole button becomes a pencil,
+      but it might be a lot of work and might just look silly. Could be fun though. -->
+      <!-- TODO: custom icons at least, for consistent display across platforms -->
+      <span style="font-size: 1.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
+        ▶&#xFE0E;/✏&#xFE0E;
+      </span>
+      Play/Edit
+    </button>
     <button class="bw-button" id="restart-level-button" aria-keyshortcuts="R">Restart Level</button>
     <button class="bw-button" id="undo-button" aria-keyshortcuts="Z">Undo</button>
     <button class="bw-button" id="redo-button" aria-keyshortcuts="Y">Redo</button>

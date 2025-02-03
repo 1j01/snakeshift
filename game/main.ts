@@ -6,10 +6,14 @@ import { initLevelSelect } from "./level-select"
 import { initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
 
+const playEditToggleButton = document.querySelector<HTMLButtonElement>('#play-edit-toggle-button')!
 const restartLevelButton = document.querySelector<HTMLButtonElement>('#restart-level-button')!
 const undoButton = document.querySelector<HTMLButtonElement>('#undo-button')!
 const redoButton = document.querySelector<HTMLButtonElement>('#redo-button')!
 
+playEditToggleButton.addEventListener('click', () => {
+  setActivityMode(activityMode === "play" ? "edit" : "play")
+})
 restartLevelButton.addEventListener('click', restartLevel)
 undoButton.addEventListener('click', undo)
 redoButton.addEventListener('click', redo)
