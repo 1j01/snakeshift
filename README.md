@@ -97,20 +97,9 @@ To build for production and push to GitHub Pages:
 npm run deploy
 ```
 
-### Ideas
+### Ideas and TODOs
 
-- slicing snakes
-  - like the ghost peppers in [Ssspicy!](https://torcado.itch.io/ssspicy) but without awkward turn counter timing, it will slice your body into live and dead parts, and the dead parts will retain their shapes will be able to be pushed around like arbitrarily shaped crates
-  - generalizes crates, so could do away with crates
-  - cutting blade and cut button combo?
-  - shown as a scythe perhaps, as a way to visually indicate a specific side of a tile that will be cut (and cut button as a skull and crossbones? or skull by itself? or skull in a hood? or crossed scythes / otherwise "contained" looking scythe(s)?)
-- portals
-  - entrance and exit of different sizes changing your snake's size, like in [PortalSnake](https://bcat112a.itch.io/portalsnake)
-- snake color changer
-  - shown as hourglass-like twist with particles of light/dark going in/out
-- generalization of color changer and portals
-  - shown as conic (hourglass-like when 1 cell) twist with black/white braided wormhole leading to other portal (which can be the same cell) and which can be the same or a different color and the same or a different size and the same or a different orientation
-  - what if it could act as the slicer too, with razor-sharp sections of the wormhole aligned to grid edges? you would go through the wormhole with a snake to slice a snake crossing the wormhole blades
+See [TODO.md](./TODO.md).
 
 ## License
 
