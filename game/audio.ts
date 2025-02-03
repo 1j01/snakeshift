@@ -28,6 +28,7 @@ const storageKeys = {
 
 const loadProgress = document.getElementById("load-progress")!
 const muteButton = document.getElementById("mute-button")!
+const muteButtonText = document.getElementById("mute-button-text")!
 
 export let muted = false
 
@@ -135,7 +136,7 @@ export const setVolume = (volume: number) => {
 
 const updateMuteButton = () => {
   muteButton.ariaPressed = muted ? "true" : "false"
-  muteButton.textContent = muted ? "Unmute" : "Mute"
+  muteButtonText.textContent = muted ? "Unmute" : "Mute"
 
   // const volume = mainGain.gain.value
   // const icon = muteButton.querySelector(".sprited-icon")
