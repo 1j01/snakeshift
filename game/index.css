@@ -173,12 +173,6 @@ a:focus {
   gap: 5px;
 }
 
-.back-to-main-menu-button::before {
-  content: "←";
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
 #main-menu {
   /* above back button (bit of a hack...) */
   /* TODO: hide back button properly, for (in)accessibility */
