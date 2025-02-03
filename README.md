@@ -1,4 +1,4 @@
-# <img src="./game/public/yin-yang-larger-sneks-180px.png" height="60"> Snakeshift
+# <img src="./game/public/graphics/yin-yang-larger-sneks-180px.png" height="60"> Snakeshift
 
 A negative space puzzle game inspired by Snake and Shift.
 
