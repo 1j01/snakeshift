@@ -113,7 +113,19 @@ export function handleLevelCompletion() {
     } else {
       // in case you undo the winning move
       // Might need to disable movement while the level is won though, if I'm unsetting this...
-      wonLevel = false
+      if (!checkLevelWon()) {
+        wonLevel = false
+      }
     }
   })
+}
+
+export function shouldInputBeAllowed() {
+  return (
+    !document.querySelector("#game-win-screen.active, #level-splash.active, #standalone-level-win-screen.active") ||
+    parseFloat(
+      getComputedStyle(document.querySelector("#game-win-screen.active, #level-splash.active, #standalone-level-win-screen.active")!)
+        .opacity
+    ) < 0.7
+  )
 }

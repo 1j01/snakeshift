@@ -265,7 +265,7 @@ test('should not allow movement while level win splash screen is shown', async (
   await expect(page).not.toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
 });
 
-test.fixme('should not allow movement after the game is won', async ({ page }) => {
+test('should not allow movement after the game is won', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);

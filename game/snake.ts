@@ -1,7 +1,7 @@
 import { playSound } from "./audio"
 import { Collectable } from "./collectable"
 import Entity from "./entity"
-import { checkLevelWon } from "./game"
+import { checkLevelWon, shouldInputBeAllowed } from "./game"
 import { entities, levelInfo, undoable } from "./game-state"
 import { hitTestAllEntities, topLayer } from "./helpers"
 import { selectedEntities } from "./level-editor"
@@ -311,15 +311,8 @@ export default class Snake extends Entity {
         snakesOnTop.length === 0 &&
         topLayer(hitsAhead) !== head.layer &&
         topLayer(hitsAtTail) === head.layer &&
-        // HACK: This isn't the place for this, this isn't the way to do it, and this isn't a complete solution.
-        // Should really prevent all input, including switching snakes, while a splash screen is visible.
-        (
-          !document.querySelector("#game-win-screen.active, #level-splash.active, #standalone-level-win-screen.active") ||
-          parseFloat(
-            getComputedStyle(document.querySelector("#game-win-screen.active, #level-splash.active, #standalone-level-win-screen.active")!)
-              .opacity
-          ) < 0.7
-        ),
+        // HACK: This isn't the place for this. Should really prevent it at the input level.
+        shouldInputBeAllowed(),
       to: { x, y, width: head.width, height: head.height },
       entitiesThere: hitsAhead.map(hit => hit.entity),
     }

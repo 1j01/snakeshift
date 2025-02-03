@@ -1,6 +1,6 @@
 import { playSound } from "./audio"
 import Entity from "./entity"
-import { activityMode, editorRedos, editorUndos, setActivityMode, setBaseLevelState as storeBaseLevelState } from "./game"
+import { activityMode, editorRedos, editorUndos, setActivityMode, shouldInputBeAllowed, setBaseLevelState as storeBaseLevelState } from "./game"
 import { makeEntity } from "./helpers"
 import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { hideScreens } from "./menus"
@@ -171,6 +171,7 @@ export function cyclePlayerControl(reverse = false) {
   const nextIndex = ((index + (reverse ? -1 : 1)) + players.length) % players.length
   // If there are no players at all, avoid creating a useless undo state or erroring.
   if (!players[nextIndex]) return
+  if (!shouldInputBeAllowed()) return
   undoable()
   activePlayer = players[nextIndex]
   playSound("switchSnakes")

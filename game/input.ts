@@ -1,5 +1,5 @@
 import { playSound } from './audio'
-import { activityMode, restartLevel } from './game'
+import { activityMode, restartLevel, shouldInputBeAllowed } from './game'
 import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, postUpdate, redo, setActivePlayer, setControlScheme, undo } from './game-state'
 import { hitTestAllEntities, makeEventListenerGroup, neighborOf } from './helpers'
 import { showMainMenu } from './menus'
@@ -64,7 +64,7 @@ export function handleInput(
     on(window, "pointerup", (event) => {
       dragging = false
       lastPointerPosition = undefined
-      if (pointerDownSnake && snakeUnderPointer(event) === pointerDownSnake && !movedSincePointerDown) {
+      if (pointerDownSnake && snakeUnderPointer(event) === pointerDownSnake && !movedSincePointerDown && shouldInputBeAllowed()) {
         // TODO: DRY, shouldn't the sfx and highlight be handled by setActivePlayer? maybe with a flag if needed?
         setActivePlayer(pointerDownSnake)
         playSound("switchSnakes")
