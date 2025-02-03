@@ -205,9 +205,32 @@ test.fixme('should not show "Level Complete" when a custom level has no goal', a
   await expect(page.getByText('Level Complete')).not.toBeVisible();
 });
 
-test.skip('should not allow movement after a level is won before the next level is loaded', async ({ page }) => { });
-// easier to test the last level, since it doesn't have a next level which may load immediately,
-// but it might be best to test both cases...
+test.fixme('should not allow movement while level win splash screen is shown', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click();
+  await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await page.keyboard.press('ArrowRight');
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).toHaveText('Test Level 002 (Just move left to win)');
+  // Don't wait for the next level to be ready.
+  // Note: when fixing this, I may need to add waiting to a lot of the other tests.
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowLeft');
+  // Wait for the next level to be ready.
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
+  // If the previous Up+Left took place, Down will win the level. But it should be the first allowed movement.
+  await page.keyboard.press('ArrowDown');
+  // await expect(page.locator('#level-splash-title')).not.toBeVisible(); // would wait for it to hide, not check that it was never shown
+  expect(await page.locator('#level-splash-title').isVisible()).toBeFalsy();
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('ArrowUp');
+  // Don't know the third level name, but it should move to the next level at this point.
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page).not.toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+});
+
 test.fixme('should not allow movement after the game is won', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
