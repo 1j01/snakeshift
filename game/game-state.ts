@@ -1,7 +1,6 @@
 import { playSound } from "./audio"
-import { Collectable } from "./collectable"
 import Entity from "./entity"
-import { activityMode, editorRedos, editorUndos, levelHasGoal, setActivityMode, setBaseLevelState as storeBaseLevelState } from "./game"
+import { activityMode, editorRedos, editorUndos, setActivityMode, setBaseLevelState as storeBaseLevelState } from "./game"
 import { makeEntity } from "./helpers"
 import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { hideScreens } from "./menus"
@@ -207,19 +206,6 @@ export function setControlScheme(scheme: ControlScheme) {
 export function setActivePlayer(snake: Snake | undefined) {
   activePlayer = snake
   postUpdate()
-}
-
-export function checkLevelWon() {
-  if (window._winLevelCheat) {
-    window._winLevelCheat = false
-    return true
-  }
-  if (!levelHasGoal) {
-    // No goal, so don't declare victory. It's useful to be able to test incomplete levels.
-    console.log("No goal; level is unwinnable.")
-    return false
-  }
-  return entities.filter(e => e instanceof Collectable).length === 0
 }
 
 declare global {

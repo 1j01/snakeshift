@@ -1,5 +1,5 @@
 import { Collectable } from "./collectable"
-import { checkLevelWon, clearLevel, deserialize, entities, onUpdate, redos, serialize, undoable, undos } from "./game-state"
+import { clearLevel, deserialize, entities, onUpdate, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
 import { currentLevelID, loadLevelFile, loadNextLevel, setStandaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
@@ -88,6 +88,19 @@ export function restartLevel() {
   undoable()
   deserialize(editorState)
   wonLevel = false
+}
+
+export function checkLevelWon() {
+  if (window._winLevelCheat) {
+    window._winLevelCheat = false
+    return true
+  }
+  if (!levelHasGoal) {
+    // No goal, so don't declare victory. It's useful to be able to test incomplete levels.
+    console.log("No goal; level is unwinnable.")
+    return false
+  }
+  return entities.filter(e => e instanceof Collectable).length === 0
 }
 
 export function handleLevelCompletion() {
