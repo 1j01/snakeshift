@@ -9,8 +9,12 @@
 declare global {
   interface Window {
     webkitAudioContext: typeof AudioContext
+    playedSounds: string[]
   }
 }
+// For testing with Playwright
+// TODO: only track sounds played during testing (could expose a global from playwright to let the page know if it's being tested, if there's not a built-in way)
+window.playedSounds = []
 
 window.AudioContext ??= window.webkitAudioContext
 const audioCtx = new AudioContext()
@@ -166,11 +170,19 @@ const showErrorMessage = (message: string, error: unknown) => {
 
 export const playSound = (soundName: keyof typeof resourcePaths, { playbackRate = 1, volume = 1, cutOffEndFraction = 0 } = {}) => {
   try {
+    if (muted) {
+      return
+    }
+    // For now, test that a sound was attempted to be played.
+    // (Actually playing sounds in tests is spotty, though it does happen, and not particularly desirable...)
+    window.playedSounds.push(soundName)
+
     const audioBuffer = resources[soundName]
     if (!audioBuffer) {
       throw new Error(`No AudioBuffer loaded for sound '${soundName}'`)
     }
-    if (muted || audioCtx.state !== "running") {
+    if (audioCtx.state !== "running") {
+      console.warn("Audio context not running, can't play sound")
       return
     }
     const gain = audioCtx.createGain()

@@ -1,6 +1,13 @@
 import { expect, test } from '@playwright/test';
 import { dragAndDropFile, saveLevelFileAndCompareContent } from './test-helpers';
 
+declare global {
+  interface Window {
+    playedSounds: string[]
+  }
+}
+
+
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/');
 
@@ -78,6 +85,7 @@ test('you should be able to win the last level twice in a row, after returning t
   await expect(page.locator('#game-win-screen')).not.toBeVisible();
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#game-win-screen')).toBeVisible();
+  await expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant']);
   await page.getByRole('button', { name: '← Back' }).click();
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
@@ -257,26 +265,43 @@ test('should not allow movement while level win splash screen is shown', async (
   await expect(page).not.toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
 });
 
-test('should not allow movement after the game is won', async ({ page }) => {
+test.fixme('should not allow movement after the game is won', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
   await expect(page.locator('#level-splash-title')).toBeVisible();
   await expect(page.locator('#level-splash-title')).not.toBeVisible();
+  await expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong']);
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#game-win-screen')).toBeVisible();
 
-  test.skip(true, "This testing strategy doesn't make sense if the code looks at the DOM state that this test manipulates to determine whether you should be able to move or not.");
-  // Force hide the win screen by removing .active
-  await page.evaluate(() => document.querySelector('#game-win-screen')!.classList.remove('active'));
-  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  // First strategy was to force hide the win screen by removing .active
+  // This testing strategy doesn't make sense if the code looks at the DOM state that this test manipulates to determine whether you should be able to move or not.
+  // Or if it doesn't reset the same DOM state that this test manipulates when the level is won.
+  // So it would only make sense if the game stores the state of the level win splash screen in a variable, and this test hides the splash screen in a way that the game will naturally reverse.
+  // Not a good test.
+  // await page.evaluate(() => document.querySelector('#game-win-screen')!.classList.remove('active'));
+  // await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  // await page.keyboard.press('ArrowRight');
+  // await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  // await page.keyboard.press('ArrowUp');
+  // await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  // await page.keyboard.press('ArrowDown');
+  // await expect(page.locator('#game-win-screen')).not.toBeVisible();
 
+  // Instead, check that the win sound effect is not played, which is the observable thing anyways, with the splash screen in the way of the canvas.
+  // The game win sound effect should have already played, but should not play again.
+  await expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant']);
   await page.keyboard.press('ArrowRight');
-  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  await expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant']);
   await page.keyboard.press('ArrowUp');
-  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  await expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant']);
   await page.keyboard.press('ArrowDown');
-  await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  await expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant']);
+  // Also test that you can't switch between snakes while the splash screen is shown
+  // TODO: add a second snake to the level to make sure this is tested
+  await page.keyboard.press('Tab');
+  await expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant']);
 })
 
 test('should confirm discarding unsaved changes in edit mode', async ({ page }) => {
