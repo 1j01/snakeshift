@@ -53,12 +53,18 @@ test('undoing should go back a level without immediately winning it (and it shou
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('ArrowRight');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('ControlOrMeta+z');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
   await page.keyboard.press('ArrowRight');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
 });
 
 test('you should be able to win the last level twice in a row, after returning to it via level select', async ({ page }) => {
@@ -67,6 +73,8 @@ test('you should be able to win the last level twice in a row, after returning t
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await expect(page.locator('#game-win-screen')).not.toBeVisible();
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#game-win-screen')).toBeVisible();
@@ -74,6 +82,8 @@ test('you should be able to win the last level twice in a row, after returning t
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await expect(page.locator('#game-win-screen')).not.toBeVisible();
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#game-win-screen')).toBeVisible();
@@ -83,6 +93,8 @@ test('you should be able to hide the game win screen by undoing, and then win ag
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#game-win-screen')).toBeVisible();
   await page.keyboard.press('ControlOrMeta+z');
@@ -123,8 +135,12 @@ test('should stay on the same level when switching to edit mode after winning a 
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('ArrowRight');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('Backquote');
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
   await page.keyboard.press('Backquote');
@@ -148,8 +164,12 @@ test('should stay on the same level when pressing R after winning a prior level'
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('ArrowRight');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('r');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
   // TODO: also test that it restarts the level
@@ -159,6 +179,8 @@ test('should stay on the same level when pressing R after winning a level and un
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('ArrowRight');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
   await page.keyboard.press('ControlOrMeta+z');
@@ -172,6 +194,8 @@ test('should show "Level Complete" when finishing a custom level (via level edit
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('Backquote');
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
   await page.keyboard.press('Backquote');
@@ -205,16 +229,18 @@ test('should not show "Level Complete" when a custom level has no goal', async (
   await expect(page.getByText('Level Complete')).not.toBeVisible();
 });
 
-test.fixme('should not allow movement while level win splash screen is shown', async ({ page }) => {
+// TODO: also test that you can't switch between snakes while a splash screen is shown
+test('should not allow movement while level win splash screen is shown', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('ArrowRight');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
   await expect(page.locator('#level-splash-title')).toBeVisible();
   await expect(page.locator('#level-splash-title')).toHaveText('Test Level 002 (Just move left to win)');
   // Don't wait for the next level to be ready.
-  // Note: when fixing this, I may need to add waiting to a lot of the other tests.
   await page.keyboard.press('ArrowUp');
   await page.keyboard.press('ArrowLeft');
   // Wait for the next level to be ready.
@@ -231,16 +257,17 @@ test.fixme('should not allow movement while level win splash screen is shown', a
   await expect(page).not.toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
 });
 
-test.fixme('should not allow movement after the game is won', async ({ page }) => {
+test('should not allow movement after the game is won', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
+  await expect(page.locator('#level-splash-title')).toBeVisible();
+  await expect(page.locator('#level-splash-title')).not.toBeVisible();
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#game-win-screen')).toBeVisible();
 
+  test.skip(true, "This testing strategy doesn't make sense if the code looks at the DOM state that this test manipulates to determine whether you should be able to move or not.");
   // Force hide the win screen by removing .active
-  // Note that this doesn't make sense if the code uses the "active" class to store whether the level was won.
-  // Not an ideal test.
   await page.evaluate(() => document.querySelector('#game-win-screen')!.classList.remove('active'));
   await expect(page.locator('#game-win-screen')).not.toBeVisible();
 

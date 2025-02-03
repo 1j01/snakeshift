@@ -310,7 +310,11 @@ export default class Snake extends Entity {
         !movingBackwards &&
         snakesOnTop.length === 0 &&
         topLayer(hitsAhead) !== head.layer &&
-        topLayer(hitsAtTail) === head.layer,
+        topLayer(hitsAtTail) === head.layer &&
+        // HACK: This isn't the place for this, this isn't the way to do it, and this isn't a complete solution.
+        // Should really prevent all input, including switching snakes, while a splash screen is visible.
+        // Also, TODO: let you move while the screen fades out.
+        !document.querySelector("#game-win-screen.active, #level-splash.active, #standalone-level-win-screen.active"),
       to: { x, y, width: head.width, height: head.height },
       entitiesThere: hitsAhead.map(hit => hit.entity),
     }
