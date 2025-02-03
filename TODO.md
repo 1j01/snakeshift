@@ -12,6 +12,8 @@
 - detect immobile state and show a message about restarting/undoing
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
 - skip/merge extra undo steps for switching snakes
+- readme image
+- false positive warning overlay with overlapped snakes (see level `possible-bug-why-is-it-detecting-this-as-invalid.json`)
 
 - saving playthroughs:
   - limit to undos pertaining to the current level (using `levelId` which is now in the undo shape)
@@ -31,6 +33,10 @@
   - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
 
 level editor:
+  - fix move tool (broken in 8a94609622efd91790c253cdb8b508637101f165 "Allow dragging an empty selection, for consistency")
+  - add play/edit toggle button (currently you have to press ` to toggle)
+  - add save and open buttons (currently you have to press Ctrl+S and Ctrl+O)
+  - add an invert button, with shortcut I, which inverts the colors of the selection or level
   - auto-save and/or onbeforeunload
   - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
 
@@ -47,12 +53,15 @@ level editor:
   - would be nice to preview levels in the level select (prerequisite: preload levels in a caching way)
 
 puzzles:
+- see `game/public/levels/sketches` folder for some ideas
 - explore tesselation
 - lock levels are cheese-able; you can bridge the left and middle vertical lanes with the black snake; the intentionally cheese-able "security by obscurity" version can also be solved in two different ways, bridging it vertically (intended) or horizontally (in the same way as the prior level); I've got a more solid version in `proper-lock-v2` but want to consider if it makes the difference between the two levels too obvious, and maybe adjust the latter level as well (but it might be fine)
 
 mechanics:
 - a wall tile that is impassable to snakes of either color (checkered?)
 - a ground/floor tile that allows either color of snake to pass through (grass pattern?)
+- crates
+  - could be fun if collectables on top of crates are pushed along with the crate
 - slicing snakes
   - like the ghost peppers in [Ssspicy!](https://torcado.itch.io/ssspicy) but without awkward turn counter timing, it will slice your body into live and dead parts, and the dead parts will retain their shapes will be able to be pushed around like arbitrarily shaped crates
   - generalizes crates, so could do away with crates
