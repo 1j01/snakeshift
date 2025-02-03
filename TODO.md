@@ -33,7 +33,6 @@
   - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
 
 level editor:
-  - fix move tool (broken in 8a94609622efd91790c253cdb8b508637101f165 "Allow dragging an empty selection, for consistency")
   - add play/edit toggle button (currently you have to press ` to toggle)
   - add save and open buttons (currently you have to press Ctrl+S and Ctrl+O)
   - add an invert button, with shortcut I, which inverts the colors of the selection or level

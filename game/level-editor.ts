@@ -345,7 +345,12 @@ export function handleInputForLevelEditing(
       mouseHoveredTile = undefined
     }
     if (mouseHoveredTile) {
-      if (dragGestureLastTile) {
+      if (
+        // For move tool
+        draggingEntities.length ||
+        // For select tool, allow dragging even empty selection.
+        dragGestureLastTile
+      ) {
         if (selectionRange && dragGestureLastTile) {
           translateSelection(mouseHoveredTile.x - dragGestureLastTile.x, mouseHoveredTile.y - dragGestureLastTile.y)
           dragGestureLastTile = mouseHoveredTile
