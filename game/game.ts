@@ -1,3 +1,4 @@
+import { Collectable } from "./collectable"
 import { checkLevelWon, clearLevel, deserialize, entities, onUpdate, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
@@ -24,7 +25,8 @@ let wonLevel = false
 
 export const editorUndos: GameState[] = []
 export const editorRedos: GameState[] = []
-export let editorState: GameState | undefined = undefined
+let editorState: GameState | undefined = undefined
+export let levelHasGoal = false
 let cleanup = handleInput(canvas)
 export function setActivityMode(newMode: "edit" | "play" | "menu") {
   if (activityMode === newMode) return
@@ -46,6 +48,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     editorUndos.splice(0, editorUndos.length, ...undos)
     editorRedos.splice(0, editorRedos.length, ...redos)
     editorState = serialize()
+    levelHasGoal = entities.some(e => e instanceof Collectable)
     undos.length = 0
     redos.length = 0
   } else {
@@ -57,13 +60,15 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     editorUndos.length = 0
     editorRedos.length = 0
     editorState = undefined
+    levelHasGoal = false
   }
   wonLevel = false // might not need this
   updatePageTitleAndLevelSpecificOverlays()
 }
 
-export function setBaseLevelState(state: GameState) {
-  editorState = state
+export function setBaseLevelState() {
+  editorState = serialize()
+  levelHasGoal = entities.some(e => e instanceof Collectable)
   wonLevel = false
 }
 
