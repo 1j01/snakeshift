@@ -165,8 +165,8 @@ a:focus {
 
 dialog {
   border: 30px solid #fff;
-  border-image: url(/graphics/border.png) calc(15/32*100%) round;
-  /* border-image-outset: 9px; */
+  border-image: url(/graphics/border-2.png) calc(15/32*100%) round;
+  border-image-outset: 9px;
   image-rendering: pixelated;
   background-color: #000;
   color: #fff;
