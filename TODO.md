@@ -14,6 +14,7 @@
 - skip/merge extra undo steps for switching snakes
 - readme image
 - weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
+- clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes
 
 - par system:
   - keep track of the fewest number of moves and best solution for each level
@@ -44,6 +45,7 @@ level editor:
   - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
   - should be easier to deselect (escape, ctrl+d, enter?)
   - rotate/flip?
+  - prompt to clear entities outside level bounds when saving
 
 - less important:
   - more appropriate undo/redo sfx
@@ -55,6 +57,7 @@ level editor:
   - reign in `onUpdate` over-extension/repurposing/overuse, maybe adding an onResize in renderer or something
   - preload levels
   - would be nice to preview levels in the level select (prerequisite: preload levels in a caching way)
+  - enlarge level border
 
 puzzles:
 - see `game/public/levels/sketches` folder for some ideas
