@@ -26,6 +26,10 @@ let createdUndoState = false
 let selectionRange: { startTile: Tile, endTile: Tile, defining: boolean } | undefined = undefined
 export let selectedEntities: Entity[] = []
 
+// HACK: setSelectedButton is defined in initLevelEditorGUI,
+// need to use it outside of that scope. TODO: refactor this stuff!
+let selectTheSelectTool = () => { /* TSILB */ }
+
 function getSelectionBox(): Tile | undefined {
   if (selectionRange) {
     return {
@@ -43,6 +47,7 @@ export function initLevelEditorGUI() {
   const entityButtons = entitiesBar.querySelectorAll('.entity-button')
   const toolButtons = entitiesBar.querySelectorAll('.tool-button') // includes entity buttons
 
+  // TODO: refactor so you don't have to separately set `tool`; confusing!
   function setSelectedButton(button: Element) {
     selectionRange = undefined
     setHighlight(undefined) // updateHighlight()? not accessible here...
@@ -113,6 +118,11 @@ export function initLevelEditorGUI() {
     event.preventDefault()
     levelInfoEditor.close()
   })
+
+  selectTheSelectTool = () => {
+    tool = Tool.Select
+    setSelectedButton(selectButton)
+  }
 
   for (const button of entityButtons) {
     makeEntityButton(button)
@@ -587,6 +597,7 @@ export function deleteSelectedEntities() {
 export function selectAll() {
   // Note: selecting entities even outside the level bounds
   // might create some inconsistencies, but is probably more useful than not.
+  selectTheSelectTool()
   selectedEntities = [...entities]
   selectionRange = { startTile: { x: 0, y: 0, width: 1, height: 1, }, endTile: { x: levelInfo.width - 1, y: levelInfo.height - 1, width: 1, height: 1 }, defining: false }
   // updateHighlight() // not available here...
