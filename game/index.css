@@ -173,6 +173,15 @@ a:focus {
   gap: 5px;
 }
 
+body:not([data-standalone-level]) .hide-in-campaign {
+  display: none;
+}
+
+body[data-screen="level-select"] .level-flow-control-button,
+body[data-screen="credits"] .level-flow-control-button {
+  display: none;
+}
+
 #main-menu {
   /* above back button (bit of a hack...) */
   /* TODO: hide back button properly, for (in)accessibility */

@@ -24,17 +24,20 @@ export function initMainMenu() {
   levelSelectButton.addEventListener('click', () => {
     hideScreens()
     levelSelect.classList.add('active')
+    document.body.dataset.screen = "level-select"
   })
 
   levelEditorButton.addEventListener('click', () => {
     hideScreens()
     setActivityMode("edit") // before clearing because it switches to separate edit mode undo stacks
     clearLevel(false)
+    document.body.dataset.screen = "level-editor"
   })
 
   creditsButton.addEventListener('click', () => {
     hideScreens()
     credits.classList.add('active')
+    document.body.dataset.screen = "credits"
   })
 
   for (const backButton of backButtons) {
@@ -71,6 +74,7 @@ export function showMainMenu() {
   if (!confirmLoseUnsavedChanges()) return false
   hideScreens()
   mainMenu.classList.add('active')
+  document.body.dataset.screen = "main-menu"
   setActivityMode("menu")
   playButton.focus()
   return true
@@ -79,6 +83,7 @@ export function showMainMenu() {
 export function showLevelSplash(levelInfo: { title: string }) {
   hideScreens()
   levelSplash.classList.add('active')
+  // document.body.dataset.screen = "game" // not sure yet
   levelSplashTitle.textContent = levelInfo.title
   playSound('gong')
   setTimeout(() => {

@@ -93,6 +93,9 @@ export function setStandaloneLevelMode(value = true) {
   standaloneLevelMode = value
   if (value) {
     currentLevelButton = undefined
+    document.body.dataset.standaloneLevel = ""
+  } else {
+    delete document.body.dataset.standaloneLevel
   }
 }
 

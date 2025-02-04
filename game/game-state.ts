@@ -347,6 +347,7 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play", levelId: 
     }
     setActivityMode(newMode)
     hideScreens({ except: ["level-splash"] }) // level splash is shown early to mask loading time
+    document.body.dataset.screen = "game"
     return true
   }
 }
