@@ -19,17 +19,17 @@ test.beforeEach(async ({ page }) => {
 
 test('basic navigation', async ({ page }) => {
   await expect(page).toHaveTitle(/Snakeshift/);
-  await page.getByRole('button', { name: 'Play' }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
   await page.keyboard.press('ArrowRight');
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await expect(page).toHaveTitle(/^Snakeshift$/);
-  await page.getByRole('button', { name: 'Play' }).click();
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await page.getByRole('button', { name: 'Level Select' }).click();
   await expect(page).toHaveTitle(/^Snakeshift$/);
   await page.getByRole('button', { name: 'Security by Obscurity' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Security by Obscurity$/);
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await page.getByRole('button', { name: 'Level Editor' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
   await page.getByRole('button', { name: 'Snake (White)' }).click();
@@ -86,7 +86,7 @@ test('you should be able to win the last level twice in a row, after returning t
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#game-win-screen')).toBeVisible();
   await expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant']);
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await page.getByRole('button', { name: 'Level Select' }).click();
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/);
@@ -318,19 +318,19 @@ test('should confirm discarding unsaved changes in edit mode', async ({ page }) 
   });
 
   // This should show a dialog which will be automatically dismissed
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
 
   // Should still show dialog if you have no undos but you have redos
   await page.keyboard.press('ControlOrMeta+z');
 
   // This should show a dialog which will be automatically dismissed
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
 
   // Should go back if you confirm
   page.on('dialog', dialog => dialog.accept());
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await expect(page).toHaveTitle(/^Snakeshift$/);
 });
 
@@ -351,19 +351,19 @@ test('should confirm discarding unsaved changes when play-testing a level after 
   await page.keyboard.press('Backquote');
 
   // This should show a dialog which will be automatically dismissed
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Custom Level$/);
 
   // Should still show dialog if you have no undos but you have redos
   await page.keyboard.press('ControlOrMeta+z');
 
   // This should show a dialog which will be automatically dismissed
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await expect(page).toHaveTitle(/^Snakeshift - Custom Level$/);
 
   // Should go back if you confirm
   page.on('dialog', dialog => dialog.accept());
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await expect(page).toHaveTitle(/^Snakeshift$/);
 });
 
@@ -372,7 +372,7 @@ test('should not show confirmation dialog if there are no unsaved changes (after
   const filePath = 'game/public/levels/tests/move-left-to-win.json';
   await dragAndDropFile(page, 'body', filePath, 'move-left-to-win.json');
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await expect(page).toHaveTitle(/^Snakeshift$/);
 });
 
@@ -382,7 +382,7 @@ test('should not show confirmation dialog if there are no unsaved changes (after
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/);
   await page.keyboard.press('Backquote');
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await expect(page).toHaveTitle(/^Snakeshift$/);
 });
 
@@ -397,7 +397,7 @@ test('should not show confirmation dialog if playing a built-in level', async ({
   await page.keyboard.press('ArrowUp');
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/);
 
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
   await expect(page).toHaveTitle(/^Snakeshift$/);
 });
 
