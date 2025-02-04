@@ -355,7 +355,9 @@ test('should confirm discarding unsaved changes when play-testing a level after 
   await expect(page).toHaveTitle(/^Snakeshift - Custom Level$/);
 
   // Should still show dialog if you have no undos but you have redos
+  await page.keyboard.press('Backquote');
   await page.keyboard.press('ControlOrMeta+z');
+  await page.keyboard.press('Backquote');
 
   // This should show a dialog which will be automatically dismissed
   await page.getByRole('button', { name: 'Back' }).click();
