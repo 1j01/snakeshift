@@ -584,6 +584,16 @@ export function deleteSelectedEntities() {
   postUpdate() // I guess?
 }
 
+export function selectAll() {
+  // Note: selecting entities even outside the level bounds
+  // might create some inconsistencies, but is probably more useful than not.
+  selectedEntities = [...entities]
+  selectionRange = { startTile: { x: 0, y: 0, width: 1, height: 1, }, endTile: { x: levelInfo.width - 1, y: levelInfo.height - 1, width: 1, height: 1 }, defining: false }
+  // updateHighlight() // not available here...
+  setHighlight(getSelectionBox(), { isSelection: true, valid: true })
+  postUpdate() // I guess???
+}
+
 export function invert() {
   undoable()
   const targetEntities = (selectedEntities.length || selectionRange) ? selectedEntities : entities

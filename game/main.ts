@@ -1,7 +1,7 @@
 import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
 import { activityMode, animate, handleLevelCompletion, restartLevel, setActivityMode } from "./game"
 import { clearLevel, loadLevel, openLevel, redo, saveLevel, savePlaythrough, undo, undoable } from "./game-state"
-import { deleteSelectedEntities, initLevelEditorGUI, invert, translateSelection } from "./level-editor"
+import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
 import { initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
@@ -55,6 +55,9 @@ addEventListener('keydown', (event) => {
     event.preventDefault()
   } else if (event.key === 'n' && activityMode == "edit") { // Ctrl+N is new window and can't be overridden
     clearLevel()
+    event.preventDefault()
+  } else if (event.key === 'a' && activityMode == "edit") {
+    selectAll()
     event.preventDefault()
   } else if (event.key === 'Delete' && activityMode == "edit") {
     deleteSelectedEntities()
