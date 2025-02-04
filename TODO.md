@@ -15,6 +15,13 @@
 - readme image
 - false positive warning overlay with overlapped snakes (see level `possible-bug-why-is-it-detecting-this-as-invalid.json`)
 
+- par system:
+  - keep track of the fewest number of moves and best solution for each level
+  - show the number of moves in the level select
+  - define a par for each level
+  - maybe allow viewing your best solution
+  - stretch goal: submit solutions to a server for verification and compare with others
+
 - saving playthroughs:
   - limit to undos pertaining to the current level (using `levelId` which is now in the undo shape)
   - make sure playthroughs can include the final (winning) state
