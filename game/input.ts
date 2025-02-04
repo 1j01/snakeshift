@@ -163,7 +163,10 @@ export function handleInput(
       const isVisibleAndOnTop = (element: Element) => {
         const rect = element.getBoundingClientRect()
         const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
-        return document.elementFromPoint(center.x, center.y) === element
+        // `elementFromPoint` may return an icon or label inside a button.
+        // `contains` is inclusive of the element itself.
+        // FIXME: this doesn't allow scrolling to elements offscreen
+        return element.contains(document.elementFromPoint(center.x, center.y))
       }
       // TODO: consider other focusable elements
       const focusableElements = [...document.querySelectorAll<HTMLElement>('button, a')]
