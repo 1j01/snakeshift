@@ -99,6 +99,7 @@ export function initLevelEditorGUI() {
     // const descriptionInput = levelInfoEditor.querySelector<HTMLInputElement>('#level-description')!
     widthInput.value = levelInfo.width.toString()
     heightInput.value = levelInfo.height.toString()
+    widthInput.select()
   })
   levelInfoEditor.addEventListener('close', () => {
     console.log(levelInfoEditor.returnValue)
