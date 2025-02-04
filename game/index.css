@@ -182,6 +182,16 @@ body[data-screen="credits"] .level-flow-control-button {
   display: none;
 }
 
+@media (max-width: 600px) {
+  #game-options-bar .button-text {
+    display: none;
+  }
+
+  /* #entities-bar .button-text {
+    display: none;
+  } */
+}
+
 #main-menu {
   /* above back button (bit of a hack...) */
   /* TODO: hide back button properly, for (in)accessibility */
