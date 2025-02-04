@@ -577,11 +577,11 @@ export function deleteSelectedEntities() {
         entities.splice(index, 1)
       }
     }
-    selectedEntities.length = 0
-    selectionRange = undefined
-    setHighlight(undefined) // updateHighlight()? not accessible out here...
-    postUpdate() // I guess?
   }
+  selectedEntities.length = 0
+  selectionRange = undefined
+  setHighlight(undefined) // updateHighlight()? not accessible out here...
+  postUpdate() // I guess?
 }
 
 export function invert() {
