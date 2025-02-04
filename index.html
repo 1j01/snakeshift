@@ -7,8 +7,8 @@
   <title>Snakeshift</title>
   <!-- <link rel="icon" type="image/png" href="/graphics/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
   <link rel="icon" type="image/png" href="./graphics/yin-yang-larger-sneks-180px.png" sizes="180x180" />
-  <script type="module" crossorigin src="./assets/index-DExtq6Lr.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Daga0d-8.css">
+  <script type="module" crossorigin src="./assets/index-v1Uu2iEq.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-Ba8bqLyd.css">
 </head>
 
 <body>
@@ -23,7 +23,7 @@
   <div class="screen" id="credits">
     <h1>Credits</h1>
     <p>
-      <a href="https://isaiahodhner.io">Isaiah Odhner</a> — Programming, Design, Art
+      <a href="https://isaiahodhner.io/games">Isaiah Odhner</a> — Programming, Design, Art
     </p>
     <h2>Sound Effects</h2>
     <p>
@@ -139,89 +139,103 @@
     <!-- TODO: make class an id or use a second button to better integrate with the entities bar -->
     <button class="bw-button back-to-main-menu-button" aria-keyshortcuts="Escape">
       <img src="./graphics/back.svg" alt="" />
-      Back
+      <span class="button-text">Back</span>
     </button>
-    <button class="bw-button" id="play-edit-toggle-button">
+    <button class="bw-button level-flow-control-button hide-in-campaign" id="play-edit-toggle-button">
       <!-- I have sketched out an animation where the play icon triangle becomes the tip of a pencil and the whole button becomes a pencil,
       but it might be a lot of work and might just look silly. Could be fun though. -->
       <!-- TODO: custom icons at least, for consistent display across platforms -->
       <span style="font-size: 1.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
         ▶&#xFE0E;/✏&#xFE0E;
       </span>
-      Play/Edit
+      <span class="button-text">Play/Edit</span>
     </button>
-    <button class="bw-button" id="restart-level-button" aria-keyshortcuts="R">
+    <button class="bw-button level-flow-control-button" id="restart-level-button" aria-keyshortcuts="R">
       <img src="./graphics/restart.svg" alt="" />
-      Restart Level
+      <span class="button-text">Restart Level</span>
     </button>
-    <button class="bw-button" id="undo-button" aria-keyshortcuts="Z">
+    <button class="bw-button level-flow-control-button" id="undo-button" aria-keyshortcuts="Z">
       <img src="./graphics/undo.svg" alt="" />
-      Undo
+      <span class="button-text">Undo</span>
     </button>
-    <button class="bw-button" id="redo-button" aria-keyshortcuts="Y">
+    <button class="bw-button level-flow-control-button" id="redo-button" aria-keyshortcuts="Y">
       <img src="./graphics/undo.svg" alt="" style="transform: scaleX(-1)" />
-      Redo
+      <span class="button-text">Redo</span>
     </button>
     <button class="bw-button" id="mute-button" aria-keyshortcuts="M" aria-pressed="false">
       <img src="./graphics/speaker.svg" alt="" />
-      <span id="mute-button-text">Mute</span>
+      <span class="button-text" id="mute-button-text">Mute</span>
     </button>
     <!-- <button class="bw-button" id="fullscreen-button" aria-keyshortcuts="F">Fullscreen</button> -->
   </div>
   <div id="level-editor">
     <div id="entities-bar">
-      <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="White">Snake (White)</button>
-      <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="Black">Snake (Black)</button>
-      <button class="bw-button tool-button entity-button" data-entity="Collectable" data-color="White">Food
-        (White)</button>
-      <button class="bw-button tool-button entity-button" data-entity="Collectable" data-color="Black">Food
-        (Black)</button>
-      <button class="bw-button tool-button entity-button" data-entity="Crate" data-color="White">Crate (White)</button>
-      <button class="bw-button tool-button entity-button" data-entity="Crate" data-color="Black">Crate (Black)</button>
-      <button class="bw-button tool-button entity-button" data-entity="Block" data-color="White">Wall (White)</button>
-      <button class="bw-button tool-button entity-button" data-entity="Block" data-color="Black">Wall (Black)</button>
+      <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="White">
+        <span class="button-text">Snake (White)</span>
+      </button>
+      <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="Black">
+        <span class="button-text">Snake (Black)</span>
+      </button>
+      <button class="bw-button tool-button entity-button" data-entity="Collectable" data-color="White">
+        <span class="button-text">Food (White)</span>
+      </button>
+      <button class="bw-button tool-button entity-button" data-entity="Collectable" data-color="Black">
+        <span class="button-text">Food (Black)</span>
+      </button>
+      <button class="bw-button tool-button entity-button" data-entity="Crate" data-color="White">
+        <span class="button-text">Crate (White)</span>
+      </button>
+      <button class="bw-button tool-button entity-button" data-entity="Crate" data-color="Black">
+        <span class="button-text">Crate (Black)</span>
+      </button>
+      <button class="bw-button tool-button entity-button" data-entity="Block" data-color="White">
+        <span class="button-text">Wall (White)</span>
+      </button>
+      <button class="bw-button tool-button entity-button" data-entity="Block" data-color="Black">
+        <span class="button-text">Wall (Black)</span>
+      </button>
       <!-- entity buttons are brush tools -->
       <!-- <button class="bw-button tool-button" data-tool="Brush">Brush</button> -->
       <button class="bw-button tool-button" data-tool="Eraser">
         <img src="./graphics/eraser.svg" alt="" />
-        Eraser
+        <span class="button-text">Eraser</span>
       </button>
       <button class="bw-button tool-button" data-tool="Select">
         <img src="./graphics/select.svg" alt="" />
-        Select
+        <span class="button-text">Select</span>
       </button>
       <button class="bw-button tool-button" data-tool="Move">
         <img src="./graphics/move.svg" alt="" />
-        Move
+        <span class="button-text">Move</span>
       </button>
       <button class="bw-button" id="clear-button">
         <img src="./graphics/trash.svg" alt="" />
-        Clear
+        <span class="button-text">Clear</span>
       </button>
       <button class="bw-button" id="invert-button">
         <img src="./graphics/invert-7.svg" alt="" />
         <!-- <span style="font-size: 2.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
           ☯&#xFE0E;
         </span> -->
-        Invert
+        <span class="button-text">Invert</span>
       </button>
       <button class="bw-button" id="level-info-button" aria-controls="level-info-editor">
         <img src="./graphics/cog.svg" alt="" />
-        Level Info
+        <span class="button-text">Level Info</span>
       </button>
       <button class="bw-button" id="save-button">
         <img src="./graphics/save.svg" alt="" />
         <!-- <span style="font-size: 1.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
           💾&#xFE0E;
         </span> -->
-        Save
+        <span class="button-text">Save</span>
       </button>
       <button class="bw-button" id="open-button">
         <img src="./graphics/open.svg" alt="" />
         <!-- <span style="font-size: 1.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
           📂&#xFE0E;
         </span> -->
-        Open
+        <span class="button-text">Open</span>
       </button>
     </div>
     <!-- <div id="toolbar">
