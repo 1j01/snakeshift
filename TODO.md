@@ -42,7 +42,6 @@
 level editor:
   - auto-save and/or onbeforeunload
   - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
-  - escape while dialog is open should close dialog, not return to menu
   - should be easier to deselect (escape, ctrl+d, enter?)
   - rotate/flip?
 
