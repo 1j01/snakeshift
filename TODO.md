@@ -44,7 +44,6 @@ level editor:
   - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
 
 - less important:
-  - speed up tests by reducing splash screen time (when I made it wait for splash screens, it doubled the time the tests took)
   - more appropriate undo/redo sfx
   - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
   - make black block behave identically with white in the editor, where you can't tell which is an entity and which is empty space (maybe even treat it as a 1bpp image, drawn with nearest neighbor interpolation)

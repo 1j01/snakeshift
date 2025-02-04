@@ -9,7 +9,7 @@ declare global {
 
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:5569/');
+  await page.goto('http://localhost:5569/?fast-splash-screens');
 
   // Fail test on any page error
   page.on('pageerror', (error) => {

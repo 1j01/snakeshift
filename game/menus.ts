@@ -94,5 +94,5 @@ export function showLevelSplash(levelInfo: { title: string }) {
       levelSplash.style.transition = ""
       levelSplash.style.opacity = ""
     }, 600)
-  }, 2000)
+  }, location.search.includes("fast-splash-screens") ? 100 : 2000)
 }

@@ -72,7 +72,7 @@ export function loadNextLevel() {
         winScreen.style.transition = ""
         winScreen.style.opacity = ""
       }, 600)
-    }, 800)
+    }, location.search.includes("fast-splash-screens") ? 100 : 800)
     return
   }
   const levelButtons = [...document.querySelectorAll<HTMLButtonElement>('.level-button')]
