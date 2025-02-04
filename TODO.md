@@ -13,7 +13,8 @@
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
 - skip/merge extra undo steps for switching snakes
 - readme image
-- false positive warning overlay with overlapped snakes (see level `possible-bug-why-is-it-detecting-this-as-invalid.json`)
+- false positive warning overlay with overlapped snakes (see level `possible-bug-why-is-it-detecting-this-as-invalid.json` or `four-eyes.json`)
+- weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
 
 - par system:
   - keep track of the fewest number of moves and best solution for each level
@@ -42,6 +43,9 @@
 level editor:
   - auto-save and/or onbeforeunload
   - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
+  - escape while dialog is open should close dialog, not return to menu
+  - should be easier to deselect (escape, ctrl+d, enter?)
+  - rotate/flip?
 
 - less important:
   - more appropriate undo/redo sfx
@@ -75,6 +79,14 @@ mechanics:
 - generalization of color changer and portals
   - shown as conic (hourglass-like when 1 cell) twist with black/white braided wormhole leading to other portal (which can be the same cell) and which can be the same or a different color and the same or a different size and the same or a different orientation
   - what if it could act as the slicer too, with razor-sharp sections of the wormhole aligned to grid edges? you would go through the wormhole with a snake to slice a snake crossing the wormhole blades
+- striped snakes
+  - only makes sense if there is neutral ground; otherwise the snake wouldn't be able to move
+  - needs extra game logic
+  - needs extra rendering logic
+  - if you can move onto black/white ground partially (i.e. just the snake's head, assuming every segment alternates color), then
+- neutral-colored snake
+  - diamondback pattern?
+  - can move anywhere!? and let snakes pass through any barriers!? like a dang ghost
 
 animation:
 - turning into a wall: move the snake forwards slightly along the snake's body path and into the wall
