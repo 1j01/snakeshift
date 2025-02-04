@@ -5,10 +5,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Snakeshift</title>
-  <!-- <link rel="icon" type="image/png" href="/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
-  <link rel="icon" type="image/png" href="./yin-yang-larger-sneks-180px.png" sizes="180x180" />
-  <script type="module" crossorigin src="./assets/index-B4IZjM9L.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-C4ThH4-y.css">
+  <!-- <link rel="icon" type="image/png" href="/graphics/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
+  <link rel="icon" type="image/png" href="./graphics/yin-yang-larger-sneks-180px.png" sizes="180x180" />
+  <script type="module" crossorigin src="./assets/index-DExtq6Lr.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-Daga0d-8.css">
 </head>
 
 <body>
@@ -79,6 +79,9 @@
       <button class="bw-button level-button" data-level="levels/hard/security-by-obscurity-lock.json">
         Security by Obscurity
       </button>
+      <button class="bw-button level-button" data-level="levels/hard/the-finish-line.json">
+        The Finish Line
+      </button>
       <div style="opacity: 0.5" id="test-cases-not-real-levels">
         <h3>Test Cases</h3>
         <button class="bw-button level-button" data-level="levels/tests/move-right-to-win.json">
@@ -134,11 +137,35 @@
   </div>
   <div id="game-options-bar">
     <!-- TODO: make class an id or use a second button to better integrate with the entities bar -->
-    <button class="bw-button back-to-main-menu-button" aria-keyshortcuts="Escape">Back</button>
-    <button class="bw-button" id="restart-level-button" aria-keyshortcuts="R">Restart Level</button>
-    <button class="bw-button" id="undo-button" aria-keyshortcuts="Z">Undo</button>
-    <button class="bw-button" id="redo-button" aria-keyshortcuts="Y">Redo</button>
-    <button class="bw-button" id="mute-button" aria-keyshortcuts="M" aria-pressed="false">Mute</button>
+    <button class="bw-button back-to-main-menu-button" aria-keyshortcuts="Escape">
+      <img src="./graphics/back.svg" alt="" />
+      Back
+    </button>
+    <button class="bw-button" id="play-edit-toggle-button">
+      <!-- I have sketched out an animation where the play icon triangle becomes the tip of a pencil and the whole button becomes a pencil,
+      but it might be a lot of work and might just look silly. Could be fun though. -->
+      <!-- TODO: custom icons at least, for consistent display across platforms -->
+      <span style="font-size: 1.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
+        ▶&#xFE0E;/✏&#xFE0E;
+      </span>
+      Play/Edit
+    </button>
+    <button class="bw-button" id="restart-level-button" aria-keyshortcuts="R">
+      <img src="./graphics/restart.svg" alt="" />
+      Restart Level
+    </button>
+    <button class="bw-button" id="undo-button" aria-keyshortcuts="Z">
+      <img src="./graphics/undo.svg" alt="" />
+      Undo
+    </button>
+    <button class="bw-button" id="redo-button" aria-keyshortcuts="Y">
+      <img src="./graphics/undo.svg" alt="" style="transform: scaleX(-1)" />
+      Redo
+    </button>
+    <button class="bw-button" id="mute-button" aria-keyshortcuts="M" aria-pressed="false">
+      <img src="./graphics/speaker.svg" alt="" />
+      <span id="mute-button-text">Mute</span>
+    </button>
     <!-- <button class="bw-button" id="fullscreen-button" aria-keyshortcuts="F">Fullscreen</button> -->
   </div>
   <div id="level-editor">
@@ -156,24 +183,45 @@
       <!-- entity buttons are brush tools -->
       <!-- <button class="bw-button tool-button" data-tool="Brush">Brush</button> -->
       <button class="bw-button tool-button" data-tool="Eraser">
-        <img src="./eraser.svg" alt="" />
+        <img src="./graphics/eraser.svg" alt="" />
         Eraser
       </button>
       <button class="bw-button tool-button" data-tool="Select">
-        <img src="./select.svg" alt="" />
+        <img src="./graphics/select.svg" alt="" />
         Select
       </button>
       <button class="bw-button tool-button" data-tool="Move">
-        <img src="./move.svg" alt="" />
+        <img src="./graphics/move.svg" alt="" />
         Move
       </button>
       <button class="bw-button" id="clear-button">
-        <img src="./trash.svg" alt="" />
+        <img src="./graphics/trash.svg" alt="" />
         Clear
       </button>
+      <button class="bw-button" id="invert-button">
+        <img src="./graphics/invert-7.svg" alt="" />
+        <!-- <span style="font-size: 2.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
+          ☯&#xFE0E;
+        </span> -->
+        Invert
+      </button>
       <button class="bw-button" id="level-info-button" aria-controls="level-info-editor">
-        <img src="./cog.svg" alt="" />
+        <img src="./graphics/cog.svg" alt="" />
         Level Info
+      </button>
+      <button class="bw-button" id="save-button">
+        <img src="./graphics/save.svg" alt="" />
+        <!-- <span style="font-size: 1.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
+          💾&#xFE0E;
+        </span> -->
+        Save
+      </button>
+      <button class="bw-button" id="open-button">
+        <img src="./graphics/open.svg" alt="" />
+        <!-- <span style="font-size: 1.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
+          📂&#xFE0E;
+        </span> -->
+        Open
       </button>
     </div>
     <!-- <div id="toolbar">
