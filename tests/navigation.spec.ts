@@ -403,8 +403,15 @@ test('should not show confirmation dialog if playing a built-in level', async ({
   await expect(page).toHaveTitle(/^Snakeshift$/);
 });
 
-
-
+test('escape should close level info dialog if open, without returning to main menu', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Editor' }).click();
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+  await page.getByRole('button', { name: 'Level Info' }).click();
+  await expect(page.getByRole('dialog').getByText("Level Info")).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog').getByText("Level Info")).not.toBeVisible();
+  await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/);
+});
 
 test.skip('you should be able to win a level after returning to it via undo... even if some unknown conditions occur', async ({ page }) => {
   // not sure when the problem occurs

@@ -104,6 +104,12 @@ export function initLevelEditorGUI() {
   levelInfoEditor.addEventListener('close', () => {
     console.log(levelInfoEditor.returnValue)
   })
+  levelInfoEditor.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      levelInfoEditor.close()
+      event.stopPropagation()
+    }
+  })
   levelInfoEditorOKButton.addEventListener('click', (event) => {
     event.preventDefault()
     undoable()
