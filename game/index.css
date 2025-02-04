@@ -163,6 +163,24 @@ a:focus {
   outline-offset: 5px;
 }
 
+dialog {
+  border: 30px solid #fff;
+  border-image: url(/graphics/border-2.png) calc(15/32*100%) round;
+  border-image-outset: 9px;
+  image-rendering: pixelated;
+  background-color: #000;
+  color: #fff;
+}
+
+dialog>h2 {
+  margin-top: 0;
+}
+
+dialog button {
+  min-width: 80px;
+  min-height: 40px;
+}
+
 #game-options-bar {
   position: absolute;
   top: 10px;
