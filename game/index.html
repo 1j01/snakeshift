@@ -140,7 +140,8 @@
       <img src="/graphics/back.svg" alt="" />
       <span class="button-text">Back</span>
     </button>
-    <button class="bw-button level-flow-control-button hide-in-campaign" id="play-edit-toggle-button">
+    <button class="bw-button level-flow-control-button hide-in-campaign" id="play-edit-toggle-button"
+      aria-keyshortcuts="`">
       <!-- I have sketched out an animation where the play icon triangle becomes the tip of a pencil and the whole button becomes a pencil,
       but it might be a lot of work and might just look silly. Could be fun though. -->
       <!-- TODO: custom icons at least, for consistent display across platforms -->
@@ -207,11 +208,11 @@
         <img src="/graphics/move.svg" alt="" />
         <span class="button-text">Move</span>
       </button>
-      <button class="bw-button" id="clear-button">
+      <button class="bw-button" id="clear-button" aria-keyshortcuts="Delete">
         <img src="/graphics/trash.svg" alt="" />
         <span class="button-text">Clear</span>
       </button>
-      <button class="bw-button" id="invert-button">
+      <button class="bw-button" id="invert-button" aria-keyshortcuts="I">
         <img src="/graphics/invert-7.svg" alt="" />
         <!-- <span style="font-size: 2.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
           ☯&#xFE0E;
@@ -222,14 +223,14 @@
         <img src="/graphics/cog.svg" alt="" />
         <span class="button-text">Level Info</span>
       </button>
-      <button class="bw-button" id="save-button">
+      <button class="bw-button" id="save-button" aria-keyshortcuts="Control+S Meta+S">
         <img src="/graphics/save.svg" alt="" />
         <!-- <span style="font-size: 1.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
           💾&#xFE0E;
         </span> -->
         <span class="button-text">Save</span>
       </button>
-      <button class="bw-button" id="open-button">
+      <button class="bw-button" id="open-button" aria-keyshortcuts="Control+O Meta+O">
         <img src="/graphics/open.svg" alt="" />
         <!-- <span style="font-size: 1.4em; font-family: monospace; font-variant-emoji: text; filter: grayscale(1)">
           📂&#xFE0E;
