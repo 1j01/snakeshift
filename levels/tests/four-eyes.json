@@ -1,0 +1,104 @@
+{
+  "format": "snakeshift",
+  "formatVersion": 4,
+  "levelInfo": {
+    "width": 2,
+    "height": 3
+  },
+  "entities": [
+    {
+      "solid": true,
+      "x": 0,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 1,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "id": "6b3eface-7db9-43d5-9e0e-84fda9bc5cc9",
+      "segments": [
+        {
+          "layer": 2,
+          "x": 1,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 2,
+          "x": 0,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    },
+    {
+      "id": "678b2066-e867-413f-9e67-f157741e1886",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 1,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 1,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    },
+    {
+      "solid": true,
+      "x": 1,
+      "y": 0,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "id": "7e6c5fcd-fd3a-44e7-8f22-80368f86416b",
+      "segments": [
+        {
+          "layer": 2,
+          "x": 1,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 2,
+          "x": 1,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    }
+  ],
+  "entityTypes": [
+    "Block",
+    "Block",
+    "Snake",
+    "Snake",
+    "Block",
+    "Snake"
+  ],
+  "activePlayerEntityIndex": 5,
+  "levelId": ""
+}
