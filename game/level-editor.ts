@@ -56,6 +56,7 @@ export function initLevelEditorGUI() {
   const moveButton = document.querySelector(".tool-button[data-tool='Move'")!
   const selectButton = document.querySelector(".tool-button[data-tool='Select'")!
   const clearButton = document.querySelector("#clear-button")!
+  const invertButton = document.querySelector("#invert-button")!
   const levelInfoButton = document.querySelector<HTMLButtonElement>("#level-info-button")!
   const levelInfoEditor = document.querySelector<HTMLDialogElement>('#level-info-editor')!
   const levelInfoEditorOKButton = document.querySelector<HTMLDialogElement>('#level-info-editor-ok-button')!
@@ -83,6 +84,7 @@ export function initLevelEditorGUI() {
       clearLevel()
     }
   })
+  invertButton.addEventListener('click', invert)
   levelInfoButton.addEventListener('click', () => {
     levelInfoEditor.showModal()
     const widthInput = levelInfoEditor.querySelector<HTMLInputElement>('#level-width')!
@@ -580,6 +582,38 @@ export function deleteSelectedEntities() {
     setHighlight(undefined) // updateHighlight()? not accessible out here...
     postUpdate() // I guess?
   }
+}
+
+export function invert() {
+  undoable()
+  const targetEntities = (selectedEntities.length || selectionRange) ? selectedEntities : entities
+  const targetRegion = getSelectionBox() ?? { x: 0, y: 0, width: levelInfo.width, height: levelInfo.height }
+  for (const entity of targetEntities) {
+    if (entity instanceof RectangularEntity) {
+      entity.layer = entity.layer === CollisionLayer.White ? CollisionLayer.Black : CollisionLayer.White
+    } else if (entity instanceof Snake) {
+      for (const segment of entity.segments) {
+        segment.layer = segment.layer === CollisionLayer.White ? CollisionLayer.Black : CollisionLayer.White
+      }
+    }
+  }
+  for (let x = targetRegion.x; x < targetRegion.x + targetRegion.width; x++) {
+    for (let y = targetRegion.y; y < targetRegion.y + targetRegion.height; y++) {
+      const hits = hitTestAllEntities(x, y)
+      if (!hits.length) {
+        // add a white block where there was implicit black
+        const block = new Block()
+        block.layer = CollisionLayer.White
+        block.x = x
+        block.y = y
+        entities.push(block)
+        if (selectionRange) {
+          selectedEntities.push(block)
+        }
+      }
+    }
+  }
+  postUpdate() // I guess?
 }
 
 function translateEntity(dragging: Entity, dx: number, dy: number) {
