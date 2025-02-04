@@ -158,10 +158,26 @@ export default class Snake extends Entity {
     // ctx.arc(0, 0, eyeRadius, 0, Math.PI * 2, true)  // single eye
     const eyeRadius = 1 / 8
     const eyeDistance = 0.45
-    ctx.arc(0, eyeDistance / 2, eyeRadius, 0, Math.PI * 2, true)
-    ctx.arc(0, -eyeDistance / 2, eyeRadius, 0, Math.PI * 2, true)
-    ctx.fillStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
-    ctx.fill()
+    if (this.growOnNextMove) {
+      // ctx.save()
+      // ctx.scale(0.5, 0.5)
+      // Collectable.prototype.draw.call({ layer: CollisionLayer.White, x: 0, y: 0, width: 1, height: 1, #time: 5 }, ctx)
+      // ctx.restore()
+      ctx.lineWidth = 1 / 12
+      ctx.arc(-eyeRadius / 3, eyeDistance / 2, eyeRadius, Math.PI / 3, -Math.PI / 3, true)
+      ctx.strokeStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(-eyeRadius / 3, -eyeDistance / 2, eyeRadius, Math.PI / 3, -Math.PI / 3, true)
+      ctx.strokeStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
+      ctx.stroke()
+      ctx.beginPath()
+    } else {
+      ctx.arc(0, eyeDistance / 2, eyeRadius, 0, Math.PI * 2, true)
+      ctx.arc(0, -eyeDistance / 2, eyeRadius, 0, Math.PI * 2, true)
+      ctx.fillStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
+      ctx.fill()
+    }
 
     // tongue
     const msSinceHighlight = performance.now() - this._highlightTime
