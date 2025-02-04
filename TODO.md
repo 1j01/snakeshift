@@ -13,7 +13,6 @@
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
 - skip/merge extra undo steps for switching snakes
 - readme image
-- false positive warning overlay with overlapped snakes (see level `possible-bug-why-is-it-detecting-this-as-invalid.json` or `four-eyes.json`)
 - weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
 
 - par system:

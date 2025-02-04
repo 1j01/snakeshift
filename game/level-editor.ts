@@ -254,7 +254,11 @@ export function handleInputForLevelEditing(
             }
           }
           const hits = hitTestAllEntities(segment.x, segment.y)
-          if (topLayer(hits.filter(hit => hit.entity !== entity)) === segment.layer) {
+            .filter(hit =>
+              hit.entity !== entity &&
+              entities.indexOf(hit.entity) < entities.indexOf(entity)
+            )
+          if (topLayer(hits) === segment.layer) {
             addProblem(segment, "collision")
           }
         }
