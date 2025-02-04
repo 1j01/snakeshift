@@ -65,6 +65,12 @@ addEventListener('keydown', (event) => {
   } else if (event.key === 'i' && activityMode == "edit") {
     invert()
     event.preventDefault()
+  } else if (event.key === 'e' && (event.altKey) && activityMode == "edit") {
+    // Alt+E is Image Attributes in MS Paint, the equivalent of Level Info here
+    // TODO: avoid querySelector
+    const levelInfoButton = document.querySelector<HTMLButtonElement>("#level-info-button")!
+    levelInfoButton.click()
+    event.preventDefault()
   } else if ((event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowDown') && activityMode == "edit") {
     const dx = (event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0)
     const dy = (event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0)
