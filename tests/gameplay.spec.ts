@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import { Collectable } from '../game/collectable.ts';
 import Entity from '../game/entity.ts';
 import Snake from '../game/snake.ts';
@@ -29,7 +29,7 @@ test.skip('gamepad controls should be supported', () => { });
 test.skip('touch controls should be supported', () => { });
 
 
-type Move = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | 'Tab' | { click: Tile };
+type Move = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | { click: Tile };
 
 test('game should be beatable (using recorded playthroughs)', async ({ page }) => {
   test.setTimeout(1000 * 60 * 60); // 1 hour
@@ -51,7 +51,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
     const levelPath = `game/public/${levelId}`;
 
     // Make sure the level file exists
-    await readFile(levelPath, 'utf8');
+    await access(levelPath);
 
     const playthroughPath = levelPath.replace(/\.json$/, '-playthrough.json');
     let playthroughJSON: string;
@@ -59,7 +59,6 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
       playthroughJSON = await readFile(playthroughPath, 'utf8')
     } catch (e) {
       console.warn(`Could not read playthrough file ${playthroughPath}, skipping level ${levelId}`);
-      // await page.evaluate(() => document.querySelectorAll('.level-button')[i + 1].click());
       await page.getByRole('button', { name: 'Back' }).click();
       await page.getByRole('button', { name: 'Level select' }).click();
       await page.getByRole('button', { name: levels[i + 1].levelName }).click();
@@ -78,7 +77,6 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
             return _forTesting.tileOnPage(tile);
           }, move.click);
           const rectCenter = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
-          // console.log(`Clicking at ${rectCenter.x}, ${rectCenter.y} (world: ${x}, ${y})`);
           await page.mouse.click(rectCenter.x, rectCenter.y);
         } else {
           await page.keyboard.press(move);
@@ -112,9 +110,6 @@ function getMovesFromPlaythrough(playthroughJSON: string): Move[] {
       for (let i = 0; i < parsed.entities.length; i++) {
         const entityData = parsed.entities[i]
         const entityType = parsed.entityTypes[i]
-        // const instance = makeEntity(entityType)
-        // Object.assign(instance, entityData)
-        // entities.push(instance)
         entities.push({ ...entityData, _type: entityType });
       }
       return { entities, activeSnakeId: (parsed.entities[parsed.activePlayerEntityIndex] as Snake)?.id };
@@ -126,11 +121,10 @@ function getMovesFromPlaythrough(playthroughJSON: string): Move[] {
   for (const state of playthrough) {
     if (prevState) {
       // Try to figure out the move from the difference between states
-      // If the active snake changed, it's Tab; otherwise an arrow key
+      // If the active snake changed, we need to click the snake; otherwise it's an arrow key
+      // (The Tab key or other controls may be used to switch snakes, but since we need to handle switching to arbitrary snakes,
+      // clicking is the way to go.)
       if (state.activeSnakeId && activeSnakeId !== state.activeSnakeId) {
-        // moves.push('Tab');
-        // It could need multiple tabs, or to click to switch to a snake directly
-        // moves.push(`SwitchSnake:${state.activeSnakeId}`);
         const activeSnake = state.entities.find((snake) => isEntityOfType(snake, "Snake") && snake.id === state.activeSnakeId) as Snake | undefined;
         if (!activeSnake) {
           throw new Error(`Could not find snake with ID ${state.activeSnakeId}`);
