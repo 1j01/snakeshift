@@ -49,7 +49,6 @@ test('first level should be beatable (using a recorded playthrough)', async ({ p
         const entityType = parsed.entityTypes[i]
         // const instance = makeEntity(entityType)
         // Object.assign(instance, entityData)
-        entityData._type = entityType
         // entities.push(instance)
         if (entityType === 'Snake') {
           snakes.push(entityData as Snake);
@@ -58,9 +57,9 @@ test('first level should be beatable (using a recorded playthrough)', async ({ p
       // return parsed;
       return { entities: snakes };
     })
-  ) as ParsedGameState[];
+  ) as { entities: Snake[] }[];
   console.log(playthrough);
-  let prevState: ParsedGameState | null = null;
+  let prevState: { entities: Snake[] } | null = null;
   let prevActiveSnakeId: string | null = null;
   for (const state of playthrough) {
     let move: string | null = null;
@@ -81,7 +80,10 @@ test('first level should be beatable (using a recorded playthrough)', async ({ p
       } else {
         for (const entity of state.entities) {
           for (const prevStateEntity of prevState.entities) {
-            if (prevStateEntity._type === 'Snake' && entity._type === 'Snake' && prevStateEntity.id === entity.id) {
+            if (
+              /*prevStateEntity._type === 'Snake' && entity._type === 'Snake' &&*/
+              prevStateEntity.id === entity.id
+            ) {
               if (prevStateEntity.segments[0].x < entity.segments[0].x) {
                 move = 'ArrowRight';
               } else if (prevStateEntity.segments[0].x > entity.segments[0].x) {
