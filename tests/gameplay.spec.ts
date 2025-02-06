@@ -14,6 +14,14 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
+declare global {
+  interface Window {
+    _forTesting: {
+      tileOnPage: (tile: Tile) => Tile;
+    };
+  }
+}
+
 test.skip('snake should not move past level boundaries', () => { });
 test.skip('snake should not move through walls', () => { });
 test.skip('snake should not move through itself', () => { });
@@ -73,7 +81,6 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
       if (move) {
         if (typeof move === 'object' && 'click' in move) {
           const rect = await page.evaluate<Tile, Tile>((tile) => {
-            // @ts-ignore
             return _forTesting.tileOnPage(tile);
           }, move.click);
           const rectCenter = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };

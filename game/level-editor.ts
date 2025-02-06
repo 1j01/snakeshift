@@ -240,8 +240,7 @@ export function handleInputForLevelEditing(
 
     const entitiesByPosition = new Map<string, Entity[]>()
     for (const entity of entities) {
-      // @ts-expect-error (x and y don't exist for snakes for example)
-      const key = `${entity.x ?? "?"},${entity.y ?? "?"}`
+      const key = entity instanceof RectangularEntity ? `${entity.x},${entity.y}` : "?,?"
       const bucket = entitiesByPosition.get(key) ?? []
       bucket.push(entity)
       entitiesByPosition.set(key, bucket)

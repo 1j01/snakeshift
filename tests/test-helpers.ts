@@ -1,5 +1,6 @@
 import { Page, expect } from '@playwright/test';
 import { readFile } from 'fs/promises';
+import { Readable } from 'stream';
 
 export const dragAndDropFile = async (
   page: Page,
@@ -30,7 +31,7 @@ export const dragAndDropFile = async (
   await page.dispatchEvent(selector, 'drop', { dataTransfer });
 };
 
-async function streamToString(stream: ReadableStream): Promise<string> {
+async function streamToString(stream: Readable): Promise<string> {
   const chunks: Buffer[] = [];
   for await (const chunk of stream) {
     chunks.push(Buffer.from(chunk));
@@ -44,7 +45,6 @@ async function saveLevelFileAndGetContent(page: Page) {
   await page.keyboard.press('KeyS');
   await page.keyboard.up('Control');
   const download = await downloadPromise;
-  // @ts-ignore
   const levelFileContent = await streamToString(await download.createReadStream());
   return levelFileContent;
 }
