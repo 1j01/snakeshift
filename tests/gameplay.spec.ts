@@ -86,7 +86,7 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
     if (prevState) {
       // Try to figure out the move from the difference between states
       // If the active snake changed, it's Tab; otherwise an arrow key
-      if (activeSnakeId !== state.activeSnakeId) {
+      if (activeSnakeId && activeSnakeId !== state.activeSnakeId) {
         // TODO: it could need multiple tabs, or to click to switch to a snake directly
         moves.push('Tab');
       }
