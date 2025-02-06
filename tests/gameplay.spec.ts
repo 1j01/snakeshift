@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
+import Entity from '../game/entity.ts';
 import Snake from '../game/snake.ts';
 import { ParsedGameState } from '../game/types.ts';
 
@@ -88,29 +89,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
     if (await page.locator('#game-win-screen').isVisible()) {
       break;
     }
-    // await expect(page.locator('#level-splash')).toBeVisible();
-    // await expect(page.locator('#level-splash')).not.toBeVisible();
-
-    // Playthrough might not contain the final state/move (awkward)
-    // so try all four directions to see if it wins
-    if (await page.locator('#level-splash').isVisible()) {
-      // wait for the level splash to disappear
-      await expect(page.locator('#level-splash')).not.toBeVisible();
-      continue;
-    }
-    console.warn(`Level ${levelId} did not win with the recorded playthrough, trying all cardinal directions in case it's missing the final move`);
-    // TODO: include the move in getMovesFromPlaythrough (there should only be one Collectable left, so we can just compare its position to the active snake's head in the last state)
-    for (const move of ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp']) {
-      await page.keyboard.press(move);
-      await page.waitForTimeout(100);
-      if (await page.locator('#level-splash').isVisible()) {
-        break;
-      }
-      // this might not even make sense as a strategy if it doesn't create an undo state for invalid moves
-      await page.keyboard.press('Control+Z');
-      await page.waitForTimeout(100);
-    }
-    // wait for the level splash to disappear
+    await expect(page.locator('#level-splash')).toBeVisible();
     await expect(page.locator('#level-splash')).not.toBeVisible();
   }
   await expect(page.locator('#game-win-screen')).toBeVisible();
@@ -122,18 +101,22 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
   const playthrough = (JSON.parse(playthroughJSON)
     .map((stateString) => {
       const parsed = JSON.parse(stateString) as ParsedGameState;
-      const snakes: Snake[] = [];
+      const entities: Entity[] = [];
       for (let i = 0; i < parsed.entities.length; i++) {
         const entityData = parsed.entities[i]
         const entityType = parsed.entityTypes[i]
-        if (entityType === 'Snake') {
-          snakes.push(entityData as Snake);
-        }
+        // const instance = makeEntity(entityType)
+        // Object.assign(instance, entityData)
+        // entities.push(instance)
+        // @ts-ignore
+        entityData._type = entityType;
+        entities.push(entityData);
       }
-      return { entities: snakes, activeSnakeId: (parsed.entities[parsed.activePlayerEntityIndex] as Snake)?.id };
+      return { entities, activeSnakeId: (parsed.entities[parsed.activePlayerEntityIndex] as Snake)?.id };
     })
-  ) as { entities: Snake[], activeSnakeId: string }[];
-  let prevState: { entities: Snake[], activeSnakeId: string } | null = null;
+    .filter(({ activeSnakeId }) => activeSnakeId) // needed for logic that handles missing final winning state in playthrough (it might actually include the initial state of the next level... hopefully always with `activePlayerEntityIndex` of -1 so that we can detect it...)
+  ) as { entities: Entity[], activeSnakeId: string }[];
+  let prevState: { entities: Entity[], activeSnakeId: string } | null = null;
   let activeSnakeId: string | null = null;
   for (const state of playthrough) {
     if (prevState) {
@@ -152,8 +135,11 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
       }
       for (const entity of state.entities) {
         for (const prevStateEntity of prevState.entities) {
-          // Assuming entities are all snakes, with filtering above
-          if (prevStateEntity.id === entity.id) {
+          if (
+            // @ts-ignore
+            entity._type === 'Snake' &&
+            prevStateEntity.id === entity.id
+          ) {
             let moveKey: string | null = null;
             if (prevStateEntity.segments[0].x < entity.segments[0].x) {
               moveKey = 'ArrowRight';
@@ -175,5 +161,29 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
     prevState = state;
     activeSnakeId = state.activeSnakeId;
   }
+
+  // Playthrough might not contain the final state/move (awkward)
+  // However, if that's the case, there should only be one Collectable left, so we can just compare its position to the active snake's head in the last state.
+  const lastState = playthrough[playthrough.length - 1];
+  // @ts-ignore
+  const collectables = lastState.entities.filter((entity) => entity._type === 'Collectable');
+  if (collectables.length === 1) {
+    const collectable = collectables[0];
+    const activeSnake = lastState.entities.find((snake) => snake.id === lastState.activeSnakeId);
+    if (!activeSnake) {
+      throw new Error(`Could not find snake with ID ${lastState.activeSnakeId}`);
+    }
+    const head = activeSnake.segments[0];
+    if (head.x < collectable.x) {
+      moves.push('ArrowRight');
+    } else if (head.x > collectable.x) {
+      moves.push('ArrowLeft');
+    } else if (head.y < collectable.y) {
+      moves.push('ArrowDown');
+    } else if (head.y > collectable.y) {
+      moves.push('ArrowUp');
+    }
+  }
+
   return moves;
 }
