@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { Collectable } from '../game/collectable.ts';
 import Entity from '../game/entity.ts';
 import Snake from '../game/snake.ts';
-import { ParsedGameState } from '../game/types.ts';
+import { ParsedGameState, Tile } from '../game/types.ts';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?fast-splash-screens');
@@ -27,6 +27,9 @@ test.skip('should detect immobile state and show a message about restarting/undo
 test.skip('extra undo states should be skipped or merged when switching snakes multiple times', () => { });
 test.skip('gamepad controls should be supported', () => { });
 test.skip('touch controls should be supported', () => { });
+
+
+type Move = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | 'Tab' | { click: Tile };
 
 test('game should be beatable (using recorded playthroughs)', async ({ page }) => {
   test.setTimeout(1000 * 60 * 60); // 1 hour
@@ -69,14 +72,11 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
     console.log(`Playing level ${levelId} with ${moves.length} moves: ${moves.join(', ')}`);
     for (const move of moves) {
       if (move) {
-        if (move.startsWith('Click:')) {
-          // TODO: avoid parsing, just store the SnakeSegment (which satisfies Tile interface); using its width/height would be more appropriate
-          const [_, xy] = move.split(':');
-          const [x, y] = xy.split(',').map(Number);
-          const rect = await page.evaluate(({ x, y }) => {
+        if (typeof move === 'object' && 'click' in move) {
+          const rect = await page.evaluate<Tile, Tile>((tile) => {
             // @ts-ignore
-            return _forTesting.tileOnPage({ x, y, width: 1, height: 1 });
-          }, { x, y });
+            return _forTesting.tileOnPage(tile);
+          }, move.click);
           const rectCenter = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
           // console.log(`Clicking at ${rectCenter.x}, ${rectCenter.y} (world: ${x}, ${y})`);
           await page.mouse.click(rectCenter.x, rectCenter.y);
@@ -103,8 +103,8 @@ function isEntityOfType(entity: EntityLike, type: "Snake" | "Collectable"): bool
   return entity._type === type;
 }
 
-function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
-  let moves: (string | null)[] = [];
+function getMovesFromPlaythrough(playthroughJSON: string): Move[] {
+  let moves: Move[] = [];
   const playthrough = (JSON.parse(playthroughJSON)
     .map((stateString) => {
       const parsed = JSON.parse(stateString) as ParsedGameState;
@@ -136,7 +136,7 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
           throw new Error(`Could not find snake with ID ${state.activeSnakeId}`);
         }
         const head = activeSnake.segments[0];
-        moves.push(`Click:${head.x},${head.y}`);
+        moves.push({ click: head });
       }
       for (const entity of state.entities) {
         for (const prevStateEntity of prevState.entities) {
@@ -145,7 +145,7 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
             isEntityOfType(prevStateEntity, 'Snake') &&
             prevStateEntity.id === entity.id
           ) {
-            let moveKey: string | null = null;
+            let moveKey: Move | null = null;
             if (prevStateEntity.segments[0].x < entity.segments[0].x) {
               moveKey = 'ArrowRight';
             } else if (prevStateEntity.segments[0].x > entity.segments[0].x) {
