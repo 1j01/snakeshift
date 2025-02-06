@@ -45,6 +45,8 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
     } catch (e) {
       console.warn(`Could not read playthrough file ${playthroughPath}, skipping level ${levelId}`);
       await page.$eval(`.level-button:nth-of-type(${i + 2})`, (el: HTMLElement) => el.click());
+      await expect(page.locator('#level-splash')).toBeVisible();
+      await expect(page.locator('#level-splash')).not.toBeVisible();
       continue;
     }
     const moves = getMovesFromPlaythrough(playthroughJSON);
