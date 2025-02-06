@@ -6,7 +6,7 @@ import Snake from '../game/snake.ts';
 import { ParsedGameState } from '../game/types.ts';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:5569/');
+  await page.goto('http://localhost:5569/?fast-splash-screens');
 
   // Fail test on any page error
   page.on('pageerror', (error) => {
@@ -83,7 +83,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
         } else {
           await page.keyboard.press(move);
         }
-        await page.waitForTimeout(100);
+        // await page.waitForTimeout(100); // for nice viewing
       }
     }
     // Could simplify this by checking if it's the last iteration (last level)

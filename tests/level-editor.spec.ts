@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:5569/');
+  await page.goto('http://localhost:5569/?fast-splash-screens');
   await page.getByRole('button', { name: 'Level Editor' }).click();
 
   // Fail test on any page error
