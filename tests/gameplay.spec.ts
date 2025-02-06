@@ -48,6 +48,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
       continue;
     }
     const moves = getMovesFromPlaythrough(playthroughJSON);
+    console.log(`Playing level ${levelId} with ${moves.length} moves: ${moves.join(', ')}`);
     for (const move of moves) {
       if (move) {
         await page.keyboard.press(move);
@@ -84,48 +85,43 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
     })
   ) as { entities: Snake[] }[];
   let prevState: { entities: Snake[] } | null = null;
-  let prevActiveSnakeId: string | null = null;
+  let lastMovedSnakeId: string | null = null;
   for (const state of playthrough) {
-    let move: string | null = null;
-    let activeSnakeId: string | null = null;
     if (prevState) {
       // Try to figure out the move from the difference between states
       // If the active snake changed, it's Tab; otherwise an arrow key
-      // Apparently the active snake is not actually tracked in the state
-      // for (const entity of state.entities) {
-      //   if (entity._type === 'Snake' && entity.active) {
-      //     activeSnakeId = entity.id;
-      //     break;
-      //   }
-      // }
-      if (activeSnakeId !== prevActiveSnakeId) {
-        // Could also be cycling backwards or selecting a snake directly with a click...
-        move = 'Tab';
-      } else {
-        for (const entity of state.entities) {
-          for (const prevStateEntity of prevState.entities) {
-            if (
-              /*prevStateEntity._type === 'Snake' && entity._type === 'Snake' &&*/
-              prevStateEntity.id === entity.id
-            ) {
-              if (prevStateEntity.segments[0].x < entity.segments[0].x) {
-                move = 'ArrowRight';
-              } else if (prevStateEntity.segments[0].x > entity.segments[0].x) {
-                move = 'ArrowLeft';
-              } else if (prevStateEntity.segments[0].y < entity.segments[0].y) {
-                move = 'ArrowDown';
-              } else if (prevStateEntity.segments[0].y > entity.segments[0].y) {
-                move = 'ArrowUp';
+      // Apparently the active snake is not actually tracked in the state,
+      // but we can infer that a change needs to happen before a new snake is moved.
+      for (const entity of state.entities) {
+        for (const prevStateEntity of prevState.entities) {
+          if (
+            /*prevStateEntity._type === 'Snake' && entity._type === 'Snake' &&*/
+            prevStateEntity.id === entity.id
+          ) {
+            let moveKey: string | null = null;
+            if (prevStateEntity.segments[0].x < entity.segments[0].x) {
+              moveKey = 'ArrowRight';
+            } else if (prevStateEntity.segments[0].x > entity.segments[0].x) {
+              moveKey = 'ArrowLeft';
+            } else if (prevStateEntity.segments[0].y < entity.segments[0].y) {
+              moveKey = 'ArrowDown';
+            } else if (prevStateEntity.segments[0].y > entity.segments[0].y) {
+              moveKey = 'ArrowUp';
+            }
+            if (moveKey) {
+              if (lastMovedSnakeId && lastMovedSnakeId !== entity.id) {
+                // TODO: it could need multiple tabs, or to click to switch to a snake directly
+                moves.push('Tab');
               }
+              moves.push(moveKey);
+              lastMovedSnakeId = entity.id;
               break;
             }
           }
         }
       }
-      moves.push(move);
     }
     prevState = state;
-    // prevActiveSnakeId = activeSnake
   }
   return moves;
 }
