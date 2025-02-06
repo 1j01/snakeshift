@@ -73,31 +73,27 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
       for (let i = 0; i < parsed.entities.length; i++) {
         const entityData = parsed.entities[i]
         const entityType = parsed.entityTypes[i]
-        // const instance = makeEntity(entityType)
-        // Object.assign(instance, entityData)
-        // entities.push(instance)
         if (entityType === 'Snake') {
           snakes.push(entityData as Snake);
         }
       }
-      // return parsed;
-      return { entities: snakes };
+      return { entities: snakes, activeSnakeId: (parsed.entities[parsed.activePlayerEntityIndex] as Snake)?.id };
     })
-  ) as { entities: Snake[] }[];
-  let prevState: { entities: Snake[] } | null = null;
-  let lastMovedSnakeId: string | null = null;
+  ) as { entities: Snake[], activeSnakeId: string }[];
+  let prevState: { entities: Snake[], activeSnakeId: string } | null = null;
+  let activeSnakeId: string | null = null;
   for (const state of playthrough) {
     if (prevState) {
       // Try to figure out the move from the difference between states
       // If the active snake changed, it's Tab; otherwise an arrow key
-      // Apparently the active snake is not actually tracked in the state,
-      // but we can infer that a change needs to happen before a new snake is moved.
+      if (activeSnakeId !== state.activeSnakeId) {
+        // TODO: it could need multiple tabs, or to click to switch to a snake directly
+        moves.push('Tab');
+      }
       for (const entity of state.entities) {
         for (const prevStateEntity of prevState.entities) {
-          if (
-            /*prevStateEntity._type === 'Snake' && entity._type === 'Snake' &&*/
-            prevStateEntity.id === entity.id
-          ) {
+          // Assuming entities are all snakes, with filtering above
+          if (prevStateEntity.id === entity.id) {
             let moveKey: string | null = null;
             if (prevStateEntity.segments[0].x < entity.segments[0].x) {
               moveKey = 'ArrowRight';
@@ -109,12 +105,7 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
               moveKey = 'ArrowUp';
             }
             if (moveKey) {
-              if (lastMovedSnakeId && lastMovedSnakeId !== entity.id) {
-                // TODO: it could need multiple tabs, or to click to switch to a snake directly
-                moves.push('Tab');
-              }
               moves.push(moveKey);
-              lastMovedSnakeId = entity.id;
               break;
             }
           }
@@ -122,6 +113,7 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
       }
     }
     prevState = state;
+    activeSnakeId = state.activeSnakeId;
   }
   return moves;
 }
