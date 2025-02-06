@@ -31,14 +31,16 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
   await page.getByRole('button', { name: 'Play' }).click();
   await expect(page.locator('#level-splash')).toBeVisible();
   await expect(page.locator('#level-splash')).not.toBeVisible();
-  for (let i = 0; i < 1000; i++) {
-    const levelId = await page.getAttribute(`.level-button:nth-of-type(${i + 1})`, 'data-level');
+  const levels = await page.$$eval('.level-button', (buttons) => buttons.map((button) => {
+    return { levelId: button.getAttribute('data-level'), levelName: button.textContent! };
+  }));
+  for (let i = 0; i < levels.length; i++) {
+    const { levelId, levelName } = levels[i];
     if (!levelId) {
       throw new Error('Could not get level ID');
     }
 
     // Make sure we're on the right level
-    const levelName = await page.locator(`.level-button:nth-of-type(${i + 1})`).textContent();
     await expect(page).toHaveTitle(`Snakeshift - ${levelName}`);
 
     const levelPath = `game/public/${levelId}`;
@@ -52,7 +54,11 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
       playthroughJSON = await readFile(playthroughPath, 'utf8')
     } catch (e) {
       console.warn(`Could not read playthrough file ${playthroughPath}, skipping level ${levelId}`);
-      await page.$eval(`.level-button:nth-of-type(${i + 2})`, (el: HTMLElement) => el.click());
+      // await page.evaluate(() => document.querySelectorAll('.level-button')[i + 1].click());
+      await page.getByRole('button', { name: 'Back' }).click();
+      await page.getByRole('button', { name: 'Level select' }).click();
+      await page.getByRole('button', { name: levels[i + 1].levelName }).click();
+
       await expect(page.locator('#level-splash')).toBeVisible();
       await expect(page.locator('#level-splash')).not.toBeVisible();
       continue;
@@ -78,6 +84,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
         await page.waitForTimeout(100);
       }
     }
+    // Could simplify this by checking if it's the last iteration (last level)
     if (await page.locator('#game-win-screen').isVisible()) {
       break;
     }
