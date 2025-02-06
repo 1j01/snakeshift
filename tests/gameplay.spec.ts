@@ -40,7 +40,20 @@ test('first level should be beatable (using a recorded playthrough)', async ({ p
   // Make sure the level file exists
   await readFile(levelPath, 'utf8');
   const playthroughPath = levelPath.replace(/\.json$/, '-playthrough.json');
-  const playthrough = (JSON.parse(await readFile(playthroughPath, 'utf8'))
+  const playthroughJSON = await readFile(playthroughPath, 'utf8')
+  const moves = getMovesFromPlaythrough(playthroughJSON);
+  for (const move of moves) {
+    if (move) {
+      await page.keyboard.press(move);
+    }
+  }
+  await expect(page.locator('#level-splash')).toBeVisible();
+})
+
+
+function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
+  let moves: (string | null)[] = [];
+  const playthrough = (JSON.parse(playthroughJSON)
     .map((stateString) => {
       const parsed = JSON.parse(stateString) as ParsedGameState;
       const snakes: Snake[] = [];
@@ -58,7 +71,6 @@ test('first level should be beatable (using a recorded playthrough)', async ({ p
       return { entities: snakes };
     })
   ) as { entities: Snake[] }[];
-  console.log(playthrough);
   let prevState: { entities: Snake[] } | null = null;
   let prevActiveSnakeId: string | null = null;
   for (const state of playthrough) {
@@ -98,21 +110,10 @@ test('first level should be beatable (using a recorded playthrough)', async ({ p
           }
         }
       }
-      if (!move) {
-        // throw new Error('Could not determine move');
-        // Last state may be the next level's initial state (awkward)
-        console.warn('Could not determine move');
-        break;
-      }
-
-      console.log('Move:', move);
-      await page.keyboard.press(move);
-
+      moves.push(move);
     }
     prevState = state;
     // prevActiveSnakeId = activeSnake
-
   }
-  await expect(page.locator('#level-splash')).toBeVisible();
-})
-
+  return moves;
+}
