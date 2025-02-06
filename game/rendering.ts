@@ -202,3 +202,6 @@ export function tileOnPage(tile: Tile): Tile {
     height: point2.y - point.y,
   }
 }
+
+// @ts-expect-error adding global for tests
+window._forTesting = { tileOnPage }

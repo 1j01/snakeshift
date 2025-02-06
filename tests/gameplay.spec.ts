@@ -54,7 +54,20 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
     console.log(`Playing level ${levelId} with ${moves.length} moves: ${moves.join(', ')}`);
     for (const move of moves) {
       if (move) {
-        await page.keyboard.press(move);
+        if (move.startsWith('Click:')) {
+          // TODO: avoid parsing, just store the SnakeSegment (which satisfies Tile interface); using its width/height would be more appropriate
+          const [_, xy] = move.split(':');
+          const [x, y] = xy.split(',').map(Number);
+          const rect = await page.evaluate(({ x, y }) => {
+            // @ts-ignore
+            return _forTesting.tileOnPage({ x, y, width: 1, height: 1 });
+          }, { x, y });
+          const rectCenter = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+          // console.log(`Clicking at ${rectCenter.x}, ${rectCenter.y} (world: ${x}, ${y})`);
+          await page.mouse.click(rectCenter.x, rectCenter.y);
+        } else {
+          await page.keyboard.press(move);
+        }
         await page.waitForTimeout(100);
       }
     }
@@ -90,9 +103,16 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
     if (prevState) {
       // Try to figure out the move from the difference between states
       // If the active snake changed, it's Tab; otherwise an arrow key
-      if (activeSnakeId && activeSnakeId !== state.activeSnakeId) {
-        // TODO: it could need multiple tabs, or to click to switch to a snake directly
-        moves.push('Tab');
+      if (state.activeSnakeId && activeSnakeId !== state.activeSnakeId) {
+        // moves.push('Tab');
+        // It could need multiple tabs, or to click to switch to a snake directly
+        // moves.push(`SwitchSnake:${state.activeSnakeId}`);
+        const activeSnake = state.entities.find((snake) => snake.id === state.activeSnakeId);
+        if (!activeSnake) {
+          throw new Error(`Could not find snake with ID ${state.activeSnakeId}`);
+        }
+        const head = activeSnake.segments[0];
+        moves.push(`Click:${head.x},${head.y}`);
       }
       for (const entity of state.entities) {
         for (const prevStateEntity of prevState.entities) {
