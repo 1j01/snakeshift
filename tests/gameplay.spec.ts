@@ -26,28 +26,40 @@ test.skip('extra undo states should be skipped or merged when switching snakes m
 test.skip('gamepad controls should be supported', () => { });
 test.skip('touch controls should be supported', () => { });
 
-// TODO: test each level, not just the first one
-// test('game should be beatable (using recorded playthroughs)', async ({ page }) => {
-test('first level should be beatable (using a recorded playthrough)', async ({ page }) => {
+test('game should be beatable (using recorded playthroughs)', async ({ page }) => {
   await page.getByRole('button', { name: 'Play' }).click();
   await expect(page.locator('#level-splash')).toBeVisible();
   await expect(page.locator('#level-splash')).not.toBeVisible();
-  const levelId = await page.getAttribute('.level-button:nth-of-type(1)', 'data-level');
-  if (!levelId) {
-    throw new Error('Could not get level ID');
-  }
-  const levelPath = `game/public/${levelId}`;
-  // Make sure the level file exists
-  await readFile(levelPath, 'utf8');
-  const playthroughPath = levelPath.replace(/\.json$/, '-playthrough.json');
-  const playthroughJSON = await readFile(playthroughPath, 'utf8')
-  const moves = getMovesFromPlaythrough(playthroughJSON);
-  for (const move of moves) {
-    if (move) {
-      await page.keyboard.press(move);
+  for (let i = 0; i < 1000; i++) {
+    const levelId = await page.getAttribute(`.level-button:nth-of-type(${i + 1})`, 'data-level');
+    if (!levelId) {
+      throw new Error('Could not get level ID');
     }
+    const levelPath = `game/public/${levelId}`;
+    // Make sure the level file exists
+    await readFile(levelPath, 'utf8');
+    const playthroughPath = levelPath.replace(/\.json$/, '-playthrough.json');
+    let playthroughJSON: string;
+    try {
+      playthroughJSON = await readFile(playthroughPath, 'utf8')
+    } catch (e) {
+      console.warn(`Could not read playthrough file ${playthroughPath}, skipping level ${levelId}`);
+      await page.$eval(`.level-button:nth-of-type(${i + 2})`, (el: HTMLElement) => el.click());
+      continue;
+    }
+    const moves = getMovesFromPlaythrough(playthroughJSON);
+    for (const move of moves) {
+      if (move) {
+        await page.keyboard.press(move);
+      }
+    }
+    if (await page.locator('#game-win-screen').isVisible()) {
+      break;
+    }
+    await expect(page.locator('#level-splash')).toBeVisible();
+    await expect(page.locator('#level-splash')).not.toBeVisible();
   }
-  await expect(page.locator('#level-splash')).toBeVisible();
+  await expect(page.locator('#game-win-screen')).toBeVisible();
 })
 
 
