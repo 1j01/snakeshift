@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
+import { Collectable } from '../game/collectable.ts';
 import Entity from '../game/entity.ts';
 import Snake from '../game/snake.ts';
 import { ParsedGameState } from '../game/types.ts';
@@ -95,28 +96,32 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
   await expect(page.locator('#game-win-screen')).toBeVisible();
 })
 
+type EntityLike = Entity & { _type: string };
+function isEntityOfType(entity: EntityLike, type: "Snake"): entity is Snake & { _type: "Snake" };
+function isEntityOfType(entity: EntityLike, type: "Collectable"): entity is Collectable & { _type: "Collectable" };
+function isEntityOfType(entity: EntityLike, type: "Snake" | "Collectable"): boolean {
+  return entity._type === type;
+}
 
 function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
   let moves: (string | null)[] = [];
   const playthrough = (JSON.parse(playthroughJSON)
     .map((stateString) => {
       const parsed = JSON.parse(stateString) as ParsedGameState;
-      const entities: Entity[] = [];
+      const entities: EntityLike[] = [];
       for (let i = 0; i < parsed.entities.length; i++) {
         const entityData = parsed.entities[i]
         const entityType = parsed.entityTypes[i]
         // const instance = makeEntity(entityType)
         // Object.assign(instance, entityData)
         // entities.push(instance)
-        // @ts-ignore
-        entityData._type = entityType;
-        entities.push(entityData);
+        entities.push({ ...entityData, _type: entityType });
       }
       return { entities, activeSnakeId: (parsed.entities[parsed.activePlayerEntityIndex] as Snake)?.id };
     })
     .filter(({ activeSnakeId }) => activeSnakeId) // needed for logic that handles missing final winning state in playthrough (it might actually include the initial state of the next level... hopefully always with `activePlayerEntityIndex` of -1 so that we can detect it...)
-  ) as { entities: Entity[], activeSnakeId: string }[];
-  let prevState: { entities: Entity[], activeSnakeId: string } | null = null;
+  ) as { entities: EntityLike[], activeSnakeId: string }[];
+  let prevState: { entities: EntityLike[], activeSnakeId: string } | null = null;
   let activeSnakeId: string | null = null;
   for (const state of playthrough) {
     if (prevState) {
@@ -126,7 +131,7 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
         // moves.push('Tab');
         // It could need multiple tabs, or to click to switch to a snake directly
         // moves.push(`SwitchSnake:${state.activeSnakeId}`);
-        const activeSnake = state.entities.find((snake) => snake.id === state.activeSnakeId);
+        const activeSnake = state.entities.find((snake) => isEntityOfType(snake, "Snake") && snake.id === state.activeSnakeId) as Snake | undefined;
         if (!activeSnake) {
           throw new Error(`Could not find snake with ID ${state.activeSnakeId}`);
         }
@@ -136,8 +141,8 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
       for (const entity of state.entities) {
         for (const prevStateEntity of prevState.entities) {
           if (
-            // @ts-ignore
-            entity._type === 'Snake' &&
+            isEntityOfType(entity, 'Snake') &&
+            isEntityOfType(prevStateEntity, 'Snake') &&
             prevStateEntity.id === entity.id
           ) {
             let moveKey: string | null = null;
@@ -165,13 +170,15 @@ function getMovesFromPlaythrough(playthroughJSON: string): (string | null)[] {
   // Playthrough might not contain the final state/move (awkward)
   // However, if that's the case, there should only be one Collectable left, so we can just compare its position to the active snake's head in the last state.
   const lastState = playthrough[playthrough.length - 1];
-  // @ts-ignore
-  const collectables = lastState.entities.filter((entity) => entity._type === 'Collectable');
+  const collectables = lastState.entities.filter((entity) => isEntityOfType(entity, 'Collectable'));
   if (collectables.length === 1) {
     const collectable = collectables[0];
-    const activeSnake = lastState.entities.find((snake) => snake.id === lastState.activeSnakeId);
+    const activeSnake = lastState.entities.find((snake) => isEntityOfType(snake, "Snake") && snake.id === lastState.activeSnakeId) as Snake | undefined;
     if (!activeSnake) {
       throw new Error(`Could not find snake with ID ${lastState.activeSnakeId}`);
+    }
+    if (!isEntityOfType(collectable, 'Collectable')) {
+      throw new Error(`Could not find collectable in last state`);
     }
     const head = activeSnake.segments[0];
     if (head.x < collectable.x) {
