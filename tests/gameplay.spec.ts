@@ -27,6 +27,7 @@ test.skip('gamepad controls should be supported', () => { });
 test.skip('touch controls should be supported', () => { });
 
 test('game should be beatable (using recorded playthroughs)', async ({ page }) => {
+  test.setTimeout(1000 * 60 * 60); // 1 hour
   await page.getByRole('button', { name: 'Play' }).click();
   await expect(page.locator('#level-splash')).toBeVisible();
   await expect(page.locator('#level-splash')).not.toBeVisible();
@@ -54,6 +55,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
     for (const move of moves) {
       if (move) {
         await page.keyboard.press(move);
+        await page.waitForTimeout(100);
       }
     }
     if (await page.locator('#game-win-screen').isVisible()) {
