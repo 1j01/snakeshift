@@ -36,9 +36,16 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
     if (!levelId) {
       throw new Error('Could not get level ID');
     }
+
+    // Make sure we're on the right level
+    const levelName = await page.locator(`.level-button:nth-of-type(${i + 1})`).textContent();
+    await expect(page).toHaveTitle(`Snakeshift - ${levelName}`);
+
     const levelPath = `game/public/${levelId}`;
+
     // Make sure the level file exists
     await readFile(levelPath, 'utf8');
+
     const playthroughPath = levelPath.replace(/\.json$/, '-playthrough.json');
     let playthroughJSON: string;
     try {
