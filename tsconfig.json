@@ -22,7 +22,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "types": [
-      "vite/client"
+      "vite/client",
+      "@types/node",
     ],
   },
   "include": [
