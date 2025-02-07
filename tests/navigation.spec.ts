@@ -116,7 +116,7 @@ test('should open a level for editing with drag and drop, while in level editor'
   await page.getByRole('button', { name: 'Level Editor' }).click()
 
   const filePath = 'game/public/levels/tests/move-left-to-win.json'
-  await dragAndDropFile(page, 'body', filePath, 'move-left-to-win.json')
+  await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/)
   await saveLevelFileAndCompareContent(page, filePath)
 })
@@ -127,14 +127,14 @@ test('should open a level for editing with drag and drop, while in play mode', a
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/)
 
   const filePath = 'game/public/levels/tests/move-left-to-win.json'
-  await dragAndDropFile(page, 'body', filePath, 'move-left-to-win.json')
+  await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/)
   await saveLevelFileAndCompareContent(page, filePath)
 })
 
 test('should open a level for editing with drag and drop, while in a menu', async ({ page }) => {
   const filePath = 'game/public/levels/tests/move-left-to-win.json'
-  await dragAndDropFile(page, 'body', filePath, 'move-left-to-win.json')
+  await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/)
   await saveLevelFileAndCompareContent(page, filePath)
 })
@@ -307,7 +307,7 @@ test('should not allow movement after the game is won', async ({ page }) => {
 test('should confirm discarding unsaved changes in edit mode', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Editor' }).click()
   const filePath = 'game/public/levels/tests/move-left-to-win.json'
-  await dragAndDropFile(page, 'body', filePath, 'move-left-to-win.json')
+  await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/)
 
   await page.locator('.editing > canvas').click({
@@ -337,7 +337,7 @@ test('should confirm discarding unsaved changes in edit mode', async ({ page }) 
 test('should confirm discarding unsaved changes when play-testing a level after editing', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Editor' }).click()
   const filePath = 'game/public/levels/tests/move-left-to-win.json'
-  await dragAndDropFile(page, 'body', filePath, 'move-left-to-win.json')
+  await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/)
 
   await page.locator('.editing > canvas').click({
@@ -372,7 +372,7 @@ test('should confirm discarding unsaved changes when play-testing a level after 
 test('should not show confirmation dialog if there are no unsaved changes (after drag and drop to load level)', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Editor' }).click()
   const filePath = 'game/public/levels/tests/move-left-to-win.json'
-  await dragAndDropFile(page, 'body', filePath, 'move-left-to-win.json')
+  await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/)
   await page.getByRole('button', { name: 'Back' }).click()
   await expect(page).toHaveTitle(/^Snakeshift$/)

@@ -1,14 +1,18 @@
 import { Page, expect } from '@playwright/test'
 import { readFile } from 'fs/promises'
+import { basename } from 'path'
 import { Readable } from 'stream'
 
 export const dragAndDropFile = async (
   page: Page,
   selector: string,
   filePath: string,
-  fileName: string,
+  fileName?: string,
   fileType = ''
 ) => {
+  if (!fileName) {
+    fileName = basename(filePath)
+  }
   const buffer = (await readFile(filePath)).toString('base64')
 
   const dataTransfer = await page.evaluateHandle(
