@@ -34,7 +34,8 @@ export const dragAndDropFile = async (
 async function streamToString(stream: Readable): Promise<string> {
   const chunks: Buffer[] = []
   for await (const chunk of stream) {
-    chunks.push(Buffer.from(chunk))
+    // weird, I can say `as ArrayBuffer` or `as string`, but not `as ArrayBuffer | string`. whatever, dude.
+    chunks.push(Buffer.from(chunk as ArrayBuffer))
   }
   return Buffer.concat(chunks).toString("utf-8")
 }

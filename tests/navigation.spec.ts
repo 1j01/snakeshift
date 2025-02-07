@@ -413,11 +413,11 @@ test('escape should close level info dialog if open, without returning to main m
   await expect(page).toHaveTitle(/^Snakeshift - Level Editor$/)
 })
 
-test.skip('you should be able to win a level after returning to it via undo... even if some unknown conditions occur', async ({ page }) => {
+test.skip('you should be able to win a level after returning to it via undo... even if some unknown conditions occur', async () => {
   // not sure when the problem occurs
 })
 
-test.skip('undoing/redoing across level changes should not drop or add extra history states', async ({ page }) => {
+test.skip('undoing/redoing across level changes should not drop or add extra history states', async () => {
   // not sure how to test this yet
 })
 
