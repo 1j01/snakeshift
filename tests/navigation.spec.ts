@@ -251,8 +251,15 @@ test('should not allow movement while level win splash screen is shown', async (
   await expect(page.locator('#level-splash-title')).toBeVisible()
   await expect(page.locator('#level-splash-title')).toHaveText('Test Level 002 (Just move left to win)')
   // Try to move while the splash screen is shown.
+  // This test is hard to debug with stepping, due to the timing.
+  // I'm including extra checks to make sure the splash screen is still shown while the movement is attempted,
+  // which might clarify things by failing earlier if the splash screen is hidden while paused in the debugger.
   await page.keyboard.press('ArrowUp')
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/)
+  await expect(page.locator('#level-splash-title')).toBeVisible()
   await page.keyboard.press('ArrowLeft')
+  await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/)
+  await expect(page.locator('#level-splash-title')).toBeVisible()
   // Wait for the splash screen to hide.
   await expect(page.locator('#level-splash-title')).not.toBeVisible()
   // If the previous Up+Left took place, Down will win the level. But it should be the first allowed movement.
