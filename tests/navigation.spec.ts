@@ -239,6 +239,8 @@ test('should not show "Level Complete" when a custom level has no goal', async (
 
 // TODO: also test that you can't switch between snakes while a splash screen is shown
 test('should not allow movement while level win splash screen is shown', async ({ page }) => {
+  // Clear ?fast-splash-screens for this test, since it relies on acting while the splash screen is shown.
+  await page.goto('http://localhost:5569/')
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 001 \(Just move right to win\)$/)
@@ -248,10 +250,10 @@ test('should not allow movement while level win splash screen is shown', async (
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 002 \(Just move left to win\)$/)
   await expect(page.locator('#level-splash-title')).toBeVisible()
   await expect(page.locator('#level-splash-title')).toHaveText('Test Level 002 (Just move left to win)')
-  // Don't wait for the next level to be ready.
+  // Try to move while the splash screen is shown.
   await page.keyboard.press('ArrowUp')
   await page.keyboard.press('ArrowLeft')
-  // Wait for the next level to be ready.
+  // Wait for the splash screen to hide.
   await expect(page.locator('#level-splash-title')).not.toBeVisible()
   // If the previous Up+Left took place, Down will win the level. But it should be the first allowed movement.
   await page.keyboard.press('ArrowDown')
