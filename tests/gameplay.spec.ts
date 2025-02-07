@@ -3,7 +3,7 @@ import { access, readFile } from 'node:fs/promises'
 import { Collectable } from '../game/collectable.ts'
 import Entity from '../game/entity.ts'
 import Snake from '../game/snake.ts'
-import { ParsedGameState, Tile } from '../game/types.ts'
+import { GameState, ParsedGameState, Tile } from '../game/types.ts'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?fast-splash-screens')
@@ -81,7 +81,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
       if (move) {
         if (typeof move === 'object' && 'click' in move) {
           const rect = await page.evaluate<Tile, Tile>((tile) => {
-            return _forTesting.tileOnPage(tile)
+            return window._forTesting.tileOnPage(tile)
           }, move.click)
           const rectCenter = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
           await page.mouse.click(rectCenter.x, rectCenter.y)
@@ -109,8 +109,8 @@ function isEntityOfType(entity: EntityLike, type: "Snake" | "Collectable"): bool
 }
 
 function getMovesFromPlaythrough(playthroughJSON: string): Move[] {
-  let moves: Move[] = []
-  const playthrough = (JSON.parse(playthroughJSON)
+  const moves: Move[] = []
+  const playthrough = ((JSON.parse(playthroughJSON) as GameState[])
     .map((stateString) => {
       const parsed = JSON.parse(stateString) as ParsedGameState
       const entities: EntityLike[] = []
