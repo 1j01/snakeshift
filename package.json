@@ -10,7 +10,7 @@
     "serve": "vite preview",
     "deploy": "vite build && gh-pages -d game/dist",
     "lint-cspell": "cspell-cli lint .",
-    "lint-eslint": "eslint -c .eslintrc.cjs --ext .ts game",
+    "lint-eslint": "eslint -c .eslintrc.cjs --ext .ts game tests",
     "lint-ts": "tsc --noEmit",
     "lint": "npm-run-all --continue-on-error --serial lint-*",
     "test": "playwright test"
