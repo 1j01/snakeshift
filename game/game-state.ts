@@ -87,7 +87,7 @@ export function serialize(): GameState {
     levelId: currentLevelID(),
   }, null, 2) + "\n"
 }
-export function deserialize(state: GameState, levelId: string | null = null) {
+export function deserialize(state: GameState, levelId: string | null = null, temporary = false) {
   const whichSnakeBefore = activePlayer?.id ?? ""
   entities.length = 0
 
@@ -138,18 +138,20 @@ export function deserialize(state: GameState, levelId: string | null = null) {
 
   activePlayer = entities[parsed.activePlayerEntityIndex] as Snake | undefined
 
-  const whichSnakeAfter = activePlayer?.id ?? ""
-  if (whichSnakeBefore !== whichSnakeAfter && activityMode == "play") {
-    activePlayer?.highlight()
-  }
+  if (!temporary) {
+    const whichSnakeAfter = activePlayer?.id ?? ""
+    if (whichSnakeBefore !== whichSnakeAfter && activityMode == "play") {
+      activePlayer?.highlight()
+    }
 
-  if (!standaloneLevelMode) {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    setCurrentLevel(levelId || parsed.levelId)
-  }
-  updatePageTitleAndLevelSpecificOverlays()
+    if (!standaloneLevelMode) {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      setCurrentLevel(levelId || parsed.levelId)
+    }
+    updatePageTitleAndLevelSpecificOverlays()
 
-  postUpdate()
+    postUpdate()
+  }
 }
 
 export function clearLevel(shouldBeUndoable = true) {

@@ -145,6 +145,22 @@ body:not(.editing) #entities-bar {
   display: block;
 }
 
+.level-preview {
+  position: relative;
+}
+
+.level-preview-error:not([hidden]) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #main-menu button,
 #level-select button {
   min-height: 50px;

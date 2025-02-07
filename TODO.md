@@ -55,8 +55,7 @@ level editor:
     - selection tool should be able to drag black onto white even if it's not formed from entities
   - handle edge case of toggling edit mode while dragging something
   - reign in `onUpdate` over-extension/repurposing/overuse, maybe adding an onResize in renderer or something
-  - preload levels
-  - would be nice to preview levels in the level select (prerequisite: preload levels in a caching way)
+  - preload levels, and share cache between level select's level previews and level loading
   - enlarge level border
 
 puzzles:

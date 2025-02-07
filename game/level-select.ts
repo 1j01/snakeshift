@@ -1,7 +1,8 @@
 import { playSound } from "./audio"
 import { activityMode, restartLevel } from "./game"
-import { loadLevel, undo } from "./game-state"
+import { deserialize, entities, levelInfo, loadLevel, serialize, undo } from "./game-state"
 import { showLevelSplash } from "./menus"
+import { drawEntities } from "./rendering"
 
 /**
  * This stores the current level in the progression. Yes, it's a bit awkward to use the DOM elements like this. 
@@ -24,10 +25,10 @@ export let standaloneLevelMode = true
 export function initLevelSelect() {
   const levelButtons = document.querySelectorAll<HTMLButtonElement>('.level-button')
   for (const button of levelButtons) {
+    const levelURL = button.getAttribute('data-level')!
     button.addEventListener('click', () => {
-      const levelURL = button.getAttribute('data-level')!
       // Show splash before file is loaded to mask loading time
-      showLevelSplash({ title: button.textContent ?? "Loading..." })
+      showLevelSplash({ title: button.querySelector(".button-text")?.textContent ?? "Loading..." })
       // TODO: error handling; simplify with promises
       void loadLevelFile(levelURL, () => {
         currentLevelButton = button
@@ -35,6 +36,82 @@ export function initLevelSelect() {
         updatePageTitleAndLevelSpecificOverlays()
       })
     })
+
+    // TODO: its awkward to have the error text inside the button.
+    // It complicates some code, which now has to look for .button-text specifically,
+    // not to mention having to wrap the text in .button-text here,
+    // and it may be an accessibility issue.
+    const buttonTextSpan = document.createElement('span')
+    buttonTextSpan.className = 'button-text'
+    buttonTextSpan.textContent = button.textContent!.trim()
+    button.textContent = ''
+    button.append(buttonTextSpan)
+    const levelPreview = document.createElement('div')
+    levelPreview.className = 'level-preview'
+    const levelPreviewError = document.createElement('div')
+    levelPreviewError.className = 'level-preview-error'
+    levelPreviewError.hidden = true
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')!
+    button.prepend(levelPreview)
+    levelPreview.append(canvas, levelPreviewError)
+    const styleWidth = 200
+    const styleHeight = 200
+    const renderLevelPreview = async () => {
+      canvas.style.width = `${styleWidth}px`
+      canvas.style.height = `${styleHeight}px`
+      // Needs rounding (or else the condition below may be true at rest, since canvas.height is an integer)
+      const resolutionWidth = Math.floor(styleWidth * devicePixelRatio)
+      const resolutionHeight = Math.floor(styleHeight * devicePixelRatio)
+      const resized = canvas.width !== resolutionWidth || canvas.height !== resolutionHeight
+      if (resized) {
+        canvas.width = resolutionWidth
+        canvas.height = resolutionHeight
+      }
+
+      ctx.fillStyle = '#000'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      const request = await fetch(levelURL)
+      if (!request.ok) {
+        levelPreviewError.textContent = `Failed to load level preview.\nStatus: ${request.statusText}`
+        levelPreviewError.hidden = false
+        return
+      }
+      const blob = await request.blob()
+      const stateToPreview = await blob.text()
+      // TODO: segregate the game state so as not to need to reset it or include a flag to avoid triggering side effects
+      // Could use OOP, i.e. a Game class, for instance (of Game class) (haha so funny)
+      const oldState = serialize()
+      try {
+        deserialize(stateToPreview, levelURL, true)
+      } catch (error) {
+        levelPreviewError.textContent = `Failed to load level preview.\n${String(error)}`
+        levelPreviewError.hidden = false
+        return
+      }
+
+      try {
+        ctx.save()
+        ctx.translate(canvas.width / 2, canvas.height / 2)
+        const borderSize = 0.2
+        const viewWidth = levelInfo.width + borderSize * 2
+        const viewHeight = levelInfo.height + borderSize * 2
+        const viewCenterX = levelInfo.width / 2
+        const viewCenterY = levelInfo.height / 2
+        const scale = Math.min(canvas.width / viewWidth, canvas.height / viewHeight)
+        ctx.scale(scale, scale)
+        ctx.translate(-viewCenterX, -viewCenterY)
+
+        drawEntities(ctx, entities)
+        ctx.restore()
+      } finally {
+        deserialize(oldState)
+      }
+    }
+    void renderLevelPreview()
+    // TODO: handle zooming (DPI changes)
+    // addEventListener('resize', renderIcon)
   }
 }
 
@@ -116,7 +193,7 @@ export function updatePageTitleAndLevelSpecificOverlays() {
   if (activityMode === "edit") {
     document.title = "Snakeshift - Level Editor"
   } else if (currentLevelButton) {
-    document.title = `Snakeshift - ${currentLevelButton.textContent}`
+    document.title = `Snakeshift - ${currentLevelButton.querySelector(".button-text")?.textContent}`
   } else if (activityMode === "play") {
     document.title = "Snakeshift - Custom Level"
   } else {

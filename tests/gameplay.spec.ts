@@ -45,7 +45,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
   await expect(page.locator('#level-splash')).toBeVisible()
   await expect(page.locator('#level-splash')).not.toBeVisible()
   const levels = await page.$$eval('.level-button', (buttons) => buttons.map((button) => {
-    return { levelId: button.getAttribute('data-level'), levelName: button.textContent! }
+    return { levelId: button.getAttribute('data-level'), levelName: button.querySelector('.button-text')!.textContent! }
   }))
   for (let i = 0; i < levels.length; i++) {
     const { levelId, levelName } = levels[i]
