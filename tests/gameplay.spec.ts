@@ -76,7 +76,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
       continue
     }
     const moves = getMovesFromPlaythrough(playthroughJSON)
-    console.log(`Playing level ${levelId} with ${moves.length} moves: ${moves.map((move) => typeof move === 'object' ? `click (${move.click.x}, ${move.click.y})` : move).join(', ')}`)
+    console.log(`Playing level ${levelId} with ${moves.length} moves: ${moves.map((move) => typeof move === 'object' ? `click(${move.click.x},${move.click.y})` : { "ArrowUp": "↑", "ArrowDown": "↓", "ArrowLeft": "←", "ArrowRight": "→" }[move]).join(' ')}`)
     for (const move of moves) {
       if (move) {
         if (typeof move === 'object' && 'click' in move) {
