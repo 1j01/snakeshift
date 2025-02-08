@@ -206,6 +206,7 @@ export function handleInput(
     }
     const move = activePlayer.analyzeMoveRelative(dx, dy)
     if (!move.valid) {
+      activePlayer.animateInvalidMove(move)
       setControlScheme(controlScheme) // signals level update uselessly
       return
     }
@@ -299,15 +300,21 @@ export function handleInput(
           const neighbor = neighborOf(playerTile, direction)
           hoveredTile = neighbor
           const move = activePlayer.analyzeMoveRelative(direction.x, direction.y)
-          if (hoveredTile && justPressed(0, gamepad) && move.valid) {
-            // updateGameState({
-            //   playerCoordinates: [hoveredTile.x, hoveredTile.y],
-            //   playerFacing: direction,
-            //   controlScheme: ControlScheme.Gamepad,
-            // })
-            activePlayer.takeMove(move)
-            setControlScheme(ControlScheme.Gamepad) // signals level update
-            hoveredTile = undefined
+          if (hoveredTile && justPressed(0, gamepad)) {
+            if (move.valid) {
+              // updateGameState({
+              //   playerCoordinates: [hoveredTile.x, hoveredTile.y],
+              //   playerFacing: direction,
+              //   controlScheme: ControlScheme.Gamepad,
+              // })
+              activePlayer.takeMove(move)
+              setControlScheme(ControlScheme.Gamepad) // signals level update
+              hoveredTile = undefined
+            } else {
+              activePlayer.animateInvalidMove(move)
+              setControlScheme(ControlScheme.Gamepad) // not thinking about this
+              hoveredTile = undefined // not thinking about this
+            }
             // break // need to update buttonsLast!
           } else {
             // updateGameState({

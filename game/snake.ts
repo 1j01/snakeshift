@@ -360,6 +360,26 @@ export default class Snake extends Entity {
       entitiesThere: hitsAhead.map(hit => hit.entity),
     }
   }
+  animateInvalidMove(move: Move): void {
+    // TODO: handle canceling animations
+    // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
+    let time = 0
+    const duration = 120
+    const animate = () => {
+      if (time > duration) {
+        this.previewMovement(0, 0)
+        return
+      }
+      time += 16 // TODO: use performance.now()
+      const progress = Math.min(1, time / duration)
+      const pos = Math.sin(progress * Math.PI) * 0.08
+      const deltaX = move.to.x - this.segments[0].x
+      const deltaY = move.to.y - this.segments[0].y
+      this.previewMovement(deltaX * pos, deltaY * pos)
+      requestAnimationFrame(animate)
+    }
+    animate()
+  }
   takeMove(move: Move): void {
     undoable()
     playSound('move')

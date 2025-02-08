@@ -88,8 +88,6 @@ mechanics:
   - can move anywhere!? and let snakes pass through any barriers!? like a dang ghost
 
 animation:
-- turning into a wall: move the snake forwards slightly along the snake's body path and into the wall
-- moving backwards into a wall: squash? first idea was alternate left/right
 - when snake is encumbered by another snake (or crate): wriggle + x eyes?
 - pushing crates (or snakes?) into a wall: push crash slightly through wall? or squash it? I think it shouldn't look too weird with the monochrome aesthetic masking the overlap in silhouette  
 - moving normally: animate snake along path
