@@ -9,19 +9,19 @@ const ctx = canvas.getContext('2d')!
 document.body.appendChild(canvas)
 
 const editorGUI = document.getElementById('entities-bar')!
-const backButton = document.querySelector('.back-to-main-menu-button')!
+const gameOptionsBar = document.querySelector('.back-to-main-menu-button')!
 
 let transform: DOMMatrix | undefined = undefined
 export function draw() {
   const styleWidth = window.innerWidth
   const editorGUIRect = editorGUI.getBoundingClientRect()
-  const backButtonRect = backButton.getBoundingClientRect()
+  const gameOptionsBarRect = gameOptionsBar.getBoundingClientRect()
   // Note: DOMRect.bottom is a double
   const styleHeight = window.innerHeight - editorGUIRect.bottom
   canvas.style.transform = `translateY(${editorGUIRect.top}px)`
   canvas.style.width = `${styleWidth}px`
   canvas.style.height = `${styleHeight}px`
-  editorGUI.style.paddingLeft = `${backButtonRect.right}px`
+  editorGUI.style.paddingTop = `${gameOptionsBarRect.bottom + 5}px`
   // Needs rounding (or else the condition below may be true at rest, since canvas.height is an integer)
   const resolutionWidth = Math.floor(styleWidth * devicePixelRatio)
   const resolutionHeight = Math.floor(styleHeight * devicePixelRatio)
