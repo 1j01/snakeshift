@@ -19,7 +19,7 @@ export function draw() {
   const editorGUIRect = editorGUI.getBoundingClientRect()
   // Note: DOMRect.bottom is a double
   const top = Math.max(editorGUIRect.bottom, gameOptionsBarRect.bottom) + 5
-  const styleHeight = window.innerHeight - top
+  const styleHeight = window.innerHeight - top - 5 // 5px so border image doesn't get cut off
   canvas.style.transform = `translateY(${top}px)`
   canvas.style.width = `${styleWidth}px`
   canvas.style.height = `${styleHeight}px`
