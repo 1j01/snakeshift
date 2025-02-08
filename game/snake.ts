@@ -177,7 +177,8 @@ export default class Snake extends Entity {
     ctx.scale(head.width, head.height)
     const angle = this.segments[1] ? Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x) : Math.PI / 2
     ctx.rotate(angle + this._movementPreviewHeadRotation)
-    ctx.translate(this._movementPreviewHeadRelative.x, this._movementPreviewHeadRelative.y)
+    const movementPreviewFactor = this.segments[1] ? 1 : 2 // Exaggerate eye movement for 1-long snakes sine they're like spheres, and it gives it a 3D appearance
+    ctx.translate(this._movementPreviewHeadRelative.x * movementPreviewFactor, this._movementPreviewHeadRelative.y * movementPreviewFactor)
 
     // eyes
     ctx.beginPath()
