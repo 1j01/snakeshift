@@ -88,7 +88,7 @@ mechanics:
   - can move anywhere!? and let snakes pass through any barriers!? like a dang ghost
 
 animation:
-- when snake is encumbered by another snake (or crate): wriggle + x eyes?
+- when snake is encumbered by another snake (or crate): wriggle whole snake? so far I've implemented x eyes, but you can't always see the head
 - pushing crates (or snakes?) into a wall: push crash slightly through wall? or squash it? I think it shouldn't look too weird with the monochrome aesthetic masking the overlap in silhouette  
 - moving normally: animate snake along path
 

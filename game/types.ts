@@ -44,6 +44,7 @@ export interface Tile extends Point {
 export interface Move {
   to: Tile
   valid: boolean
+  encumbered: boolean
   entitiesThere: Entity[]
 }
 

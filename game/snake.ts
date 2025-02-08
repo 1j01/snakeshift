@@ -23,6 +23,7 @@ export default class Snake extends Entity {
   private _movementPreview: { x: number, y: number } = { x: 0, y: 0 }
   private _movementPreviewHeadRelative: { x: number, y: number } = { x: 0, y: 0 }
   private _movementPreviewHeadRotation = 0
+  private _xEyes = false
   static readonly HIGHLIGHT_DURATION = 500
   static DEBUG_SNAKE_DRAGGING = false
 
@@ -186,7 +187,20 @@ export default class Snake extends Entity {
     // ctx.arc(0, 0, eyeRadius, 0, Math.PI * 2, true)  // single eye
     const eyeRadius = 1 / 8
     const eyeDistance = 0.45
-    if (this.growOnNextMove) {
+    if (this._xEyes) {
+      ctx.lineWidth = 1 / 12
+      ctx.moveTo(-eyeRadius, -eyeRadius + eyeDistance / 2)
+      ctx.lineTo(eyeRadius, eyeRadius + eyeDistance / 2)
+      ctx.moveTo(-eyeRadius, eyeRadius + eyeDistance / 2)
+      ctx.lineTo(eyeRadius, -eyeRadius + eyeDistance / 2)
+      ctx.moveTo(-eyeRadius, -eyeRadius - eyeDistance / 2)
+      ctx.lineTo(eyeRadius, eyeRadius - eyeDistance / 2)
+      ctx.moveTo(-eyeRadius, eyeRadius - eyeDistance / 2)
+      ctx.lineTo(eyeRadius, -eyeRadius - eyeDistance / 2)
+      ctx.strokeStyle = head.layer === CollisionLayer.White ? '#000' : '#fff'
+      ctx.stroke()
+      ctx.beginPath()
+    } else if (this.growOnNextMove) {
       // ctx.save()
       // ctx.scale(0.5, 0.5)
       // Collectable.prototype.draw.call({ layer: CollisionLayer.White, x: 0, y: 0, width: 1, height: 1, #time: 5 }, ctx)
@@ -358,6 +372,7 @@ export default class Snake extends Entity {
         topLayer(hitsAtTail) === head.layer &&
         // HACK: This isn't the place for this. Should really prevent it at the input level.
         shouldInputBeAllowed(),
+      encumbered: snakesOnTop.length > 0,
       to: { x, y, width: head.width, height: head.height },
       entitiesThere: hitsAhead.map(hit => hit.entity),
     }
@@ -366,10 +381,11 @@ export default class Snake extends Entity {
     // TODO: handle canceling animations
     // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
     let time = 0
-    const duration = 120
+    const duration = move.encumbered ? 230 : 120
     const animate = () => {
       if (time > duration) {
         this.previewMovement(0, 0)
+        this._xEyes = false
         return
       }
       time += 16 // TODO: use performance.now()
@@ -377,6 +393,7 @@ export default class Snake extends Entity {
       const pos = Math.sin(progress * Math.PI) * 0.08
       const deltaX = move.to.x - this.segments[0].x
       const deltaY = move.to.y - this.segments[0].y
+      this._xEyes = move.encumbered
       this.previewMovement(deltaX * pos, deltaY * pos)
       requestAnimationFrame(animate)
     }
