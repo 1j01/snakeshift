@@ -67,7 +67,8 @@ body {
 #entities-bar {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: safe center;
+  overflow: auto;
   padding: 5px;
   transition: transform 0.5s, opacity 0.5s;
 }
