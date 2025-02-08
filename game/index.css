@@ -290,9 +290,16 @@ kbd:not(.grouping-kbd) {
   text-shadow: none;
 }
 
-#level-splash.active::before,
-#standalone-level-win-screen.active::before,
-#game-win-screen.active::before {
+.gong-effect {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gong-effect::before {
   content: "";
   position: absolute;
   top: 50%;
