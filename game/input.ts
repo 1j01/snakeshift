@@ -101,20 +101,21 @@ export function handleInput(
         if (move.valid) {
           activePlayer.takeMove(move)
           postUpdate() // for level win condition (weirdly, this was handled via setControlScheme previously)
-
-          // Should this update both x and y or just one coordinate of the reference point?
-          // Also, shouldn't it update the reference point even if the move is invalid? Otherwise you have to move the pointer weirdly far in some cases, right?
-          // lastPointerPosition = { x: event.clientX, y: event.clientY }
-          if (moveX !== 0) {
-            // lastPointerPosition.x += moveX * MOVE_THRESHOLD
-            lastPointerPosition.x = event.clientX
-          }
-          if (moveY !== 0) {
-            // lastPointerPosition.y += moveY * MOVE_THRESHOLD
-            lastPointerPosition.y = event.clientY
-          }
-
           movedSincePointerDown = true
+        }
+        // Update the reference point even if the move is invalid. Otherwise you have to move the pointer weirdly far in some cases,
+        // specifically you'd have to move it further in a valid direction than you'd moved it in an invalid direction,
+        // which can be arbitrarily far and make it hard to turn a snake around.
+
+        // Should this update both x and y or just one coordinate of the reference point?
+        // lastPointerPosition = { x: event.clientX, y: event.clientY }
+        if (moveX !== 0) {
+          // lastPointerPosition.x += moveX * MOVE_THRESHOLD
+          lastPointerPosition.x = event.clientX
+        }
+        if (moveY !== 0) {
+          // lastPointerPosition.y += moveY * MOVE_THRESHOLD
+          lastPointerPosition.y = event.clientY
         }
       }
     })

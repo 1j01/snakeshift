@@ -35,7 +35,6 @@
   - gamepad: key repeat
   - keyboard: key repeat
   - keyboard: cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
-  - touch: moving finger in the direction of an invalid move shouldn't make it harder to move in a different direction; right now it doesn't reset the reference point for an invalid move, so you have to move vertically more than you've moved horizontally to trigger a vertical move if the horizontal movement was invalid
   - touch: could try a virtual joystick/dpad as an alternative to gliding anywhere on the screen
   - gamepad/touch support for level editor (currently requires keyboard/mouse)
   - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
