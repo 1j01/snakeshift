@@ -313,7 +313,7 @@ kbd:not(.grouping-kbd) {
   animation: gong 1s ease forwards;
 }
 
-#game-win-screen.active::before {
+#game-win-screen.active .gong-effect::before {
   animation-duration: 8s;
   animation-delay: -0.5s;
 }
