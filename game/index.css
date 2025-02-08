@@ -141,12 +141,6 @@ body:not(.editing) #entities-bar {
   font-weight: bold;
 }
 
-#level-select.active {
-  /* TODO: maybe don't set display: flex on .screen */
-  overflow: auto;
-  display: block;
-}
-
 .level-preview {
   position: relative;
 }
