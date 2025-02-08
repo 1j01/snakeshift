@@ -60,7 +60,7 @@ export default class Snake extends Entity {
     this._movementPreview.y = deltaY
     const movementPreviewAngle = Math.atan2(this._movementPreview.y, this._movementPreview.x)
     const movementPreviewDistance = Math.hypot(this._movementPreview.y, this._movementPreview.x)
-    const headAngle = this.segments.length > 1 ? Math.atan2(this.segments[1].y - this.segments[0].y, this.segments[1].x - this.segments[0].x) : Math.PI / 2 // or 0? or something else?
+    const headAngle = this.segments.length > 1 ? Math.atan2(this.segments[1].y - this.segments[0].y, this.segments[1].x - this.segments[0].x) : Math.PI / 2
     this._movementPreviewHeadRelative = {
       x: Math.cos(movementPreviewAngle - headAngle) * movementPreviewDistance,
       y: Math.sin(movementPreviewAngle - headAngle) * movementPreviewDistance,
@@ -252,6 +252,7 @@ export default class Snake extends Entity {
       if (i === 0) {
         if (this.segments.length === 1) {
           // head circle
+          ctx.rotate(Math.PI / 2) // only matters for offset, for movement preview
           ctx.arc(this._movementPreviewHeadRelative.x, this._movementPreviewHeadRelative.y, 1 / 2, 0, Math.PI * 2)
         } else {
           // head
