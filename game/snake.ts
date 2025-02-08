@@ -22,6 +22,7 @@ export default class Snake extends Entity {
   private _melodyIndex = 0
   private _movementPreview: { x: number, y: number } = { x: 0, y: 0 }
   private _movementPreviewHeadRelative: { x: number, y: number } = { x: 0, y: 0 }
+  private _movementPreviewHeadRotation = 0
   static readonly HIGHLIGHT_DURATION = 500
   static DEBUG_SNAKE_DRAGGING = false
 
@@ -64,6 +65,7 @@ export default class Snake extends Entity {
       x: Math.cos(movementPreviewAngle - headAngle) * movementPreviewDistance,
       y: Math.sin(movementPreviewAngle - headAngle) * movementPreviewDistance,
     }
+    this._movementPreviewHeadRotation = this._movementPreviewHeadRelative.y * -1
   }
   draw(ctx: CanvasRenderingContext2D): void {
     // body
@@ -174,7 +176,7 @@ export default class Snake extends Entity {
     ctx.translate(head.x + head.width / 2, head.y + head.height / 2)
     ctx.scale(head.width, head.height)
     const angle = this.segments[1] ? Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x) : Math.PI / 2
-    ctx.rotate(angle)
+    ctx.rotate(angle + this._movementPreviewHeadRotation)
     ctx.translate(this._movementPreviewHeadRelative.x, this._movementPreviewHeadRelative.y)
 
     // eyes
