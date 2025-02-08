@@ -242,7 +242,8 @@ body[data-screen="credits"] .level-flow-control-button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: safe center;
+  overflow: auto;
   /* Absolute position makes menus play nice with the editor transition. */
   /* Otherwise, the editor UI jumps to the bottom when returning to the main menu. */
   position: absolute;
