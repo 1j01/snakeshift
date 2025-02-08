@@ -20,6 +20,8 @@ export default class Snake extends Entity {
   private _highlightTime = -Infinity
   private _highlightCanvas = document.createElement('canvas')
   private _melodyIndex = 0
+  private _movementPreview: { x: number, y: number } = { x: 0, y: 0 }
+  private _movementPreviewHeadRelative: { x: number, y: number } = { x: 0, y: 0 }
   static readonly HIGHLIGHT_DURATION = 500
   static DEBUG_SNAKE_DRAGGING = false
 
@@ -40,6 +42,28 @@ export default class Snake extends Entity {
   }
   highlight(): void {
     this._highlightTime = performance.now()
+  }
+  previewMovement(deltaX: number, deltaY: number): void {
+    // For touch/mouse control scheme: dynamic animation of stretching the snake until it snaps forwards
+    // The idea is to give confidence in when it will move, but this probably isn't enough.
+    // Some improvements could be:
+    // - rotate for turns instead of just offsetting
+    // - squash/stretch
+    // - preview the movement closer to being activated: horizontal or vertical, not both
+    //   (although perhaps a combination when its not near the threshold where it will take a move, for some fluidity)
+    // - animate the whole body path, including the tail
+    //   (if the snake had scales, this would have a greater visual impact)
+    // - springiness
+
+    this._movementPreview.x = deltaX
+    this._movementPreview.y = deltaY
+    const movementPreviewAngle = Math.atan2(this._movementPreview.y, this._movementPreview.x)
+    const movementPreviewDistance = Math.hypot(this._movementPreview.y, this._movementPreview.x)
+    const headAngle = this.segments.length > 1 ? Math.atan2(this.segments[1].y - this.segments[0].y, this.segments[1].x - this.segments[0].x) : Math.PI / 2 // or 0? or something else?
+    this._movementPreviewHeadRelative = {
+      x: Math.cos(movementPreviewAngle - headAngle) * movementPreviewDistance,
+      y: Math.sin(movementPreviewAngle - headAngle) * movementPreviewDistance,
+    }
   }
   draw(ctx: CanvasRenderingContext2D): void {
     // body
@@ -151,6 +175,7 @@ export default class Snake extends Entity {
     ctx.scale(head.width, head.height)
     const angle = this.segments[1] ? Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x) : Math.PI / 2
     ctx.rotate(angle)
+    ctx.translate(this._movementPreviewHeadRelative.x, this._movementPreviewHeadRelative.y)
 
     // eyes
     ctx.beginPath()
@@ -225,13 +250,13 @@ export default class Snake extends Entity {
       if (i === 0) {
         if (this.segments.length === 1) {
           // head circle
-          ctx.arc(0, 0, 1 / 2, 0, Math.PI * 2)
+          ctx.arc(this._movementPreviewHeadRelative.x, this._movementPreviewHeadRelative.y, 1 / 2, 0, Math.PI * 2)
         } else {
           // head
           ctx.rotate(backAngle)
           ctx.scale(1, 0.9)
           mirrored(() => ctx.lineTo(1 / 2, 1 / 2))
-          ctx.arc(0, 0, 1 / 2, Math.PI / 2, -Math.PI / 2)
+          ctx.arc(this._movementPreviewHeadRelative.x, this._movementPreviewHeadRelative.y, 1 / 2, Math.PI / 2, -Math.PI / 2)
           ctx.lineTo(1 / 2, -1 / 2)
           ctx.lineTo(1 / 2, 1 / 2)
         }

@@ -1,6 +1,6 @@
 import { playSound } from './audio'
 import { activityMode, restartLevel, shouldInputBeAllowed } from './game'
-import { activePlayer, controlScheme, cyclePlayerControl, onResize, onUpdate, postUpdate, redo, setActivePlayer, setControlScheme, undo } from './game-state'
+import { activePlayer, controlScheme, cyclePlayerControl, entities, onResize, onUpdate, postUpdate, redo, setActivePlayer, setControlScheme, undo } from './game-state'
 import { hitTestAllEntities, makeEventListenerGroup, neighborOf } from './helpers'
 import { showMainMenu } from './menus'
 import { pageToWorldTile } from './rendering'
@@ -70,11 +70,13 @@ export function handleInput(
         playSound("switchSnakes")
         pointerDownSnake.highlight()
       }
+      resetMovementPreview()
     })
 
     on(window, "pointercancel", () => {
       dragging = false
       lastPointerPosition = undefined
+      resetMovementPreview()
     })
 
     on(window, "pointermove", (event) => {
@@ -83,6 +85,8 @@ export function handleInput(
 
       const deltaX = event.clientX - lastPointerPosition.x
       const deltaY = event.clientY - lastPointerPosition.y
+
+      activePlayer.previewMovement(deltaX / MOVE_THRESHOLD / 10, deltaY / MOVE_THRESHOLD / 10)
 
       if (Math.abs(deltaX) < MOVE_THRESHOLD && Math.abs(deltaY) < MOVE_THRESHOLD) {
         return
@@ -119,6 +123,14 @@ export function handleInput(
         }
       }
     })
+  }
+
+  function resetMovementPreview() {
+    for (const entity of entities) {
+      if (entity instanceof Snake) {
+        entity.previewMovement(0, 0)
+      }
+    }
   }
 
   // ----------------
