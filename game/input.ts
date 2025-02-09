@@ -251,7 +251,8 @@ export function handleInput(
         break
       case 'ArrowDown': // arrow keys
       case 'KeyS': // WASD
-      case 'Numpad2': // numpad
+      case 'Numpad2': // numpad, arrow-labeled
+      case 'Numpad5': // numpad, more ergonomic
       case 'KeyJ': // vi-style
         move(0, 1)
         break
