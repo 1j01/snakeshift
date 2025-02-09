@@ -3,6 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
+  "author": "Isaiah Odhner <isaiahodhner@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1j01/snakeshift.git"
+  },
+  "bugs": {
+    "url": "https://github.com/1j01/snakeshift/issues"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite --port 5569",
