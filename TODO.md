@@ -19,7 +19,6 @@
 - weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes
 - hide test levels from level select (except in tests), maybe with a URL parameter
-- fullscreen button
 
 - par system:
   - keep track of the fewest number of moves and best solution for each level

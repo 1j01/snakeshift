@@ -222,6 +222,10 @@ body[data-screen="credits"] .level-flow-control-button {
   display: none;
 }
 
+:fullscreen #fullscreen-button {
+  display: none;
+}
+
 @media (max-width: 600px) {
   #game-options-bar .button-text {
     display: none;

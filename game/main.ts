@@ -10,6 +10,7 @@ export const playEditToggleButton = document.querySelector<HTMLButtonElement>('#
 const restartLevelButton = document.querySelector<HTMLButtonElement>('#restart-level-button')!
 const undoButton = document.querySelector<HTMLButtonElement>('#undo-button')!
 const redoButton = document.querySelector<HTMLButtonElement>('#redo-button')!
+const fullscreenButton = document.getElementById("fullscreen-button")!
 
 playEditToggleButton.addEventListener('click', () => {
   setActivityMode(activityMode === "play" ? "edit" : "play")
@@ -17,6 +18,14 @@ playEditToggleButton.addEventListener('click', () => {
 restartLevelButton.addEventListener('click', restartLevel)
 undoButton.addEventListener('click', undo)
 redoButton.addEventListener('click', redo)
+fullscreenButton.addEventListener('click', () => {
+  if (document.fullscreenElement) {
+    // button will actually be hidden in fullscreen mode, by CSS
+    void document.exitFullscreen()
+  } else {
+    void document.documentElement.requestFullscreen()
+  }
+})
 
 addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {
