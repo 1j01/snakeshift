@@ -199,7 +199,7 @@ export function updatePageTitleAndLevelSpecificOverlays() {
   } else {
     document.title = "Snakeshift"
   }
-  for (const overlayElement of document.querySelectorAll<HTMLDivElement>('.level-specific-overlay')) {
+  for (const overlayElement of document.querySelectorAll<HTMLDivElement>('.level-specific-overlay, #level-stuck-hint')) {
     overlayElement.hidden = overlayElement.dataset.forLevel !== currentLevelID()
   }
 }

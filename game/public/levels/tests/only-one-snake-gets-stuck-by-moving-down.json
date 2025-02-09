@@ -1,0 +1,86 @@
+{
+  "format": "snakeshift",
+  "formatVersion": 4,
+  "levelInfo": {
+    "width": 5,
+    "height": 5
+  },
+  "entities": [
+    {
+      "id": "aecbf693-1a83-4eb4-9935-15e86be0b9a7",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 0,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 1,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 1,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 2,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 3,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    },
+    {
+      "id": "46b58e58-0c26-4f54-941b-1089cab019f7",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 1,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 2,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    },
+    {
+      "solid": false,
+      "x": 4,
+      "y": 0,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    }
+  ],
+  "entityTypes": [
+    "Snake",
+    "Snake",
+    "Collectable"
+  ],
+  "activePlayerEntityIndex": -1,
+  "levelId": ""
+}

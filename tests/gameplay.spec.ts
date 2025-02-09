@@ -4,6 +4,7 @@ import { Collectable } from '../game/collectable.ts'
 import Entity from '../game/entity.ts'
 import Snake from '../game/snake.ts'
 import { GameState, ParsedGameState, Tile } from '../game/types.ts'
+import { dragAndDropFile } from './test-helpers.ts'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?fast-splash-screens')
@@ -35,6 +36,31 @@ test.skip('should detect immobile state and show a message about restarting/undo
 test.skip('extra undo states should be skipped or merged when switching snakes multiple times', () => { /* TODO */ })
 test.skip('gamepad controls should be supported', () => { /* TODO */ })
 test.skip('touch controls should be supported', () => { /* TODO */ })
+
+// DRY not just to reduce repetition, but so that the negative test will always be in sync with the positive test
+const stuckHint = 'Press Z to undo or R to restart'
+
+test('should show a message about restarting/undoing if you get stuck', async ({ page }) => {
+  await dragAndDropFile(page, 'body', 'game/public/levels/tests/get-stuck-by-moving-down.json')
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
+  await expect(page.getByText(stuckHint)).not.toBeVisible()
+  await page.keyboard.press('Tab') // stupidly, there's no active snake in these levels. (isn't it supposed to auto-activate a snake?)
+  await page.keyboard.press('ArrowDown')
+  await expect(page.getByText(stuckHint)).toBeVisible()
+})
+
+test('should not show a message about restarting/undoing if only one snake is stuck', async ({ page }) => {
+  await dragAndDropFile(page, 'body', 'game/public/levels/tests/only-one-snake-gets-stuck-by-moving-down.json')
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
+  await expect(page.getByText(stuckHint)).not.toBeVisible()
+  await page.keyboard.press('Tab') // stupidly, there's no active snake in these levels. (isn't it supposed to auto-activate a snake?)
+  await page.keyboard.press('ArrowDown')
+  await expect(page.getByText(stuckHint)).not.toBeVisible()
+})
 
 
 type Move = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | { click: Tile };

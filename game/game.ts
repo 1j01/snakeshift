@@ -4,6 +4,7 @@ import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
 import { currentLevelID, loadLevelFile, loadNextLevel, setStandaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { canvas, draw } from "./rendering"
+import Snake from "./snake"
 import { GameState } from "./types"
 
 
@@ -103,6 +104,10 @@ export function checkLevelWon() {
   return entities.filter(e => e instanceof Collectable).length === 0
 }
 
+function checkLevelStuck() {
+  return entities.filter(e => e instanceof Snake).every((snake) => !snake.canMove())
+}
+
 export function handleLevelCompletion() {
   onUpdate(() => {
     if (activityMode !== "play") return
@@ -116,6 +121,7 @@ export function handleLevelCompletion() {
       if (!checkLevelWon()) {
         wonLevel = false
       }
+      document.querySelector<HTMLElement>("#level-stuck-hint")!.hidden = !checkLevelStuck()
     }
   })
 }

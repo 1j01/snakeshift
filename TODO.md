@@ -12,7 +12,6 @@
 - bug: can select tutorial text just after loading a level, while the splash screen is still fading out
 - bug: the whole page can scroll (saw this on mobile)
   - possibly related: on mobile, viewport has an unintended sort of animation when resizing the view (i.e. by rotating the device), and the viewport can end up cut off in some cases
-- detect immobile state and show a message about restarting/undoing
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
 - skip/merge extra undo steps for switching snakes
 - readme image

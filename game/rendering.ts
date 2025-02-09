@@ -58,7 +58,7 @@ export function draw() {
   setLevelBorder(levelInfo)
   ctx.restore()
 
-  for (const overlayElement of document.querySelectorAll<HTMLDivElement>('.level-specific-overlay')) {
+  for (const overlayElement of document.querySelectorAll<HTMLDivElement>('.level-specific-overlay, #level-stuck-hint')) {
     positionElement(overlayElement, tileOnPage({ x: 0, y: 0, width: levelInfo.width, height: levelInfo.height }))
   }
 
