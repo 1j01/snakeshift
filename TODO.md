@@ -9,12 +9,17 @@
 - feels like you shouldn't be able to go on top of another snake's head, like you'd eat the snake
   - I have since made collectables more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
 
+- bug: can select tutorial text just after loading a level, while the splash screen is still fading out
+- bug: the whole page can scroll (saw this on mobile)
+  - possibly related: on mobile, viewport has an unintended sort of animation when resizing the view (i.e. by rotating the device), and the viewport can end up cut off in some cases
 - detect immobile state and show a message about restarting/undoing
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
 - skip/merge extra undo steps for switching snakes
 - readme image
 - weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes
+- hide test levels from level select (except in tests), maybe with a URL parameter
+- fullscreen button
 
 - par system:
   - keep track of the fewest number of moves and best solution for each level
@@ -36,6 +41,7 @@
   - keyboard: key repeat
   - keyboard: cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
   - touch: could try a virtual joystick/dpad as an alternative to gliding anywhere on the screen
+  - touch: when tapping to switch snakes, search for closest snake within a radius of the tap
   - gamepad/touch support for level editor (currently requires keyboard/mouse)
   - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
 
@@ -45,8 +51,11 @@ level editor:
   - should be easier to deselect (escape, ctrl+d, enter?)
   - rotate/flip?
   - prompt to clear entities outside level bounds when saving
+  - bug: outdated tile highlight after closing level info dialog can be confusing, with the old tile size implying the dimensions aren't changed
+  - restart button doesn't make sense in level editor; clear is the closest, could replace it, and move other action buttons in the level editor into the game options bar
 
 - less important:
+  - sound effect for restart level
   - more appropriate undo/redo sfx
   - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
   - make black block behave identically with white in the editor, where you can't tell which is an entity and which is empty space (maybe even treat it as a 1bpp image, drawn with nearest neighbor interpolation)
@@ -56,6 +65,23 @@ level editor:
   - reign in `onUpdate` over-extension/repurposing/overuse, maybe adding an onResize in renderer or something
   - preload levels, and share cache between level select's level previews and level loading
   - enlarge level border
+  - bug: undoing isn't hiding game win screen... right away, consistently? test might not catch this if it's a delay; not sure if it was a delay or it required hitting undo multiple times
+  - update tutorial text to recommend numpad 5 instead of numpad 2?
+  - configure eslint rules
+  - ensure accessible name for buttons when labels are hidden (include aria-label or hide label spans visually instead of using `display: none`)
+    - tooltips would also be nice... including keyboard shortcut hints
+  - hide things properly instead of relying on z-index
+    - simplify tests (remove `exact`)
+    - fix aria-keyshortcuts semantics (the attribute shouldn't be present on things that won't activate, such as some hidden buttons)
+    - fix flash of in-game controls before main menu is shown while page is loading
+    - see `/* TODO: hide back button properly, for (in)accessibility */`
+
+
+- playthrough tests:
+  - upgrade the actual playthrough format (might want to do this before recording more playthroughs)
+  - record playthroughs for all the levels
+  - disable code that skips over levels that don't have playthroughs; make it fail if there's no playthrough
+  - ensure that it's finding some levels, don't want to find out that "whoops, it's not testing anything" for such an important test
 
 puzzles:
 - see `game/public/levels/sketches` folder for some ideas

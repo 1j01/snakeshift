@@ -49,7 +49,6 @@ export default class Snake extends Entity {
     // For touch/mouse control scheme: dynamic animation of stretching the snake until it snaps forwards
     // The idea is to give confidence in when it will move, but this probably isn't enough.
     // Some improvements could be:
-    // - rotate for turns instead of just offsetting
     // - squash/stretch
     // - preview the movement closer to being activated: horizontal or vertical, not both
     //   (although perhaps a combination when its not near the threshold where it will take a move, for some fluidity)

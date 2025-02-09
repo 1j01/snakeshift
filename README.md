@@ -30,7 +30,7 @@ Press Ⓨ to restart the level.
 
 You may need to press a button to activate the gamepad, before the web page can see it.
 
-NOTE: The level editor currently requires a keyboard and mouse.
+NOTE: The level editor does not currently support gamepad controls.
 
 ### Keyboard
 
