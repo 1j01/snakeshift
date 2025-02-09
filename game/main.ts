@@ -18,14 +18,17 @@ playEditToggleButton.addEventListener('click', () => {
 restartLevelButton.addEventListener('click', restartLevel)
 undoButton.addEventListener('click', undo)
 redoButton.addEventListener('click', redo)
-fullscreenButton.addEventListener('click', () => {
+fullscreenButton.addEventListener('click', toggleFullscreen)
+
+function toggleFullscreen() {
   if (document.fullscreenElement) {
     // button will actually be hidden in fullscreen mode, by CSS
+    // but the 'F' key should still work
     void document.exitFullscreen()
   } else {
     void document.documentElement.requestFullscreen()
   }
-})
+}
 
 addEventListener('keydown', (event) => {
   if (event.key === '`' && !event.repeat) {
@@ -96,6 +99,9 @@ addEventListener('keydown', (event) => {
     event.preventDefault()
   } else if (event.key === 'm') {
     toggleMute()
+    event.preventDefault()
+  } else if (event.key === 'f') {
+    toggleFullscreen()
     event.preventDefault()
   }
   enableAudioViaUserGesture()
