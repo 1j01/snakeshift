@@ -78,11 +78,14 @@ This command runs the spell checker, the typescript compiler, and eslint:
 npm run lint
 ```
 
-There are also tests written using Playwright:
+This command will run tests using Playwright:
 
 ```sh
 npm run test
 ```
+
+Learn more about [Playwright's philosophy and tooling](https://playwright.dev/docs/best-practices).  
+It has great VS Code integration, a test recorder/generator, a trace viewer including screen capture replay, and more.
 
 ### File Format Versioning
 
