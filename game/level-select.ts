@@ -203,3 +203,15 @@ export function updatePageTitleAndLevelSpecificOverlays() {
     overlayElement.hidden = overlayElement.dataset.forLevel !== currentLevelID()
   }
 }
+
+// Hacky little way to load a level from the URL
+// TODO: proper routing, handle hash changes, avoid race condition, prefer exact level name match (so that "level-1" doesn't match "level-10", or "Foo" doesn't match "Foo: The Sequel")
+const levelMatch = location.hash.match(/^#\/?levels\/(.+)$/)
+if (levelMatch) {
+  setTimeout(() => {
+    const levelButton = document.querySelector<HTMLButtonElement>(`button[data-level*="${levelMatch[1]}"]`)
+    if (levelButton) {
+      levelButton.click()
+    }
+  }, 100)
+}
