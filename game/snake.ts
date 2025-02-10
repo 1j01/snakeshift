@@ -371,7 +371,8 @@ export default class Snake extends Entity {
         const hitsAheadCrate = hitTestAllEntities(newTile.x, newTile.y, { ignoreTailOfSnake: this })
         if (
           // TODO: check collision layer matches pusher
-          // TODO: bounds check
+          newTile.x >= 0 && newTile.y >= 0 &&
+          newTile.x + newTile.width <= levelInfo.width && newTile.y + newTile.height <= levelInfo.height &&
           topLayer(hitsAheadCrate) !== hit.entity.layer &&
           topLayer(hitsAheadCrate) !== CollisionLayer.Both // might want a function canMoveOnto
         ) {
