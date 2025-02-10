@@ -29,6 +29,10 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+
+    /* This prevents the downloads from being silently rejected especially when running tests in a batch.
+    The gameplay tests currently use many file downloads to test the game state. */
+    acceptDownloads: true,
   },
 
   /* Configure projects for major browsers */
