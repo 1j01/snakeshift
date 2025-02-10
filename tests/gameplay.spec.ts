@@ -63,7 +63,7 @@ test('should not show a message about restarting/undoing if only one snake is st
 })
 
 
-type Move = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | { click: Tile };
+type MoveInput = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | { click: Tile };
 
 test('game should be beatable (using recorded playthroughs)', async ({ page }) => {
   test.setTimeout(1000 * 60 * 60) // 1 hour
@@ -136,8 +136,8 @@ function isEntityOfType(entity: EntityLike, type: "Snake" | "Collectable"): bool
   return entity._type === type
 }
 
-function getMovesFromPlaythrough(playthroughJSON: string): Move[] {
-  const moves: Move[] = []
+function getMovesFromPlaythrough(playthroughJSON: string): MoveInput[] {
+  const moves: MoveInput[] = []
   const playthrough = ((JSON.parse(playthroughJSON) as GameState[])
     .map((stateString) => {
       const parsed = JSON.parse(stateString) as ParsedGameState
@@ -174,7 +174,7 @@ function getMovesFromPlaythrough(playthroughJSON: string): Move[] {
             isEntityOfType(prevStateEntity, 'Snake') &&
             prevStateEntity.id === entity.id
           ) {
-            let moveKey: Move | null = null
+            let moveKey: MoveInput | null = null
             if (prevStateEntity.segments[0].x < entity.segments[0].x) {
               moveKey = 'ArrowRight'
             } else if (prevStateEntity.segments[0].x > entity.segments[0].x) {
