@@ -139,9 +139,6 @@ test.fixme('snake should not move if a crate is on top', async ({ page }) => {
   await page.keyboard.press('Tab') // stupidly, there may be no active snake
   const originalContent = await saveLevelFileAndGetContent(page)
   await page.keyboard.press('ArrowRight')
-  await page.keyboard.press('Tab') // in case there actually was and we switched away from the one we wanted
-  await page.keyboard.press('ArrowRight')
-  await page.keyboard.press('Tab') // to restore focus to the original from the snapshot
   expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
 })
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should not be able to swap depths with the above snake by moving onto it', ()=>{ });
