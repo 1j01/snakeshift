@@ -105,7 +105,7 @@ export function checkLevelWon() {
 }
 
 function checkLevelStuck() {
-  return entities.filter(e => e instanceof Snake).every((snake) => !snake.canMove())
+  return entities.every((entity) => !(entity instanceof Snake) || !entity.canMove())
 }
 
 export function handleLevelCompletion() {

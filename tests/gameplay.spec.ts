@@ -101,7 +101,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
       // await expect(page.locator('#level-splash')).toBeVisible()
       // await expect(page.locator('#level-splash')).not.toBeVisible()
       // continue
-      throw new Error(`Could not read playthrough file ${playthroughPath}: ${e}`)
+      throw new Error(`Could not read playthrough file ${playthroughPath}: ${String(e)}`)
     }
     const moves = getMovesFromPlaythrough(playthroughJSON)
     console.log(`Playing level ${levelId} with ${moves.length} moves: ${moves.map((move) => typeof move === 'object' ? `click(${move.click.x},${move.click.y})` : { "ArrowUp": "↑", "ArrowDown": "↓", "ArrowLeft": "←", "ArrowRight": "→" }[move]).join(' ')}`)
