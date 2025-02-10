@@ -106,6 +106,10 @@ mechanics:
 - neutral-colored snake
   - diamondback pattern?
   - can move anywhere!? and let snakes pass through any barriers!? like a dang ghost
+- two-headed snake
+  - can move in both directions
+  - would require two focus stops, one for each head
+  - would probably look silly and not be worth it
 
 animation:
 - when snake is encumbered by another snake (or crate): wriggle whole snake? so far I've implemented x eyes, but you can't always see the head
