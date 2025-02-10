@@ -335,9 +335,12 @@ export default class Snake extends Entity {
     const hitsAhead = hitTestAllEntities(x, y, { ignoreTailOfSnake: this.growOnNextMove ? undefined : this })
     // const hitsAtTail = hitTestAllEntities(tail.x, tail.y)
     const hitsAllAlong = this.segments.flatMap(segment => hitTestAllEntities(segment.x, segment.y))
-    // Note: snakesOnTop may include duplicates
-    // TODO: also include crates on top (any solid entities on top I suppose)
-    const snakesOnTop = hitsAllAlong.filter(hit => hit.entity instanceof Snake && hit.entity !== this && entities.indexOf(hit.entity) > entities.indexOf(this))
+    const encumbered = hitsAllAlong.some(hit =>
+      // any solid entity (should I just check for not Collectable?)
+      (hit.entity instanceof Snake || hit.entity instanceof Crate) &&
+      hit.entity !== this &&
+      entities.indexOf(hit.entity) > entities.indexOf(this)
+    )
 
     // Prevent moving backwards when two segments long
     // (When one segment long, you can plausibly move in any direction,
@@ -397,13 +400,13 @@ export default class Snake extends Entity {
         x >= 0 && y >= 0 &&
         x + head.width <= levelInfo.width && y + head.height <= levelInfo.height &&
         !movingBackwards &&
-        snakesOnTop.length === 0 &&
+        !encumbered &&
         topLayer(hitsAhead) !== head.layer &&
         topLayer(hitsAhead) !== CollisionLayer.Both && // might want a function canMoveOnto
         // topLayer(hitsAtTail) === head.layer && // obsolete since you can no longer move with snakes on top, and was probably meant to check that no snakes were on top of the tail, but would fail if there were two snakes on top of the tail, alternating colors, right?
         // HACK: This isn't the place for this. Should really prevent it at the input level.
         shouldInputBeAllowed(),
-      encumbered: snakesOnTop.length > 0,
+      encumbered,
       to: { x, y, width: head.width, height: head.height },
       delta: { x: deltaX, y: deltaY },
       entitiesThere: hitsAhead.map(hit => hit.entity),

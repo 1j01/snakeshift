@@ -75,6 +75,9 @@ async function snakeShouldBeTrappedIn3x3Area(page: Page) {
   })
 }
 
+// TODO: make sure both colors of snakes are tested adequately
+// and bicolor blocks, in combination
+
 test('snake should not move past level boundaries', async ({ page }) => {
   await dragAndDropFile(page, 'body', 'game/public/levels/tests/3x3-with-1x1-snake-in-middle.json')
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
@@ -131,7 +134,7 @@ test('snake should not move if another snake is on top', async ({ page }) => {
   await page.keyboard.press('Tab') // to restore focus to the original from the snapshot
   expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
 })
-test.fixme('snake should not move if a crate is on top', async ({ page }) => {
+test('snake should not move if a crate is on top', async ({ page }) => {
   await dragAndDropFile(page, 'body', 'game/public/levels/tests/crate-on-top-should-immobilize-snake.json')
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
   await page.getByRole('button', { name: 'Play/Edit' }).click()
