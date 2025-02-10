@@ -90,7 +90,6 @@ test.skip('snake should not move if another snake is on top', () => { /* TODO */
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should not be able to swap depths with the above snake by moving onto it', ()=>{ });
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should not be able to move out from under the other snake, since it would be providing the ground for it', ()=>{ });
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should be able to move out from under the other snake if its tail will fill the gap immediately', ()=>{ });
-test.skip('should detect immobile state and show a message about restarting/undoing', () => { /* TODO */ })
 test.skip('extra undo states should be skipped or merged when switching snakes multiple times', () => { /* TODO */ })
 test.skip('gamepad controls should be supported', () => { /* TODO */ })
 test.skip('touch controls should be supported', () => { /* TODO */ })
