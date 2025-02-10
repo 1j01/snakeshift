@@ -2,7 +2,7 @@ import { Block } from './block'
 import { Collectable } from './collectable'
 import Entity from './entity'
 import { activePlayer, clearLevel, entities, levelInfo, onResize, onUpdate, openLevel, postUpdate, saveLevel, setActivePlayer, undoable } from './game-state'
-import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, within, withinLevel } from './helpers'
+import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, translateEntity, within, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
@@ -655,18 +655,6 @@ export function invert() {
     }
   }
   postUpdate() // I guess?
-}
-
-function translateEntity(dragging: Entity, dx: number, dy: number) {
-  if (dragging instanceof RectangularEntity) {
-    dragging.x += dx
-    dragging.y += dy
-  } else if (dragging instanceof Snake) {
-    for (const segment of dragging.segments) {
-      segment.x += dx
-      segment.y += dy
-    }
-  }
 }
 
 export function translateSelection(dx: number, dy: number) {

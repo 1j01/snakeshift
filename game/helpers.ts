@@ -3,6 +3,7 @@ import { Collectable } from "./collectable"
 import { Crate } from "./crate"
 import Entity from "./entity"
 import { entities, levelInfo } from "./game-state"
+import { RectangularEntity } from "./rectangular-entity"
 import Snake from "./snake"
 import { CollisionLayer, Hit, Point, Tile } from "./types"
 
@@ -175,4 +176,16 @@ export function makeEventListenerGroup() {
   }
 
   return { on, removeEventListeners }
+}
+
+export function translateEntity(dragging: Entity, dx: number, dy: number) {
+  if (dragging instanceof RectangularEntity) {
+    dragging.x += dx
+    dragging.y += dy
+  } else if (dragging instanceof Snake) {
+    for (const segment of dragging.segments) {
+      segment.x += dx
+      segment.y += dy
+    }
+  }
 }
