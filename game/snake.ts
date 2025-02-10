@@ -336,8 +336,7 @@ export default class Snake extends Entity {
     // const hitsAtTail = hitTestAllEntities(tail.x, tail.y)
     const hitsAllAlong = this.segments.flatMap(segment => hitTestAllEntities(segment.x, segment.y))
     const encumbered = hitsAllAlong.some(hit =>
-      // any solid entity (should I just check for not Collectable?)
-      (hit.entity instanceof Snake || hit.entity instanceof Crate) &&
+      hit.entity.solid &&
       hit.entity !== this &&
       entities.indexOf(hit.entity) > entities.indexOf(this)
     )
