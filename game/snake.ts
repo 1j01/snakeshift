@@ -3,8 +3,8 @@ import { Collectable } from "./collectable"
 import { Crate } from "./crate"
 import Entity from "./entity"
 import { checkLevelWon, shouldInputBeAllowed } from "./game"
-import { entities, levelInfo, undoable } from "./game-state"
-import { hitTestAllEntities, topLayer, translateEntity } from "./helpers"
+import { entities, undoable } from "./game-state"
+import { hitTestAllEntities, topLayer, translateEntity, withinLevel } from "./helpers"
 import { selectedEntities } from "./level-editor"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
@@ -373,8 +373,7 @@ export default class Snake extends Entity {
         const newTile = { x: hit.entity.x + deltaX, y: hit.entity.y + deltaY, width: hit.entity.width, height: hit.entity.height }
         const hitsAheadCrate = hitTestAllEntities(newTile.x, newTile.y, { ignoreTailOfSnake: this })
         if (
-          newTile.x >= 0 && newTile.y >= 0 &&
-          newTile.x + newTile.width <= levelInfo.width && newTile.y + newTile.height <= levelInfo.height &&
+          withinLevel(newTile) &&
           (hit.entity.layer === head.layer || hit.entity.layer === CollisionLayer.Both || head.layer === CollisionLayer.Both) &&
           topLayer(hitsAheadCrate) !== hit.entity.layer &&
           topLayer(hitsAheadCrate) !== CollisionLayer.Both // might want a function canMoveOnto or layersCollide
@@ -395,8 +394,7 @@ export default class Snake extends Entity {
       valid:
         (dirX === 0 || dirY === 0) &&
         (Math.abs(dirX) === 1 || Math.abs(dirY) === 1) &&
-        x >= 0 && y >= 0 &&
-        x + head.width <= levelInfo.width && y + head.height <= levelInfo.height &&
+        withinLevel({ x, y, width: head.width, height: head.height }) &&
         !movingBackwards &&
         !encumbered &&
         topLayer(hitsAhead) !== head.layer &&
