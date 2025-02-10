@@ -148,7 +148,7 @@ export function loadNextLevel() {
         winScreen.classList.remove('active')
         winScreen.style.transition = ""
         winScreen.style.opacity = ""
-      }, 600)
+      }, location.search.includes("fast-splash-screens") ? 0 : 600)
     }, location.search.includes("fast-splash-screens") ? 100 : 800)
     return
   }
