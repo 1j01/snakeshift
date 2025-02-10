@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { Page, expect, test } from '@playwright/test'
 import { access, readFile } from 'node:fs/promises'
 import { Collectable } from '../game/collectable.ts'
 import Entity from '../game/entity.ts'
@@ -23,16 +23,8 @@ declare global {
   }
 }
 
-test('snake should not move past level boundaries', async ({ page }) => {
-  await dragAndDropFile(page, 'body', 'game/public/levels/tests/3x3-with-1x1-snake-in-middle.json')
-  await expect(page).toHaveTitle('Snakeshift - Level Editor')
-  await page.getByRole('button', { name: 'Play/Edit' }).click()
-  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
-
-  await page.keyboard.press('Tab') // stupidly, there's no active snake in these levels. (isn't it supposed to auto-activate a snake?)
-
+async function snakeShouldBeTrappedIn3x3Area(page: Page) {
   const originalContent = await saveLevelFileAndGetContent(page)
-
   await test.step('snake should not move past right boundary', async () => {
     // Move once to right
     await page.keyboard.press('ArrowRight')
@@ -81,12 +73,67 @@ test('snake should not move past level boundaries', async ({ page }) => {
     await page.keyboard.press('ArrowUp')
     expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
   })
+}
+
+test('snake should not move past level boundaries', async ({ page }) => {
+  await dragAndDropFile(page, 'body', 'game/public/levels/tests/3x3-with-1x1-snake-in-middle.json')
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
+
+  await page.keyboard.press('Tab') // stupidly, there's no active snake in these levels. (isn't it supposed to auto-activate a snake?)
+
+  await snakeShouldBeTrappedIn3x3Area(page)
 })
-test.skip('snake should not move through walls', () => { /* TODO */ })
+test('snake should not move through walls', async ({ page }) => {
+  await dragAndDropFile(page, 'body', 'game/public/levels/tests/5x5-ring-of-walls-with-1x1-snake-in-middle.json')
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
+
+  await page.keyboard.press('Tab') // stupidly, there's no active snake in these levels. (isn't it supposed to auto-activate a snake?)
+
+  await snakeShouldBeTrappedIn3x3Area(page)
+})
+test('snake should not push crates past level boundaries', async ({ page }) => {
+  await dragAndDropFile(page, 'body', 'game/public/levels/tests/5x5-ring-of-crates-with-1x1-snake-in-middle.json')
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
+
+  await page.keyboard.press('Tab') // stupidly, there's no active snake in these levels. (isn't it supposed to auto-activate a snake?)
+
+  await snakeShouldBeTrappedIn3x3Area(page)
+})
 test.skip('snake should not move through itself', () => { /* TODO */ })
 test.skip('snake should be able to move to its tail location, since its tail will move', () => { /* TODO */ })
 test.skip('snake should not move through other snakes of the same color', () => { /* TODO */ })
-test.skip('snake should not move if another snake is on top', () => { /* TODO */ })
+test('snake should not move if another snake is on top', async ({ page }) => {
+  await dragAndDropFile(page, 'body', 'game/public/levels/tests/snake-on-top-should-immobilize-snake.json')
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
+  await page.keyboard.press('Tab') // stupidly, there may be no active snake
+  const originalContent = await saveLevelFileAndGetContent(page)
+  await page.keyboard.press('ArrowRight')
+  await page.keyboard.press('Tab') // in case there actually was and we switched away from the one we wanted
+  await page.keyboard.press('ArrowRight')
+  await page.keyboard.press('Tab') // to restore focus to the original from the snapshot
+  expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+})
+test.fixme('snake should not move if a crate is on top', async ({ page }) => {
+  await dragAndDropFile(page, 'body', 'game/public/levels/tests/crate-on-top-should-immobilize-snake.json')
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
+  await page.keyboard.press('Tab') // stupidly, there may be no active snake
+  const originalContent = await saveLevelFileAndGetContent(page)
+  await page.keyboard.press('ArrowRight')
+  await page.keyboard.press('Tab') // in case there actually was and we switched away from the one we wanted
+  await page.keyboard.press('ArrowRight')
+  await page.keyboard.press('Tab') // to restore focus to the original from the snapshot
+  expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+})
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should not be able to swap depths with the above snake by moving onto it', ()=>{ });
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should not be able to move out from under the other snake, since it would be providing the ground for it', ()=>{ });
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should be able to move out from under the other snake if its tail will fill the gap immediately', ()=>{ });
