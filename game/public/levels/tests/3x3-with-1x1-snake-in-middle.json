@@ -1,0 +1,28 @@
+{
+  "format": "snakeshift",
+  "formatVersion": 4,
+  "levelInfo": {
+    "width": 3,
+    "height": 3
+  },
+  "entities": [
+    {
+      "id": "9e8a85e4-0801-4d26-905b-e3f019aa95d2",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 1,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    }
+  ],
+  "entityTypes": [
+    "Snake"
+  ],
+  "activePlayerEntityIndex": -1,
+  "levelId": ""
+}
