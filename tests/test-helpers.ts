@@ -44,7 +44,7 @@ async function streamToString(stream: Readable): Promise<string> {
   return Buffer.concat(chunks).toString("utf-8")
 }
 
-async function saveLevelFileAndGetContent(page: Page) {
+export async function saveLevelFileAndGetContent(page: Page) {
   const downloadPromise = page.waitForEvent('download')
   await page.keyboard.down('Control')
   await page.keyboard.press('KeyS')

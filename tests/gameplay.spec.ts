@@ -4,7 +4,7 @@ import { Collectable } from '../game/collectable.ts'
 import Entity from '../game/entity.ts'
 import Snake from '../game/snake.ts'
 import { GameState, ParsedGameState, Tile } from '../game/types.ts'
-import { dragAndDropFile } from './test-helpers.ts'
+import { dragAndDropFile, saveLevelFileAndGetContent } from './test-helpers.ts'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?fast-splash-screens')
@@ -23,7 +23,65 @@ declare global {
   }
 }
 
-test.skip('snake should not move past level boundaries', () => { /* TODO */ })
+test('snake should not move past level boundaries', async ({ page }) => {
+  await dragAndDropFile(page, 'body', 'game/public/levels/tests/3x3-with-1x1-snake-in-middle.json')
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
+
+  await page.keyboard.press('Tab') // stupidly, there's no active snake in these levels. (isn't it supposed to auto-activate a snake?)
+
+  const originalContent = await saveLevelFileAndGetContent(page)
+
+  await test.step('snake should not move past right boundary', async () => {
+    // Move once to right
+    await page.keyboard.press('ArrowRight')
+    const snakeToTheRight = await saveLevelFileAndGetContent(page)
+    expect(snakeToTheRight).not.toEqual(originalContent)
+    // Move again should do nothing
+    await page.keyboard.press('ArrowRight')
+    expect(await saveLevelFileAndGetContent(page)).toEqual(snakeToTheRight)
+    // Recenter
+    await page.keyboard.press('ArrowLeft')
+    expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+  })
+  await test.step('snake should not move past left boundary', async () => {
+    // Move once to left
+    await page.keyboard.press('ArrowLeft')
+    const snakeToTheLeft = await saveLevelFileAndGetContent(page)
+    expect(snakeToTheLeft).not.toEqual(originalContent)
+    // Move again should do nothing
+    await page.keyboard.press('ArrowLeft')
+    expect(await saveLevelFileAndGetContent(page)).toEqual(snakeToTheLeft)
+    // Recenter
+    await page.keyboard.press('ArrowRight')
+    expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+  })
+  await test.step('snake should not move past top boundary', async () => {
+    // Move once upwards
+    await page.keyboard.press('ArrowUp')
+    const snakeAtTop = await saveLevelFileAndGetContent(page)
+    expect(snakeAtTop).not.toEqual(originalContent)
+    // Move again should do nothing
+    await page.keyboard.press('ArrowUp')
+    expect(await saveLevelFileAndGetContent(page)).toEqual(snakeAtTop)
+    // Recenter
+    await page.keyboard.press('ArrowDown')
+    expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+  })
+  await test.step('snake should not move past bottom boundary', async () => {
+    // Move once downwards
+    await page.keyboard.press('ArrowDown')
+    const snakeAtBottom = await saveLevelFileAndGetContent(page)
+    expect(snakeAtBottom).not.toEqual(originalContent)
+    // Move again should do nothing
+    await page.keyboard.press('ArrowDown')
+    expect(await saveLevelFileAndGetContent(page)).toEqual(snakeAtBottom)
+    // Recenter
+    await page.keyboard.press('ArrowUp')
+    expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+  })
+})
 test.skip('snake should not move through walls', () => { /* TODO */ })
 test.skip('snake should not move through itself', () => { /* TODO */ })
 test.skip('snake should be able to move to its tail location, since its tail will move', () => { /* TODO */ })
