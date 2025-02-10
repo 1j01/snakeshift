@@ -1,9 +1,10 @@
 import { playSound } from "./audio"
 import { Collectable } from "./collectable"
+import { Crate } from "./crate"
 import Entity from "./entity"
 import { checkLevelWon, shouldInputBeAllowed } from "./game"
 import { entities, levelInfo, undoable } from "./game-state"
-import { hitTestAllEntities, topLayer } from "./helpers"
+import { hitTestAllEntities, topLayer, translateEntity } from "./helpers"
 import { selectedEntities } from "./level-editor"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
@@ -359,6 +360,34 @@ export default class Snake extends Entity {
     // If moves are analyzed by checking for collisions within a whole game board,
     // it could share some code. Theoretically.
 
+    // Push objects
+    const entitiesToPush: Entity[] = []
+    for (const hit of hitsAhead) {
+      // TODO: try pushing other snakes too
+      // TODO: recursively push crates
+      if (hit.entity instanceof Crate) {
+        // Check if the crate can be pushed
+        const newTile = { x: hit.entity.x + deltaX, y: hit.entity.y + deltaY, width: hit.entity.width, height: hit.entity.height }
+        const hitsAheadCrate = hitTestAllEntities(newTile.x, newTile.y, { ignoreTailOfSnake: this })
+        if (
+          // TODO: check collision layer matches pusher
+          // TODO: bounds check
+          topLayer(hitsAheadCrate) !== hit.entity.layer &&
+          topLayer(hitsAheadCrate) !== CollisionLayer.Both // might want a function canMoveOnto
+        ) {
+          entitiesToPush.push(hit.entity)
+        }
+      }
+    }
+    // Ignore pushed objects as obstacles
+    for (const entity of entitiesToPush) {
+      const index = hitsAhead.findIndex(hit => hit.entity === entity)
+      if (index !== -1) {
+        hitsAhead.splice(index, 1)
+      }
+    }
+    console.log(hitsAhead, entitiesToPush)
+
     return {
       valid:
         (dirX === 0 || dirY === 0) &&
@@ -374,7 +403,9 @@ export default class Snake extends Entity {
         shouldInputBeAllowed(),
       encumbered: snakesOnTop.length > 0,
       to: { x, y, width: head.width, height: head.height },
+      delta: { x: deltaX, y: deltaY },
       entitiesThere: hitsAhead.map(hit => hit.entity),
+      entitiesToPush,
     }
   }
   canMove(): boolean {
@@ -438,6 +469,16 @@ export default class Snake extends Entity {
       entities.splice(maxIndex + 1, 0, this)
       entities.splice(thisIndex, 1)
     }
+    // Push objects
+    // TODO: handle pushing collectables inside crates (without eating them)
+    for (const entity of move.entitiesToPush) {
+      translateEntity(entity, move.delta.x, move.delta.y)
+      entities.splice(entities.indexOf(entity), 1)
+      entities.push(entity)
+    }
+    // if (move.entitiesToPush.length > 0) {
+    //   sortEntities()
+    // }
     // Eat collectables
     for (const entity of move.entitiesThere) {
       if (entity instanceof Collectable && entity.layer === head.layer) {

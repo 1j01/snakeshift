@@ -44,9 +44,11 @@ export interface Tile extends Point {
 
 export interface Move {
   to: Tile
+  delta: Point
   valid: boolean
   encumbered: boolean
   entitiesThere: Entity[]
+  entitiesToPush: Entity[]
 }
 
 export interface Hit {
