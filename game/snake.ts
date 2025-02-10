@@ -332,7 +332,7 @@ export default class Snake extends Entity {
     const x = head.x + deltaX
     const y = head.y + deltaY
     const hitsAhead = hitTestAllEntities(x, y, { ignoreTailOfSnake: this.growOnNextMove ? undefined : this })
-    const hitsAtTail = hitTestAllEntities(tail.x, tail.y)
+    // const hitsAtTail = hitTestAllEntities(tail.x, tail.y)
     const hitsAllAlong = this.segments.flatMap(segment => hitTestAllEntities(segment.x, segment.y))
     // Note: snakesOnTop may include duplicates
     const snakesOnTop = hitsAllAlong.filter(hit => hit.entity instanceof Snake && hit.entity !== this && entities.indexOf(hit.entity) > entities.indexOf(this))
