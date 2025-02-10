@@ -7,8 +7,8 @@
   <title>Snakeshift</title>
   <!-- <link rel="icon" type="image/png" href="/graphics/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
   <link rel="icon" type="image/png" href="./graphics/yin-yang-larger-sneks-180px.png" sizes="180x180" />
-  <script type="module" crossorigin src="./assets/index-BYpJBFtq.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-6KoKL1Xn.css">
+  <script type="module" crossorigin src="./assets/index-B7SCCwtA.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-C8udUCjA.css">
 </head>
 
 <body>
@@ -177,7 +177,11 @@
       <img src="./graphics/speaker.svg" alt="" />
       <span class="button-text" id="mute-button-text">Mute</span>
     </button>
-    <!-- <button class="bw-button" id="fullscreen-button" aria-keyshortcuts="F">Fullscreen</button> -->
+    <button class="bw-button" id="fullscreen-button" aria-keyshortcuts="F">
+      <!-- <img src="/graphics/fullscreen.svg" alt="" /> -->
+      <img src="./graphics/move.svg" alt="" style="transform: rotate(45deg)" />
+      <span class="button-text">Fullscreen</span>
+    </button>
   </div>
   <div id="level-editor">
     <div id="entities-bar">
@@ -367,6 +371,12 @@
     <!-- TODO: show controls specific to the active control scheme -->
     <!-- <p>Press <kbd>Z</kbd>/ⓧ to undo, or <kbd>R</kbd>/Ⓨ to restart the level.</p> -->
     <p>Press <kbd>Z</kbd> to undo, or <kbd>R</kbd> to restart the level, or ⓧ/Ⓨ on a gamepad.</p>
+  </div>
+  <div id="level-stuck-hint" hidden>
+    <!-- TODO: show controls specific to the active control scheme -->
+    <!-- Want neutral language that doesn't imply you're having trouble. -->
+    <!-- <h2>Stuck?</h2> -->
+    <p>Press <kbd>Z</kbd> to undo or <kbd>R</kbd> to restart</p>
   </div>
 </body>
 
