@@ -11,7 +11,7 @@ export enum CollisionLayer {
   None = 0,
   White = 1,
   Black = 2,
-  Both = 3,
+  Both = 3, // = 1 | 2
 }
 
 export interface ParsedGameState {

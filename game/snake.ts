@@ -336,6 +336,7 @@ export default class Snake extends Entity {
     // const hitsAtTail = hitTestAllEntities(tail.x, tail.y)
     const hitsAllAlong = this.segments.flatMap(segment => hitTestAllEntities(segment.x, segment.y))
     // Note: snakesOnTop may include duplicates
+    // TODO: also include crates on top (any solid entities on top I suppose)
     const snakesOnTop = hitsAllAlong.filter(hit => hit.entity instanceof Snake && hit.entity !== this && entities.indexOf(hit.entity) > entities.indexOf(this))
 
     // Prevent moving backwards when two segments long
@@ -370,11 +371,11 @@ export default class Snake extends Entity {
         const newTile = { x: hit.entity.x + deltaX, y: hit.entity.y + deltaY, width: hit.entity.width, height: hit.entity.height }
         const hitsAheadCrate = hitTestAllEntities(newTile.x, newTile.y, { ignoreTailOfSnake: this })
         if (
-          // TODO: check collision layer matches pusher
           newTile.x >= 0 && newTile.y >= 0 &&
           newTile.x + newTile.width <= levelInfo.width && newTile.y + newTile.height <= levelInfo.height &&
+          (hit.entity.layer === head.layer || hit.entity.layer === CollisionLayer.Both || head.layer === CollisionLayer.Both) &&
           topLayer(hitsAheadCrate) !== hit.entity.layer &&
-          topLayer(hitsAheadCrate) !== CollisionLayer.Both // might want a function canMoveOnto
+          topLayer(hitsAheadCrate) !== CollisionLayer.Both // might want a function canMoveOnto or layersCollide
         ) {
           entitiesToPush.push(hit.entity)
         }

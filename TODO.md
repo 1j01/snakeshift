@@ -84,8 +84,8 @@ puzzles:
 - lock levels are cheese-able; you can bridge the left and middle vertical lanes with the black snake; the intentionally cheese-able "security by obscurity" version can also be solved in two different ways, bridging it vertically (intended) or horizontally (in the same way as the prior level); I've got a more solid version in `proper-lock-v2` but want to consider if it makes the difference between the two levels too obvious, and maybe adjust the latter level as well (but it might be fine)
 
 mechanics:
-- crates
-  - could be fun if collectables on top of crates are pushed along with the crate
+- could be fun if collectables on top of crates are pushed along with the crate
+  - and you should probably also be able to push a crate underneath a collectable to box it
 - slicing snakes
   - like the ghost peppers in [Ssspicy!](https://torcado.itch.io/ssspicy) but without awkward turn counter timing, it will slice your body into live and dead parts, and the dead parts will retain their shapes will be able to be pushed around like arbitrarily shaped crates
   - generalizes crates, so could do away with crates
