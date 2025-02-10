@@ -76,9 +76,7 @@ level editor:
 
 
 - playthrough tests:
-  - upgrade the actual playthrough format (might want to do this before recording more playthroughs)
-  - record playthroughs for all the levels
-  - disable code that skips over levels that don't have playthroughs; make it fail if there's no playthrough
+  - upgrade the actual playthrough format
   - ensure that it's finding some levels, don't want to find out that "whoops, it's not testing anything" for such an important test
 
 puzzles:

@@ -73,6 +73,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
   const levels = await page.$$eval('.level-button', (buttons) => buttons.map((button) => {
     return { levelId: button.getAttribute('data-level'), levelName: button.querySelector('.button-text')!.textContent! }
   }))
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < levels.length; i++) {
     const { levelId, levelName } = levels[i]
     if (!levelId) {
@@ -92,14 +93,15 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
     try {
       playthroughJSON = await readFile(playthroughPath, 'utf8')
     } catch (e) {
-      console.warn(`Could not read playthrough file ${playthroughPath}, skipping level ${levelId}`)
-      await page.getByRole('button', { name: 'Back' }).click()
-      await page.getByRole('button', { name: 'Level select' }).click()
-      await page.getByRole('button', { name: levels[i + 1].levelName }).click()
+      // console.warn(`Could not read playthrough file ${playthroughPath}, skipping level ${levelId}`)
+      // await page.getByRole('button', { name: 'Back' }).click()
+      // await page.getByRole('button', { name: 'Level select' }).click()
+      // await page.getByRole('button', { name: levels[i + 1].levelName }).click()
 
-      await expect(page.locator('#level-splash')).toBeVisible()
-      await expect(page.locator('#level-splash')).not.toBeVisible()
-      continue
+      // await expect(page.locator('#level-splash')).toBeVisible()
+      // await expect(page.locator('#level-splash')).not.toBeVisible()
+      // continue
+      throw new Error(`Could not read playthrough file ${playthroughPath}: ${e}`)
     }
     const moves = getMovesFromPlaythrough(playthroughJSON)
     console.log(`Playing level ${levelId} with ${moves.length} moves: ${moves.map((move) => typeof move === 'object' ? `click(${move.click.x},${move.click.y})` : { "ArrowUp": "↑", "ArrowDown": "↓", "ArrowLeft": "←", "ArrowRight": "→" }[move]).join(' ')}`)
