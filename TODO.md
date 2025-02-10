@@ -95,6 +95,8 @@ mechanics:
   - entrance and exit of different sizes changing your snake's size, like in [PortalSnake](https://bcat112a.itch.io/portalsnake)
 - snake color changer
   - shown as hourglass-like twist with particles of light/dark going in/out
+  - changes segments one at a time as the snake moves through it
+  - interaction with grass tiles could be interesting: you could enter the color changer with either color of snake, but come out with the same color
 - generalization of color changer and portals
   - shown as conic (hourglass-like when 1 cell) twist with black/white braided wormhole leading to other portal (which can be the same cell) and which can be the same or a different color and the same or a different size and the same or a different orientation
   - what if it could act as the slicer too, with razor-sharp sections of the wormhole aligned to grid edges? you would go through the wormhole with a snake to slice a snake crossing the wormhole blades
@@ -110,6 +112,8 @@ mechanics:
   - can move in both directions
   - would require two focus stops, one for each head
   - would probably look silly and not be worth it
+- yin yang pickup that switches the snake's color in place
+  - would also have to switch the color of everything under the snake, but that might be interesting
 
 animation:
 - when snake is encumbered by another snake (or crate): wriggle whole snake? so far I've implemented x eyes, but you can't always see the head
