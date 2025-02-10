@@ -326,7 +326,7 @@ export default class Snake extends Entity {
   }
   analyzeMoveRelative(dirX: number, dirY: number): Move {
     const head = this.segments[0]
-    const tail = this.segments[this.segments.length - 1]
+    // const tail = this.segments[this.segments.length - 1]
     const deltaX = dirX * head.width
     const deltaY = dirY * head.height
     const x = head.x + deltaX
