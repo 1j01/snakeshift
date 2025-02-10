@@ -391,7 +391,6 @@ export default class Snake extends Entity {
         hitsAhead.splice(index, 1)
       }
     }
-    console.log(hitsAhead, entitiesToPush)
 
     return {
       valid:
