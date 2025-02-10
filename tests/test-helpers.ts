@@ -46,9 +46,7 @@ async function streamToString(stream: Readable): Promise<string> {
 
 export async function saveLevelFileAndGetContent(page: Page) {
   const downloadPromise = page.waitForEvent('download')
-  await page.keyboard.down('Control')
-  await page.keyboard.press('KeyS')
-  await page.keyboard.up('Control')
+  await page.keyboard.press('Control+KeyS')
   const download = await downloadPromise
   const levelFileContent = await streamToString(await download.createReadStream())
   return levelFileContent
