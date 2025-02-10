@@ -1,0 +1,147 @@
+{
+  "format": "snakeshift",
+  "formatVersion": 4,
+  "levelInfo": {
+    "width": 5,
+    "height": 5
+  },
+  "entities": [
+    {
+      "id": "b0f328ad-f9ac-4d34-8b9b-faa599281688",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 4,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 4,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 4,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 4,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 3,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 2,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 1,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 0,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 0,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 0,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 0,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 1,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 2,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 3,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    },
+    {
+      "id": "1404247a-f3aa-46a0-aab9-8de5a97f9734",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 2,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    }
+  ],
+  "entityTypes": [
+    "Snake",
+    "Snake"
+  ],
+  "activePlayerEntityIndex": -1,
+  "levelId": ""
+}

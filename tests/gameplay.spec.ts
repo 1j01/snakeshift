@@ -105,9 +105,19 @@ test('snake should not push crates past level boundaries', async ({ page }) => {
 
   await snakeShouldBeTrappedIn3x3Area(page)
 })
+test('snake should not move through other snakes of the same color, or push snakes past level boundaries', async ({ page }) => {
+  await dragAndDropFile(page, 'body', 'game/public/levels/tests/5x5-ring-of-snake-with-1x1-snake-in-middle.json')
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
+
+  await page.keyboard.press('Tab') // stupidly, there's no active snake in these levels. (isn't it supposed to auto-activate a snake?)
+  await page.keyboard.press('Tab') // sigh... need the other snake of the two
+
+  await snakeShouldBeTrappedIn3x3Area(page)
+})
 test.skip('snake should not move through itself', () => { /* TODO */ })
 test.skip('snake should be able to move to its tail location, since its tail will move', () => { /* TODO */ })
-test.skip('snake should not move through other snakes of the same color', () => { /* TODO */ })
 test('snake should not move if another snake is on top', async ({ page }) => {
   await dragAndDropFile(page, 'body', 'game/public/levels/tests/snake-on-top-should-immobilize-snake.json')
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
