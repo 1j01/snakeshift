@@ -641,7 +641,7 @@ export function invert() {
   for (let x = targetRegion.x; x < targetRegion.x + targetRegion.width; x++) {
     for (let y = targetRegion.y; y < targetRegion.y + targetRegion.height; y++) {
       const hits = hitTestAllEntities(x, y)
-      if (!hits.filter((hit) => hit.entity instanceof Block).length) {
+      if (!hits.some((hit) => hit.entity instanceof Block)) {
         // add a white block where there was implicit black
         const block = new Block()
         block.layer = CollisionLayer.White
