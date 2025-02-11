@@ -126,7 +126,8 @@ test('snake should not move if a crate is on top', async ({ page }) => {
   await page.keyboard.press('ArrowRight')
   expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
 })
-test('snake should not push a crate below another snake', async ({ page }) => {
+test.fixme('snake should not push a crate below another snake', async ({ page }) => {
+  // TODO: this test is wrong, the state should change, but the crate should not move
   await loadLevelToPlay(page, 'game/public/levels/tests/move-right-should-not-push-crate.json')
   await page.keyboard.press('Tab') // stupidly, there may be no active snake
   const originalContent = await saveLevelFileAndGetContent(page)

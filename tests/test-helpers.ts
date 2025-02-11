@@ -36,7 +36,8 @@ export const dragAndDropFile = async (
 }
 
 export async function loadLevelToPlay(page: Page, filePath: string) {
-  // TODO: fix flakiness (maybe wait for network idle?)
+  // If this function is called right at the start of a test, the event listeners might not be set up yet.
+  await page.waitForLoadState('networkidle')
   await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
   await page.getByRole('button', { name: 'Play/Edit' }).click()
