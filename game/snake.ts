@@ -4,7 +4,7 @@ import { Crate } from "./crate"
 import Entity from "./entity"
 import { checkLevelWon, shouldInputBeAllowed } from "./game"
 import { entities, undoable } from "./game-state"
-import { hitTestAllEntities, topLayer, translateEntity, withinLevel } from "./helpers"
+import { hitTestAllEntities, layersCollide, topLayer, translateEntity, withinLevel } from "./helpers"
 import { selectedEntities } from "./level-editor"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
@@ -374,9 +374,8 @@ export default class Snake extends Entity {
         const hitsAheadCrate = hitTestAllEntities(newTile.x, newTile.y, { ignoreTailOfSnake: this })
         if (
           withinLevel(newTile) &&
-          (hit.entity.layer === head.layer || hit.entity.layer === CollisionLayer.Both || head.layer === CollisionLayer.Both) &&
-          topLayer(hitsAheadCrate) !== hit.entity.layer &&
-          topLayer(hitsAheadCrate) !== CollisionLayer.Both // might want a function canMoveOnto or layersCollide
+          layersCollide(hit.entity.layer, head.layer) &&
+          !layersCollide(topLayer(hitsAheadCrate), hit.entity.layer)
         ) {
           entitiesToPush.push(hit.entity)
         }
@@ -397,9 +396,7 @@ export default class Snake extends Entity {
         withinLevel({ x, y, width: head.width, height: head.height }) &&
         !movingBackwards &&
         !encumbered &&
-        topLayer(hitsAhead) !== head.layer &&
-        topLayer(hitsAhead) !== CollisionLayer.Both && // might want a function canMoveOnto
-        // topLayer(hitsAtTail) === head.layer && // obsolete since you can no longer move with snakes on top, and was probably meant to check that no snakes were on top of the tail, but would fail if there were two snakes on top of the tail, alternating colors, right?
+        !layersCollide(topLayer(hitsAhead), head.layer) &&
         // HACK: This isn't the place for this. Should really prevent it at the input level.
         shouldInputBeAllowed(),
       encumbered,

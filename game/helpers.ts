@@ -158,6 +158,15 @@ export function topLayer(hits: Hit[]): CollisionLayer {
   }
   return layer
 }
+
+export function layersCollide(a: CollisionLayer, b: CollisionLayer) {
+  // Previously, this was:
+  // return (a === b || a === CollisionLayer.Both || b === CollisionLayer.Both)
+  // which would consider CollisionLayer.None to collide with CollisionLayer.None.
+  // Simpler bitwise logic is used now.
+  return (a & b) !== 0
+}
+
 export function makeEventListenerGroup() {
   // This is a lot of complexity for simply improving the ergonomics of cleanup.
   // Most of the complexity is for type checking.
