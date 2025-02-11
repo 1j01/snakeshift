@@ -4,7 +4,7 @@ import { Crate } from "./crate"
 import Entity from "./entity"
 import { checkLevelWon, shouldInputBeAllowed } from "./game"
 import { entities, undoable } from "./game-state"
-import { hitTestAllEntities, layersCollide, topLayer, translateEntity, withinLevel } from "./helpers"
+import { hitTestAllEntities, layersCollide, sortEntities, topLayer, translateEntity, withinLevel } from "./helpers"
 import { selectedEntities } from "./level-editor"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
@@ -377,6 +377,10 @@ export default class Snake extends Entity {
           !layersCollide(topLayer(hitsAheadCrate), hit.entity.layer)
         ) {
           entitiesToPush.push(hit.entity)
+          const boxedCollectable = hitsAhead.find(hit => hit.entity instanceof Collectable)
+          if (boxedCollectable) {
+            entitiesToPush.push(boxedCollectable.entity)
+          }
         }
       }
     }
@@ -467,18 +471,18 @@ export default class Snake extends Entity {
       entities.splice(thisIndex, 1)
     }
     // Push objects
-    // TODO: handle pushing collectables inside crates (without eating them)
     for (const entity of move.entitiesToPush) {
       translateEntity(entity, move.delta.x, move.delta.y)
       entities.splice(entities.indexOf(entity), 1)
       entities.push(entity)
     }
-    // if (move.entitiesToPush.length > 0) {
-    //   sortEntities()
-    // }
+    // Ensure collectables are on top of crates, so that you can scoop up collectables inside crates to push them around.
+    if (move.entitiesToPush.length > 0) {
+      sortEntities()
+    }
     // Eat collectables
     for (const entity of move.entitiesThere) {
-      if (entity instanceof Collectable && entity.layer === head.layer) {
+      if (entity instanceof Collectable && entity.layer === head.layer && !move.entitiesToPush.includes(entity)) {
         entities.splice(entities.indexOf(entity), 1)
         this.growOnNextMove = true
         // const eatPlaybackRate = Math.pow(2, this.segments.length / 10) / 10
