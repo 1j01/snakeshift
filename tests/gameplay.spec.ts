@@ -126,16 +126,13 @@ test('snake should not move if a crate is on top', async ({ page }) => {
   await page.keyboard.press('ArrowRight')
   expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
 })
-test.fixme('snake should not push a crate below another snake', async ({ page }) => {
-  // TODO: this test is wrong, the state should change, but the crate should not move
+test('snake should not push a crate below another snake', async ({ page }) => {
   await loadLevelToPlay(page, 'game/public/levels/tests/move-right-should-not-push-crate.json')
   await page.keyboard.press('Tab') // stupidly, there may be no active snake
-  const originalContent = await saveLevelFileAndGetContent(page)
   await page.keyboard.press('ArrowRight')
   await page.keyboard.press('Tab') // in case there actually was and we switched away from the one we wanted
   await page.keyboard.press('ArrowRight')
-  await page.keyboard.press('Tab') // to restore focus to the original from the snapshot
-  expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+  expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
 })
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should not be able to swap depths with the above snake by moving onto it', ()=>{ });
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should not be able to move out from under the other snake, since it would be providing the ground for it', ()=>{ });
