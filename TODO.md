@@ -10,14 +10,21 @@
   - I have since made collectables more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
 
 - bug: can select tutorial text just after loading a level, while the splash screen is still fading out
-- bug: the whole page can scroll (saw this on mobile)
-  - possibly related: on mobile, viewport has an unintended sort of animation when resizing the view (i.e. by rotating the device), and the viewport can end up cut off in some cases
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
 - skip/merge extra undo steps for switching snakes
 - readme image
 - weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes
 - hide test levels from level select (except in tests), maybe with a URL parameter
+- should probably disallow pushing stars on top of other stars with crates
+- default active snake behavior isn't working? (`if (!activePlayer) {` in `loadLevelFromText`)
+  - `storeBaseLevelState` should probably be after this logic, although I don't know if changing that will fix the issue
+  - should also pick a snake that is able to move, if possible (with `snake.canMove`)
+- bug: ctrl+o isn't always loading a level, sometimes it just switches to edit mode for the current level
+
+- mobile viewport issues:
+  - the whole page can be scrolled if zoomed in; it can be unclear what's happening, and hard to zoom out since pinching on the canvas doesn't work
+  - on mobile, viewport has an unintended sort of animation when resizing the view (i.e. by rotating the device), and the viewport can end up cut off 
 
 - par system:
   - keep track of the fewest number of moves and best solution for each level
@@ -35,6 +42,7 @@
 
 - controls:
   - gamepad: use joystick directly instead of requiring a button press to move each tile (this should also do away with the highlight visual which is the only thing not black and white during gameplay)
+    - although perhaps the current behavior should be left in as an option, but the tile highlight should be changed to a black and white arrow of some kind
   - gamepad: key repeat
   - keyboard: key repeat
   - keyboard: cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
@@ -47,6 +55,7 @@ level editor:
   - auto-save and/or onbeforeunload
   - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
   - should be easier to deselect (escape, ctrl+d, enter?)
+    - undo should clear selection
   - rotate/flip?
   - prompt to clear entities outside level bounds when saving
   - bug: outdated tile highlight after closing level info dialog can be confusing, with the old tile size implying the dimensions aren't changed
@@ -55,7 +64,12 @@ level editor:
 - less important:
   - sound effect for restart level
   - more appropriate undo/redo sfx
+  - crate push sfx
+  - invalid move sfx
   - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
+  - 1x1 snake should change direction when moving
+    - need to store heading in a different way, to work with a single segment
+  - grass should have more natural edges
   - make black block behave identically with white in the editor, where you can't tell which is an entity and which is empty space (maybe even treat it as a 1bpp image, drawn with nearest neighbor interpolation)
     - "erase" on black to add white
     - selection tool should be able to drag black onto white even if it's not formed from entities
@@ -78,6 +92,15 @@ level editor:
 - playthrough tests:
   - upgrade the actual playthrough format
   - ensure that it's finding some levels, don't want to find out that "whoops, it's not testing anything" for such an important test
+- test flakiness:
+  - tests should be more in control of splash screens timing/hiding
+    - maybe instead of `?fast-splash-screens`, have the tests dismiss the splash screens early with a keypress, like Esc, which could be a feature available to users as well
+  - downloads are unreliable apparently, even with `acceptDownloads: true`; need a better way of getting the level state from the page
+  - levels can take some time to load after the page title is set, apparently
+- node.js 23 breaks playwright tests:
+  - How does Playwright normally load typescript files, that the new Node.js built-in support is able to interfere with?
+  - What am I supposed to do as a user?
+
 
 puzzles:
 - see `game/public/levels/sketches` folder for some ideas
