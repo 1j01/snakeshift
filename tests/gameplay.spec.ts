@@ -135,6 +135,16 @@ test('snake should be able to push a crate to its tail location, since its tail 
   await page.keyboard.press('ArrowDown')
   expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
 })
+test('boxing collectables: crates should be pushed to be underneath collectables', async ({ page }) => {
+  await loadLevelToPlay(page, 'game/public/levels/tests/boxing-collectables.json')
+  await page.keyboard.press('Tab')
+  for (let i = 0; i < 10; i++) {
+    await page.keyboard.press('ArrowRight')
+    await page.keyboard.press('ArrowLeft')
+    await page.keyboard.press('ArrowDown')
+  }
+  expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
+})
 test('snake should not move if another snake is on top', async ({ page }) => {
   await loadLevelToPlay(page, 'game/public/levels/tests/snake-on-top-should-immobilize-snake.json')
   await page.keyboard.press('Tab') // stupidly, there may be no active snake
