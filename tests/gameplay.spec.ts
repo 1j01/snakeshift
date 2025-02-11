@@ -144,7 +144,7 @@ test('snake should not move if a crate is on top', async ({ page }) => {
   await page.keyboard.press('ArrowRight')
   expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
 })
-test.fail('snake should not push a crate below another snake', async ({ page }) => {
+test('snake should not push a crate below another snake', async ({ page }) => {
   await dragAndDropFile(page, 'body', 'game/public/levels/tests/move-right-should-not-push-crate.json')
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
   await page.getByRole('button', { name: 'Play/Edit' }).click()

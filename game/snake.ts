@@ -365,10 +365,13 @@ export default class Snake extends Entity {
 
     // Push objects
     const entitiesToPush: Entity[] = []
-    for (const hit of hitsAhead) {
+    {
+      // TODO: maybe reverse order of array returned by hitTestAllEntities
+      // everywhere seems to find it unnatural how it's ordered now
+      const hit = hitsAhead.findLast(hit => hit.entity.solid)
       // TODO: try pushing other snakes too
       // TODO: recursively push crates
-      if (hit.entity instanceof Crate) {
+      if (hit?.entity instanceof Crate) {
         // Check if the crate can be pushed
         const newTile = { x: hit.entity.x + deltaX, y: hit.entity.y + deltaY, width: hit.entity.width, height: hit.entity.height }
         const hitsAheadCrate = hitTestAllEntities(newTile.x, newTile.y, { ignoreTailOfSnake: this })
