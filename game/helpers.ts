@@ -130,10 +130,15 @@ export function sortEntities() {
   })
 }
 
+/**
+ * Returns all entities at a given point, from top to bottom.
+ * 
+ * A snake's tail may be leaving the space, so it can be ignored, optionally.
+ */
 export function hitTestAllEntities(x: number, y: number, options: Partial<{ ignoreTailOfSnake: Snake | undefined }> = {}): Hit[] {
-  // A snake's tail may be leaving the space, so it can be ignored, optionally.
   const hits: Hit[] = []
-  for (const entity of entities) {
+  for (let i = entities.length - 1; i >= 0; i--) {
+    const entity = entities[i]
     if (entity instanceof Snake) {
       const hit = entity.at(x, y, true, entity !== options.ignoreTailOfSnake)
       if (hit) {
@@ -149,14 +154,16 @@ export function hitTestAllEntities(x: number, y: number, options: Partial<{ igno
   return hits
 }
 
+/**
+ * Returns the color (collision layer) of the topmost solid entity in a list of hits ordered from top to bottom.
+ */
 export function topLayer(hits: Hit[]): CollisionLayer {
-  let layer = CollisionLayer.Black
   for (const hit of hits) {
     if (hit.entity.solid) {
-      layer = hit.layer
+      return hit.layer
     }
   }
-  return layer
+  return CollisionLayer.Black
 }
 
 export function layersCollide(a: CollisionLayer, b: CollisionLayer) {

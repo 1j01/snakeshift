@@ -309,9 +309,8 @@ export function handleInputForLevelEditing(
         draggingSegmentIndex = 0 // This doesn't apply; snakes are dragged as a whole
         dragGestureLastTile = pointerDownTile
       } else {
-        // TODO: consider reversing the array to be topmost first
         const hits = hitTestAllEntities(pointerDownTile.x, pointerDownTile.y)
-        const hit = hits[hits.length - 1]
+        const hit = hits[0]
         draggingEntities = [hit?.entity].filter(Boolean)
         draggingSegmentIndex = hit?.segmentIndex ?? 0
         dragGestureLastTile = undefined

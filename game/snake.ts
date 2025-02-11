@@ -327,13 +327,11 @@ export default class Snake extends Entity {
   }
   analyzeMoveRelative(dirX: number, dirY: number): Move {
     const head = this.segments[0]
-    // const tail = this.segments[this.segments.length - 1]
     const deltaX = dirX * head.width
     const deltaY = dirY * head.height
     const x = head.x + deltaX
     const y = head.y + deltaY
     const hitsAhead = hitTestAllEntities(x, y, { ignoreTailOfSnake: this.growOnNextMove ? undefined : this })
-    // const hitsAtTail = hitTestAllEntities(tail.x, tail.y)
     const hitsAllAlong = this.segments.flatMap(segment => hitTestAllEntities(segment.x, segment.y))
     const encumbered = hitsAllAlong.some(hit =>
       hit.entity.solid &&
@@ -366,9 +364,7 @@ export default class Snake extends Entity {
     // Push objects
     const entitiesToPush: Entity[] = []
     {
-      // TODO: maybe reverse order of array returned by hitTestAllEntities
-      // everywhere seems to find it unnatural how it's ordered now
-      const hit = hitsAhead.findLast(hit => hit.entity.solid)
+      const hit = hitsAhead.find(hit => hit.entity.solid)
       // TODO: try pushing other snakes too
       // TODO: recursively push crates
       if (hit?.entity instanceof Crate) {

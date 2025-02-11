@@ -48,7 +48,6 @@ export function handleInput(
     const snakeUnderPointer = (event: { clientX: number, clientY: number }): Snake | undefined => {
       const mouseTile = pageToWorldTile(event)
       const hits = hitTestAllEntities(mouseTile.x, mouseTile.y)
-      hits.reverse() // prioritize higher z-index; TODO: consider reversing the order returned by hitTestAllEntities instead
       const snakeHit = hits.find((hit) => hit.entity instanceof Snake)
       return snakeHit?.entity as Snake | undefined
     }
