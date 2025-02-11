@@ -128,6 +128,13 @@ test('snake should be able to move to its tail location, since its tail will mov
   await page.keyboard.press('ArrowDown')
   expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
 })
+test('snake should be able to push a crate to its tail location, since its tail will move', async ({ page }) => {
+  // This test also includes a collectable that should be pushed along with the crate.
+  await loadLevelToPlay(page, 'game/public/levels/tests/snake-should-be-able-to-push-crate-down-to-its-tail.json')
+  await page.keyboard.press('Tab') // stupidly, there may be no active snake
+  await page.keyboard.press('ArrowDown')
+  expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
+})
 test('snake should not move if another snake is on top', async ({ page }) => {
   await loadLevelToPlay(page, 'game/public/levels/tests/snake-on-top-should-immobilize-snake.json')
   await page.keyboard.press('Tab') // stupidly, there may be no active snake
