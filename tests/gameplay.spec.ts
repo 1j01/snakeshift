@@ -107,8 +107,27 @@ test('snake should not move through other snakes of the same color, or push snak
 
   await snakeShouldBeTrappedIn3x3Area(page)
 })
-test.skip('snake should not move through itself', () => { /* TODO */ })
-test.skip('snake should be able to move to its tail location, since its tail will move', () => { /* TODO */ })
+test('snake should not move through itself', async ({ page }) => {
+  await loadLevelToPlay(page, 'game/public/levels/tests/snake-should-not-move-through-itself-left-or-down.json')
+  await page.keyboard.press('Tab') // this level should have an active snake since I saved it from play mode, but just in case
+  // const originalContent = await saveLevelFileAndGetContent(page)
+  await page.keyboard.press('ArrowLeft')
+  // expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+  await page.keyboard.press('ArrowDown')
+  // expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+  // Maybe snapshots are better, since they won't falsely pass if the level simply isn't loaded...
+  // Oh yeah, the other way I was doing this was loading the file from the test's side for comparison,
+  // using saveLevelFileAndCompareContent, but that assumes the file serializes the same.
+  expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
+})
+test('snake should be able to move to its tail location, since its tail will move', async ({ page }) => {
+  // This is really covered by playthrough tests, but it's fine to have a simple test for it.
+  // But invalid move tests are more important, since they're not covered by playthroughs.
+  await loadLevelToPlay(page, 'game/public/levels/tests/snake-should-be-able-to-move-down-to-its-tail.json')
+  await page.keyboard.press('Tab') // stupidly, there may be no active snake
+  await page.keyboard.press('ArrowDown')
+  expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
+})
 test('snake should not move if another snake is on top', async ({ page }) => {
   await loadLevelToPlay(page, 'game/public/levels/tests/snake-on-top-should-immobilize-snake.json')
   await page.keyboard.press('Tab') // stupidly, there may be no active snake
