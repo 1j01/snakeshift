@@ -35,6 +35,15 @@ export const dragAndDropFile = async (
   await page.dispatchEvent(selector, 'drop', { dataTransfer })
 }
 
+export async function loadLevelToPlay(page: Page, filePath: string) {
+  // TODO: fix flakiness (maybe wait for network idle?)
+  await dragAndDropFile(page, 'body', filePath)
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page.locator('#level-splash')).not.toBeVisible() // wait for level splash to disappear if applicable
+  // await expect(page).toHaveTitle('Snakeshift - Custom Level')
+}
+
 async function streamToString(stream: Readable): Promise<string> {
   const chunks: Buffer[] = []
   for await (const chunk of stream) {
