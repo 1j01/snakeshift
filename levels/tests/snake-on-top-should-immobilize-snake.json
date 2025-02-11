@@ -1,0 +1,74 @@
+{
+  "format": "snakeshift",
+  "formatVersion": 4,
+  "levelInfo": {
+    "width": 3,
+    "height": 3
+  },
+  "entities": [
+    {
+      "id": "24a58bc2-2dde-4272-be18-c565f65cd4bf",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 0,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    },
+    {
+      "solid": true,
+      "x": 1,
+      "y": 0,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 2,
+      "y": 0,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "id": "99e31e33-a9bd-4784-b98f-f13aee878921",
+      "segments": [
+        {
+          "layer": 2,
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 2,
+          "x": 1,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    }
+  ],
+  "entityTypes": [
+    "Snake",
+    "Block",
+    "Block",
+    "Snake"
+  ],
+  "activePlayerEntityIndex": -1,
+  "levelId": ""
+}
