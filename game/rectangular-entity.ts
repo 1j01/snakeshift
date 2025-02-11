@@ -14,6 +14,8 @@ grassTexture.height = 128
 // TODO: integrate with resource loading used for audio
 await grassTextureLoaded
 
+let grassPattern: CanvasPattern | null = null
+
 export class RectangularEntity extends Entity {
   constructor(
     public x = 0,
@@ -60,7 +62,22 @@ export class RectangularEntity extends Entity {
         }
       }
     } else if (this.layer === CollisionLayer.None) {
-      ctx.drawImage(grassTexture, this.x, this.y, this.width + pixel, this.height + pixel)
+      // drawImage is REALLY slow, so we use a pattern instead
+      // ctx.drawImage(grassTexture, this.x, this.y, this.width + pixel, this.height + pixel)
+      if (!grassPattern) {
+        grassPattern = ctx.createPattern(grassTexture, 'repeat')
+        const grassTextureCanvas = document.createElement('canvas')
+        grassTextureCanvas.width = grassTexture.width
+        grassTextureCanvas.height = grassTexture.height
+        const grassTextureCtx = grassTextureCanvas.getContext('2d')!
+        grassTextureCtx.drawImage(grassTexture, 0, 0, grassTexture.width, grassTexture.height)
+        grassPattern = ctx.createPattern(grassTextureCanvas, 'repeat')
+      }
+      if (grassPattern) {
+        grassPattern.setTransform(new DOMMatrix().scale(1 / grassTexture.width, 1 / grassTexture.height))
+        ctx.fillStyle = grassPattern
+        ctx.fillRect(this.x, this.y, this.width + pixel, this.height + pixel)
+      }
     } else {
       ctx.fillStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
       ctx.fillRect(this.x, this.y, this.width + pixel, this.height + pixel)
