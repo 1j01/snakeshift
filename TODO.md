@@ -17,9 +17,6 @@
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes
 - hide test levels from level select (except in tests), maybe with a URL parameter
 - should probably disallow pushing stars on top of other stars with crates
-- default active snake behavior isn't working? (`if (!activePlayer) {` in `loadLevelFromText`)
-  - `storeBaseLevelState` should probably be after this logic, although I don't know if changing that will fix the issue
-  - should also pick a snake that is able to move, if possible (with `snake.canMove`)
 - bug: ctrl+o isn't always loading a level, sometimes it just switches to edit mode for the current level
 
 - mobile viewport issues:

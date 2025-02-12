@@ -2,7 +2,7 @@ import { playSound } from "./audio"
 import { Collectable } from "./collectable"
 import { Crate } from "./crate"
 import Entity from "./entity"
-import { checkLevelWon, shouldInputBeAllowed } from "./game"
+import { checkLevelWon } from "./game"
 import { entities, undoable } from "./game-state"
 import { hitTestAllEntities, layersCollide, sortEntities, topLayer, translateEntity, withinLevel } from "./helpers"
 import { selectedEntities } from "./level-editor"
@@ -399,9 +399,7 @@ export default class Snake extends Entity {
         withinLevel({ x, y, width: head.width, height: head.height }) &&
         !movingBackwards &&
         !encumbered &&
-        !layersCollide(topLayer(hitsAhead), head.layer) &&
-        // HACK: This isn't the place for this. Should really prevent it at the input level.
-        shouldInputBeAllowed(),
+        !layersCollide(topLayer(hitsAhead), head.layer),
       encumbered,
       to: { x, y, width: head.width, height: head.height },
       delta: { x: deltaX, y: deltaY },

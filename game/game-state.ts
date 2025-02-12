@@ -329,17 +329,17 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play", levelId: 
   } else {
     try {
       deserialize(fileText, levelId)
-      storeBaseLevelState()
       if (!activePlayer) {
         // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
         // and anyway I have a bunch of levels saved at this point.
-        for (const entity of entities) {
-          if (entity instanceof Snake) {
-            setActivePlayer(entity)
-            break
-          }
-        }
+        // Try to select a snake that can move, then select any snake if there are no movable snakes.
+        // In REAL LEVELS there should always be a movable snake, but having only stuck snakes is very useful for TEST CASES.
+        const snakes = entities.filter(e => e instanceof Snake) as Snake[]
+        setActivePlayer(snakes.find(snake => snake.canMove()) ?? snakes[0])
+        // @ts-expect-error activePlayer is narrowed to `never` or `undefined` in this whole scope even though it may be modified by `setActivePlayer`
+        console.log("No active player found in loaded level. Selected", activePlayer?.id, activePlayer?.canMove(), snakes.map(s => s.id), snakes.map(s => s.canMove()))
       }
+      storeBaseLevelState()
     } catch (error) {
       deserialize(before.state)
       undos.splice(0, undos.length, ...before.undos)

@@ -79,7 +79,7 @@ export function handleInput(
     })
 
     on(window, "pointermove", (event) => {
-      if (!dragging || !activePlayer || !lastPointerPosition) return
+      if (!dragging || !activePlayer || !lastPointerPosition || !shouldInputBeAllowed()) return
       event.preventDefault()
 
       const deltaX = event.clientX - lastPointerPosition.x
@@ -206,6 +206,9 @@ export function handleInput(
       }
       return
     }
+    if (!shouldInputBeAllowed()) {
+      return
+    }
     const move = activePlayer.analyzeMoveRelative(dx, dy)
     if (!move.valid) {
       activePlayer.animateInvalidMove(move)
@@ -303,7 +306,7 @@ export function handleInput(
           const neighbor = neighborOf(playerTile, direction)
           hoveredTile = neighbor
           const move = activePlayer.analyzeMoveRelative(direction.x, direction.y)
-          if (hoveredTile && justPressed(0, gamepad)) {
+          if (hoveredTile && justPressed(0, gamepad) && shouldInputBeAllowed()) {
             if (move.valid) {
               // updateGameState({
               //   playerCoordinates: [hoveredTile.x, hoveredTile.y],
