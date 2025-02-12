@@ -1,1 +1,5 @@
 * text=auto
+
+# Playwright test snapshots
+# Need to disable EOL conversion because they will be matched strictly
+tests/*-snapshots/* -text
