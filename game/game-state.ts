@@ -336,8 +336,6 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play", levelId: 
         // In REAL LEVELS there should always be a movable snake, but having only stuck snakes is very useful for TEST CASES.
         const snakes = entities.filter(e => e instanceof Snake) as Snake[]
         setActivePlayer(snakes.find(snake => snake.canMove()) ?? snakes[0])
-        // @ts-expect-error activePlayer is narrowed to `never` or `undefined` in this whole scope even though it may be modified by `setActivePlayer`
-        console.log("No active player found in loaded level. Selected", activePlayer?.id, activePlayer?.canMove(), snakes.map(s => s.id), snakes.map(s => s.canMove()))
       }
       storeBaseLevelState()
     } catch (error) {
