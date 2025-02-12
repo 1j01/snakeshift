@@ -203,14 +203,3 @@ export function tileOnPage(tile: Tile): Tile {
     height: point2.y - point.y,
   }
 }
-
-window._forTesting = { tileOnPage }
-
-// TODO: can I share this interface with the tests?
-declare global {
-  interface Window {
-    _forTesting: {
-      tileOnPage: (tile: Tile) => Tile;
-    };
-  }
-}

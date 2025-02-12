@@ -1,11 +1,13 @@
 import { expect, test } from '@playwright/test'
 import { dragAndDropFile, saveLevelFileAndCompareContent } from './test-helpers'
 
-declare global {
-  interface Window {
-    playedSounds: string[]
-  }
-}
+// declare global {
+//   interface Window {
+//     _forTesting: {
+//       playedSounds: string[]
+//     }
+//   }
+// }
 
 
 test.beforeEach(async ({ page }) => {
@@ -85,7 +87,7 @@ test('you should be able to win the last level twice in a row, after returning t
   await expect(page.locator('#game-win-screen')).not.toBeVisible()
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('#game-win-screen')).toBeVisible()
-  expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
+  expect(await page.evaluate(() => window._forTesting.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
   await page.getByRole('button', { name: 'Back' }).click()
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click()
@@ -283,7 +285,7 @@ test('should not allow movement after the game is won', async ({ page }) => {
   await expect(page).toHaveTitle(/^Snakeshift - Test Level 999 \(Just move right to win\)$/)
   await expect(page.locator('#level-splash-title')).toBeVisible()
   await expect(page.locator('#level-splash-title')).not.toBeVisible()
-  expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong'])
+  expect(await page.evaluate(() => window._forTesting.playedSounds)).toEqual(['gong'])
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('#game-win-screen')).toBeVisible()
 
@@ -303,17 +305,17 @@ test('should not allow movement after the game is won', async ({ page }) => {
 
   // Instead, check that the win sound effect is not played, which is the observable thing anyways, with the splash screen in the way of the canvas.
   // The game win sound effect should have already played, but should not play again.
-  expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
+  expect(await page.evaluate(() => window._forTesting.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
   await page.keyboard.press('ArrowRight')
-  expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
+  expect(await page.evaluate(() => window._forTesting.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
   await page.keyboard.press('ArrowUp')
-  expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
+  expect(await page.evaluate(() => window._forTesting.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
   await page.keyboard.press('ArrowDown')
-  expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
+  expect(await page.evaluate(() => window._forTesting.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
   // Also test that you can't switch between snakes while the splash screen is shown
   // TODO: add a second snake to the level to make sure this is tested
   await page.keyboard.press('Tab')
-  expect(await page.evaluate(() => window.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
+  expect(await page.evaluate(() => window._forTesting.playedSounds)).toEqual(['gong', 'move', 'gongBrilliant'])
 })
 
 test('should confirm discarding unsaved changes in edit mode', async ({ page }) => {

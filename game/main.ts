@@ -5,6 +5,7 @@ import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translat
 import { initLevelSelect } from "./level-select"
 import { initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
+import './testing-interface'
 
 export const playEditToggleButton = document.querySelector<HTMLButtonElement>('#play-edit-toggle-button')!
 const restartLevelButton = document.querySelector<HTMLButtonElement>('#restart-level-button')!
