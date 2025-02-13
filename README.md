@@ -94,7 +94,7 @@ When the file format changes, increment `FORMAT_VERSION` and add an upgrade step
 To update all levels to the new format, run:
 
 ```sh
-node update-level-format.js
+npm run update-level-format
 ```
 
 ### Deployment

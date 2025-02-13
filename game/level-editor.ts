@@ -275,7 +275,7 @@ export function handleInputForLevelEditing(
       if (collectablesHere.length > 1) {
         addProblem(collectablesHere[1], "overlap")
         // Automatically delete
-        // quick hack, using `node update-level-format.js` script to fix all levels
+        // quick hack, using `npm run update-level-format` script to fix all levels
         // for (let i = 1; i < collectablesHere.length; i++) {
         //   entities.splice(entities.indexOf(collectablesHere[i]), 1)
         // }

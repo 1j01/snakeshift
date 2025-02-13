@@ -21,7 +21,8 @@
     "lint-eslint": "eslint -c .eslintrc.cjs --ext .ts game tests",
     "lint-ts": "tsc --noEmit",
     "lint": "npm-run-all --continue-on-error --serial lint-*",
-    "test": "playwright test"
+    "test": "playwright test",
+    "update-level-format": "node update-level-format.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.1",
