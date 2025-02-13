@@ -63,9 +63,7 @@ void (async () => {
 
     // Load the level in the editor
     const fileChooserPromise = page.waitForEvent('filechooser')
-    await page.keyboard.down('Control')
-    await page.keyboard.press('KeyO')
-    await page.keyboard.up('Control')
+    await page.keyboard.press('Control+KeyO')
     const fileChooser = await fileChooserPromise
     await fileChooser.setFiles(filePath)
 
@@ -73,9 +71,7 @@ void (async () => {
 
     // Save the level
     const downloadPromise = page.waitForEvent('download')
-    await page.keyboard.down('Control')
-    await page.keyboard.press('KeyS')
-    await page.keyboard.up('Control')
+    await page.keyboard.press('Control+KeyS')
     const download = await downloadPromise
     await download.saveAs(filePath)
 
