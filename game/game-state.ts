@@ -211,9 +211,20 @@ export function setActivePlayer(snake: Snake | undefined) {
   postUpdate()
 }
 
+export function guessDefaultActivePlayer() {
+  if (!activePlayer) {
+    // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
+    // and anyway I have a bunch of levels saved at this point.
+    // Try to select a snake that can move, then select any snake if there are no movable snakes.
+    // In REAL LEVELS there should always be a movable snake, but having only stuck snakes is very useful for TEST CASES.
+    const snakes = entities.filter(e => e instanceof Snake) as Snake[]
+    setActivePlayer(snakes.find(snake => snake.canMove()) ?? snakes[0])
+  }
+}
+
 declare global {
   interface Window {
-    _winLevelCheat?: boolean;
+    _winLevelCheat?: boolean
   }
 }
 
@@ -329,14 +340,7 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play", levelId: 
   } else {
     try {
       deserialize(fileText, levelId)
-      if (!activePlayer) {
-        // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
-        // and anyway I have a bunch of levels saved at this point.
-        // Try to select a snake that can move, then select any snake if there are no movable snakes.
-        // In REAL LEVELS there should always be a movable snake, but having only stuck snakes is very useful for TEST CASES.
-        const snakes = entities.filter(e => e instanceof Snake) as Snake[]
-        setActivePlayer(snakes.find(snake => snake.canMove()) ?? snakes[0])
-      }
+      guessDefaultActivePlayer()
       storeBaseLevelState()
     } catch (error) {
       deserialize(before.state)

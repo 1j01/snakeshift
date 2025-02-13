@@ -31,7 +31,7 @@ test.describe('level editor', () => {
     test.skip('should not place entities outside level boundaries (including snakes)', () => { /* TODO */ })
   })
   test.describe('default snake focus', () => {
-    test.fail('should focus first movable snake', async ({ page }) => {
+    test('should focus first movable snake', async ({ page }) => {
       const snakePos1 = { x: 1, y: 1 }
       const snakePos2 = { x: 5, y: 1 }
       // Place snakes
@@ -53,7 +53,7 @@ test.describe('level editor', () => {
       await page.keyboard.press('ArrowRight')
       await expect(page.getByText('Level Complete')).toBeVisible()
     })
-    test.fail('should focus first snake if none can move', async ({ page }) => {
+    test('should focus first snake if none can move', async ({ page }) => {
       const snakePos1 = { x: 1, y: 1 }
       const snakePos2 = { x: 5, y: 1 }
       // Place snakes

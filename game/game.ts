@@ -1,5 +1,5 @@
 import { Collectable } from "./collectable"
-import { clearLevel, deserialize, entities, onUpdate, redos, serialize, undoable, undos } from "./game-state"
+import { clearLevel, deserialize, entities, guessDefaultActivePlayer, onUpdate, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
 import { currentLevelID, loadLevelFile, loadNextLevel, setStandaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
@@ -52,6 +52,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     levelHasGoal = entities.some(e => e instanceof Collectable)
     undos.length = 0
     redos.length = 0
+    guessDefaultActivePlayer()
   } else {
     setStandaloneLevelMode()
     cleanup = handleInput(canvas)
