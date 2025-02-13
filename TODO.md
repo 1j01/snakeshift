@@ -1,19 +1,9 @@
 # Snakeshift Todo List
 
-- hard to see/understand snakes' shapes when overlapping
-  - outline shouldn't intersect 
-  - might help to change the style back to originally intended style (i.e. rounded corners, instead of boxy creases)
-  - might help to add scales
-  - probably need texture-based rendering to sort this out
-  - oh, could prevent key repeat on switching snakes, and make it keep the highlight as long as the key is held
-- feels like you shouldn't be able to go on top of another snake's head, like you'd eat the snake
-  - I have since made collectables more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
-
 - bug: can select tutorial text just after loading a level, while the splash screen is still fading out
 - handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
 - skip/merge extra undo steps for switching snakes
 - readme image
-- weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes
 - hide test levels from level select (except in tests), maybe with a URL parameter
 - should probably disallow pushing stars on top of other stars with crates
@@ -56,24 +46,43 @@ level editor:
   - rotate/flip?
   - prompt to clear entities outside level bounds when saving
   - bug: outdated tile highlight after closing level info dialog can be confusing, with the old tile size implying the dimensions aren't changed
+  - handle edge case of toggling edit mode while dragging something
   - restart button doesn't make sense in level editor; clear is the closest, could replace it, and move other action buttons in the level editor into the game options bar
-
-- less important:
-  - sound effect for restart level
-  - more appropriate undo/redo sfx
-  - crate push sfx
-  - invalid move sfx
-  - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
-  - 1x1 snake should change direction when moving
-    - need to store heading in a different way, to work with a single segment
-  - grass should have more natural edges
-  - make black block behave identically with white in the editor, where you can't tell which is an entity and which is empty space (maybe even treat it as a 1bpp image, drawn with nearest neighbor interpolation)
+  - make black and white behave symmetrically, where you can't tell which is an entity and which is empty space
     - "erase" on black to add white
     - selection tool should be able to drag black onto white even if it's not formed from entities
-  - handle edge case of toggling edit mode while dragging something
+    - maybe change it to store background tiles as a grid instead of walls being part of the list of entities
+
+- aesthetics:
+  - visuals:
+    - enlarge level border
+    - 1x1 snake should change direction when moving
+      - need to store heading in a different way, to work with a single segment
+    - do something about weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
+    - grass should have more natural edges
+    - possibly obsolete feedback:
+      - hard to see/understand snakes' shapes when overlapping
+        - outline shouldn't intersect 
+        - might help to change the style back to originally intended style (i.e. rounded corners, instead of boxy creases)
+        - might help to add scales
+        - probably need texture-based rendering to sort this out
+        - oh, could prevent key repeat on switching snakes, and make it keep the highlight as long as the key is held
+      - feels like you shouldn't be able to go on top of another snake's head, like you'd eat the snake
+        - I have since made collectables more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
+  - animation:
+    - when snake is encumbered by another snake (or crate): wriggle whole snake? so far I've implemented x eyes, but you can't always see the head
+    - pushing crates (or snakes?) into a wall: push crash slightly through wall? or squash it? I think it shouldn't look too weird with the monochrome aesthetic masking the overlap in silhouette  
+    - moving normally: animate snake along path
+  - audio:
+    - sound effect for restart level
+    - more appropriate undo/redo sfx
+    - crate push sfx
+    - invalid move sfx
+
+- less important:
+  - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
   - reign in `onUpdate` over-extension/repurposing/overuse, maybe adding an onResize in renderer or something
   - preload levels, and share cache between level select's level previews and level loading
-  - enlarge level border
   - bug: undoing isn't hiding game win screen... right away, consistently? test might not catch this if it's a delay; not sure if it was a delay or it required hitting undo multiple times
   - update tutorial text to recommend numpad 5 instead of numpad 2?
   - configure eslint rules
@@ -86,17 +95,17 @@ level editor:
     - see `/* TODO: hide back button properly, for (in)accessibility */`
 
 
-- playthrough tests:
-  - upgrade the actual playthrough format
-  - ensure that it's finding some levels, don't want to find out that "whoops, it's not testing anything" for such an important test
-- test flakiness:
-  - tests should be more in control of splash screens timing/hiding
-    - maybe instead of `?fast-splash-screens`, have the tests dismiss the splash screens early with a keypress, like Esc, which could be a feature available to users as well
-  - levels can take some time to load after the page title is set, apparently
-- node.js 23 breaks playwright tests:
-  - How does Playwright normally load typescript files, that the new Node.js built-in support is able to interfere with?
-  - What am I supposed to do as a user?
-
+- tests:
+  - game playthrough test:
+    - upgrade the playthrough format to include inputs instead of inferring them
+    - ensure that it's finding some levels; don't want to find out that "whoops, it's not testing anything" for such an important test
+  - flakiness:
+    - tests should be more in control of splash screens timing/hiding
+      - maybe instead of `?fast-splash-screens`, have the tests dismiss the splash screens early with a keypress, like Esc, which could be a feature available to users as well
+    - levels can take some time to load after the page title is set, apparently
+  - Node.js 23 breaks Playwright tests:
+    - How does Playwright normally load typescript files, that the new Node.js built-in support is able to interfere with?
+    - What am I supposed to do as a user?
 
 puzzles:
 - see `game/public/levels/sketches` folder for some ideas
@@ -134,9 +143,4 @@ mechanics:
 - super-food pickup that makes you grow 3 or something, maybe indefinitely
   - appearance: star like normal food except with alternating black and white concentric scaled copies zooming like a fractal, possibly rotated for a spiral effect
     - implies it can be eaten by any snake, which is fine
-
-animation:
-- when snake is encumbered by another snake (or crate): wriggle whole snake? so far I've implemented x eyes, but you can't always see the head
-- pushing crates (or snakes?) into a wall: push crash slightly through wall? or squash it? I think it shouldn't look too weird with the monochrome aesthetic masking the overlap in silhouette  
-- moving normally: animate snake along path
 
