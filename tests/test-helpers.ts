@@ -2,6 +2,7 @@ import { Page, expect } from '@playwright/test'
 import { readFile } from 'fs/promises'
 import { basename } from 'path'
 import { Readable } from 'stream'
+import { Tile } from '../game/types'
 
 export const dragAndDropFile = async (
   page: Page,
@@ -65,4 +66,13 @@ export async function saveLevelFileAndCompareContent(page: Page, filePath: strin
   const expectedContent = await readFile(filePath, 'utf8')
   const actualContent = await saveLevelFileAndGetContent(page)
   expect(actualContent).toEqual(expectedContent)
+}
+
+export async function clickTile(page: Page, x: number, y: number) {
+  const tile = { x, y, width: 1, height: 1 }
+  const rect = await page.evaluate<Tile, Tile>((tile) => {
+    return window._forTesting.tileOnPage(tile)
+  }, tile)
+  const rectCenter = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
+  await page.mouse.click(rectCenter.x, rectCenter.y)
 }

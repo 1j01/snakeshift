@@ -1,13 +1,25 @@
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
+import { clickTile, saveLevelFileAndGetContent } from './test-helpers'
+
 
 test.beforeEach(async ({ page }) => {
+
+  // Snapshot testing doesn't work if IDs change.
+  // I could normalize them by find and replace, but that would be brittle/complex.
+  // Better to mock the function used to generate the IDs.
+  await page.addInitScript({
+    content: `let id=1; window.crypto.randomUUID = () => \`mocked randomUUID: \${(id++).toString()}\`;`
+  })
+
   await page.goto('http://localhost:5569/?fast-splash-screens')
-  await page.getByRole('button', { name: 'Level Editor' }).click()
 
   // Fail test on any page error
+  // TODO: move this earlier, also in other tests
   page.on('pageerror', (error) => {
     throw new Error(`Uncaught exception: ${error.stack}`)
   })
+
+  await page.getByRole('button', { name: 'Level Editor' }).click()
 })
 
 test.describe('level editor', () => {
@@ -17,6 +29,62 @@ test.describe('level editor', () => {
     test.skip('should not place collectables on the same color of wall or snake', () => { /* TODO */ })
     test.skip('should not place collectables on top of other collectables', () => { /* TODO */ })
     test.skip('should not place entities outside level boundaries (including snakes)', () => { /* TODO */ })
+  })
+  test.describe('default snake focus', () => {
+    test.fail('should focus first movable snake', async ({ page }) => {
+      const snakePos1 = { x: 1, y: 1 }
+      const snakePos2 = { x: 5, y: 1 }
+      // Place snakes
+      await page.getByRole('button', { name: 'Snake (White)' }).click()
+      await clickTile(page, snakePos1.x, snakePos1.y)
+      await clickTile(page, snakePos2.x, snakePos2.y)
+      // Surround the first snake with walls
+      await page.getByRole('button', { name: 'Wall (White)' }).click()
+      for (const dir of [{ x: -1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 0 }, { x: 0, y: -1 }]) {
+        await clickTile(page, snakePos1.x + dir.x, snakePos1.y + dir.y)
+      }
+      // Place goal next to second snake
+      await page.getByRole('button', { name: 'Food (White)' }).click()
+      await clickTile(page, snakePos2.x + 1, snakePos2.y)
+      // Play
+      await page.getByRole('button', { name: 'Play/Edit' }).click()
+      await expect(page).toHaveTitle('Snakeshift - Custom Level')
+      await expect(page.locator('#level-splash-title')).not.toBeVisible()
+      await page.keyboard.press('ArrowRight')
+      await expect(page.getByText('Level Complete')).toBeVisible()
+    })
+    test.fail('should focus first snake if none can move', async ({ page }) => {
+      const snakePos1 = { x: 1, y: 1 }
+      const snakePos2 = { x: 5, y: 1 }
+      // Place snakes
+      await page.getByRole('button', { name: 'Snake (White)' }).click()
+      await clickTile(page, snakePos1.x, snakePos1.y)
+      await clickTile(page, snakePos2.x, snakePos2.y)
+      // Surround both snakes with walls
+      await page.getByRole('button', { name: 'Wall (White)' }).click()
+      for (const snakePos of [snakePos1, snakePos2]) {
+        for (const dir of [{ x: -1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 0 }, { x: 0, y: -1 }]) {
+          await clickTile(page, snakePos.x + dir.x, snakePos.y + dir.y)
+        }
+      }
+      // Play
+      await page.getByRole('button', { name: 'Play/Edit' }).click()
+      await expect(page).toHaveTitle('Snakeshift - Custom Level')
+      await expect(page.locator('#level-splash-title')).not.toBeVisible()
+      await page.keyboard.press('ArrowRight')
+      // TODO: expect invalid move sound (none yet)
+      expect(await page.evaluate(() => window._forTesting.playedSounds)).not.toContain(['move'])
+      // A snapshot test doesn't test much here...
+      // The level shouldn't be changed by moving invalidly.
+      // I know what we can do. If we press tab twice, it should end up on the same snake.
+      // If it hadn't focused a snake by default, it will end up on the first snake.
+      const snapshot1 = await saveLevelFileAndGetContent(page)
+      await page.keyboard.press('Tab')
+      await page.keyboard.press('Tab')
+      const snapshot2 = await saveLevelFileAndGetContent(page)
+      expect(snapshot1).toEqual(snapshot2)
+      expect(snapshot1).toMatchSnapshot()
+    })
   })
   test.describe('move tool', () => {
     test.skip('move tool should let you move rectangular entities', () => { /* TODO */ })
