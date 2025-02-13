@@ -203,6 +203,77 @@ export const playSound = (soundName: SoundID, { playbackRate = 1, volume = 1, cu
   }
 }
 
+const midiToFreq = (midiNote: number) => 440 * Math.pow(2, (midiNote - 69) / 12)
+// const songABC = `
+// X:231
+// T:The Snake Charmer Song
+// T:The Streets of Cairo
+// Z:Jack Campin, http://www.campin.me.uk/
+// F:Jack Campin's Nine-Note Tunebook
+// % last edit 03-02-2013
+// C:Sol Bloom and James Thornton, 1893
+// H:see http://www.shira.net/streets-of-cairo.htm
+// M:4/4
+// L:1/8
+// Q:1/4=120
+// K:DMin
+// DE| F2 E2 D2 DE|FA  EF  D2   :|\
+// z2| AA AB AG EF|
+//                 GG  GA  GF     \
+// DE| FF FG FE DE|F2  EE  D2 z2||
+// K:F
+//   |:A4    A3  F|G>A G>F D2 C2 |\
+// [1  F2 A2 c2 d2|
+//                 c2  d2  cA G2:|\
+// [2  F2 AF G2 A2|F4      z2   |]
+// `
+// Original compositions/improvisations, trying to make it sound good when played with one note every beat since the rhythm is in the player's hands so the only obvious way to play it is 4 on the floor.
+// const songABC = "c d e f g a f g e f d e c d"
+// const songABC = "c d e f g a b a g f e d c d e d g f a b a f g e f c d g, d ,a c e g b a b g e"
+// songABC = "c d e g a c e a f
+// const songABC = `
+// X:1
+// T:2025 02 02T064421Z CDEGA Patter (One Note Every Beat)
+// L:1/4
+// Q:1/4=120
+// M:4/4
+// K:none
+// %%stretchlast true
+// V:1 treble
+// V:1
+//  C- C/4 (6:5:1D E G/ z/ | (3:2:1z/4 A (6:5:1C F A (3:2:1G/4- | (6:5:1G C (6:5:2E z/8 G F/- | F/ (6:5:2E z/8 C3/4 (6:5:1A, G, C/4- |
+//  (12:7:2C D (6:5:2F E (6:5:2C G,/4- | (6:5:2G, E (6:5:1D B,3/4 (6:5:2G, D/- | D/ (3:2:2C G, E,3/4 (6:5:1G, C,/- | C,7/2 z/ |
+//  z4 | D,3/4 E, G, A,3/4 F,3/4- | F,/4 (6:5:2C A, (6:5:1E D3/4 (3:2:2C A,/4- | (6:5:2A, F (3:2:1E C3/4 A,3/4 (3:2:2z/8 G,/4- (3:2:1G,/4- |
+//  (48:35:2G,4 A, (3:2:1C/- | (3:2:2C/ E- (3:2:2E/4 G (3E C G,- | (3:2:1G,/4 A3/4 (3G D B, E3/4 G/4- | G/ (3:2:2C E G,3/4 C3/4 (3:2:2E, G,/4- |
+//  (12:7:2G, z/8 (6:5:1C, G, G,, (6:5:1E,- | (3:2:1E,/ C, G,,- G,,/4 C,,3/2- (3:2:1[EcC]/4- | (3:2:2C,,/4 [EcC]2 (12:7:1z4 |]
+// `
+// The above was recorded with midi-recorder.web.app and then converted to ABC notation with https://michaeleskin.com/abctools/abctools.html
+// It has a lot of timing information that I don't want and complex formatting that I don't want to try to understand.
+// I used the rendering with note names shown, and selected the text and copied it and deleted extra stuff, giving the following.
+// (This loses octaves but maybe that's fine.)
+// spell-checker:disable
+const songABC = `CDEGACFAGCEGFECAGCDFECGEDBGDCGEGCDEGAFCAEDCAFECAGACEGECGAGDBEGCEGCEGCGGECGC`
+// spell-checker:enable
+
+const melodyMidi = [...songABC.replace(/^([A-Z]:|%).*$/gim, "").matchAll(/([A-G])([,'])*/gi)].map(match => {
+  const letter = match[1]
+  const octaveModifier = match[2] === "'" ? 1 : match[2] === "," ? -1 : 0
+  const octave = (letter === letter.toUpperCase() ? 1 : 0) + octaveModifier
+  const midiNote = 12 * (octave + 4) + 'CDEFGAB'.indexOf(letter.toUpperCase())
+  return midiNote
+})
+const melodyFrequencies = melodyMidi.map(midiToFreq)
+export const playMelodicSound = (soundName: SoundID, noteIndex: number) => {
+  // const playbackRate = Math.pow(2, this.segments.length / 10) / 10
+  // const playbackRate = [1, 2, 3, 4, 5, 6, 4, 3, 2][this.segments.length % 8] * 10
+  // const scale = [1, 9 / 8, 5 / 4, 4 / 3, 3 / 2, 5 / 3, 15 / 8, 2]
+  // const playbackRate = scale[this.segments.length % scale.length]
+
+  // const playbackRate = melodyFrequencies[this.segments.length % melodyFrequencies.length] / 440
+  const playbackRate = melodyFrequencies[noteIndex % melodyFrequencies.length] / 440
+  playSound(soundName, { playbackRate })
+}
+
 muteButton.addEventListener("click", () => {
   toggleMute()
 })
