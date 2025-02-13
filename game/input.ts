@@ -39,7 +39,7 @@ export function handleInput(
   const MOVE_THRESHOLD = 40
 
   let dragging = false
-  let lastPointerPosition: { x: number; y: number } | undefined = undefined
+  let lastPointerPosition: { x: number, y: number } | undefined = undefined
 
   if (activityMode !== "menu") {
     let pointerDownSnake: Snake | undefined = undefined

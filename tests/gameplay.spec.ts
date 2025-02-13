@@ -166,7 +166,7 @@ test('should not show a message about restarting/undoing if only one snake is st
 })
 
 
-type MoveInput = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | { click: Tile };
+type MoveInput = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | { click: Tile }
 
 test('game should be beatable (using recorded playthroughs)', async ({ page }) => {
   test.setTimeout(1000 * 60 * 60) // 1 hour
@@ -219,7 +219,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
         } else {
           await page.keyboard.press(move)
         }
-        // await page.waitForTimeout(100); // for nice viewing
+        // await page.waitForTimeout(100) // for nice viewing
       }
     }
     // Could simplify this by checking if it's the last iteration (last level)
@@ -232,9 +232,9 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
   await expect(page.locator('#game-win-screen')).toBeVisible()
 })
 
-type EntityLike = Entity & { _type: string };
-function isEntityOfType(entity: EntityLike, type: "Snake"): entity is Snake & { _type: "Snake" };
-function isEntityOfType(entity: EntityLike, type: "Collectable"): entity is Collectable & { _type: "Collectable" };
+type EntityLike = Entity & { _type: string }
+function isEntityOfType(entity: EntityLike, type: "Snake"): entity is Snake & { _type: "Snake" }
+function isEntityOfType(entity: EntityLike, type: "Collectable"): entity is Collectable & { _type: "Collectable" }
 function isEntityOfType(entity: EntityLike, type: "Snake" | "Collectable"): boolean {
   return entity._type === type
 }

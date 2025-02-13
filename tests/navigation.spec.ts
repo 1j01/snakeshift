@@ -147,7 +147,7 @@ test('should stay on the same level when switching to edit mode after winning a 
   await page.keyboard.press('Backquote')
   // Might change the title in the future to say the level name + " (Edited)" or something
   await expect(page).toHaveTitle('Snakeshift - Custom Level')
-  // await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)');
+  // await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   // We can compare the file content instead.
   await saveLevelFileAndCompareContent(page, 'game/public/levels/tests/move-left-to-win.json')
 })
@@ -260,7 +260,7 @@ test('should not allow movement while level win splash screen is shown', async (
   await expect(page.locator('#level-splash-title')).not.toBeVisible()
   // If the previous Up+Left took place, Down will win the level. But it should be the first allowed movement.
   await page.keyboard.press('ArrowDown')
-  // await expect(page.locator('#level-splash-title')).not.toBeVisible(); // would wait for it to hide, not check that it was never shown
+  // await expect(page.locator('#level-splash-title')).not.toBeVisible() // would wait for it to hide, not check that it was never shown
   expect(await page.locator('#level-splash-title').isVisible()).toBeFalsy()
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   await page.keyboard.press('ArrowLeft')
@@ -285,14 +285,14 @@ test('should not allow movement after the game is won', async ({ page }) => {
   // Or if it doesn't reset the same DOM state that this test manipulates when the level is won.
   // So it would only make sense if the game stores the state of the level win splash screen in a variable, and this test hides the splash screen in a way that the game will naturally reverse.
   // Not a good test.
-  // await page.evaluate(() => document.querySelector('#game-win-screen')!.classList.remove('active'));
-  // await expect(page.locator('#game-win-screen')).not.toBeVisible();
-  // await page.keyboard.press('ArrowRight');
-  // await expect(page.locator('#game-win-screen')).not.toBeVisible();
-  // await page.keyboard.press('ArrowUp');
-  // await expect(page.locator('#game-win-screen')).not.toBeVisible();
-  // await page.keyboard.press('ArrowDown');
-  // await expect(page.locator('#game-win-screen')).not.toBeVisible();
+  // await page.evaluate(() => document.querySelector('#game-win-screen')!.classList.remove('active'))
+  // await expect(page.locator('#game-win-screen')).not.toBeVisible()
+  // await page.keyboard.press('ArrowRight')
+  // await expect(page.locator('#game-win-screen')).not.toBeVisible()
+  // await page.keyboard.press('ArrowUp')
+  // await expect(page.locator('#game-win-screen')).not.toBeVisible()
+  // await page.keyboard.press('ArrowDown')
+  // await expect(page.locator('#game-win-screen')).not.toBeVisible()
 
   // Instead, check that the win sound effect is not played, which is the observable thing anyways, with the splash screen in the way of the canvas.
   // The game win sound effect should have already played, but should not play again.
