@@ -416,21 +416,25 @@ export default class Snake extends Entity {
   animateInvalidMove(move: Move): void {
     // TODO: handle canceling animations
     // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
-    let time = 0
+    const startTime = performance.now()
     const duration = move.encumbered ? 230 : 120
     const animate = () => {
-      if (time > duration) {
+      const elapsed = performance.now() - startTime
+
+      if (elapsed > duration) {
         this.previewMovement(0, 0)
         this._xEyes = false
         return
       }
-      time += 16 // TODO: use performance.now()
-      const progress = Math.min(1, time / duration)
+
+      const progress = Math.min(1, elapsed / duration)
       const pos = Math.sin(progress * Math.PI) * 0.08
       const deltaX = move.to.x - this.segments[0].x
       const deltaY = move.to.y - this.segments[0].y
+
       this._xEyes = move.encumbered
       this.previewMovement(deltaX * pos, deltaY * pos)
+
       requestAnimationFrame(animate)
     }
     animate()
