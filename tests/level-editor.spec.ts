@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { clickTile, saveLevelFileAndGetContent } from './test-helpers'
+import { clickTile, getCurrentLevelContent } from './test-helpers'
 
 
 test.beforeEach(async ({ page }) => {
@@ -81,10 +81,10 @@ test.describe('level editor', () => {
       // The level shouldn't be changed by moving invalidly.
       // I know what we can do. If we press tab twice, it should end up on the same snake.
       // If it hadn't focused a snake by default, it will end up on the first snake.
-      const snapshot1 = await saveLevelFileAndGetContent(page)
+      const snapshot1 = await getCurrentLevelContent(page)
       await page.keyboard.press('Tab')
       await page.keyboard.press('Tab')
-      const snapshot2 = await saveLevelFileAndGetContent(page)
+      const snapshot2 = await getCurrentLevelContent(page)
       expect(snapshot1).toEqual(snapshot2)
       expect(snapshot1).toMatchSnapshot()
     })

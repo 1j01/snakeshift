@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { dragAndDropFile, saveLevelFileAndCompareContent } from './test-helpers'
+import { compareCurrentLevelContentToFile, dragAndDropFile } from './test-helpers'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?fast-splash-screens')
@@ -111,7 +111,7 @@ test('should open a level for editing with drag and drop, while in level editor'
   const filePath = 'game/public/levels/tests/move-left-to-win.json'
   await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
-  await saveLevelFileAndCompareContent(page, filePath)
+  await compareCurrentLevelContentToFile(page, filePath)
 })
 
 test('should open a level for editing with drag and drop, while in play mode', async ({ page }) => {
@@ -122,14 +122,14 @@ test('should open a level for editing with drag and drop, while in play mode', a
   const filePath = 'game/public/levels/tests/move-left-to-win.json'
   await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
-  await saveLevelFileAndCompareContent(page, filePath)
+  await compareCurrentLevelContentToFile(page, filePath)
 })
 
 test('should open a level for editing with drag and drop, while in a menu', async ({ page }) => {
   const filePath = 'game/public/levels/tests/move-left-to-win.json'
   await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
-  await saveLevelFileAndCompareContent(page, filePath)
+  await compareCurrentLevelContentToFile(page, filePath)
 })
 
 test('should stay on the same level when switching to edit mode after winning a prior level', async ({ page }) => {
@@ -149,7 +149,7 @@ test('should stay on the same level when switching to edit mode after winning a 
   await expect(page).toHaveTitle('Snakeshift - Custom Level')
   // await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   // We can compare the file content instead.
-  await saveLevelFileAndCompareContent(page, 'game/public/levels/tests/move-left-to-win.json')
+  await compareCurrentLevelContentToFile(page, 'game/public/levels/tests/move-left-to-win.json')
 })
 
 test('should stay on the same level when pressing R', async ({ page }) => {

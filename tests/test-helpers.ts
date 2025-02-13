@@ -55,16 +55,16 @@ async function streamToString(stream: Readable): Promise<string> {
   return Buffer.concat(chunks).toString("utf-8")
 }
 
-export async function saveLevelFileAndGetContent(page: Page) {
+export async function getCurrentLevelContent(page: Page) {
   const downloadPromise = page.waitForEvent('download')
   await page.keyboard.press('Control+KeyS')
   const download = await downloadPromise
   const levelFileContent = await streamToString(await download.createReadStream())
   return levelFileContent
 }
-export async function saveLevelFileAndCompareContent(page: Page, filePath: string) {
+export async function compareCurrentLevelContentToFile(page: Page, filePath: string) {
   const expectedContent = await readFile(filePath, 'utf8')
-  const actualContent = await saveLevelFileAndGetContent(page)
+  const actualContent = await getCurrentLevelContent(page)
   expect(actualContent).toEqual(expectedContent)
 }
 

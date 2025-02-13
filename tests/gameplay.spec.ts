@@ -4,7 +4,7 @@ import { Collectable } from '../game/collectable.ts'
 import Entity from '../game/entity.ts'
 import Snake from '../game/snake.ts'
 import { GameState, ParsedGameState, Tile } from '../game/types.ts'
-import { loadLevelToPlay, saveLevelFileAndGetContent } from './test-helpers.ts'
+import { getCurrentLevelContent, loadLevelToPlay } from './test-helpers.ts'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?fast-splash-screens')
@@ -16,54 +16,54 @@ test.beforeEach(async ({ page }) => {
 })
 
 async function snakeShouldBeTrappedIn3x3Area(page: Page) {
-  const originalContent = await saveLevelFileAndGetContent(page)
+  const originalContent = await getCurrentLevelContent(page)
   await test.step('snake should not move past right boundary', async () => {
     // Move once to right
     await page.keyboard.press('ArrowRight')
-    const snakeToTheRight = await saveLevelFileAndGetContent(page)
+    const snakeToTheRight = await getCurrentLevelContent(page)
     expect(snakeToTheRight).not.toEqual(originalContent)
     // Move again should do nothing
     await page.keyboard.press('ArrowRight')
-    expect(await saveLevelFileAndGetContent(page)).toEqual(snakeToTheRight)
+    expect(await getCurrentLevelContent(page)).toEqual(snakeToTheRight)
     // Recenter
     await page.keyboard.press('ArrowLeft')
-    expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+    expect(await getCurrentLevelContent(page)).toEqual(originalContent)
   })
   await test.step('snake should not move past left boundary', async () => {
     // Move once to left
     await page.keyboard.press('ArrowLeft')
-    const snakeToTheLeft = await saveLevelFileAndGetContent(page)
+    const snakeToTheLeft = await getCurrentLevelContent(page)
     expect(snakeToTheLeft).not.toEqual(originalContent)
     // Move again should do nothing
     await page.keyboard.press('ArrowLeft')
-    expect(await saveLevelFileAndGetContent(page)).toEqual(snakeToTheLeft)
+    expect(await getCurrentLevelContent(page)).toEqual(snakeToTheLeft)
     // Recenter
     await page.keyboard.press('ArrowRight')
-    expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+    expect(await getCurrentLevelContent(page)).toEqual(originalContent)
   })
   await test.step('snake should not move past top boundary', async () => {
     // Move once upwards
     await page.keyboard.press('ArrowUp')
-    const snakeAtTop = await saveLevelFileAndGetContent(page)
+    const snakeAtTop = await getCurrentLevelContent(page)
     expect(snakeAtTop).not.toEqual(originalContent)
     // Move again should do nothing
     await page.keyboard.press('ArrowUp')
-    expect(await saveLevelFileAndGetContent(page)).toEqual(snakeAtTop)
+    expect(await getCurrentLevelContent(page)).toEqual(snakeAtTop)
     // Recenter
     await page.keyboard.press('ArrowDown')
-    expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+    expect(await getCurrentLevelContent(page)).toEqual(originalContent)
   })
   await test.step('snake should not move past bottom boundary', async () => {
     // Move once downwards
     await page.keyboard.press('ArrowDown')
-    const snakeAtBottom = await saveLevelFileAndGetContent(page)
+    const snakeAtBottom = await getCurrentLevelContent(page)
     expect(snakeAtBottom).not.toEqual(originalContent)
     // Move again should do nothing
     await page.keyboard.press('ArrowDown')
-    expect(await saveLevelFileAndGetContent(page)).toEqual(snakeAtBottom)
+    expect(await getCurrentLevelContent(page)).toEqual(snakeAtBottom)
     // Recenter
     await page.keyboard.press('ArrowUp')
-    expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+    expect(await getCurrentLevelContent(page)).toEqual(originalContent)
   })
 }
 
@@ -97,20 +97,20 @@ test('snake should not move through itself', async ({ page }) => {
   // Maybe snapshots are better, since they won't falsely pass if the level simply isn't loaded...
   // Oh yeah, the other way I was doing this was loading the file from the test's side for comparison,
   // using saveLevelFileAndCompareContent, but that assumes the file serializes the same.
-  expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
+  expect(await getCurrentLevelContent(page)).toMatchSnapshot()
 })
 test('snake should be able to move to its tail location, since its tail will move', async ({ page }) => {
   // This is really covered by playthrough tests, but it's fine to have a simple test for it.
   // But invalid move tests are more important, since they're not covered by playthroughs.
   await loadLevelToPlay(page, 'game/public/levels/tests/snake-should-be-able-to-move-down-to-its-tail.json')
   await page.keyboard.press('ArrowDown')
-  expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
+  expect(await getCurrentLevelContent(page)).toMatchSnapshot()
 })
 test('snake should be able to push a crate to its tail location, since its tail will move', async ({ page }) => {
   // This test also includes a collectable that should be pushed along with the crate.
   await loadLevelToPlay(page, 'game/public/levels/tests/snake-should-be-able-to-push-crate-down-to-its-tail.json')
   await page.keyboard.press('ArrowDown')
-  expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
+  expect(await getCurrentLevelContent(page)).toMatchSnapshot()
 })
 test('boxing collectables: crates should be pushed to be underneath collectables', async ({ page }) => {
   await loadLevelToPlay(page, 'game/public/levels/tests/boxing-collectables.json')
@@ -119,27 +119,27 @@ test('boxing collectables: crates should be pushed to be underneath collectables
     await page.keyboard.press('ArrowLeft')
     await page.keyboard.press('ArrowDown')
   }
-  expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
+  expect(await getCurrentLevelContent(page)).toMatchSnapshot()
 })
 test('snake should not move if another snake is on top', async ({ page }) => {
   await loadLevelToPlay(page, 'game/public/levels/tests/snake-on-top-should-immobilize-snake.json')
-  const originalContent = await saveLevelFileAndGetContent(page)
+  const originalContent = await getCurrentLevelContent(page)
   await page.keyboard.press('ArrowRight')
   await page.keyboard.press('Tab') // switch to the other snake to make sure NEITHER can move
   await page.keyboard.press('ArrowRight')
   await page.keyboard.press('Tab') // to restore focus to the original from the snapshot
-  expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+  expect(await getCurrentLevelContent(page)).toEqual(originalContent)
 })
 test('snake should not move if a crate is on top', async ({ page }) => {
   await loadLevelToPlay(page, 'game/public/levels/tests/crate-on-top-should-immobilize-snake.json')
-  const originalContent = await saveLevelFileAndGetContent(page)
+  const originalContent = await getCurrentLevelContent(page)
   await page.keyboard.press('ArrowRight')
-  expect(await saveLevelFileAndGetContent(page)).toEqual(originalContent)
+  expect(await getCurrentLevelContent(page)).toEqual(originalContent)
 })
 test('snake should not push a crate below another snake', async ({ page }) => {
   await loadLevelToPlay(page, 'game/public/levels/tests/move-right-should-not-push-crate.json')
   await page.keyboard.press('ArrowRight')
-  expect(await saveLevelFileAndGetContent(page)).toMatchSnapshot()
+  expect(await getCurrentLevelContent(page)).toMatchSnapshot()
 })
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should not be able to swap depths with the above snake by moving onto it', ()=>{ });
 // test.skip('if we WERE supporting snakes moving while another snake is on top, the snake should not be able to move out from under the other snake, since it would be providing the ground for it', ()=>{ });
