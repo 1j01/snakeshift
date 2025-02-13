@@ -9,109 +9,112 @@
 - should probably disallow pushing stars on top of other stars with crates
 - bug: ctrl+o isn't always loading a level, sometimes it just switches to edit mode for the current level
 
-- mobile viewport issues:
-  - the whole page can be scrolled if zoomed in; it can be unclear what's happening, and hard to zoom out since pinching on the canvas doesn't work
-  - on mobile, viewport has an unintended sort of animation when resizing the view (i.e. by rotating the device), and the viewport can end up cut off 
+## Mobile viewport issues
+- the whole page can be scrolled if zoomed in; it can be unclear what's happening, and hard to zoom out since pinching on the canvas doesn't work
+- on mobile, viewport has an unintended sort of animation when resizing the view (i.e. by rotating the device), and the viewport can end up cut off 
 
-- par system:
-  - keep track of the fewest number of moves and best solution for each level
-  - show the number of moves in the level select
-  - define a par for each level
-  - maybe allow viewing your best solution
-  - stretch goal: submit solutions to a server for verification and compare with others
+## Par system
+- keep track of the fewest number of moves and best solution for each level
+- show the number of moves in the level select
+- define a par for each level
+- maybe allow viewing your best solution
+- stretch goal: submit solutions to a server for verification and compare with others
 
-- saving playthroughs:
-  - limit to undos pertaining to the current level (using `levelId` which is now in the undo shape)
-  - make sure playthroughs can include the final (winning) state
-  - improve playthrough format
-    - include inputs
-      - use Move, but include the Snake's id in the Move structure
+## Saving playthroughs
+- limit to undos pertaining to the current level (using `levelId` which is now in the undo shape)
+- make sure playthroughs can include the final (winning) state
+- improve playthrough format
+  - include inputs
+    - use Move, but include the Snake's id in the Move structure
 
-- controls:
-  - gamepad: use joystick directly instead of requiring a button press to move each tile (this should also do away with the highlight visual which is the only thing not black and white during gameplay)
-    - although perhaps the current behavior should be left in as an option, but the tile highlight should be changed to a black and white arrow of some kind
-  - gamepad: key repeat
-  - keyboard: key repeat
-  - keyboard: cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
-  - touch: could try a virtual joystick/dpad as an alternative to gliding anywhere on the screen
-  - touch: when tapping to switch snakes, search for closest snake within a radius of the tap
-  - gamepad/touch support for level editor (currently requires keyboard/mouse)
-  - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
+## Controls
+- gamepad: use joystick directly instead of requiring a button press to move each tile (this should also do away with the highlight visual which is the only thing not black and white during gameplay)
+  - although perhaps the current behavior should be left in as an option, but the tile highlight should be changed to a black and white arrow of some kind
+- gamepad: key repeat
+- keyboard: key repeat
+- keyboard: cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
+- touch: could try a virtual joystick/dpad as an alternative to gliding anywhere on the screen
+- touch: when tapping to switch snakes, search for closest snake within a radius of the tap
+- gamepad/touch support for level editor (currently requires keyboard/mouse)
+- would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
 
-level editor:
-  - auto-save and/or onbeforeunload
-  - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
-  - should be easier to deselect (escape, ctrl+d, enter?)
-    - undo should clear selection
-  - rotate/flip?
-  - prompt to clear entities outside level bounds when saving
-  - bug: outdated tile highlight after closing level info dialog can be confusing, with the old tile size implying the dimensions aren't changed
-  - handle edge case of toggling edit mode while dragging something
-  - restart button doesn't make sense in level editor; clear is the closest, could replace it, and move other action buttons in the level editor into the game options bar
-  - make black and white behave symmetrically, where you can't tell which is an entity and which is empty space
-    - "erase" on black to add white
-    - selection tool should be able to drag black onto white even if it's not formed from entities
-    - maybe change it to store background tiles as a grid instead of walls being part of the list of entities
+## Level Editor
+- auto-save and/or onbeforeunload
+- bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
+- should be easier to deselect (escape, ctrl+d, enter?)
+  - undo should clear selection
+- rotate/flip?
+- prompt to clear entities outside level bounds when saving
+- bug: outdated tile highlight after closing level info dialog can be confusing, with the old tile size implying the dimensions aren't changed
+- handle edge case of toggling edit mode while dragging something
+- restart button doesn't make sense in level editor; clear is the closest, could replace it, and move other action buttons in the level editor into the game options bar
+- make black and white behave symmetrically, where you can't tell which is an entity and which is empty space
+  - "erase" on black to add white
+  - selection tool should be able to drag black onto white even if it's not formed from entities
+  - maybe change it to store background tiles as a grid instead of walls being part of the list of entities
 
-- aesthetics:
-  - visuals:
-    - enlarge level border
-    - 1x1 snake should change direction when moving
-      - need to store heading in a different way, to work with a single segment
-    - do something about weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
-    - grass should have more natural edges
-    - possibly obsolete feedback:
-      - hard to see/understand snakes' shapes when overlapping
-        - outline shouldn't intersect 
-        - might help to change the style back to originally intended style (i.e. rounded corners, instead of boxy creases)
-        - might help to add scales
-        - probably need texture-based rendering to sort this out
-        - oh, could prevent key repeat on switching snakes, and make it keep the highlight as long as the key is held
-      - feels like you shouldn't be able to go on top of another snake's head, like you'd eat the snake
-        - I have since made collectables more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
-  - animation:
-    - when snake is encumbered by another snake (or crate): wriggle whole snake? so far I've implemented x eyes, but you can't always see the head
-    - pushing crates (or snakes?) into a wall: push crash slightly through wall? or squash it? I think it shouldn't look too weird with the monochrome aesthetic masking the overlap in silhouette  
-    - moving normally: animate snake along path
-  - audio:
-    - sound effect for restart level
-    - more appropriate undo/redo sfx
-    - crate push sfx
-    - invalid move sfx
+## Aesthetics:
+- visuals:
+  - enlarge level border
+  - 1x1 snake should change direction when moving
+    - need to store heading in a different way, to work with a single segment
+  - do something about weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
+  - grass should have more natural edges
+  - possibly obsolete feedback:
+    - hard to see/understand snakes' shapes when overlapping
+      - outline shouldn't intersect 
+      - might help to change the style back to originally intended style (i.e. rounded corners, instead of boxy creases)
+      - might help to add scales
+      - probably need texture-based rendering to sort this out
+      - oh, could prevent key repeat on switching snakes, and make it keep the highlight as long as the key is held
+    - feels like you shouldn't be able to go on top of another snake's head, like you'd eat the snake
+      - I have since made collectables more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
+- animation:
+  - when snake is encumbered by another snake (or crate): wriggle whole snake? so far I've implemented x eyes, but you can't always see the head
+  - pushing crates (or snakes?) into a wall: push crash slightly through wall? or squash it? I think it shouldn't look too weird with the monochrome aesthetic masking the overlap in silhouette  
+  - moving normally: animate snake along path
+- audio:
+  - sound effect for restart level
+  - more appropriate undo/redo sfx
+  - crate push sfx
+  - invalid move sfx
 
-- less important:
-  - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
-  - reign in `onUpdate` over-extension/repurposing/overuse, maybe adding an onResize in renderer or something
-  - preload levels, and share cache between level select's level previews and level loading
-  - bug: undoing isn't hiding game win screen... right away, consistently? test might not catch this if it's a delay; not sure if it was a delay or it required hitting undo multiple times
-  - update tutorial text to recommend numpad 5 instead of numpad 2?
-  - configure eslint rules
-  - ensure accessible name for buttons when labels are hidden (include aria-label or hide label spans visually instead of using `display: none`)
-    - tooltips would also be nice... including keyboard shortcut hints
-  - hide things properly instead of relying on z-index
-    - simplify tests (remove `exact`)
-    - fix aria-keyshortcuts semantics (the attribute shouldn't be present on things that won't activate, such as some hidden buttons)
-    - fix flash of in-game controls before main menu is shown while page is loading
-    - see `/* TODO: hide back button properly, for (in)accessibility */`
+## Less important
+- shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
+- reign in `onUpdate` over-extension/repurposing/overuse, maybe adding an onResize in renderer or something
+- preload levels, and share cache between level select's level previews and level loading
+- bug: undoing isn't hiding game win screen... right away, consistently? test might not catch this if it's a delay; not sure if it was a delay or it required hitting undo multiple times
+- update tutorial text to recommend numpad 5 instead of numpad 2?
+- configure eslint rules
+- ensure accessible name for buttons when labels are hidden (include aria-label or hide label spans visually instead of using `display: none`)
+  - tooltips would also be nice... including keyboard shortcut hints
+- hide things properly instead of relying on z-index
+  - simplify tests (remove `exact`)
+  - fix aria-keyshortcuts semantics (the attribute shouldn't be present on things that won't activate, such as some hidden buttons)
+  - fix flash of in-game controls before main menu is shown while page is loading
+  - see `/* TODO: hide back button properly, for (in)accessibility */`
 
 
-- tests:
-  - game playthrough test:
-    - upgrade the playthrough format to include inputs instead of inferring them
-    - ensure that it's finding some levels; don't want to find out that "whoops, it's not testing anything" for such an important test
-  - flakiness:
-    - tests should be more in control of splash screens timing/hiding
-      - maybe instead of `?fast-splash-screens`, have the tests dismiss the splash screens early with a keypress, like Esc, which could be a feature available to users as well
-    - levels can take some time to load after the page title is set, apparently
-  - Node.js 23 breaks Playwright tests:
-    - How does Playwright normally load typescript files, that the new Node.js built-in support is able to interfere with?
-    - What am I supposed to do as a user?
+## Tests
+- game playthrough test:
+  - upgrade the playthrough format to include inputs instead of inferring them
+  - ensure that it's finding some levels; don't want to find out that "whoops, it's not testing anything" for such an important test
+- flakiness:
+  - tests should be more in control of splash screens timing/hiding
+    - maybe instead of `?fast-splash-screens`, have the tests dismiss the splash screens early with a keypress, like Esc, which could be a feature available to users as well
+  - levels can take some time to load after the page title is set, apparently
+- Node.js 23 breaks Playwright tests:
+  - How does Playwright normally load typescript files, that the new Node.js built-in support is able to interfere with?
+  - What am I supposed to do as a user?
 
-puzzles:
+## Puzzles
 - see `game/public/levels/sketches` folder for some ideas
 - lock levels are cheese-able; you can bridge the left and middle vertical lanes with the black snake; the intentionally cheese-able "security by obscurity" version can also be solved in two different ways, bridging it vertically (intended) or horizontally (in the same way as the prior level); I've got a more solid version in `proper-lock-v2` but want to consider if it makes the difference between the two levels too obvious, and maybe adjust the latter level as well (but it might be fine)
 
-mechanics:
+## Mechanics
+
+These are just ideas, not necessarily planned features.
+
 - slicing snakes
   - like the ghost peppers in [Ssspicy!](https://torcado.itch.io/ssspicy) but without awkward turn counter timing, it will slice your body into live and dead parts, and the dead parts will retain their shapes will be able to be pushed around like arbitrarily shaped crates
   - generalizes crates, so could do away with crates
