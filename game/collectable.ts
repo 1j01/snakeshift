@@ -1,6 +1,10 @@
 import { RectangularEntity } from "./rectangular-entity"
 import { CollisionLayer } from "./types"
 
+// AKA in general: collectibles, pickups, pick-ups, tokens, items, perhaps power-ups
+// AKA in specific: food, goals, dots, stars, sparkles, pellets, pills, gems, fruit, apples, prey
+// I may separate Collectable into Food and PickUp in order to support different types of collectables
+// or I could just use `solid = false` to differentiate pickups from other types of entities
 export class Collectable extends RectangularEntity {
   static readonly VISUAL_SIZE = 0.8
 
