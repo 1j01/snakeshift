@@ -8,7 +8,10 @@ test.beforeEach(async ({ page }) => {
   // I could normalize them by find and replace, but that would be brittle/complex.
   // Better to mock the function used to generate the IDs.
   await page.addInitScript({
-    content: `let id=1; window.crypto.randomUUID = () => \`mocked randomUUID: \${(id++).toString()}\`;`
+    content: `
+      let id = 1
+      window.crypto.randomUUID = () => 'mocked randomUUID: ' + (id++).toString()
+    `
   })
 
   await page.goto('http://localhost:5569/?fast-splash-screens')
