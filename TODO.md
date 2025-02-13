@@ -132,6 +132,9 @@ mechanics:
   - would probably look silly and not be worth it
 - yin yang pickup that switches the snake's color in place
   - would also have to switch the color of everything under the snake, but that might be interesting
+- super-food pickup that makes you grow 3 or something, maybe indefinitely
+  - appearance: star like normal food except with alternating black and white concentric scaled copies zooming like a fractal, possibly rotated for a spiral effect
+    - implies it can be eaten by any snake, which is fine
 
 animation:
 - when snake is encumbered by another snake (or crate): wriggle whole snake? so far I've implemented x eyes, but you can't always see the head
