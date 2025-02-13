@@ -1,4 +1,5 @@
 import { activityMode } from "./game"
+import { analyzeMoveAbsolute } from "./game-logic"
 import { activePlayer } from "./game-state"
 import { tileOnPage } from "./rendering"
 import { Tile } from "./types"
@@ -49,6 +50,6 @@ export function positionElement(element: HTMLElement, rect: Tile) {
 // Arguably it would've been simpler to just support valid as an option and && the validity,
 // which could theoretically have utility. But I did the typescript thing. It is done. Look how type-safe it is.
 export function highlightMove(tile: Tile | undefined, options: Partial<Omit<HighlightOptions, 'valid'>> = {}) {
-  const valid = tile ? activePlayer?.analyzeMoveAbsolute(tile).valid : false
+  const valid = tile && activePlayer ? analyzeMoveAbsolute(activePlayer, tile).valid : false
   setHighlight(tile, { valid, ...options })
 }

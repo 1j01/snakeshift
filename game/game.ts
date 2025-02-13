@@ -1,4 +1,5 @@
 import { Collectable } from "./collectable"
+import { canMove } from "./game-logic"
 import { clearLevel, deserialize, entities, guessDefaultActivePlayer, onUpdate, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
@@ -106,7 +107,7 @@ export function checkLevelWon() {
 }
 
 function checkLevelStuck() {
-  return entities.every((entity) => !(entity instanceof Snake) || !entity.canMove())
+  return entities.every((entity) => !(entity instanceof Snake) || !canMove(entity))
 }
 
 export function handleLevelCompletion() {

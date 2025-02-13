@@ -1,5 +1,6 @@
 import { playSound } from './audio'
 import { activityMode, restartLevel, shouldInputBeAllowed } from './game'
+import { analyzeMoveRelative, takeMove } from './game-logic'
 import { activePlayer, controlScheme, cyclePlayerControl, entities, onResize, onUpdate, postUpdate, redo, setActivePlayer, setControlScheme, undo } from './game-state'
 import { hitTestAllEntities, makeEventListenerGroup, neighborOf } from './helpers'
 import { showMainMenu } from './menus'
@@ -100,9 +101,9 @@ export function handleInput(
       }
 
       if (moveX !== 0 || moveY !== 0) { // Should always be true
-        const move = activePlayer.analyzeMoveRelative(moveX, moveY)
+        const move = analyzeMoveRelative(activePlayer, moveX, moveY)
         if (move.valid) {
-          activePlayer.takeMove(move)
+          takeMove(move)
           postUpdate() // for level win condition (weirdly, this was handled via setControlScheme previously)
           movedSincePointerDown = true
         } else {
@@ -209,13 +210,13 @@ export function handleInput(
     if (!shouldInputBeAllowed()) {
       return
     }
-    const move = activePlayer.analyzeMoveRelative(dx, dy)
+    const move = analyzeMoveRelative(activePlayer, dx, dy)
     if (!move.valid) {
       activePlayer.animateInvalidMove(move)
       setControlScheme(controlScheme) // signals level update uselessly
       return
     }
-    activePlayer.takeMove(move)
+    takeMove(move)
     setControlScheme(controlScheme) // signals level update
   }
 
@@ -305,7 +306,7 @@ export function handleInput(
           usingGamepad = true
           const neighbor = neighborOf(playerTile, direction)
           hoveredTile = neighbor
-          const move = activePlayer.analyzeMoveRelative(direction.x, direction.y)
+          const move = analyzeMoveRelative(activePlayer, direction.x, direction.y)
           if (hoveredTile && justPressed(0, gamepad) && shouldInputBeAllowed()) {
             if (move.valid) {
               // updateGameState({
@@ -313,7 +314,7 @@ export function handleInput(
               //   playerFacing: direction,
               //   controlScheme: ControlScheme.Gamepad,
               // })
-              activePlayer.takeMove(move)
+              takeMove(move)
               setControlScheme(ControlScheme.Gamepad) // signals level update
               hoveredTile = undefined
             } else {

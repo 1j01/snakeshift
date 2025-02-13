@@ -1,4 +1,5 @@
 import Entity from "./entity"
+import Snake from "./snake"
 
 export enum ControlScheme {
   KeyboardAbsoluteDirection,
@@ -43,6 +44,8 @@ export interface Tile extends Point {
 }
 
 export interface Move {
+  // snakeId: string
+  snake: Snake,
   to: Tile
   delta: Point
   valid: boolean

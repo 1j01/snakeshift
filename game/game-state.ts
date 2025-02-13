@@ -1,6 +1,7 @@
 import { playSound } from "./audio"
 import Entity from "./entity"
 import { activityMode, editorRedos, editorUndos, setActivityMode, shouldInputBeAllowed, setBaseLevelState as storeBaseLevelState } from "./game"
+import { canMove } from "./game-logic"
 import { makeEntity } from "./helpers"
 import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { hideScreens } from "./menus"
@@ -218,7 +219,7 @@ export function guessDefaultActivePlayer() {
     // Try to select a snake that can move, then select any snake if there are no movable snakes.
     // In REAL LEVELS there should always be a movable snake, but having only stuck snakes is very useful for TEST CASES.
     const snakes = entities.filter(e => e instanceof Snake) as Snake[]
-    setActivePlayer(snakes.find(snake => snake.canMove()) ?? snakes[0])
+    setActivePlayer(snakes.find(snake => canMove(snake)) ?? snakes[0])
   }
 }
 

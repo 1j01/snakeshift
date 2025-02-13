@@ -25,7 +25,7 @@
 - make sure playthroughs can include the final (winning) state
 - improve playthrough format
   - include inputs
-    - use Move, but include the Snake's id in the Move structure
+    - possibly using `Move` type, but changing it to be more standalone? right now it includes entity references... maybe I want separate types for moves and move analyses
 
 ## Controls
 - gamepad: use joystick directly instead of requiring a button press to move each tile (this should also do away with the highlight visual which is the only thing not black and white during gameplay)
