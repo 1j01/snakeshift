@@ -1,7 +1,7 @@
 import { Page, expect } from '@playwright/test'
 import { readFile } from 'fs/promises'
 import { basename } from 'path'
-import { Readable } from 'stream'
+// import { Readable } from 'stream'
 import { Tile } from '../game/types'
 
 export const dragAndDropFile = async (
@@ -46,21 +46,28 @@ export async function loadLevelToPlay(page: Page, filePath: string) {
   // await expect(page).toHaveTitle('Snakeshift - Custom Level')
 }
 
-async function streamToString(stream: Readable): Promise<string> {
-  const chunks: Buffer[] = []
-  for await (const chunk of stream) {
-    // weird, I can say `as ArrayBuffer` or `as string`, but not `as ArrayBuffer | string`. whatever, dude.
-    chunks.push(Buffer.from(chunk as ArrayBuffer))
-  }
-  return Buffer.concat(chunks).toString("utf-8")
-}
+// async function streamToString(stream: Readable): Promise<string> {
+//   const chunks: Buffer[] = []
+//   for await (const chunk of stream) {
+//     // weird, I can say `as ArrayBuffer` or `as string`, but not `as ArrayBuffer | string`. whatever, dude.
+//     chunks.push(Buffer.from(chunk as ArrayBuffer))
+//   }
+//   return Buffer.concat(chunks).toString("utf-8")
+// }
 
 export async function getCurrentLevelContent(page: Page) {
-  const downloadPromise = page.waitForEvent('download')
-  await page.keyboard.press('Control+KeyS')
-  const download = await downloadPromise
-  const levelFileContent = await streamToString(await download.createReadStream())
-  return levelFileContent
+  // This was flaky.
+  // const downloadPromise = page.waitForEvent('download')
+  // await page.keyboard.press('Control+KeyS')
+  // const download = await downloadPromise
+  // const levelFileContent = await streamToString(await download.createReadStream())
+  // return levelFileContent
+
+  // This is more reliable, faster, and more efficient.
+  // (Of course we need tests specifically for the level saving functionality now. TODO.)
+  return page.evaluate(() => {
+    return window._forTesting.serialize()
+  })
 }
 export async function compareCurrentLevelContentToFile(page: Page, filePath: string) {
   const expectedContent = await readFile(filePath, 'utf8')

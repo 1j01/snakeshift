@@ -31,8 +31,8 @@ export default defineConfig({
     trace: 'on-first-retry',
 
     /* This theoretically prevents prompts about downloading files,
-    but it didn't help with the tests that download many files to test the game state like I was hoping.
-    Those are still flaky. */
+    but it didn't help with the tests that downloaded many files to test the game state like I was hoping.
+    I had to change those to use page.evaluate to fix the flakiness. */
     acceptDownloads: true,
   },
 
