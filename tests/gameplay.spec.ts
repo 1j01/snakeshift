@@ -15,14 +15,6 @@ test.beforeEach(async ({ page }) => {
   })
 })
 
-// declare global {
-//   interface Window {
-//     _forTesting: {
-//       tileOnPage: (tile: Tile) => Tile;
-//     };
-//   }
-// }
-
 async function snakeShouldBeTrappedIn3x3Area(page: Page) {
   const originalContent = await saveLevelFileAndGetContent(page)
   await test.step('snake should not move past right boundary', async () => {

@@ -1,15 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { dragAndDropFile, saveLevelFileAndCompareContent } from './test-helpers'
 
-// declare global {
-//   interface Window {
-//     _forTesting: {
-//       playedSounds: string[]
-//     }
-//   }
-// }
-
-
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?fast-splash-screens')
 
