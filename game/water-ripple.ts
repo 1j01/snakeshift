@@ -35,8 +35,13 @@ export class Ripple {
         const nudgeY = boundaryY - this.positions[i].y
         this.positions[i].x += nudgeX
         this.positions[i].y += nudgeY
-        this.velocities[i].x += nudgeX
-        this.velocities[i].y += nudgeY
+        // this.velocities[i].x += nudgeX
+        // this.velocities[i].y += nudgeY
+        if (Math.abs(nudgeX) > Math.abs(nudgeY)) {
+          this.velocities[i].x *= -1 // Hit vertical boundary
+        } else {
+          this.velocities[i].y *= -1 // Hit horizontal boundary
+        }
       }
     }
   }
