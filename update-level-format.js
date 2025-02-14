@@ -4,13 +4,14 @@
 // However, it's nice to have the levels all in the same format,
 // and especially nice when cleaning up unnecessary data that was accidentally serialized.
 
-import { readdir } from 'node:fs/promises'
+import { readdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { exec } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
 import { readFileSync } from 'node:fs'
 import { glob } from 'glob'
+import { getCurrentLevelContent, setLevelContent } from './tests/test-helpers.ts'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -66,18 +67,25 @@ void (async () => {
     console.log("Processing", filePath)
 
     // Load the level in the editor
-    const fileChooserPromise = page.waitForEvent('filechooser')
-    await page.keyboard.press('Control+KeyO')
-    const fileChooser = await fileChooserPromise
-    await fileChooser.setFiles(filePath)
+    // const fileChooserPromise = page.waitForEvent('filechooser')
+    // await page.keyboard.press('Control+KeyO')
+    // const fileChooser = await fileChooserPromise
+    // await fileChooser.setFiles(filePath)
+
+    // Likely much more efficient
+    await setLevelContent(page, fileContents)
 
     await page.waitForTimeout(500)
 
     // Save the level
-    const downloadPromise = page.waitForEvent('download')
-    await page.keyboard.press('Control+KeyS')
-    const download = await downloadPromise
-    await download.saveAs(filePath)
+    // const downloadPromise = page.waitForEvent('download')
+    // await page.keyboard.press('Control+KeyS')
+    // const download = await downloadPromise
+    // await download.saveAs(filePath)
+
+    // Likely much more efficient
+    const newContent = await getCurrentLevelContent(page)
+    await writeFile(filePath, newContent, 'utf8')
 
     await page.waitForTimeout(200)
   }

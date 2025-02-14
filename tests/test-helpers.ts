@@ -78,6 +78,12 @@ export async function compareCurrentLevelContentToFile(page: Page, filePath: str
   expect(actualContent).toEqual(expectedContent)
 }
 
+export async function setLevelContent(page: Page, content: string) {
+  await page.evaluate((content) => {
+    window._forTesting.deserialize(content)
+  }, content)
+}
+
 export async function clickTile(page: Page, x: number, y: number) {
   const tile = { x, y, width: 1, height: 1 }
   const rect = await page.evaluate<Tile, Tile>((tile) => {
