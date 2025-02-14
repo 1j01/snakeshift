@@ -29,7 +29,7 @@ export class Inverter extends Collectable {
     ctx.translate(this.x, this.y)
     ctx.scale(this.width, this.height)
     ctx.translate(1 / 2, 1 / 2)
-    ctx.rotate((this.#time / 1000 + this.x / 10 + this.y / 10) * Math.PI / 12)
+    ctx.rotate(-(this.#time / 1000 + this.x / 10 + this.y / 10) * Math.PI / 12)
 
     // drawImage is REALLY slow, so we use a pattern instead
     // ctx.drawImage(yinYangTexture, this.x, this.y, this.width + pixel, this.height + pixel)
