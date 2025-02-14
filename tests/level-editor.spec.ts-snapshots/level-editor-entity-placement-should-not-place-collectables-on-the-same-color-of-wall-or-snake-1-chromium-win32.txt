@@ -13,10 +13,24 @@
       "width": 1,
       "height": 1,
       "layer": 1
+    },
+    {
+      "id": "mocked randomUUID: 57",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 2,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
     }
   ],
   "entityTypes": [
-    "Block"
+    "Block",
+    "Snake"
   ],
   "activePlayerEntityIndex": -1,
   "levelId": ""
