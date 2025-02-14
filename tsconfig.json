@@ -28,6 +28,7 @@
   },
   "include": [
     "game",
-    "tests"
+    "tests",
+    "scripts",
   ]
 }

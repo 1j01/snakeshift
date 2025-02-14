@@ -4,14 +4,14 @@
 // However, it's nice to have the levels all in the same format,
 // and especially nice when cleaning up unnecessary data that was accidentally serialized.
 
-import { readdir, writeFile } from 'node:fs/promises'
-import { dirname, join } from 'node:path'
+import { glob } from 'glob'
 import { exec } from 'node:child_process'
+import { readFileSync } from 'node:fs'
+import { writeFile } from 'node:fs/promises'
+import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
-import { readFileSync } from 'node:fs'
-import { glob } from 'glob'
-import { getCurrentLevelContent, setLevelContent } from './tests/test-helpers.ts'
+import { getCurrentLevelContent, setLevelContent } from '../tests/test-helpers.ts'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -41,12 +41,11 @@ void (async () => {
   await page.click('#level-editor-button')
 
   // Find the level files
-  // __dirname?
   const filePaths = await glob([
-    'game/public/levels/**/*.json',
-    'tests/*-snapshots/*.txt', // currently saved as .txt
-    'tests/*-snapshots/*.json', // might be saved as .json in the future
-  ])
+    '../game/public/levels/**/*.json',
+    '../tests/*-snapshots/*.txt', // currently saved as .txt
+    '../tests/*-snapshots/*.json', // might be saved as .json in the future
+  ], { root: __dirname })
 
   console.log("Files found:", filePaths)
 

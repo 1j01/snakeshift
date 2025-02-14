@@ -22,7 +22,7 @@
     "lint-ts": "tsc --noEmit",
     "lint": "npm-run-all --continue-on-error --serial lint-*",
     "test": "playwright test",
-    "update-level-format": "tsx update-level-format.js"
+    "update-level-format": "tsx scripts/update-level-format.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.1",
