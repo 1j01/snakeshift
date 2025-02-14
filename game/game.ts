@@ -1,4 +1,4 @@
-import { Collectable } from "./collectable"
+import { Food } from "./food"
 import { canMove } from "./game-logic"
 import { clearLevel, deserialize, entities, guessDefaultActivePlayer, onUpdate, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
@@ -50,7 +50,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     editorUndos.splice(0, editorUndos.length, ...undos)
     editorRedos.splice(0, editorRedos.length, ...redos)
     editorState = serialize()
-    levelHasGoal = entities.some(e => e instanceof Collectable)
+    levelHasGoal = entities.some(e => e instanceof Food)
     undos.length = 0
     redos.length = 0
     guessDefaultActivePlayer()
@@ -71,7 +71,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
 
 export function setBaseLevelState() {
   editorState = serialize()
-  levelHasGoal = entities.some(e => e instanceof Collectable)
+  levelHasGoal = entities.some(e => e instanceof Food)
   wonLevel = false
 }
 
@@ -103,7 +103,7 @@ export function checkLevelWon() {
     console.log("No goal; level is unwinnable.")
     return false
   }
-  return entities.filter(e => e instanceof Collectable).length === 0
+  return entities.filter(e => e instanceof Food).length === 0
 }
 
 function checkLevelStuck() {
