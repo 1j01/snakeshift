@@ -1,6 +1,6 @@
 {
   "format": "snakeshift",
-  "formatVersion": 4,
+  "formatVersion": 5,
   "levelInfo": {
     "width": 16,
     "height": 16
@@ -465,11 +465,11 @@
     "Block",
     "Block",
     "Block",
-    "Collectable",
-    "Collectable",
-    "Collectable",
-    "Collectable",
-    "Collectable"
+    "Food",
+    "Food",
+    "Food",
+    "Food",
+    "Food"
   ],
   "activePlayerEntityIndex": 0,
   "levelId": ""

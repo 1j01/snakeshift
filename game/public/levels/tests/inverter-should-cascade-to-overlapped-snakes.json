@@ -1,6 +1,6 @@
 {
   "format": "snakeshift",
-  "formatVersion": 4,
+  "formatVersion": 5,
   "levelInfo": {
     "width": 4,
     "height": 5
@@ -261,6 +261,6 @@
     "Inverter",
     "Food"
   ],
-  "activePlayerEntityIndex": -1,
+  "activePlayerEntityIndex": 15,
   "levelId": ""
 }
