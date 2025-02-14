@@ -55,11 +55,11 @@ void (async () => {
       continue
     }
     const fileContents = readFileSync(filePath, 'utf8')
-    if (fileContents[0] === '[') {
+    if (fileContents.startsWith('[')) {
       console.error("Skipping file which may be a playthrough:", filePath)
       continue
     }
-    if (fileContents[0] !== '{') {
+    if (!fileContents.startsWith('{')) {
       console.error("Skipping file which does not look like a JSON object:", filePath)
       continue
     }
