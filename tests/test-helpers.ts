@@ -92,3 +92,12 @@ export async function clickTile(page: Page, x: number, y: number) {
   const rectCenter = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
   await page.mouse.click(rectCenter.x, rectCenter.y)
 }
+
+export async function moveMouseToTile(page: Page, x: number, y: number) {
+  const tile = { x, y, width: 1, height: 1 }
+  const rect = await page.evaluate<Tile, Tile>((tile) => {
+    return window._forTesting.tileOnPage(tile)
+  }, tile)
+  const rectCenter = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
+  await page.mouse.move(rectCenter.x, rectCenter.y)
+}

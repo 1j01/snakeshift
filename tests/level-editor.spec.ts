@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { clickTile, getCurrentLevelContent } from './test-helpers'
+import { clickTile, getCurrentLevelContent, moveMouseToTile } from './test-helpers'
 
 
 test.beforeEach(async ({ page }) => {
@@ -27,11 +27,123 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('level editor', () => {
   test.describe('entity placement', () => {
-    test.skip('should define a whole snake by dragging in a winding path', () => { /* TODO */ })
-    test.skip('should place collectables on opposite color of wall or snake', () => { /* TODO */ })
-    test.skip('should not place collectables on the same color of wall or snake', () => { /* TODO */ })
-    test.skip('should not place collectables on top of other collectables', () => { /* TODO */ })
-    test.skip('should not place entities outside level boundaries (including snakes)', () => { /* TODO */ })
+    test('should define a whole snake by dragging in a winding path', async ({ page }) => {
+      await page.getByRole('button', { name: 'Snake (White)' }).click()
+      await moveMouseToTile(page, 1, 1)
+      await page.mouse.down()
+      await moveMouseToTile(page, 5, 5)
+      await moveMouseToTile(page, 5, 1)
+      await moveMouseToTile(page, 3, 1)
+      await page.mouse.up()
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
+    test('should place collectables on opposite color of wall or snake', async ({ page }) => {
+      await page.getByRole('button', { name: 'Wall (Black)' }).click()
+      await clickTile(page, 1, 1)
+      await page.getByRole('button', { name: 'Food (White)' }).click()
+      await clickTile(page, 1, 1)
+      await page.getByRole('button', { name: 'Wall (White)' }).click()
+      await clickTile(page, 2, 1)
+      await page.getByRole('button', { name: 'Food (Black)' }).click()
+      await clickTile(page, 2, 1)
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
+    test('should not place collectables on the same color of wall or snake', async ({ page }) => {
+      // Note: I'm considering reversing this decision, because it's interesting to have food you have to go inside a snake/crate to get.
+      await page.getByRole('button', { name: 'Wall (Black)' }).click()
+      await clickTile(page, 1, 1)
+      await page.getByRole('button', { name: 'Food (Black)' }).click()
+      await clickTile(page, 1, 1)
+      await page.getByRole('button', { name: 'Wall (White)' }).click()
+      await clickTile(page, 2, 1)
+      await page.getByRole('button', { name: 'Food (White)' }).click()
+      await clickTile(page, 2, 1)
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
+    test.fixme('should place grass beneath snakes (of either color)', async ({ page }) => {
+      await page.getByRole('button', { name: 'Snake (Black)' }).click()
+      await clickTile(page, 1, 1)
+      await page.getByRole('button', { name: 'Snake (White)' }).click()
+      await clickTile(page, 2, 1)
+      await page.getByRole('button', { name: 'Grass' }).click()
+      await clickTile(page, 1, 1)
+      await clickTile(page, 2, 1)
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
+    test.fixme('should not place "Wall (Both)" where there are snakes', async ({ page }) => {
+      await page.getByRole('button', { name: 'Snake (Black)' }).click()
+      await clickTile(page, 1, 1)
+      await page.getByRole('button', { name: 'Snake (White)' }).click()
+      await clickTile(page, 2, 1)
+      await page.getByRole('button', { name: 'Wall (Both)' }).click()
+      await clickTile(page, 1, 1)
+      await clickTile(page, 2, 1)
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
+    test('should not place collectables on top of other collectables', async ({ page }) => {
+      await page.getByRole('button', { name: 'Food (White)' }).click()
+      await clickTile(page, 1, 1)
+      await clickTile(page, 1, 1)
+      await page.getByRole('button', { name: 'Food (Black)' }).click()
+      await clickTile(page, 1, 1)
+      await page.getByRole('button', { name: 'Inverter' }).click()
+      await clickTile(page, 1, 1)
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
+    test.fixme('should place walls, crates, or snakes (of opposite color) below collectables', async ({ page }) => {
+      await page.getByRole('button', { name: 'Food (White)' }).click()
+      await clickTile(page, 1, 1)
+      await clickTile(page, 2, 1)
+      await clickTile(page, 3, 1)
+      await clickTile(page, 4, 1)
+      await page.getByRole('button', { name: 'Wall (Black)' }).click()
+      await clickTile(page, 1, 1)
+      await page.getByRole('button', { name: 'Crate (Black)' }).click()
+      await clickTile(page, 2, 1)
+      await page.getByRole('button', { name: 'Snake (Black)' }).click()
+      await clickTile(page, 3, 1)
+      await page.getByRole('button', { name: 'Grass' }).click()
+      await clickTile(page, 4, 1)
+    })
+    test.fixme('should place walls, crates, or snakes (of same color) below collectables', async ({ page }) => {
+      await page.getByRole('button', { name: 'Food (White)' }).click()
+      await clickTile(page, 1, 1)
+      await clickTile(page, 2, 1)
+      await clickTile(page, 3, 1)
+      await clickTile(page, 4, 1)
+      await page.getByRole('button', { name: 'Wall (White)' }).click()
+      await clickTile(page, 1, 1)
+      await page.getByRole('button', { name: 'Crate (White)' }).click()
+      await clickTile(page, 2, 1)
+      await page.getByRole('button', { name: 'Snake (White)' }).click()
+      await clickTile(page, 3, 1)
+      await page.getByRole('button', { name: 'Grass' }).click()
+      await clickTile(page, 4, 1)
+    })
+    test('should not place entities outside level boundaries (including snakes)', async ({ page }) => {
+      await page.getByRole('button', { name: 'Wall (White)' }).click()
+      await clickTile(page, -1, 1)
+      await page.getByRole('button', { name: 'Wall (White)' }).click() // in case another tool was selected by clicking outside the canvas
+      await clickTile(page, 1, 16) // assuming default level size of 16x16, this is just out of bounds
+      await page.getByRole('button', { name: 'Snake (White)' }).click()
+
+      // This path gave different results in firefox and chromium
+      // probably because firefox is not allowing the mouse to go outside the page
+      // await moveMouseToTile(page, 5, 5)
+      // await page.mouse.down()
+      // await moveMouseToTile(page, 5 + 20, 5 - 20)
+      // await moveMouseToTile(page, 5 + 20, 5 + 20)
+      // await page.mouse.up()
+
+      // Let's try going closer to the edge
+      await moveMouseToTile(page, 3, 3)
+      await page.mouse.down()
+      await moveMouseToTile(page, 6, -3)
+      await moveMouseToTile(page, 6, 3)
+      await page.mouse.up()
+
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
   })
   test.describe('default snake focus', () => {
     test('should focus first movable snake', async ({ page }) => {
