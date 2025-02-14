@@ -200,7 +200,7 @@ test.describe('level editor', () => {
       await expect(page.locator('#level-splash-title')).not.toBeVisible()
       await page.keyboard.press('ArrowRight')
       // TODO: expect invalid move sound (none yet)
-      expect(await page.evaluate(() => window._forTesting.playedSounds)).not.toContain(['move'])
+      expect(await page.evaluate(() => window._forTesting.playedSounds)).not.toContain('move')
       // A snapshot test doesn't test much here...
       // The level shouldn't be changed by moving invalidly.
       // I know what we can do. If we press tab twice, it should end up on the same snake.
