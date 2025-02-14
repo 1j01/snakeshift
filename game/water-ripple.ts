@@ -9,7 +9,7 @@ export class Ripple {
   velocities: Point[] = []
   radius = 0
   speed = 1
-  life = 10
+  life = 2
   constructor(x: number, y: number) {
     const numPoints = 100
     for (let i = 0; i < numPoints; i++) {
@@ -25,23 +25,39 @@ export class Ripple {
       let dy = this.velocities[i].y * this.speed * deltaTime / 1000
       this.positions[i].x += dx
       this.positions[i].y += dy
-      if (hitTestAllEntities(this.positions[i].x, this.positions[i].y).some((hit) => hit.entity.solid)) {
-        const hitTile = { x: Math.floor(this.positions[i].x), y: Math.floor(this.positions[i].y) }
-        const fromTile = { x: Math.floor(this.positions[i].x - dx), y: Math.floor(this.positions[i].y - dy) }
-        // nudge position back onto the original tile, then update velocity based on the change
-        const boundaryX = this.velocities[i].x > 0 ? fromTile.x + 1 : fromTile.x
-        const boundaryY = this.velocities[i].y > 0 ? fromTile.y + 1 : fromTile.y
-        const nudgeX = boundaryX - this.positions[i].x
-        const nudgeY = boundaryY - this.positions[i].y
-        this.positions[i].x += nudgeX
-        this.positions[i].y += nudgeY
-        // this.velocities[i].x += nudgeX
-        // this.velocities[i].y += nudgeY
-        if (Math.abs(nudgeX) > Math.abs(nudgeY)) {
-          this.velocities[i].x *= -1 // Hit vertical boundary
-        } else {
-          this.velocities[i].y *= -1 // Hit horizontal boundary
+      const hitEntity = hitTestAllEntities(this.positions[i].x, this.positions[i].y).find((hit) => hit.entity.solid)?.entity
+      if (hitEntity) {
+        // const hitTile = { x: Math.floor(this.positions[i].x), y: Math.floor(this.positions[i].y) }
+        // const fromTile = { x: Math.floor(this.positions[i].x - dx), y: Math.floor(this.positions[i].y - dy) }
+        // // nudge position back onto the original tile, then update velocity based on the change
+        // const boundaryX = this.velocities[i].x > 0 ? fromTile.x + 1 : fromTile.x
+        // const boundaryY = this.velocities[i].y > 0 ? fromTile.y + 1 : fromTile.y
+        // const nudgeX = boundaryX - this.positions[i].x
+        // const nudgeY = boundaryY - this.positions[i].y
+        // this.positions[i].x += nudgeX
+        // this.positions[i].y += nudgeY
+        // // this.velocities[i].x += nudgeX
+        // // this.velocities[i].y += nudgeY
+        // if (Math.abs(nudgeX) > Math.abs(nudgeY)) {
+        //   this.velocities[i].x *= -1 // Hit vertical boundary
+        // } else {
+        //   this.velocities[i].y *= -1 // Hit horizontal boundary
+        // }
+
+        const normal = getSurfaceNormal(hitEntity, this.positions[i]) // Get normal at collision
+        const velocity = this.velocities[i]
+
+        // Reflect velocity using the formula: V' = V - 2 (V ⋅ N) N
+        const dotProduct = velocity.x * normal.x + velocity.y * normal.y
+        this.velocities[i] = {
+          x: velocity.x - 2 * dotProduct * normal.x,
+          y: velocity.y - 2 * dotProduct * normal.y
         }
+
+        // Move the point slightly away from the surface to avoid sticking
+        this.positions[i].x += this.velocities[i].x * 0.1
+        this.positions[i].y += this.velocities[i].y * 0.1
+
       }
     }
   }
@@ -59,6 +75,31 @@ export class Ripple {
     ctx.lineWidth = 0.1 * Math.min(1, this.life)
     ctx.stroke()
     ctx.restore()
+  }
+}
+function getSurfaceNormal(entity: Entity, point: Point): Point {
+  // Insane ChatGPT-generated code
+  const left = entity.x
+  const right = entity.x + entity.width
+  const top = entity.y
+  const bottom = entity.y + entity.height
+
+  const distLeft = Math.abs(point.x - left)
+  const distRight = Math.abs(point.x - right)
+  const distTop = Math.abs(point.y - top)
+  const distBottom = Math.abs(point.y - bottom)
+
+  // Find the closest surface
+  const minDist = Math.min(distLeft, distRight, distTop, distBottom)
+
+  if (minDist === distLeft) {
+    return { x: -1, y: 0 } // Left wall
+  } else if (minDist === distRight) {
+    return { x: 1, y: 0 } // Right wall
+  } else if (minDist === distTop) {
+    return { x: 0, y: -1 } // Top wall
+  } else {
+    return { x: 0, y: 1 } // Bottom wall
   }
 }
 
