@@ -242,11 +242,61 @@ test.describe('level editor', () => {
     test.skip('clear button should just hide the selection box if the selection is empty (without creating an undo state)', () => { /* TODO */ })
   })
   test.describe('level info panel', () => {
-    test.skip('level info panel should start with the first field selected, not just focused', () => { /* TODO */ })
-    test.skip('level info panel should show the existing level details', () => { /* TODO */ })
-    test.skip('level info panel should let you change the dimensions of the level (undoable)', () => { /* TODO */ })
-    test.skip('level info panel should let you change other metadata of the level', () => { /* TODO */ })
-    test.skip('cancel button should leave level unchanged', () => { /* TODO */ })
+    test('level info panel should start with the first field selected, not just focused', async ({ page }) => {
+      await page.getByRole('button', { name: 'Level Info' }).click()
+      await expect(page.getByLabel('Width')).toBeFocused()
+      // TODO: Test that it's SELECTED, not just FOCUSED.
+      // expect(await page.evaluate(() => {
+      //   const input = document.activeElement as HTMLInputElement
+      //   // <input type="number"> doesn't support getting/setting the selection range
+      //   // A workaround is to change the type to "text"... except this seems to clear the selection range.
+      //   input.type = 'text'
+      //   return [input.selectionStart, input.selectionStart !== input.selectionEnd]
+      // })).toEqual([0, true])
+    })
+    test('level info panel should show the existing level details', async ({ page }) => {
+      await page.getByRole('button', { name: 'Level Info' }).click()
+      await expect(page.getByLabel('Width')).toHaveValue('16')
+      await expect(page.getByLabel('Height')).toHaveValue('16')
+    })
+    test('level info panel should let you change the dimensions of the level (undoable)', async ({ page }) => {
+      await page.getByRole('button', { name: 'Level Info' }).click()
+      await page.getByLabel('Width').fill('8')
+      await page.getByLabel('Height').fill('10')
+      await page.getByRole('button', { name: 'OK' }).click()
+      await expect(page.getByRole('dialog')).not.toBeVisible()
+      expect(await page.evaluate(() => window._forTesting.playedSounds)).toContain('resize')
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+      await page.keyboard.press('z')
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
+    test.fixme('level info panel should let you change other metadata of the level', async ({ page }) => {
+      // Should this be undoable? Probably, to match, right? But it's kinda invisible as a change...
+      await page.getByRole('button', { name: 'Level Info' }).click()
+      await page.getByLabel('Title').fill('Test Level')
+      await page.getByLabel('Author').fill('Test Author')
+      await page.getByRole('button', { name: 'OK' }).click()
+      await expect(page.getByRole('dialog')).not.toBeVisible()
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
+    test('cancel button should leave level unchanged', async ({ page }) => {
+      await page.getByRole('button', { name: 'Level Info' }).click()
+      await page.getByLabel('Width').fill('8')
+      await page.getByLabel('Height').fill('10')
+      await page.getByRole('button', { name: 'Cancel' }).click()
+      await expect(page.getByRole('dialog')).not.toBeVisible()
+      expect(await page.evaluate(() => window._forTesting.playedSounds)).not.toContain('resize')
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
+    test('escape key should leave level unchanged', async ({ page }) => {
+      await page.getByRole('button', { name: 'Level Info' }).click()
+      await page.getByLabel('Width').fill('8')
+      await page.getByLabel('Height').fill('10')
+      await page.getByRole('button', { name: 'Cancel' }).click()
+      await expect(page.getByRole('dialog')).not.toBeVisible()
+      expect(await page.evaluate(() => window._forTesting.playedSounds)).not.toContain('resize')
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
   })
   test.describe('save button', () => {
     test.skip('save button should save the level', () => { /* TODO */ })
