@@ -197,7 +197,7 @@ export default class Snake extends Entity {
     } else if (this.growOnNextMove) {
       // ctx.save()
       // ctx.scale(0.5, 0.5)
-      // Collectable.prototype.draw.call({ layer: CollisionLayer.White, x: 0, y: 0, width: 1, height: 1, #time: 5 }, ctx)
+      // Food.prototype.draw.call({ layer: CollisionLayer.White, x: 0, y: 0, width: 1, height: 1, #time: 5 }, ctx)
       // ctx.restore()
       ctx.lineWidth = 1 / 12
       ctx.arc(-eyeRadius / 3, eyeDistance / 2, eyeRadius, Math.PI / 3, -Math.PI / 3, true)
