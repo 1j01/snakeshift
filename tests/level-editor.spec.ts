@@ -313,11 +313,21 @@ test.describe('level editor', () => {
     test.skip('redo button should be disabled when there are no actions to redo', () => { /* TODO */ })
   })
   test.describe('ui', () => {
+    // probably should do screenshot tests for these
     test.skip('tool bar should scroll if space is limited, and should not go behind the back button', () => { /* TODO */ })
     test.skip('tool bar should be centered if there is enough space', () => { /* TODO */ })
   })
   test.describe('inapplicable actions', () => {
-    test.skip('restart level should not do anything, and button should be hidden', () => { /* TODO */ })
+    test.fail('restart level (R) should not do anything, and button should be hidden', async ({ page }) => {
+      // Arguably I could make R clear the level same as N, to make it more guessable.
+      // Then again, R could mean different things, so maybe clear shouldn't be "guessable".
+      // Even if it's undoable, it may be upsetting and you may not consider that it could be undoable.
+      await expect(page.getByText('Restart Level')).not.toBeVisible()
+      await expect(page.locator('#restart-level')).not.toBeVisible()
+      await clickTile(page, 1, 1)
+      await page.keyboard.press('r')
+      expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+    })
   })
   test.skip('gamepad controls should be supported', () => { /* TODO */ })
   test.skip('touch controls should be supported', () => { /* TODO */ })
