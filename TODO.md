@@ -7,6 +7,7 @@
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes
 - should probably disallow pushing stars on top of other stars with crates
 - bug: ctrl+o isn't always loading a level, sometimes it just switches to edit mode for the current level
+- bug: can't move after restarting level from level editor play test
 
 ## Mobile viewport issues
 - the whole page can be scrolled if zoomed in; it can be unclear what's happening, and hard to zoom out since pinching on the canvas doesn't work
@@ -16,6 +17,7 @@
 - keep track of the fewest number of moves and best solution for each level
 - show the number of moves in the level select
 - define a par for each level
+- store hash of the level content; if it differs, test the stored solution against the new level; if it works, keep it; if it doesn't, discard it
 - maybe allow viewing your best solution
 - stretch goal: submit solutions to a server for verification and compare with others
 
@@ -38,6 +40,8 @@
 - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
 
 ## Level Editor
+- clear shouldn't reset level size
+- shouldn't place Grass or Wall (Both) on top of snakes
 - auto-save and/or onbeforeunload
 - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
 - should be easier to deselect (escape, ctrl+d, enter?)
