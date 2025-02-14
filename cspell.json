@@ -53,6 +53,7 @@
     "node_modules",
     ".history",
     "playwright-report",
+    "test-results",
     "dist",
     "*.svg",
     "*.png",
