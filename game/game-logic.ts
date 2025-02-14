@@ -148,6 +148,9 @@ export function takeMove(move: Move): void {
     entities.splice(thisIndex, 1)
   }
   // Push objects
+  if (move.entitiesToPush.length > 0) {
+    playSound('pushCrate', { playbackRate: Math.random() * 0.1 + 0.95, volume: 0.3 })
+  }
   for (const entity of move.entitiesToPush) {
     translateEntity(entity, move.delta.x, move.delta.y)
     entities.splice(entities.indexOf(entity), 1)

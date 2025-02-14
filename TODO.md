@@ -76,7 +76,6 @@
 - audio:
   - sound effect for restart level
   - more appropriate undo/redo sfx
-  - crate push sfx
   - invalid move sfx
   - invert sfx (for both editor and gameplay)
   - clear sfx (for editor)
