@@ -10,6 +10,7 @@ import { exec } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
 import { readFileSync } from 'node:fs'
+import { glob } from 'glob'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -39,9 +40,12 @@ void (async () => {
   await page.click('#level-editor-button')
 
   // Find the level files
-  const filePaths = (await readdir(join(__dirname, 'game/public/levels'), { recursive: true, withFileTypes: true }))
-    .filter((dirent) => dirent.isFile() && dirent.name.endsWith('.json'))
-    .map((dirent) => join(dirent.parentPath, dirent.name))
+  // __dirname?
+  const filePaths = await glob([
+    'game/public/levels/**/*.json',
+    'tests/*-snapshots/*.txt', // currently saved as .txt
+    'tests/*-snapshots/*.json', // might be saved as .json in the future
+  ])
 
   console.log("Files found:", filePaths)
 

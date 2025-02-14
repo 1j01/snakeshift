@@ -76,7 +76,7 @@ function stepHistory(from: GameState[], to: GameState[], skipOverWinState = fals
   deserialize(state)
   return true
 }
-const FORMAT_VERSION = 4
+const FORMAT_VERSION = 5
 export function serialize(): GameState {
   return JSON.stringify({
     format: "snakeshift",
@@ -122,6 +122,15 @@ export function deserialize(state: GameState, levelId: string | null = null, tem
     for (const entDef of parsed.entities) {
       // @ts-expect-error property is not defined on Entity
       delete entDef._time
+    }
+  }
+  if (parsed.formatVersion === 4) {
+    parsed.formatVersion = 5
+    // Rename "Collectable" to "Food"
+    for (let i = 0; i < parsed.entityTypes.length; i++) {
+      if (parsed.entityTypes[i] === "Collectable") {
+        parsed.entityTypes[i] = "Food"
+      }
     }
   }
   if (parsed.formatVersion !== FORMAT_VERSION) throw new Error("Invalid format version")

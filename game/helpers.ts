@@ -110,7 +110,6 @@ export function makeEntity(entityType: string): Entity {
       return new Block()
     case "Snake":
       return new Snake()
-    case "Collectable": // TODO: format upgrade
     case "Food":
       return new Food()
     case "Inverter":
