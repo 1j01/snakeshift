@@ -174,6 +174,16 @@ export function layersCollide(a: CollisionLayer, b: CollisionLayer) {
   return (a & b) !== 0
 }
 
+export function invertCollisionLayer(layer: CollisionLayer) {
+  if (layer === CollisionLayer.White) {
+    return CollisionLayer.Black
+  } else if (layer === CollisionLayer.Black) {
+    return CollisionLayer.White
+  } else {
+    return layer
+  }
+}
+
 export function makeEventListenerGroup() {
   // This is a lot of complexity for simply improving the ergonomics of cleanup.
   // Most of the complexity is for type checking.

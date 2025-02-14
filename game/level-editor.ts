@@ -2,7 +2,7 @@ import { Block } from './block'
 import { Collectable } from './collectable'
 import Entity from './entity'
 import { activePlayer, clearLevel, entities, levelInfo, onResize, onUpdate, openLevel, postUpdate, saveLevel, setActivePlayer, undoable } from './game-state'
-import { bresenham, clampToLevel, hitTestAllEntities, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, translateEntity, within, withinLevel } from './helpers'
+import { bresenham, clampToLevel, hitTestAllEntities, invertCollisionLayer, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, translateEntity, within, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
@@ -612,16 +612,6 @@ export function selectAll() {
   // updateHighlight() // not available here...
   setHighlight(getSelectionBox(), { isSelection: true, valid: true })
   postUpdate() // I guess???
-}
-
-function invertCollisionLayer(layer: CollisionLayer) {
-  if (layer === CollisionLayer.White) {
-    return CollisionLayer.Black
-  } else if (layer === CollisionLayer.Black) {
-    return CollisionLayer.White
-  } else {
-    return layer
-  }
 }
 
 export function invert() {
