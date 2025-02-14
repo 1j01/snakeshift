@@ -2,6 +2,7 @@ import Entity from "./entity"
 import { entities, levelInfo, postResize } from "./game-state"
 import { positionElement, setLevelBorder } from "./tile-highlight"
 import { Point, Tile } from "./types"
+import { drawEffects } from "./water-ripple"
 
 export const canvas = document.createElement('canvas')
 canvas.style.touchAction = 'none'
@@ -53,6 +54,7 @@ export function draw() {
   }
   // drawBorder(ctx)
   drawEntities(ctx, entities)
+  drawEffects(ctx, entities)
   drawProblems(ctx)
   // drawGrid(ctx)
   setLevelBorder(levelInfo)
