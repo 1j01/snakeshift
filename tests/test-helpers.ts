@@ -70,8 +70,11 @@ export async function getCurrentLevelContent(page: Page) {
   })
 }
 export async function compareCurrentLevelContentToFile(page: Page, filePath: string) {
-  const expectedContent = await readFile(filePath, 'utf8')
-  const actualContent = await getCurrentLevelContent(page)
+  function normalize(content: string) {
+    return content.replace(/\r\n/g, '\n')
+  }
+  const expectedContent = normalize(await readFile(filePath, 'utf8'))
+  const actualContent = normalize(await getCurrentLevelContent(page))
   expect(actualContent).toEqual(expectedContent)
 }
 
