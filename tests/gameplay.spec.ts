@@ -148,6 +148,13 @@ test.skip('extra undo states should be skipped or merged when switching snakes m
 test.skip('gamepad controls should be supported', () => { /* TODO */ })
 test.skip('touch controls should be supported', () => { /* TODO */ })
 
+test('inverter should cascade inversion to overlapped snakes', async ({ page }) => {
+  await loadLevelToPlay(page, 'game/public/levels/tests/inverter-should-cascade-to-overlapped-snakes.json')
+  await page.keyboard.press('ArrowUp')
+  await page.keyboard.press('ArrowLeft')
+  expect(await getCurrentLevelContent(page)).toMatchSnapshot()
+})
+
 // DRY not just to reduce repetition, but so that the negative test will always be in sync with the positive test
 const stuckHint = 'Press Z to undo or R to restart'
 

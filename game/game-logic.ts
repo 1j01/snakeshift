@@ -183,10 +183,40 @@ function growSnake(snake: Snake): void {
   snake.segments.push(newTail)
 }
 function invertSnake(snake: Snake): void {
-  // TODO: DRY with invert in level-editor.ts? maybe too specialized idk
-  const targetEntities = new Set<Entity>()
-  for (const segment of snake.segments) {
-    const { x, y } = segment
+  // See also: `invert` function in level-editor.ts
+  const handledEntities = new Set<Entity>()
+  const handledPositions = new Set<`${number},${number}`>()
+
+  function handleEntity(entity: Entity) {
+    if (handledEntities.has(entity)) {
+      return
+    }
+    handledEntities.add(entity)
+    if (entity instanceof RectangularEntity) {
+      entity.layer = invertCollisionLayer(entity.layer)
+    } else if (entity instanceof Snake) {
+      for (const segment of entity.segments) {
+        handlePosition(segment.x, segment.y)
+        segment.layer = invertCollisionLayer(segment.layer)
+      }
+    }
+  }
+
+  function handlePosition(x: number, y: number) {
+    if (handledPositions.has(`${x},${y}`)) {
+      return
+    }
+    handledPositions.add(`${x},${y}`)
+    const hits = hitTestAllEntities(x, y)
+    for (const hit of hits) {
+      handleEntity(hit.entity)
+    }
+  }
+
+  handleEntity(snake)
+
+  for (const pos of handledPositions) {
+    const [x, y] = pos.split(',').map(Number)
     const hits = hitTestAllEntities(x, y)
     if (!hits.some((hit) => hit.entity instanceof Block)) {
       // add a white block where there was implicit black
@@ -195,18 +225,6 @@ function invertSnake(snake: Snake): void {
       block.x = x
       block.y = y
       entities.unshift(block)
-    }
-    for (const hit of hits) {
-      targetEntities.add(hit.entity)
-    }
-  }
-  for (const entity of targetEntities) {
-    if (entity instanceof RectangularEntity) {
-      entity.layer = invertCollisionLayer(entity.layer)
-    } else if (entity instanceof Snake) {
-      for (const segment of entity.segments) {
-        segment.layer = invertCollisionLayer(segment.layer)
-      }
     }
   }
 }
