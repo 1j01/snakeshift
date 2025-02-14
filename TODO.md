@@ -5,7 +5,6 @@
 - skip/merge extra undo steps for switching snakes
 - readme image
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes
-- hide test levels from level select (except in tests), maybe with a URL parameter
 - should probably disallow pushing stars on top of other stars with crates
 - bug: ctrl+o isn't always loading a level, sometimes it just switches to edit mode for the current level
 

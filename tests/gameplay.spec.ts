@@ -7,7 +7,7 @@ import { GameState, ParsedGameState, Tile } from '../game/types.ts'
 import { getCurrentLevelContent, loadLevelToPlay } from './test-helpers.ts'
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:5569/?fast-splash-screens')
+  await page.goto('http://localhost:5569/?fast-splash-screens&show-test-levels')
 
   // Fail test on any page error
   page.on('pageerror', (error) => {

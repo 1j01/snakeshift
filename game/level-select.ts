@@ -215,3 +215,7 @@ if (levelMatch) {
     }
   }, 100)
 }
+
+if (location.search.includes("show-test-levels")) {
+  document.querySelector<HTMLDivElement>('#test-cases-not-real-levels')!.hidden = false
+}

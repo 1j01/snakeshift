@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 import { compareCurrentLevelContentToFile, dragAndDropFile } from './test-helpers'
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:5569/?fast-splash-screens')
+  await page.goto('http://localhost:5569/?fast-splash-screens&show-test-levels')
 
   // Fail test on any page error
   page.on('pageerror', (error) => {
@@ -236,7 +236,7 @@ test('should not allow movement while level win splash screen is shown', async (
   // But first wait for network requests to finish, since goto can abort them, causing the pageerror event to fail the test otherwise.
   // Ideally, we would only load the page once for this test, but I'm not sure how to handle an exceptional case while still taking advantage of beforeEach.
   await page.waitForLoadState('networkidle')
-  await page.goto('http://localhost:5569/')
+  await page.goto('http://localhost:5569/?show-test-levels')
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
