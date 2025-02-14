@@ -14,6 +14,7 @@ import { chromium } from 'playwright'
 import { getCurrentLevelContent, setLevelContent } from '../tests/test-helpers.ts'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+const repoRoot = dirname(__dirname)
 
 void (async () => {
   // Launch the browser
@@ -42,10 +43,10 @@ void (async () => {
 
   // Find the level files
   const filePaths = await glob([
-    '../game/public/levels/**/*.json',
-    '../tests/*-snapshots/*.txt', // currently saved as .txt
-    '../tests/*-snapshots/*.json', // might be saved as .json in the future
-  ], { root: __dirname })
+    'game/public/levels/**/*.json',
+    'tests/*-snapshots/*.txt', // currently saved as .txt
+    'tests/*-snapshots/*.json', // might be saved as .json in the future
+  ], { cwd: repoRoot })
 
   console.log("Files found:", filePaths)
 
