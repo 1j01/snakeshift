@@ -56,6 +56,7 @@ export const resourcePaths = {
   eat: 'audio/sound-effects/glockenspiel_a-102771.mp3',
   move: 'audio/sound-effects/tiny-drip.wav',
   switchSnakes: 'audio/sound-effects/snake-hissing-6092.mp3',
+  resize: 'audio/sound-effects/736438__riley_garinger__woodfric-scraping-dragging-wooden-4x4-post-on-concrete-02__sample.mp3',
 }
 
 const totalResources = Object.keys(resourcePaths).length

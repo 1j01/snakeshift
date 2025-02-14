@@ -1,3 +1,4 @@
+import { playSound } from './audio'
 import { Block } from './block'
 import { Collectable } from './collectable'
 import Entity from './entity'
@@ -113,8 +114,13 @@ export function initLevelEditorGUI() {
   levelInfoEditorOKButton.addEventListener('click', (event) => {
     event.preventDefault()
     undoable()
-    levelInfo.width = parseInt(levelInfoEditor.querySelector<HTMLInputElement>('#level-width')!.value)
-    levelInfo.height = parseInt(levelInfoEditor.querySelector<HTMLInputElement>('#level-height')!.value)
+    const width = parseInt(levelInfoEditor.querySelector<HTMLInputElement>('#level-width')!.value)
+    const height = parseInt(levelInfoEditor.querySelector<HTMLInputElement>('#level-height')!.value)
+    if (width !== levelInfo.width || height !== levelInfo.height) {
+      levelInfo.width = width
+      levelInfo.height = height
+      playSound('resize')
+    }
     // levelInfo.name = nameInput.value
     // levelInfo.author = authorInput.value
     // levelInfo.description = descriptionInput.value

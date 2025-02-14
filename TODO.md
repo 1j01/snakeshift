@@ -80,7 +80,6 @@
   - invalid move sfx
   - invert sfx (for both editor and gameplay)
   - clear sfx (for editor)
-  - resize sfx (for editor)
 
 ## Less important
 - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
