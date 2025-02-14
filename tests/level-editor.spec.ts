@@ -262,10 +262,6 @@ test.describe('level editor', () => {
     test.skip('redo button should redo the last action', () => { /* TODO */ })
     test.skip('redo button should be disabled when there are no actions to redo', () => { /* TODO */ })
   })
-  test.describe('play testing the level', () => {
-    // This sort of thing may be tested by navigation.spec.ts, but there's no play button yet, only a keyboard shortcut.
-    test.skip('play button should start the level', () => { /* TODO */ })
-  })
   test.describe('ui', () => {
     test.skip('tool bar should scroll if space is limited, and should not go behind the back button', () => { /* TODO */ })
     test.skip('tool bar should be centered if there is enough space', () => { /* TODO */ })
