@@ -1,6 +1,6 @@
 {
   "format": "snakeshift",
-  "formatVersion": 4,
+  "formatVersion": 5,
   "levelInfo": {
     "width": 3,
     "height": 3
@@ -39,6 +39,6 @@
     "Snake",
     "Crate"
   ],
-  "activePlayerEntityIndex": -1,
+  "activePlayerEntityIndex": 0,
   "levelId": ""
 }

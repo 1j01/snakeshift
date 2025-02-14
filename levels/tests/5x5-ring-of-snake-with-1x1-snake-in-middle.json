@@ -1,6 +1,6 @@
 {
   "format": "snakeshift",
-  "formatVersion": 4,
+  "formatVersion": 5,
   "levelInfo": {
     "width": 5,
     "height": 5
@@ -142,6 +142,6 @@
     "Snake",
     "Snake"
   ],
-  "activePlayerEntityIndex": -1,
+  "activePlayerEntityIndex": 0,
   "levelId": ""
 }
