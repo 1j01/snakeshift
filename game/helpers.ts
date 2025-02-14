@@ -2,7 +2,9 @@ import { Block } from "./block"
 import { Collectable } from "./collectable"
 import { Crate } from "./crate"
 import Entity from "./entity"
+import { Food } from "./food"
 import { entities, levelInfo } from "./game-state"
+import { Inverter } from "./inverter"
 import { RectangularEntity } from "./rectangular-entity"
 import Snake from "./snake"
 import { CollisionLayer, Hit, Point, Tile } from "./types"
@@ -108,8 +110,11 @@ export function makeEntity(entityType: string): Entity {
       return new Block()
     case "Snake":
       return new Snake()
-    case "Collectable":
-      return new Collectable()
+    case "Collectable": // TODO: format upgrade
+    case "Food":
+      return new Food()
+    case "Inverter":
+      return new Inverter()
     case "Crate":
       return new Crate()
     default:

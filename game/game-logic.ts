@@ -1,12 +1,16 @@
 import { playMelodicSound, playSound } from "./audio"
+import { Block } from "./block"
 import { Collectable } from "./collectable"
 import { Crate } from "./crate"
 import Entity from "./entity"
+import { Food } from "./food"
 import { checkLevelWon } from "./game"
 import { entities, undoable } from "./game-state"
-import { hitTestAllEntities, layersCollide, sortEntities, topLayer, translateEntity, withinLevel } from "./helpers"
+import { hitTestAllEntities, invertCollisionLayer, layersCollide, sortEntities, topLayer, translateEntity, withinLevel } from "./helpers"
+import { Inverter } from "./inverter"
+import { RectangularEntity } from "./rectangular-entity"
 import Snake from "./snake"
-import { Move, Tile } from "./types"
+import { CollisionLayer, Move, Tile } from "./types"
 
 export function analyzeMoveAbsolute(snake: Snake, tile: Tile): Move {
   // Using Math.sign() here would lead to checking if moving to an adjacent tile is valid,
@@ -155,11 +159,19 @@ export function takeMove(move: Move): void {
   }
   // Eat collectables
   for (const entity of move.entitiesThere) {
-    if (entity instanceof Collectable && entity.layer === head.layer && !move.entitiesToPush.includes(entity)) {
+    if (
+      entity instanceof Collectable &&
+      layersCollide(entity.layer, head.layer) &&
+      !move.entitiesToPush.includes(entity)
+    ) {
       entities.splice(entities.indexOf(entity), 1)
-      snake.growOnNextMove = true
-      if (!checkLevelWon()) {
-        playMelodicSound('eat', snake.getNextMelodyIndex())
+      if (entity instanceof Food) {
+        snake.growOnNextMove = true
+        if (!checkLevelWon()) {
+          playMelodicSound('eat', snake.getNextMelodyIndex())
+        }
+      } else if (entity instanceof Inverter) {
+        invertSnake(snake)
       }
     }
   }
@@ -169,4 +181,32 @@ function growSnake(snake: Snake): void {
   // This only works because SnakeSegment is a flat object.
   const newTail = { ...tail }
   snake.segments.push(newTail)
+}
+function invertSnake(snake: Snake): void {
+  // TODO: DRY with invert in level-editor.ts? maybe too specialized idk
+  const targetEntities = new Set<Entity>()
+  for (const segment of snake.segments) {
+    const { x, y } = segment
+    const hits = hitTestAllEntities(x, y)
+    if (!hits.some((hit) => hit.entity instanceof Block)) {
+      // add a white block where there was implicit black
+      const block = new Block()
+      block.layer = CollisionLayer.White
+      block.x = x
+      block.y = y
+      entities.unshift(block)
+    }
+    for (const hit of hits) {
+      targetEntities.add(hit.entity)
+    }
+  }
+  for (const entity of targetEntities) {
+    if (entity instanceof RectangularEntity) {
+      entity.layer = invertCollisionLayer(entity.layer)
+    } else if (entity instanceof Snake) {
+      for (const segment of entity.segments) {
+        segment.layer = invertCollisionLayer(segment.layer)
+      }
+    }
+  }
 }
