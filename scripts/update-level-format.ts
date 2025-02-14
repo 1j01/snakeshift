@@ -67,27 +67,11 @@ void (async () => {
     console.log("Processing", filePath)
 
     // Load the level in the editor
-    // const fileChooserPromise = page.waitForEvent('filechooser')
-    // await page.keyboard.press('Control+KeyO')
-    // const fileChooser = await fileChooserPromise
-    // await fileChooser.setFiles(filePath)
-
-    // Likely much more efficient
     await setLevelContent(page, fileContents)
 
-    await page.waitForTimeout(500)
-
     // Save the level
-    // const downloadPromise = page.waitForEvent('download')
-    // await page.keyboard.press('Control+KeyS')
-    // const download = await downloadPromise
-    // await download.saveAs(filePath)
-
-    // Likely much more efficient
     const newContent = await getCurrentLevelContent(page)
     await writeFile(filePath, newContent, 'utf8')
-
-    await page.waitForTimeout(200)
   }
 
   console.log("Done updating levels")
