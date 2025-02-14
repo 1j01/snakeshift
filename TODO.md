@@ -55,6 +55,7 @@
 
 ## Aesthetics:
 - visuals:
+  - there's a slight bug where Block is not always sorted to bottom, which I can see when dragging with the pointer control scheme, which animates the snake slightly beyond its cell, in the level Ferry
   - enlarge level border
   - 1x1 snake should change direction when moving
     - need to store heading in a different way, to work with a single segment
@@ -78,6 +79,9 @@
   - more appropriate undo/redo sfx
   - crate push sfx
   - invalid move sfx
+  - invert sfx (for both editor and gameplay)
+  - clear sfx (for editor)
+  - resize sfx (for editor)
 
 ## Less important
 - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
