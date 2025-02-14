@@ -1,0 +1,41 @@
+{
+  "format": "snakeshift",
+  "formatVersion": 5,
+  "levelInfo": {
+    "width": 16,
+    "height": 16
+  },
+  "entities": [
+    {
+      "solid": true,
+      "x": 2,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": false,
+      "x": 1,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": false,
+      "x": 2,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "layer": 2
+    }
+  ],
+  "entityTypes": [
+    "Block",
+    "Food",
+    "Food"
+  ],
+  "activePlayerEntityIndex": -1,
+  "levelId": ""
+}
