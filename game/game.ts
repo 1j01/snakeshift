@@ -69,7 +69,7 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
   updatePageTitleAndLevelSpecificOverlays()
 }
 
-export function setBaseLevelState() {
+export function storeBaseLevelState() {
   editorState = serialize()
   levelHasGoal = entities.some(e => e instanceof Food)
   wonLevel = false

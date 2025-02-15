@@ -1,6 +1,6 @@
 import { playSound } from "./audio"
 import Entity from "./entity"
-import { activityMode, editorRedos, editorUndos, setActivityMode, shouldInputBeAllowed, setBaseLevelState as storeBaseLevelState } from "./game"
+import { activityMode, editorRedos, editorUndos, setActivityMode, shouldInputBeAllowed, storeBaseLevelState } from "./game"
 import { canMove } from "./game-logic"
 import { makeEntity } from "./helpers"
 import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
