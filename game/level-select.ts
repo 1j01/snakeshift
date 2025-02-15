@@ -138,6 +138,7 @@ export function loadNextLevel() {
     undo()
     restartLevel()
     // TODO: DRY with showLevelSplash
+    // Note: splash screens may be dismissed early by pressing Enter/Space/Escape
     const winScreen = document.querySelector<HTMLDivElement>('#standalone-level-win-screen')!
     winScreen.classList.add('active')
     playSound('gong')

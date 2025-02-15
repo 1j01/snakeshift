@@ -172,6 +172,8 @@ test('should restart level when pressing R after winning a level and undoing bac
   const contentAtStart = await getCurrentLevelContent(page)
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
+  await expect(page.locator('#level-splash-title')).toBeVisible()
+  // await page.keyboard.press('Enter') // skip splash screen (not needed for undoing)
   await page.keyboard.press('ControlOrMeta+z')
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await page.keyboard.press('r')
@@ -206,6 +208,8 @@ test('should not show "Level Complete" when a custom level has no goal', async (
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level With No Goal' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level With No Goal')
+  await expect(page.locator('#level-splash-title')).toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.keyboard.press('Backquote')
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
   await page.keyboard.press('Backquote')
@@ -366,6 +370,8 @@ test('should not show confirmation dialog if there are no unsaved changes (after
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level 002 (Just move left to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
+  await expect(page.locator('#level-splash-title')).toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.keyboard.press('Backquote')
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
   await page.getByRole('button', { name: 'Back' }).click()

@@ -229,7 +229,8 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
         // await page.waitForTimeout(100) // for nice viewing
       }
     }
-    // Could simplify this by checking if it's the last iteration (last level)
+    // TODO: for robustness, check if the game or level is won depending on whether it's the last level
+    // Note that we need to exclude non-campaign levels to check the iteration count
     if (await page.locator('#game-win-screen').isVisible()) {
       break
     }

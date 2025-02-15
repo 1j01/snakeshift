@@ -1,5 +1,5 @@
 import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
-import { activityMode, animate, handleLevelCompletion, restartLevel, setActivityMode } from "./game"
+import { activityMode, animate, handleLevelCompletion, restartLevel, setActivityMode, shouldInputBeAllowed } from "./game"
 import { clearLevel, loadLevel, openLevel, redo, saveLevel, savePlaythrough, undo, undoable } from "./game-state"
 import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
@@ -32,6 +32,27 @@ function toggleFullscreen() {
 }
 
 addEventListener('keydown', (event) => {
+  // While a screen is overtop the game, only allow certain actions that will dismiss the screen.
+  // - Allow Ctrl+Z while win screen is shown to undo winning the level/game (in case you want to try to solve it with less moves for instance)
+  // - Allow Enter/Space/Escape to dismiss the screen
+  if (!shouldInputBeAllowed() && event.key !== 'z' && event.key !== 'Z' && event.key !== 'y') {
+    if (!event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey && !event.repeat) {
+      // Press any key to dismiss splash screens? Maybe not directional keys,
+      // as you may be pressing these repeatedly to get to the end of a level and accidentally skip the splash screen...
+      // There are a lot of directional keys though, so for now, just allow Enter/Space/Escape.
+      if (event.key === 'Enter' || event.key === ' ' || event.key === 'Escape') {
+        if (document.querySelector('#game-win-screen')?.classList.contains('active')) {
+          showMainMenu()
+        } else {
+          for (const screen of document.querySelectorAll('.splash-screen.active')) {
+            screen.classList.remove('active')
+          }
+        }
+        event.preventDefault()
+      }
+    }
+    return
+  }
   if (event.key === '`' && !event.repeat) {
     if (activityMode === "play") {
       setActivityMode("edit")

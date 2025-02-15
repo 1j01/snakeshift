@@ -128,6 +128,11 @@ export function handleLevelCompletion() {
   })
 }
 
+/**
+ * Used to prevent input from secretly affecting the game while a screen is shown over it.
+ * Also used to check if a screen is shown that could be dismissed with a key press.
+ * @returns true if there is NO screen blocking the game screen, false if blocked
+ */
 export function shouldInputBeAllowed() {
   return (
     !document.querySelector("#game-win-screen.active, #level-splash.active, #standalone-level-win-screen.active") ||

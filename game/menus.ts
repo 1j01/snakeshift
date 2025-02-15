@@ -81,6 +81,7 @@ export function showMainMenu() {
 }
 
 export function showLevelSplash(levelInfo: { title: string }) {
+  // Note: splash screens may be dismissed early by pressing Enter/Space/Escape
   hideScreens()
   levelSplash.classList.add('active')
   // document.body.dataset.screen = "game" // not sure yet
