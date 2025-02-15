@@ -308,7 +308,7 @@ test('should confirm discarding unsaved changes in edit mode', async ({ page }) 
   await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
 
-  await clickTile(page, 1, 1)
+  await clickTile(page, { x: 1, y: 1 })
 
   // This should show a dialog which will be automatically dismissed
   await page.getByRole('button', { name: 'Back' }).click()
@@ -333,7 +333,7 @@ test('should confirm discarding unsaved changes when play-testing a level after 
   await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
 
-  await clickTile(page, 1, 1)
+  await clickTile(page, { x: 1, y: 1 })
 
   // Start play-testing the level
   await page.keyboard.press('Backquote')

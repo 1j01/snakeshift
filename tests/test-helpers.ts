@@ -2,7 +2,7 @@ import { Page, expect } from '@playwright/test'
 import { readFile } from 'fs/promises'
 import { basename } from 'path'
 // import { Readable } from 'stream'
-import { Tile } from '../game/types'
+import { Point, Tile } from '../game/types'
 
 export const dragAndDropFile = async (
   page: Page,
@@ -85,16 +85,8 @@ export async function setLevelContent(page: Page, content: string) {
     window._forTesting.deserialize(content)
   }, content)
 }
-export async function clickTile(page: Page, xOrTile: number | Tile, y?: number) {
-  let tile: Tile
-  if (typeof xOrTile === 'number' && typeof y === 'number') {
-    tile = { x: xOrTile, y, width: 1, height: 1 }
-  } else if (typeof xOrTile === 'object') {
-    tile = xOrTile
-  } else {
-    throw new Error('Invalid arguments: must provide either (x, y) or a Tile object')
-  }
-
+export async function clickTile(page: Page, pos: Point | Tile) {
+  const tile = { x: pos.x, y: pos.y, width: 'width' in pos ? pos.width : 1, height: 'height' in pos ? pos.height : 1 }
   const rect = await page.evaluate<Tile, Tile>((tile) => {
     return window._forTesting.tileOnPage(tile)
   }, tile)
@@ -102,8 +94,8 @@ export async function clickTile(page: Page, xOrTile: number | Tile, y?: number) 
   await page.mouse.click(rectCenter.x, rectCenter.y)
 }
 
-export async function moveMouseToTile(page: Page, x: number, y: number) {
-  const tile = { x, y, width: 1, height: 1 }
+export async function moveMouseToTile(page: Page, pos: Point | Tile) {
+  const tile = { x: pos.x, y: pos.y, width: 'width' in pos ? pos.width : 1, height: 'height' in pos ? pos.height : 1 }
   const rect = await page.evaluate<Tile, Tile>((tile) => {
     return window._forTesting.tileOnPage(tile)
   }, tile)
