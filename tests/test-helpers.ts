@@ -85,9 +85,16 @@ export async function setLevelContent(page: Page, content: string) {
     window._forTesting.deserialize(content)
   }, content)
 }
+export async function clickTile(page: Page, xOrTile: number | Tile, y?: number) {
+  let tile: Tile
+  if (typeof xOrTile === 'number' && typeof y === 'number') {
+    tile = { x: xOrTile, y, width: 1, height: 1 }
+  } else if (typeof xOrTile === 'object') {
+    tile = xOrTile
+  } else {
+    throw new Error('Invalid arguments: must provide either (x, y) or a Tile object')
+  }
 
-export async function clickTile(page: Page, x: number, y: number) {
-  const tile = { x, y, width: 1, height: 1 }
   const rect = await page.evaluate<Tile, Tile>((tile) => {
     return window._forTesting.tileOnPage(tile)
   }, tile)

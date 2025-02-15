@@ -218,7 +218,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
     for (const move of moves) {
       if (move) {
         if (typeof move === 'object' && 'click' in move) {
-          await clickTile(page, move.click.x, move.click.y)
+          await clickTile(page, move.click)
         } else {
           await page.keyboard.press(move)
         }
