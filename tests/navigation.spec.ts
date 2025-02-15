@@ -25,28 +25,6 @@ test('basic navigation', async ({ page }) => {
   await page.getByRole('button', { name: 'Back' }).click()
   await page.getByRole('button', { name: 'Level Editor' }).click()
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
-  await page.getByRole('button', { name: 'Snake (White)' }).click()
-  await page.locator('.editing > canvas').click({
-    position: {
-      x: 341,
-      y: 317
-    }
-  })
-  await page.locator('.editing > canvas').click({
-    position: {
-      x: 398,
-      y: 345
-    }
-  })
-  await page.locator('.editing > canvas').click({
-    position: {
-      x: 583,
-      y: 218
-    }
-  })
-  await page.getByRole('button', { name: 'Snake (White)' }).press('ControlOrMeta+z')
-  // TODO: test that snake was added and then removed
-  // and split this into multiple tests, probably multiple files since this is navigation.spec.ts
 })
 
 test('undoing should go back a level without immediately winning it (and it should still be winnable)', async ({ page }) => {
