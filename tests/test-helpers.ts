@@ -11,6 +11,10 @@ export const dragAndDropFile = async (
   fileName?: string,
   fileType = ''
 ) => {
+  // If this function is called right at the start of a test, the event listeners might not be set up yet.
+  // Could try a different value for the load state parameter...
+  await page.waitForLoadState('networkidle')
+
   if (!fileName) {
     fileName = basename(filePath)
   }
@@ -37,8 +41,6 @@ export const dragAndDropFile = async (
 }
 
 export async function loadLevelToPlay(page: Page, filePath: string) {
-  // If this function is called right at the start of a test, the event listeners might not be set up yet.
-  await page.waitForLoadState('networkidle')
   await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
   await page.getByRole('button', { name: 'Play/Edit' }).click()

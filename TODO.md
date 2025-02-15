@@ -106,7 +106,6 @@
 - flakiness:
   - tests should be more in control of splash screens timing/hiding
     - maybe instead of `?fast-splash-screens`, have the tests dismiss the splash screens early with a keypress, like Esc, which could be a feature available to users as well
-  - levels can take some time to load after the page title is set, apparently
 - Node.js 23 breaks Playwright tests:
   - How does Playwright normally load typescript files, that the new Node.js built-in support is able to interfere with?
   - What am I supposed to do as a user?
