@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { compareCurrentLevelContentToFile, dragAndDropFile, getCurrentLevelContent } from './test-helpers'
+import { clickTile, compareCurrentLevelContentToFile, dragAndDropFile, getCurrentLevelContent } from './test-helpers'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?fast-splash-screens&show-test-levels')
@@ -304,12 +304,7 @@ test('should confirm discarding unsaved changes in edit mode', async ({ page }) 
   await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
 
-  await page.locator('.editing > canvas').click({
-    position: {
-      x: 341,
-      y: 317
-    }
-  })
+  await clickTile(page, 1, 1)
 
   // This should show a dialog which will be automatically dismissed
   await page.getByRole('button', { name: 'Back' }).click()
@@ -334,12 +329,7 @@ test('should confirm discarding unsaved changes when play-testing a level after 
   await dragAndDropFile(page, 'body', filePath)
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
 
-  await page.locator('.editing > canvas').click({
-    position: {
-      x: 341,
-      y: 317
-    }
-  })
+  await clickTile(page, 1, 1)
 
   // Start play-testing the level
   await page.keyboard.press('Backquote')
