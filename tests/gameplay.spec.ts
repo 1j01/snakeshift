@@ -4,7 +4,7 @@ import { Collectable } from '../game/collectable.ts'
 import Entity from '../game/entity.ts'
 import Snake from '../game/snake.ts'
 import { GameState, ParsedGameState, Tile } from '../game/types.ts'
-import { getCurrentLevelContent, loadLevelToPlay } from './test-helpers.ts'
+import { clickTile, getCurrentLevelContent, loadLevelToPlay } from './test-helpers.ts'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?fast-splash-screens&show-test-levels')
@@ -218,11 +218,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
     for (const move of moves) {
       if (move) {
         if (typeof move === 'object' && 'click' in move) {
-          const rect = await page.evaluate<Tile, Tile>((tile) => {
-            return window._forTesting.tileOnPage(tile)
-          }, move.click)
-          const rectCenter = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
-          await page.mouse.click(rectCenter.x, rectCenter.y)
+          await clickTile(page, move.click.x, move.click.y)
         } else {
           await page.keyboard.press(move)
         }
