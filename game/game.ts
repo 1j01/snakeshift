@@ -49,11 +49,11 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
     cleanup = handleInput(canvas)
     editorUndos.splice(0, editorUndos.length, ...undos)
     editorRedos.splice(0, editorRedos.length, ...redos)
-    editorState = serialize()
     levelHasGoal = entities.some(e => e instanceof Food)
     undos.length = 0
     redos.length = 0
     guessDefaultActivePlayer()
+    storeBaseLevelState()
   } else {
     setStandaloneLevelMode()
     cleanup = handleInput(canvas)

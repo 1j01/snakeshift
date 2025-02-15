@@ -213,7 +213,7 @@ test.describe('level editor', () => {
       expect(snapshot1).toMatchSnapshot()
     })
   })
-  test.fail('should be able to move after restarting a custom level', async ({ page }) => {
+  test('should be able to move after restarting a custom level', async ({ page }) => {
     // Set up level so you can win by moving right
     await page.getByRole('button', { name: 'Snake (White)' }).click()
     await clickTile(page, 1, 1)
