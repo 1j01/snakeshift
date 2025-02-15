@@ -7,7 +7,7 @@ import { GameState, ParsedGameState, Tile } from '../game/types.ts'
 import { clickTile, getCurrentLevelContent, loadLevelToPlay } from './test-helpers.ts'
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:5569/?fast-splash-screens&show-test-levels')
+  await page.goto('http://localhost:5569/?show-test-levels')
 
   // Fail test on any page error
   page.on('pageerror', (error) => {
@@ -179,7 +179,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
   test.setTimeout(1000 * 60 * 60) // 1 hour
   await page.getByRole('button', { name: 'Play' }).click()
   await expect(page.locator('#level-splash')).toBeVisible()
-  await expect(page.locator('#level-splash')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   const levels = await page.$$eval('.level-button', (buttons) => buttons.map((button) => {
     return { levelId: button.getAttribute('data-level'), levelName: button.querySelector('.button-text')!.textContent! }
   }))
@@ -209,7 +209,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
       // await page.getByRole('button', { name: levels[i + 1].levelName }).click()
 
       // await expect(page.locator('#level-splash')).toBeVisible()
-      // await expect(page.locator('#level-splash')).not.toBeVisible()
+      // await page.keyboard.press('Enter') // skip splash screen
       // continue
       throw new Error(`Could not read playthrough file ${playthroughPath}: ${String(e)}`)
     }
@@ -231,7 +231,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
       break
     }
     await expect(page.locator('#level-splash')).toBeVisible()
-    await expect(page.locator('#level-splash')).not.toBeVisible()
+    await page.keyboard.press('Enter') // skip splash screen
   }
   await expect(page.locator('#game-win-screen')).toBeVisible()
 })

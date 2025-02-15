@@ -80,6 +80,7 @@ export function showMainMenu() {
   return true
 }
 
+export const splashScreenTimeouts = new Set<number>()
 export function showLevelSplash(levelInfo: { title: string }) {
   // Note: splash screens may be dismissed early by pressing Enter/Space/Escape
   hideScreens()
@@ -87,13 +88,15 @@ export function showLevelSplash(levelInfo: { title: string }) {
   // document.body.dataset.screen = "game" // not sure yet
   levelSplashTitle.textContent = levelInfo.title
   playSound('gong')
-  setTimeout(() => {
+  // @ts-expect-error conflict with @types/node
+  splashScreenTimeouts.add(setTimeout(() => {
     levelSplash.style.transition = "opacity .5s"
     levelSplash.style.opacity = "0"
-    setTimeout(() => {
+    // @ts-expect-error conflict with @types/node
+    splashScreenTimeouts.add(setTimeout(() => {
       levelSplash.classList.remove('active')
       levelSplash.style.transition = ""
       levelSplash.style.opacity = ""
-    }, location.search.includes("fast-splash-screens") ? 0 : 600)
-  }, location.search.includes("fast-splash-screens") ? 100 : 2000)
+    }, location.search.includes("fast-splash-screens") ? 0 : 600))
+  }, location.search.includes("fast-splash-screens") ? 100 : 2000))
 }

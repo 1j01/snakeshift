@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:5569/?fast-splash-screens&show-test-levels')
+  await page.goto('http://localhost:5569/?show-test-levels')
 
   // Fail test on any page error
   page.on('pageerror', (error) => {

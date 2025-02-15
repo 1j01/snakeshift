@@ -3,7 +3,7 @@ import { activityMode, animate, handleLevelCompletion, restartLevel, setActivity
 import { clearLevel, loadLevel, openLevel, redo, saveLevel, savePlaythrough, undo, undoable } from "./game-state"
 import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
-import { initMainMenu, showMainMenu } from "./menus"
+import { initMainMenu, showMainMenu, splashScreenTimeouts } from "./menus"
 import { canvas } from "./rendering"
 import './testing-interface'
 
@@ -35,6 +35,7 @@ addEventListener('keydown', (event) => {
   // While a screen is overtop the game, only allow certain actions that will dismiss the screen.
   // - Allow Ctrl+Z while win screen is shown to undo winning the level/game (in case you want to try to solve it with less moves for instance)
   // - Allow Enter/Space/Escape to dismiss the screen
+  // - Not really sure about Ctrl+Y, maybe should remove the exclusion
   if (!shouldInputBeAllowed() && event.key !== 'z' && event.key !== 'Z' && event.key !== 'y') {
     if (!event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey && !event.repeat) {
       // Press any key to dismiss splash screens? Maybe not directional keys,
@@ -46,6 +47,9 @@ addEventListener('keydown', (event) => {
         } else {
           for (const screen of document.querySelectorAll('.splash-screen.active')) {
             screen.classList.remove('active')
+          }
+          for (const timeout of splashScreenTimeouts) {
+            clearTimeout(timeout)
           }
         }
         event.preventDefault()

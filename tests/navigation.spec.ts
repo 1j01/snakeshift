@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 import { clickTile, compareCurrentLevelContentToFile, dragAndDropFile, getCurrentLevelContent } from './test-helpers'
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:5569/?fast-splash-screens&show-test-levels')
+  await page.goto('http://localhost:5569/?show-test-levels')
 
   // Fail test on any page error
   page.on('pageerror', (error) => {
@@ -32,17 +32,17 @@ test('undoing should go back a level without immediately winning it (and it shou
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.keyboard.press('ControlOrMeta+z')
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
 })
 
 test('you should be able to win the last level twice in a row, after returning to it via level select', async ({ page }) => {
@@ -52,7 +52,7 @@ test('you should be able to win the last level twice in a row, after returning t
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 999 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await expect(page.locator('#game-win-screen')).not.toBeVisible()
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('#game-win-screen')).toBeVisible()
@@ -62,7 +62,7 @@ test('you should be able to win the last level twice in a row, after returning t
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 999 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await expect(page.locator('#game-win-screen')).not.toBeVisible()
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('#game-win-screen')).toBeVisible()
@@ -73,7 +73,7 @@ test('you should be able to hide the game win screen by undoing, and then win ag
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 999 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('#game-win-screen')).toBeVisible()
   await page.keyboard.press('ControlOrMeta+z')
@@ -115,11 +115,11 @@ test('should stay on the same level when switching to edit mode after winning a 
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.keyboard.press('Backquote')
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
   await page.keyboard.press('Backquote')
@@ -135,7 +135,7 @@ test('should restart level when pressing R', async ({ page }) => {
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   const contentAtStart = await getCurrentLevelContent(page)
   await page.keyboard.press('ArrowUp')
   const contentAfterMoveUp = await getCurrentLevelContent(page)
@@ -151,11 +151,11 @@ test('should restart level when pressing R after winning a prior level', async (
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   const contentAtStart = await getCurrentLevelContent(page)
   await page.keyboard.press('r')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
@@ -168,7 +168,7 @@ test('should restart level when pressing R after winning a level and undoing bac
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   const contentAtStart = await getCurrentLevelContent(page)
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
@@ -187,7 +187,7 @@ test('should show "Level Complete" when finishing a custom level (via level edit
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.keyboard.press('Backquote')
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
   await page.keyboard.press('Backquote')
@@ -225,16 +225,11 @@ test('should not show "Level Complete" when a custom level has no goal', async (
 
 // TODO: also test that you can't switch between snakes while a splash screen is shown
 test('should not allow movement while level win splash screen is shown', async ({ page }) => {
-  // Clear ?fast-splash-screens for this test, since it relies on acting while the splash screen is shown.
-  // But first wait for network requests to finish, since goto can abort them, causing the pageerror event to fail the test otherwise.
-  // Ideally, we would only load the page once for this test, but I'm not sure how to handle an exceptional case while still taking advantage of beforeEach.
-  await page.waitForLoadState('networkidle')
-  await page.goto('http://localhost:5569/?show-test-levels')
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
@@ -249,8 +244,7 @@ test('should not allow movement while level win splash screen is shown', async (
   await page.keyboard.press('ArrowLeft')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  // Wait for the splash screen to hide.
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   // If the previous Up+Left took place, Down will win the level. But it should be the first allowed movement.
   await page.keyboard.press('ArrowDown')
   // await expect(page.locator('#level-splash-title')).not.toBeVisible() // would wait for it to hide, not check that it was never shown
@@ -268,7 +262,7 @@ test('should not allow movement after the game is won', async ({ page }) => {
   await page.getByRole('button', { name: 'Test Level 999 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 999 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
-  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   expect(await page.evaluate(() => window._forTesting.playedSounds)).toEqual(['gong'])
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('#game-win-screen')).toBeVisible()
