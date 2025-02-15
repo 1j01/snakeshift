@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { compareCurrentLevelContentToFile, dragAndDropFile } from './test-helpers'
+import { compareCurrentLevelContentToFile, dragAndDropFile, getCurrentLevelContent } from './test-helpers'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?fast-splash-screens&show-test-levels')
@@ -130,16 +130,23 @@ test('should stay on the same level when switching to edit mode after winning a 
   await compareCurrentLevelContentToFile(page, 'game/public/levels/tests/move-left-to-win.json')
 })
 
-test('should stay on the same level when pressing R', async ({ page }) => {
+test('should restart level when pressing R', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
+  await expect(page.locator('#level-splash-title')).toBeVisible()
+  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  const contentAtStart = await getCurrentLevelContent(page)
+  await page.keyboard.press('ArrowUp')
+  const contentAfterMoveUp = await getCurrentLevelContent(page)
   await page.keyboard.press('r')
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
-  // TODO: also test that it restarts the level
+  const contentAfterRestart = await getCurrentLevelContent(page)
+  expect(contentAfterMoveUp).not.toEqual(contentAtStart)
+  expect(contentAfterRestart).toEqual(contentAtStart)
 })
 
-test('should stay on the same level when pressing R after winning a prior level', async ({ page }) => {
+test('should restart level when pressing R after winning a prior level', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
@@ -149,24 +156,28 @@ test('should stay on the same level when pressing R after winning a prior level'
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
   await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  const contentAtStart = await getCurrentLevelContent(page)
   await page.keyboard.press('r')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
-  // TODO: also test that it restarts the level
+  const contentAfterRestart = await getCurrentLevelContent(page)
+  expect(contentAfterRestart).toEqual(contentAtStart)
 })
 
-test('should stay on the same level when pressing R after winning a level and undoing back to the previous level', async ({ page }) => {
+test('should restart level when pressing R after winning a level and undoing back to the previous level', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await expect(page.locator('#level-splash-title')).toBeVisible()
   await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  const contentAtStart = await getCurrentLevelContent(page)
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveTitle('Snakeshift - Test Level 002 (Just move left to win)')
   await page.keyboard.press('ControlOrMeta+z')
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
   await page.keyboard.press('r')
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
-  // TODO: also test that it restarts the level
+  const contentAfterRestart = await getCurrentLevelContent(page)
+  expect(contentAfterRestart).toEqual(contentAtStart)
 })
 
 test('should show "Level Complete" when finishing a custom level (via level editor)', async ({ page }) => {

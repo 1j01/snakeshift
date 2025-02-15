@@ -213,6 +213,21 @@ test.describe('level editor', () => {
       expect(snapshot1).toMatchSnapshot()
     })
   })
+  test.fail('should be able to move after restarting a custom level', async ({ page }) => {
+    // Set up level so you can win by moving right
+    await page.getByRole('button', { name: 'Snake (White)' }).click()
+    await clickTile(page, 1, 1)
+    await page.getByRole('button', { name: 'Food (White)' }).click()
+    await clickTile(page, 2, 1)
+
+    // Play
+    await page.getByRole('button', { name: 'Play/Edit' }).click()
+    await expect(page).toHaveTitle('Snakeshift - Custom Level')
+    await page.getByRole('button', { name: 'Restart Level' }).click()
+    await expect(page.getByText('Level Complete')).not.toBeVisible()
+    await page.keyboard.press('ArrowRight')
+    await expect(page.getByText('Level Complete')).toBeVisible()
+  })
   test.describe('move tool', () => {
     test.skip('move tool should let you move rectangular entities', () => { /* TODO */ })
     test.skip('move tool should let you drag snakes by the head', () => { /* TODO */ })
