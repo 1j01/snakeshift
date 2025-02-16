@@ -58,6 +58,8 @@
     ".history",
     "playwright-report",
     "test-results",
+    "blob-report",
+    "playwright/.cache",
     "tests/*-snapshots",
     "dist",
     "*.svg",
