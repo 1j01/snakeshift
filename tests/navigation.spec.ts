@@ -378,6 +378,8 @@ test('should not show confirmation dialog if playing a built-in level', async ({
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
+  await expect(page.locator('#level-splash-title')).toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
 
   // Don't win the level, just move, creating an undo state.
   await page.keyboard.press('ArrowUp')
