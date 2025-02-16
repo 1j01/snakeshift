@@ -98,7 +98,6 @@
 - hide things properly instead of relying on z-index
   - simplify tests (remove `exact`)
   - fix aria-keyshortcuts semantics (the attribute shouldn't be present on things that won't activate, such as some hidden buttons)
-  - fix flash of in-game controls before main menu is shown while page is loading
   - see `/* TODO: hide back button properly, for (in)accessibility */`
 
 
