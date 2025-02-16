@@ -9,7 +9,7 @@ const ctx = canvas.getContext('2d')!
 document.body.appendChild(canvas)
 
 const editorGUI = document.getElementById('entities-bar')!
-const gameOptionsBar = document.querySelector('.back-to-main-menu-button')!
+const gameOptionsBar = document.getElementById('game-options-bar')!
 
 let transform: DOMMatrix | undefined = undefined
 export function draw() {
