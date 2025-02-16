@@ -58,6 +58,7 @@
     ".history",
     "playwright-report",
     "test-results",
+    "tests/*-snapshots",
     "dist",
     "*.svg",
     "*.png",
