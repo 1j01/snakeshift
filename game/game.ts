@@ -1,6 +1,6 @@
 import { Food } from "./food"
 import { canMove } from "./game-logic"
-import { clearLevel, deserialize, entities, guessDefaultActivePlayer, onUpdate, redos, serialize, undoable, undos } from "./game-state"
+import { clearLevel, deserialize, entities, goToHistoryIndex, guessDefaultActivePlayer, onUpdate, redos, serialize, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
 import { currentLevelID, loadLevelFile, loadNextLevel, setStandaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
@@ -80,7 +80,10 @@ export function storeBaseLevelState() {
 }
 
 export function restartLevel() {
-  // TODO: for replay mode, this should (could) go back to the start of the replay
+  if (activityMode === "replay") {
+    goToHistoryIndex(0)
+    return
+  }
   if (activityMode !== "play") return
   if (currentLevelID()) {
     // I don't want to special case this, but I'm so tired from whacking moles
