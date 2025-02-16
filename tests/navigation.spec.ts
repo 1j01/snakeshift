@@ -399,6 +399,54 @@ test('escape should close level info dialog if open, without returning to main m
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
 })
 
+test('escape should hide a splash screen if open, without returning to main menu', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click()
+  await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
+  await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
+  await expect(page.locator('#level-splash-title')).toBeVisible()
+  await page.keyboard.press('Escape') // skip splash screen (using Escape, unlike other tests)
+  await expect(page.locator('#level-splash-title')).not.toBeVisible()
+  await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
+})
+
+test.fail('escape should go to main menu from a campaign level', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click()
+  await page.getByRole('button', { name: 'Lock Picking' }).click()
+  await expect(page).toHaveTitle('Snakeshift - Lock Picking')
+  await expect(page.locator('#level-splash-title')).toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
+  await page.keyboard.press('Escape')
+  await expect(page).toHaveTitle('Snakeshift')
+})
+
+test('escape should switch to edit mode if playtesting a custom level', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Editor' }).click()
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page).toHaveTitle('Snakeshift - Custom Level')
+  await page.keyboard.press('Escape')
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+})
+
+test('back button should go to main menu from a campaign level', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click()
+  await page.getByRole('button', { name: 'Lock Picking' }).click()
+  await expect(page).toHaveTitle('Snakeshift - Lock Picking')
+  await expect(page.locator('#level-splash-title')).toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
+  await page.getByRole('button', { name: 'Back' }).click()
+  await expect(page).toHaveTitle('Snakeshift')
+})
+
+test.fail('back button should switch to edit mode if playtesting a custom level', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Editor' }).click()
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+  await page.getByRole('button', { name: 'Play/Edit' }).click()
+  await expect(page).toHaveTitle('Snakeshift - Custom Level')
+  await page.getByRole('button', { name: 'Back' }).click()
+  await expect(page).toHaveTitle('Snakeshift - Level Editor')
+})
+
 test.skip('you should be able to win a level after returning to it via undo... even if some unknown conditions occur', async () => {
   // not sure when the problem occurs
 })
