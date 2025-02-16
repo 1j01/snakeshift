@@ -322,6 +322,8 @@ test('should confirm discarding unsaved changes in edit mode', async ({ page }) 
 })
 
 test('should confirm discarding unsaved changes when play-testing a level after editing', async ({ page }) => {
+  test.skip(true, 'This test no longer makes sense because Escape or the Back button will toggle edit mode in this case.')
+
   await page.getByRole('button', { name: 'Level Editor' }).click()
   const filePath = 'game/public/levels/tests/move-left-to-win.json'
   await dragAndDropFile(page, 'body', filePath)
@@ -409,7 +411,7 @@ test('escape should hide a splash screen if open, without returning to main menu
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
 })
 
-test.fail('escape should go to main menu from a campaign level', async ({ page }) => {
+test('escape should go to main menu from a campaign level', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Lock Picking' }).click()
   await expect(page).toHaveTitle('Snakeshift - Lock Picking')
@@ -438,7 +440,11 @@ test('back button should go to main menu from a campaign level', async ({ page }
   await expect(page).toHaveTitle('Snakeshift')
 })
 
-test.fail('back button should switch to edit mode if playtesting a custom level', async ({ page }) => {
+test('back button should switch to edit mode if playtesting a custom level', async ({ page }) => {
+  // Motivation for this behavior:
+  // I don't like seeing "This will discard any unsaved changes. Are you sure?"
+  // when I'm not expecting it, and it's easy to hit Back instead of Play/Edit.
+  // Edit mode is a natural state to return to, even if the Back button is technically redundant with Play/Edit in this case.
   await page.getByRole('button', { name: 'Level Editor' }).click()
   await expect(page).toHaveTitle('Snakeshift - Level Editor')
   await page.getByRole('button', { name: 'Play/Edit' }).click()

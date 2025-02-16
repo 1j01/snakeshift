@@ -111,12 +111,8 @@ addEventListener('keydown', (event) => {
     translateSelection(dx, dy)
     event.preventDefault()
   } else if (event.key === 'Escape') {
-    if (activityMode === "play") {
-      setActivityMode("edit")
-    } else {
-      // From Level Editor, Level Select, or Credits, go to Main Menu
-      showMainMenu()
-    }
+    const backButton = document.querySelector<HTMLButtonElement>('.back-to-main-menu-button')!
+    backButton.click()
     event.preventDefault()
   } else if (event.key === 'm') {
     toggleMute()

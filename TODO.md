@@ -1,10 +1,6 @@
 # Snakeshift Todo List
 
 - bug: can select tutorial text just after loading a level, while the splash screen is still fading out
-- handle escape key same as back button (maybe trigger a click; but take the best of both worlds)
-  - in particular, it should not toggle ONE WAY INTO THE LEVEL EDITOR that's insane (for the campaign)
-  - back button should probably act to switch from play to edit mode when playtesting a custom level though
-    - (I don't like seeing "This will discard any unsaved changes. Are you sure?" when I'm not expecting it, and it's easy to hit back instead of play/edit)
 - skip/merge extra undo steps for switching snakes
 - readme image
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes

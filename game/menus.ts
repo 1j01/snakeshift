@@ -1,7 +1,7 @@
 import { playSound } from "./audio"
-import { setActivityMode } from "./game"
+import { activityMode, setActivityMode } from "./game"
 import { clearLevel, confirmLoseUnsavedChanges } from "./game-state"
-import { loadFirstLevel } from "./level-select"
+import { loadFirstLevel, standaloneLevelMode } from "./level-select"
 
 const playButton = document.querySelector<HTMLButtonElement>('#play-button')!
 const levelSelectButton = document.querySelector<HTMLButtonElement>('#level-select-button')!
@@ -41,7 +41,15 @@ export function initMainMenu() {
   })
 
   for (const backButton of backButtons) {
-    backButton.addEventListener('click', showMainMenu)
+    backButton.addEventListener('click', () => {
+      if (activityMode === "play" && standaloneLevelMode) {
+        // Playtesting a custom level, return to editing
+        setActivityMode("edit")
+      } else {
+        // From Level Editor, Level Select, Credits, or a campaign level, go to Main Menu
+        showMainMenu()
+      }
+    })
   }
 
   // This is now handled in input.ts with general focus management
