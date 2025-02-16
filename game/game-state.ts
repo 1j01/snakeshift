@@ -1,3 +1,4 @@
+import * as jsondiffpatch from "jsondiffpatch"
 import { playSound } from "./audio"
 import Entity from "./entity"
 import { activityMode, editorRedos, editorUndos, setActivityMode, shouldInputBeAllowed, storeBaseLevelState } from "./game"
@@ -5,6 +6,7 @@ import { canMove } from "./game-logic"
 import { makeEntity } from "./helpers"
 import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { hideScreens, showLevelSplash } from "./menus"
+import { isPlaythrough } from "./shared-helpers"
 import Snake from "./snake"
 import { ControlScheme, GameState, ParsedGameState } from "./types"
 
@@ -88,6 +90,7 @@ export function goToHistoryIndex(index: number) {
 }
 
 const FORMAT_VERSION = 5
+const PLAYTHROUGH_FORMAT_VERSION = 2
 export function serialize(): GameState {
   return JSON.stringify({
     format: "snakeshift",
@@ -260,32 +263,94 @@ export function saveLevel() {
 }
 
 export function savePlaythrough() {
-  // TODO: better playthrough format
-  // Since I've already saved some playthroughs by just copying `JSON.stringify(undos)` from the console,
-  // I figure I might as well make it easy to save them like this for now, as I'll have files to convert anyway.
-  // This format's pretty bad though - JSON strings in JSON, and no format identifier/version.
-  // BTW: this function doesn't have to do with level editing, except I suppose I MIGHT allow saving while editing,
-  // but it's just similar to saveLevel.
-  // New files will include the final state, but old files will be slightly unsatisfying to watch. :P
-  const json = JSON.stringify([...undos, serialize()])
+  // TODO: Include redos in order to support round-trip re-saving of playthroughs for automated upgrading of the format...
+  // but maybe only in replay mode? Might be unexpected in play mode.
+  const states = [...undos, serialize()].map(s => JSON.parse(s) as ParsedGameState)
+  const baseState = states[0]
+  const deltas: jsondiffpatch.Delta[] = []
+  let prevState = baseState
+  const diffPatcher = jsondiffpatch.create({
+    objectHash: (obj: object, index?: number): string | undefined => {
+      // try to find an id property, otherwise just use the index in the array
+      // unfortunately not all movable entities have an id property
+      return 'id' in obj ? (obj as { id: string }).id : '$$index:' + index
+    },
+  })
+
+  for (let i = 1; i < states.length; i++) {
+    const state = states[i]
+    const delta = diffPatcher.diff(prevState, state)
+    // jsonpatch format is a standard and more human-readable,
+    // but jsondiffpatch's native Delta format is more compact when minified (not necessarily when pretty-printed, since it uses more nesting)
+    // patches.push(jsonpatchFormatter.format(delta))
+    deltas.push(delta)
+    prevState = state
+  }
+  const json = JSON.stringify({
+    format: "snakeshift-playthrough",
+    formatVersion: PLAYTHROUGH_FORMAT_VERSION,
+    baseState,
+    deltas,
+  })
   const blob = new Blob([json], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
+  // TODO: include level ID in filename if available
   a.download = 'snakeshift-level-playthrough.json'
   a.click()
 }
 function loadPlaythrough(json: string) {
-
-  const playthrough = JSON.parse(json) as GameState[]
-  if (!Array.isArray(playthrough)) {
-    throw new Error("Invalid playthrough format")
+  let parsed = JSON.parse(json) as object
+  if (Array.isArray(parsed)) {
+    // V1 -> V2
+    // First version of playthrough format was just an array of JSON strings
+    // containing snakeshift level file data. Very inefficient.
+    const stateStrings = parsed as string[]
+    const baseState = JSON.parse(stateStrings[0]) as ParsedGameState
+    const deltas: jsondiffpatch.Delta[] = []
+    let prevState = baseState
+    const diffPatcher = jsondiffpatch.create({
+      objectHash: (obj: object, index?: number): string | undefined => {
+        // try to find an id property, otherwise just use the index in the array
+        return 'id' in obj ? (obj as { id: string }).id : '$$index:' + index
+      },
+    })
+    for (let i = 1; i < stateStrings.length; i++) {
+      const state = JSON.parse(stateStrings[i]) as ParsedGameState
+      const delta = diffPatcher.diff(prevState, state)
+      deltas.push(delta)
+      prevState = state
+    }
+    parsed = {
+      format: "snakeshift-playthrough",
+      formatVersion: 2,
+      baseState,
+      deltas,
+    }
   }
+  if (!('format' in parsed)) throw new Error('Invalid format. Missing "format" property.')
+  if (!('formatVersion' in parsed)) throw new Error('Invalid format. Missing "formatVersion" property.')
+  if (parsed.format !== "snakeshift-playthrough") throw new Error(`Invalid format. Expected "snakeshift-playthrough", got ${JSON.stringify(parsed.format)}`)
+  if (typeof parsed.formatVersion !== "number") throw new Error(`Invalid format. Expected "number", got ${JSON.stringify(parsed.formatVersion)} for "formatVersion" property.`)
+  if (parsed.formatVersion > PLAYTHROUGH_FORMAT_VERSION) throw new Error("Format version is too new")
+  if (!('baseState' in parsed)) throw new Error('Invalid format. Missing "baseState" property.')
+  if (!('deltas' in parsed)) throw new Error('Invalid format. Missing "deltas" property.')
+
+  let state = parsed.baseState as ParsedGameState
+  const playthrough = [JSON.stringify(state)] as GameState[]
+  for (const delta of parsed.deltas as jsondiffpatch.Delta[]) {
+    const newState = jsondiffpatch.patch(state, delta) as ParsedGameState
+    playthrough.push(JSON.stringify(newState))
+    state = newState
+  }
+
   loadLevelFromText(playthrough[0], "replay")
   for (const state of playthrough.toReversed()) {
     redos.push(state)
   }
   redo()
+  // undos.length = 0 // TODO?
   const replaySlider = document.getElementById("replay-slider") as HTMLInputElement
   replaySlider.max = `${playthrough.length}`
   replaySlider.value = "0"
@@ -351,8 +416,7 @@ function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "replay"
   if (activityMode === "play" && newMode === "play") {
     undoable()
   }
-  // not allowing whitespace but this is just a temporary file format with no proper identifier, for playthroughs
-  if (fileText.startsWith('[')) {
+  if (isPlaythrough(fileText)) {
     // TODO: error handling; also, I just realized loadLevelFromText will be at
     // two places in the call stack in this case. Might be able to simplify by having
     // loadPlaythrough (or a replacement with a new name) return the GameState string to load,

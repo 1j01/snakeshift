@@ -11,6 +11,7 @@ import { writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
+import { isPlaythrough } from '../game/shared-helpers.ts'
 import { getCurrentLevelContent, setLevelContent } from '../tests/test-helpers.ts'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -56,7 +57,8 @@ void (async () => {
       continue
     }
     const fileContents = readFileSync(filePath, 'utf8')
-    if (fileContents.startsWith('[')) {
+    if (isPlaythrough(fileContents)) {
+      // TODO: upgrade playthroughs
       console.error("Skipping file which may be a playthrough:", filePath)
       continue
     }
