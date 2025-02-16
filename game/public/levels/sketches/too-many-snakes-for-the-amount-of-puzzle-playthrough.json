@@ -1,0 +1,5982 @@
+{
+  "format": "snakeshift-playthrough",
+  "formatVersion": 2,
+  "baseState": {
+    "format": "snakeshift",
+    "formatVersion": 5,
+    "levelInfo": {
+      "width": 6,
+      "height": 6
+    },
+    "entities": [
+      {
+        "solid": true,
+        "x": 7,
+        "y": 7,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 6,
+        "y": 7,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 6,
+        "y": 6,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 6,
+        "y": 5,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 7,
+        "y": 4,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 7,
+        "y": 3,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 8,
+        "y": 3,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 8,
+        "y": 2,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 9,
+        "y": 2,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 10,
+        "y": 2,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 10,
+        "y": 3,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 10,
+        "y": 4,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 10,
+        "y": 5,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 9,
+        "y": 6,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 9,
+        "y": 7,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 9,
+        "y": 8,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 10,
+        "y": 7,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 11,
+        "y": 8,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 12,
+        "y": 8,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 12,
+        "y": 7,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 13,
+        "y": 6,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 13,
+        "y": 5,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 13,
+        "y": 4,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 2,
+        "y": 3,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 2,
+        "y": 2,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 3,
+        "y": 2,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 4,
+        "y": 1,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 1,
+        "y": 1,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 4,
+        "y": 4,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 1,
+        "y": 4,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 3,
+        "y": 3,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 0,
+        "y": 5,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 5,
+        "y": 5,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": true,
+        "x": 5,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "id": "64e2d407-73dd-4d01-8d95-edc5c1cbfa98",
+        "segments": [
+          {
+            "layer": 1,
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 1
+          },
+          {
+            "layer": 1,
+            "x": 0,
+            "y": 3,
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "growOnNextMove": false
+      },
+      {
+        "id": "929d872e-5fde-4454-9cc3-e1c644041431",
+        "segments": [
+          {
+            "layer": 1,
+            "x": 3,
+            "y": 0,
+            "width": 1,
+            "height": 1
+          },
+          {
+            "layer": 1,
+            "x": 2,
+            "y": 0,
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "growOnNextMove": false
+      },
+      {
+        "id": "4a1d28a0-15c5-49b7-a236-375f29b8a683",
+        "segments": [
+          {
+            "layer": 1,
+            "x": 5,
+            "y": 3,
+            "width": 1,
+            "height": 1
+          },
+          {
+            "layer": 1,
+            "x": 5,
+            "y": 2,
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "growOnNextMove": false
+      },
+      {
+        "id": "57f10ee2-f99d-49ed-a3de-9ba1704f09c2",
+        "segments": [
+          {
+            "layer": 1,
+            "x": 2,
+            "y": 5,
+            "width": 1,
+            "height": 1
+          },
+          {
+            "layer": 1,
+            "x": 3,
+            "y": 5,
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "growOnNextMove": false
+      },
+      {
+        "id": "8a01ab47-d2a0-4f35-a8f6-77f70f75d424",
+        "segments": [
+          {
+            "layer": 2,
+            "x": 2,
+            "y": 2,
+            "width": 1,
+            "height": 1
+          },
+          {
+            "layer": 2,
+            "x": 2,
+            "y": 3,
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "growOnNextMove": false
+      },
+      {
+        "id": "388bea90-3ae1-48c3-b6c6-aa1ebd746588",
+        "segments": [
+          {
+            "layer": 2,
+            "x": 3,
+            "y": 3,
+            "width": 1,
+            "height": 1
+          },
+          {
+            "layer": 2,
+            "x": 3,
+            "y": 2,
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "growOnNextMove": false
+      },
+      {
+        "id": "1822f370-c3ed-4c96-b79f-ee11bfea34c6",
+        "segments": [
+          {
+            "layer": 1,
+            "x": 3,
+            "y": 1,
+            "width": 1,
+            "height": 1
+          },
+          {
+            "layer": 1,
+            "x": 2,
+            "y": 1,
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "growOnNextMove": false
+      },
+      {
+        "id": "4129f8b2-3c22-4297-a77d-dc181dd4412a",
+        "segments": [
+          {
+            "layer": 1,
+            "x": 4,
+            "y": 3,
+            "width": 1,
+            "height": 1
+          },
+          {
+            "layer": 1,
+            "x": 4,
+            "y": 2,
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "growOnNextMove": false
+      },
+      {
+        "id": "6ea68ae7-16c0-4723-8b28-e143cdd0213d",
+        "segments": [
+          {
+            "layer": 1,
+            "x": 2,
+            "y": 4,
+            "width": 1,
+            "height": 1
+          },
+          {
+            "layer": 1,
+            "x": 3,
+            "y": 4,
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "growOnNextMove": false
+      },
+      {
+        "id": "0d7a3bed-0646-4da7-88ad-81477a92e47a",
+        "segments": [
+          {
+            "layer": 1,
+            "x": 1,
+            "y": 2,
+            "width": 1,
+            "height": 1
+          },
+          {
+            "layer": 1,
+            "x": 1,
+            "y": 3,
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "growOnNextMove": false
+      },
+      {
+        "solid": false,
+        "x": 1,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": false,
+        "x": 0,
+        "y": 1,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": false,
+        "x": 0,
+        "y": 4,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": false,
+        "x": 1,
+        "y": 5,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": false,
+        "x": 4,
+        "y": 5,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": false,
+        "x": 5,
+        "y": 4,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": false,
+        "x": 5,
+        "y": 1,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": false,
+        "x": 4,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "layer": 1
+      },
+      {
+        "solid": false,
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "layer": 2
+      },
+      {
+        "solid": false,
+        "x": 1,
+        "y": 1,
+        "width": 1,
+        "height": 1,
+        "layer": 2
+      },
+      {
+        "solid": false,
+        "x": 4,
+        "y": 1,
+        "width": 1,
+        "height": 1,
+        "layer": 2
+      },
+      {
+        "solid": false,
+        "x": 5,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "layer": 2
+      },
+      {
+        "solid": false,
+        "x": 4,
+        "y": 4,
+        "width": 1,
+        "height": 1,
+        "layer": 2
+      },
+      {
+        "solid": false,
+        "x": 5,
+        "y": 5,
+        "width": 1,
+        "height": 1,
+        "layer": 2
+      },
+      {
+        "solid": false,
+        "x": 1,
+        "y": 4,
+        "width": 1,
+        "height": 1,
+        "layer": 2
+      },
+      {
+        "solid": false,
+        "x": 0,
+        "y": 5,
+        "width": 1,
+        "height": 1,
+        "layer": 2
+      }
+    ],
+    "entityTypes": [
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Block",
+      "Snake",
+      "Snake",
+      "Snake",
+      "Snake",
+      "Snake",
+      "Snake",
+      "Snake",
+      "Snake",
+      "Snake",
+      "Snake",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food",
+      "Food"
+    ],
+    "activePlayerEntityIndex": 35,
+    "levelId": ""
+  },
+  "patches": [
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/60"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/60"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/55/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/55/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/56/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/56/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/57/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/57/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/58/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/58/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/59/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/59/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 37
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/59"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/59"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/51/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/51/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/51/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/55/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/55/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/56/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/56/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/57/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/57/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/58/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/58/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 38
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/58"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/58"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/48/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/49/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/49/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/51/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/51/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/55/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/55/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/56/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/56/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/57/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/57/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 39
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 41
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/id",
+        "value": "388bea90-3ae1-48c3-b6c6-aa1ebd746588"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/0/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/id",
+        "value": "1822f370-c3ed-4c96-b79f-ee11bfea34c6"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/id",
+        "value": "8a01ab47-d2a0-4f35-a8f6-77f70f75d424"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/x",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/57"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/57"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/55/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/55/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/56/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/56/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 42
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 43
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 37
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 38
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 39
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 40
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 41
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 42
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 4
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/56"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/56"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/49/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/49/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/49/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/51/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/55/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/55/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 43
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 37
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 38
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 39
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 40
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 41
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 42
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/id",
+        "value": "4129f8b2-3c22-4297-a77d-dc181dd4412a"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/id",
+        "value": "8a01ab47-d2a0-4f35-a8f6-77f70f75d424"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 0
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/2",
+        "value": {
+          "layer": 2,
+          "x": 4,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        }
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/55"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/55"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/51/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/54/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 1
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/3",
+        "value": {
+          "layer": 2,
+          "x": 5,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        }
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/54"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/54"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/51/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/51/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/53/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/42/segments/3"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/42/segments/2"
+      },
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/id",
+        "value": "6ea68ae7-16c0-4723-8b28-e143cdd0213d"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/id",
+        "value": "0d7a3bed-0646-4da7-88ad-81477a92e47a"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/id",
+        "value": "8a01ab47-d2a0-4f35-a8f6-77f70f75d424"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "add",
+        "path": "/entities/44/segments/2",
+        "value": {
+          "layer": 2,
+          "x": 2,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/44/segments/3",
+        "value": {
+          "layer": 2,
+          "x": 3,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/44/segments/4",
+        "value": {
+          "layer": 2,
+          "x": 4,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        }
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/4/x",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/53"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/53"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/4/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/52/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/4/x",
+        "value": 1
+      },
+      {
+        "op": "add",
+        "path": "/entities/44/segments/5",
+        "value": {
+          "layer": 2,
+          "x": 2,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        }
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/4/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/5/x",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/52"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/52"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/4/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/5/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/51/x",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 37
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/44/segments/5"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/44/segments/4"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/44/segments/3"
+      },
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/id",
+        "value": "57f10ee2-f99d-49ed-a3de-9ba1704f09c2"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/0/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/1/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/id",
+        "value": "388bea90-3ae1-48c3-b6c6-aa1ebd746588"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/id",
+        "value": "1822f370-c3ed-4c96-b79f-ee11bfea34c6"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/id",
+        "value": "4129f8b2-3c22-4297-a77d-dc181dd4412a"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/0/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/id",
+        "value": "6ea68ae7-16c0-4723-8b28-e143cdd0213d"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/id",
+        "value": "0d7a3bed-0646-4da7-88ad-81477a92e47a"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/id",
+        "value": "8a01ab47-d2a0-4f35-a8f6-77f70f75d424"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "add",
+        "path": "/entities/43/segments/2",
+        "value": {
+          "layer": 2,
+          "x": 2,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/43/segments/3",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/43/segments/4",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/43/segments/5",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/id",
+        "value": "4a1d28a0-15c5-49b7-a236-375f29b8a683"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/y",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/51"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/51"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/48/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/48/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/48/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/49/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/49/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/50/x",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/x",
+        "value": 4
+      },
+      {
+        "op": "add",
+        "path": "/entities/44/segments/3",
+        "value": {
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/x",
+        "value": 4
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/x",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/y",
+        "value": 4
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/x",
+        "value": 4
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/3/x",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 37
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 38
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 39
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 40
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 41
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 42
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 43
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 37
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 38
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/y",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/x",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/y",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/43/segments/5"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/43/segments/4"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/44/segments/3"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/44/segments/2"
+      },
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/id",
+        "value": "1822f370-c3ed-4c96-b79f-ee11bfea34c6"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/id",
+        "value": "4129f8b2-3c22-4297-a77d-dc181dd4412a"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/0/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/id",
+        "value": "6ea68ae7-16c0-4723-8b28-e143cdd0213d"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/id",
+        "value": "0d7a3bed-0646-4da7-88ad-81477a92e47a"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/id",
+        "value": "8a01ab47-d2a0-4f35-a8f6-77f70f75d424"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/2",
+        "value": {
+          "layer": 2,
+          "x": 2,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/3",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/4",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/5",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/id",
+        "value": "4a1d28a0-15c5-49b7-a236-375f29b8a683"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/2/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/2/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/2/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/3/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/3/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/id",
+        "value": "388bea90-3ae1-48c3-b6c6-aa1ebd746588"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/y",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 4
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/y",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/42/segments/5"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/42/segments/4"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/43/segments/3"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/43/segments/2"
+      },
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/id",
+        "value": "57f10ee2-f99d-49ed-a3de-9ba1704f09c2"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/segments/0/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/segments/1/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/id",
+        "value": "1822f370-c3ed-4c96-b79f-ee11bfea34c6"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/id",
+        "value": "4129f8b2-3c22-4297-a77d-dc181dd4412a"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/id",
+        "value": "6ea68ae7-16c0-4723-8b28-e143cdd0213d"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/id",
+        "value": "0d7a3bed-0646-4da7-88ad-81477a92e47a"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/id",
+        "value": "8a01ab47-d2a0-4f35-a8f6-77f70f75d424"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "add",
+        "path": "/entities/41/segments/2",
+        "value": {
+          "layer": 2,
+          "x": 2,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/41/segments/3",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/41/segments/4",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/41/segments/5",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/id",
+        "value": "4a1d28a0-15c5-49b7-a236-375f29b8a683"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/id",
+        "value": "388bea90-3ae1-48c3-b6c6-aa1ebd746588"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/0/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/0/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/43/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/id",
+        "value": "929d872e-5fde-4454-9cc3-e1c644041431"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/y",
+        "value": 0
+      },
+      {
+        "op": "add",
+        "path": "/entities/44/segments/2",
+        "value": {
+          "layer": 1,
+          "x": 3,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        }
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/44/segments/2/x",
+        "value": 4
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 37
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/0/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/1/x",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/1/y",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/50"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/50"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/45/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/45/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/46/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/47/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/47/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/48/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/48/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/49/x",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 38
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 39
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 40
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 41
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 42
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 43
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 37
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 38
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 39
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 40
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 41
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/41/segments/5"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/41/segments/4"
+      },
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 42
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/id",
+        "value": "4a1d28a0-15c5-49b7-a236-375f29b8a683"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/2/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/2/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/2/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/3/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/3/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/id",
+        "value": "8a01ab47-d2a0-4f35-a8f6-77f70f75d424"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 2
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/4",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/5",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/6",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        }
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 4
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 4
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/49"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/49"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/47/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/47/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/48/x",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 43
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/48"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/48"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/35/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/35/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/35/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/45/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/46/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/46/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/46/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/47/x",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/42/segments/6"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/42/segments/5"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/42/segments/4"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/42/segments/3"
+      },
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 42
+      },
+      {
+        "op": "replace",
+        "path": "/entities/35/id",
+        "value": "57f10ee2-f99d-49ed-a3de-9ba1704f09c2"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/35/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/35/segments/0/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/35/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/35/segments/1/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/id",
+        "value": "1822f370-c3ed-4c96-b79f-ee11bfea34c6"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/segments/0/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/36/segments/1/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/id",
+        "value": "4129f8b2-3c22-4297-a77d-dc181dd4412a"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/0/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/37/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/id",
+        "value": "6ea68ae7-16c0-4723-8b28-e143cdd0213d"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/38/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/id",
+        "value": "0d7a3bed-0646-4da7-88ad-81477a92e47a"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/39/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/id",
+        "value": "4a1d28a0-15c5-49b7-a236-375f29b8a683"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/40/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "add",
+        "path": "/entities/40/segments/2",
+        "value": {
+          "layer": 1,
+          "x": 5,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/40/segments/3",
+        "value": {
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/id",
+        "value": "8a01ab47-d2a0-4f35-a8f6-77f70f75d424"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/2/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/2/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/2/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/3/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/3/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/3/y",
+        "value": 2
+      },
+      {
+        "op": "add",
+        "path": "/entities/41/segments/4",
+        "value": {
+          "layer": 2,
+          "x": 2,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/41/segments/5",
+        "value": {
+          "layer": 2,
+          "x": 2,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/41/segments/6",
+        "value": {
+          "layer": 2,
+          "x": 3,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/id",
+        "value": "64e2d407-73dd-4d01-8d95-edc5c1cbfa98"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 43
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 37
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 38
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 39
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 40
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 41
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/41/segments/6"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/41/segments/5"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/41/segments/4"
+      },
+      {
+        "op": "remove",
+        "path": "/entities/41/segments/3"
+      },
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 42
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/id",
+        "value": "64e2d407-73dd-4d01-8d95-edc5c1cbfa98"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/2/layer",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/2/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/id",
+        "value": "8a01ab47-d2a0-4f35-a8f6-77f70f75d424"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 0
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/3",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/4",
+        "value": {
+          "layer": 2,
+          "x": 1,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/5",
+        "value": {
+          "layer": 2,
+          "x": 2,
+          "y": 2,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/6",
+        "value": {
+          "layer": 2,
+          "x": 2,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/7",
+        "value": {
+          "layer": 2,
+          "x": 3,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        }
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/y",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/y",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/y",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/y",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/y",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/y",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/47"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/47"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 43
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 44
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 35
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 36
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 37
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 38
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 39
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 40
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 41
+      }
+    ],
+    [
+      {
+        "op": "remove",
+        "path": "/entities/46"
+      },
+      {
+        "op": "remove",
+        "path": "/entityTypes/46"
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/growOnNextMove",
+        "value": true
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/41/segments/2/y",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/45/layer",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/45/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/45/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/activePlayerEntityIndex",
+        "value": 42
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/growOnNextMove",
+        "value": false
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 4
+      },
+      {
+        "op": "add",
+        "path": "/entities/42/segments/8",
+        "value": {
+          "layer": 2,
+          "x": 3,
+          "y": 3,
+          "width": 1,
+          "height": 1
+        }
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/8/x",
+        "value": 4
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/8/y",
+        "value": 4
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/8/x",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/y",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/8/x",
+        "value": 2
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/8/y",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/x",
+        "value": 0
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/8/x",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/0/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/1/x",
+        "value": 5
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/2/x",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/3/x",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/4/x",
+        "value": 2
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/5/x",
+        "value": 1
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/6/y",
+        "value": 3
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/7/y",
+        "value": 4
+      },
+      {
+        "op": "replace",
+        "path": "/entities/42/segments/8/x",
+        "value": 0
+      }
+    ]
+  ]
+}
