@@ -7,12 +7,12 @@
   <title>Snakeshift</title>
   <!-- <link rel="icon" type="image/png" href="/graphics/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
   <link rel="icon" type="image/png" href="./graphics/yin-yang-larger-sneks-180px.png" sizes="180x180" />
-  <script type="module" crossorigin src="./assets/index-D5g-QdYT.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-C8udUCjA.css">
+  <script type="module" crossorigin src="./assets/index-Va2UUJW-.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CAN5f4nA.css">
 </head>
 
 <body>
-  <div class="screen" id="main-menu">
+  <div class="screen active" id="main-menu">
     <h1>Snake<span
         style="color: black; background: white; border-radius: 20px 30px / 10px 0px; padding: 4px">Shift</span></h1>
     <button class="bw-button" id="play-button" autofocus>Play</button>
@@ -127,12 +127,8 @@
   <div class="screen" id="loading-screen">
     <div id="load-progress"></div>
   </div>
-  <div class="screen" id="level-splash">
+  <div class="screen splash-screen" id="level-splash">
     <h1 id="level-splash-title"></h1>
-    <div class="gong-effect"></div>
-  </div>
-  <div class="screen" id="standalone-level-win-screen">
-    <h1>Level Complete</h1>
     <div class="gong-effect"></div>
   </div>
   <div class="screen" id="game-win-screen">
@@ -154,8 +150,7 @@
     <div class="gong-effect"></div>
   </div>
   <div id="game-options-bar">
-    <!-- TODO: make class an id or use a second button to better integrate with the entities bar -->
-    <button class="bw-button back-to-main-menu-button" aria-keyshortcuts="Escape">
+    <button class="bw-button" id="back-to-main-menu-button" aria-keyshortcuts="Escape">
       <img src="./graphics/back.svg" alt="" />
       <span class="button-text">Back</span>
     </button>
@@ -309,7 +304,7 @@
             id="level-info-editor-cancel-button">Cancel</button>
         </div>
       </form>
-  </div>
+    </dialog>
   </div>
   <div class="level-specific-overlay" data-for-level="levels/easy/001-movement.json" hidden>
     <!-- It is actually possible to get stuck on this level. TODO: detect this or limit the size of the snake -->
@@ -378,7 +373,6 @@
       <tr>
         <td style="text-align: right;"><strong>Gamepad:</strong></td>
         <td style="text-align: left;">Use the shoulder buttons to switch snakes.</td>
-        </td>
       </tr>
       <tr>
         <td style="text-align: right;"><strong>Mouse/pen/touch:</strong></td>
