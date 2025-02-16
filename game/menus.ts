@@ -7,7 +7,7 @@ const playButton = document.querySelector<HTMLButtonElement>('#play-button')!
 const levelSelectButton = document.querySelector<HTMLButtonElement>('#level-select-button')!
 const levelEditorButton = document.querySelector<HTMLButtonElement>('#level-editor-button')!
 const creditsButton = document.querySelector<HTMLButtonElement>('#credits-button')!
-const backButtons = document.querySelectorAll<HTMLButtonElement>('.back-to-main-menu-button')!
+const backButton = document.querySelector<HTMLButtonElement>('#back-to-main-menu-button')!
 
 const mainMenu = document.querySelector<HTMLDivElement>('#main-menu')!
 const levelSelect = document.querySelector<HTMLDivElement>('#level-select')!
@@ -40,17 +40,15 @@ export function initMainMenu() {
     document.body.dataset.screen = "credits"
   })
 
-  for (const backButton of backButtons) {
-    backButton.addEventListener('click', () => {
-      if (activityMode === "play" && standaloneLevelMode) {
-        // Playtesting a custom level, return to editing
-        setActivityMode("edit")
-      } else {
-        // From Level Editor, Level Select, Credits, or a campaign level, go to Main Menu
-        showMainMenu()
-      }
-    })
-  }
+  backButton.addEventListener('click', () => {
+    if (activityMode === "play" && standaloneLevelMode) {
+      // Playtesting a custom level, return to editing
+      setActivityMode("edit")
+    } else {
+      // From Level Editor, Level Select, Credits, or a campaign level, go to Main Menu
+      showMainMenu()
+    }
+  })
 
   // This is now handled in input.ts with general focus management
   // addEventListener("keydown", (event) => {

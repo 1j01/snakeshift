@@ -111,7 +111,7 @@ addEventListener('keydown', (event) => {
     translateSelection(dx, dy)
     event.preventDefault()
   } else if (event.key === 'Escape') {
-    const backButton = document.querySelector<HTMLButtonElement>('.back-to-main-menu-button')!
+    const backButton = document.querySelector<HTMLButtonElement>('#back-to-main-menu-button')!
     backButton.click()
     event.preventDefault()
   } else if (event.key === 'm') {
