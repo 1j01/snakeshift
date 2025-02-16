@@ -94,9 +94,17 @@ export function showLevelSplash(options: { title: string, duration?: number }) {
     levelSplash.style.opacity = "0"
     // @ts-expect-error conflict with @types/node
     splashScreenTimeouts.add(setTimeout(() => {
-      levelSplash.classList.remove('active')
-      levelSplash.style.transition = ""
-      levelSplash.style.opacity = ""
+      hideLevelSplash()
     }, location.search.includes("fast-splash-screens") ? 0 : 600))
   }, location.search.includes("fast-splash-screens") ? 100 : (options.duration ?? 2000)))
+}
+export function hideLevelSplash() {
+  for (const timeout of splashScreenTimeouts) {
+    clearTimeout(timeout)
+  }
+  splashScreenTimeouts.clear()
+  levelSplash.classList.remove('active')
+  levelSplash.style.transition = ""
+  levelSplash.style.opacity = ""
+  levelSplashTitle.textContent = ""
 }

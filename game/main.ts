@@ -3,7 +3,7 @@ import { activityMode, animate, handleLevelCompletion, restartLevel, setActivity
 import { clearLevel, loadLevel, openLevel, redo, saveLevel, savePlaythrough, undo, undoable } from "./game-state"
 import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
-import { initMainMenu, showMainMenu, splashScreenTimeouts } from "./menus"
+import { hideLevelSplash, initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
 import './testing-interface'
 
@@ -45,12 +45,7 @@ addEventListener('keydown', (event) => {
         if (document.querySelector('#game-win-screen')?.classList.contains('active')) {
           showMainMenu()
         } else {
-          for (const screen of document.querySelectorAll('.splash-screen.active')) {
-            screen.classList.remove('active')
-          }
-          for (const timeout of splashScreenTimeouts) {
-            clearTimeout(timeout)
-          }
+          hideLevelSplash()
         }
         event.preventDefault()
       }
