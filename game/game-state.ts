@@ -4,7 +4,7 @@ import { activityMode, editorRedos, editorUndos, setActivityMode, shouldInputBeA
 import { canMove } from "./game-logic"
 import { makeEntity } from "./helpers"
 import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
-import { hideScreens } from "./menus"
+import { hideScreens, showLevelSplash } from "./menus"
 import Snake from "./snake"
 import { ControlScheme, GameState, ParsedGameState } from "./types"
 
@@ -290,7 +290,7 @@ function loadPlaythrough(json: string) {
   replaySlider.max = `${playthrough.length}`
   replaySlider.value = "0"
   replaySlider.focus()
-  alert(`Loaded playthrough with ${playthrough.length} moves. Press 'Y' (Redo) to step through it.`)
+  showLevelSplash({ title: `Loaded replay with ${playthrough.length} steps` })
 }
 // TODO: simplify with promises
 
