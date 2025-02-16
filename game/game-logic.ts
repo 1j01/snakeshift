@@ -61,7 +61,7 @@ export function analyzeMoveRelative(snake: Snake, dirX: number, dirY: number): M
   const entitiesToPush: Entity[] = []
   {
     const hit = hitsAhead.find(hit => hit.entity.solid)
-    // TODO: try pushing other snakes too
+    // TODO: try pushing other snakes too (or save that for when splitting snakes; only push the tail / "dead" half)
     // TODO: recursively push crates
     if (hit?.entity instanceof Crate) {
       // Check if the crate can be pushed
