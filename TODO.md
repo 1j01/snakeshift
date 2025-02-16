@@ -1,6 +1,5 @@
 # Snakeshift Todo List
 
-- bug: can select tutorial text just after loading a level, while the splash screen is still fading out
 - skip/merge extra undo steps for switching snakes
 - readme image
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes

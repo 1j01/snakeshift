@@ -264,6 +264,12 @@ body[data-screen="credits"] .level-flow-control-button {
   display: none;
 }
 
+#level-splash {
+  /* Avoid selecting text by clicking and dragging while splash screen is fading out. */
+  /* If the element that the selection starts within is hidden while making a selection, it can select lots of unwanted text. */
+  pointer-events: none;
+}
+
 .level-specific-overlay:not([hidden]),
 #level-stuck-hint:not([hidden]) {
   position: absolute;
