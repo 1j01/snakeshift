@@ -135,9 +135,9 @@ export function handleLevelCompletion() {
  */
 export function shouldInputBeAllowed() {
   return (
-    !document.querySelector("#game-win-screen.active, #level-splash.active, #standalone-level-win-screen.active") ||
+    !document.querySelector("#game-win-screen.active, #level-splash.active.active") ||
     parseFloat(
-      getComputedStyle(document.querySelector("#game-win-screen.active, #level-splash.active, #standalone-level-win-screen.active")!)
+      getComputedStyle(document.querySelector("#game-win-screen.active, #level-splash.active")!)
         .opacity
     ) < 0.7
   )

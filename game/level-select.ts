@@ -1,7 +1,7 @@
 import { playSound } from "./audio"
 import { activityMode, restartLevel } from "./game"
 import { deserialize, entities, levelInfo, loadLevel, serialize, undo } from "./game-state"
-import { showLevelSplash, splashScreenTimeouts } from "./menus"
+import { showLevelSplash } from "./menus"
 import { drawEntities } from "./rendering"
 
 /**
@@ -137,22 +137,7 @@ export function loadNextLevel() {
     // without immediately winning, blocking you from undoing further back.
     undo()
     restartLevel()
-    // TODO: DRY with showLevelSplash!! This is really stupid.
-    // Note: splash screens may be dismissed early by pressing Enter/Space/Escape
-    const winScreen = document.querySelector<HTMLDivElement>('#standalone-level-win-screen')!
-    winScreen.classList.add('active')
-    playSound('gong')
-    // @ts-expect-error conflict with @types/node
-    splashScreenTimeouts.add(setTimeout(() => {
-      winScreen.style.transition = "opacity .5s"
-      winScreen.style.opacity = "0"
-      // @ts-expect-error conflict with @types/node
-      splashScreenTimeouts.add(setTimeout(() => {
-        winScreen.classList.remove('active')
-        winScreen.style.transition = ""
-        winScreen.style.opacity = ""
-      }, location.search.includes("fast-splash-screens") ? 0 : 600))
-    }, location.search.includes("fast-splash-screens") ? 100 : 800))
+    showLevelSplash({ title: "Level Complete", duration: 800 })
     return
   }
   const levelButtons = [...document.querySelectorAll<HTMLButtonElement>('.level-button')]
