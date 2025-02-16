@@ -1,6 +1,6 @@
 import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
 import { activityMode, animate, handleLevelCompletion, restartLevel, setActivityMode, shouldInputBeAllowed } from "./game"
-import { clearLevel, loadLevel, openLevel, redo, saveLevel, savePlaythrough, undo, undoable } from "./game-state"
+import { clearLevel, goToHistoryIndex, loadLevel, openLevel, redo, saveLevel, savePlaythrough, undo, undoable } from "./game-state"
 import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
 import { hideLevelSplash, initMainMenu, showMainMenu } from "./menus"
@@ -12,6 +12,7 @@ const restartLevelButton = document.querySelector<HTMLButtonElement>('#restart-l
 const undoButton = document.querySelector<HTMLButtonElement>('#undo-button')!
 const redoButton = document.querySelector<HTMLButtonElement>('#redo-button')!
 const fullscreenButton = document.getElementById("fullscreen-button")!
+const replaySlider = document.getElementById("replay-slider") as HTMLInputElement
 
 playEditToggleButton.addEventListener('click', () => {
   setActivityMode(activityMode === "play" ? "edit" : "play")
@@ -30,6 +31,11 @@ function toggleFullscreen() {
     void document.documentElement.requestFullscreen()
   }
 }
+
+replaySlider.addEventListener('input', () => {
+  const replayIndex = parseInt(replaySlider.value)
+  goToHistoryIndex(replayIndex)
+})
 
 addEventListener('keydown', (event) => {
   // While a screen is overtop the game, only allow certain actions that will dismiss the screen.

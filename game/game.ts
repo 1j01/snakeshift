@@ -35,7 +35,9 @@ export function setActivityMode(newMode: "edit" | "play" | "replay" | "menu") {
   console.log("Switching from", activityMode, "to", newMode)
   cleanup()
   activityMode = newMode
+  // Could unify with a [data-activity-mode] data attribute...
   document.body.classList.toggle('editing', activityMode === "edit")
+  document.body.classList.toggle('replaying', activityMode === "replay")
 
   if (activityMode === "edit") {
     setStandaloneLevelMode()

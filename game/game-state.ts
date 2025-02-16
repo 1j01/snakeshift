@@ -74,8 +74,19 @@ function stepHistory(from: GameState[], to: GameState[], skipOverWinState = fals
     return true
   }
   deserialize(state)
+  const replaySlider = document.getElementById("replay-slider") as HTMLInputElement
+  replaySlider.value = `${undos.length}`
   return true
 }
+export function goToHistoryIndex(index: number) {
+  while (undos.length > index) {
+    if (!stepHistory(undos, redos)) break
+  }
+  while (undos.length < index) {
+    if (!stepHistory(redos, undos)) break
+  }
+}
+
 const FORMAT_VERSION = 5
 export function serialize(): GameState {
   return JSON.stringify({
@@ -275,6 +286,10 @@ function loadPlaythrough(json: string) {
     redos.push(state)
   }
   redo()
+  const replaySlider = document.getElementById("replay-slider") as HTMLInputElement
+  replaySlider.max = `${playthrough.length}`
+  replaySlider.value = "0"
+  replaySlider.focus()
   alert(`Loaded playthrough with ${playthrough.length} moves. Press 'Y' (Redo) to step through it.`)
 }
 // TODO: simplify with promises

@@ -305,6 +305,13 @@
       </form>
     </dialog>
   </div>
+  <div id="replay-bar">
+    <!-- <button class="bw-button" id="replay-play-pause-button" aria-keyshortcuts="Space">
+      <span>▶</span>
+      <span class="button-text">Play</span>
+    </button> -->
+    <input type="range" id="replay-slider" min="0" max="0" step="1" value="0" />
+  </div>
   <div class="level-specific-overlay" data-for-level="levels/easy/001-movement.json" hidden>
     <!-- It is actually possible to get stuck on this level. TODO: detect this or limit the size of the snake -->
     <h2>How to Move</h2>

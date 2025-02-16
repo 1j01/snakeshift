@@ -9,6 +9,7 @@ const ctx = canvas.getContext('2d')!
 document.body.appendChild(canvas)
 
 const editorGUI = document.getElementById('entities-bar')!
+const replayBar = document.getElementById('replay-bar')!
 const gameOptionsBar = document.getElementById('game-options-bar')!
 
 let transform: DOMMatrix | undefined = undefined
@@ -16,9 +17,11 @@ export function draw() {
   const styleWidth = window.innerWidth
   const gameOptionsBarRect = gameOptionsBar.getBoundingClientRect()
   editorGUI.style.paddingTop = `${gameOptionsBarRect.bottom + 5}px`
+  replayBar.style.paddingTop = `${gameOptionsBarRect.bottom + 5}px`
   const editorGUIRect = editorGUI.getBoundingClientRect()
+  const replayBarRect = replayBar.getBoundingClientRect()
   // Note: DOMRect.bottom is a double
-  const top = Math.max(editorGUIRect.bottom, gameOptionsBarRect.bottom) + 5
+  const top = Math.max(editorGUIRect.bottom, replayBarRect.bottom, gameOptionsBarRect.bottom) + 5
   const styleHeight = window.innerHeight - top - 5 // 5px so border image doesn't get cut off
   canvas.style.transform = `translateY(${top}px)`
   canvas.style.width = `${styleWidth}px`

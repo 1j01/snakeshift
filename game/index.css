@@ -64,7 +64,8 @@ body {
   margin-left: 1em;
 }
 
-#entities-bar {
+#entities-bar,
+#replay-bar {
   position: absolute;
   top: 0;
   z-index: 2;
@@ -81,6 +82,17 @@ body {
 body:not(.editing) #entities-bar {
   transform: translateY(-100%);
   opacity: 0;
+}
+
+body:not(.replaying) #replay-bar {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+#replay-slider {
+  width: 100%;
+  height: 40px;
+  accent-color: #fff;
 }
 
 #level-info-editor .control-row {
