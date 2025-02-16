@@ -68,6 +68,10 @@ export function hideScreens(options: { except?: string[] } = {}) {
     }
     screen.classList.remove('active')
   }
+  // Clear timers in case this helps avoid any weird timing issues
+  if (!options.except?.includes(levelSplash.id)) {
+    hideLevelSplash()
+  }
 }
 
 export function showMainMenu() {
