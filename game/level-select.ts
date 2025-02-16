@@ -180,6 +180,8 @@ export function currentLevelID() {
 export function updatePageTitleAndLevelSpecificOverlays() {
   if (activityMode === "edit") {
     document.title = "Snakeshift - Level Editor"
+  } else if (activityMode === "replay") {
+    document.title = "Snakeshift - Replay"
   } else if (currentLevelButton) {
     document.title = `Snakeshift - ${currentLevelButton.querySelector(".button-text")?.textContent}`
   } else if (activityMode === "play") {

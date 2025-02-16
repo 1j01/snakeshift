@@ -22,7 +22,7 @@ export function animate(time = 0) {
   draw()
 }
 
-export let activityMode: "edit" | "play" | "menu" = "menu"
+export let activityMode: "edit" | "play" | "replay" | "menu" = "menu"
 let wonLevel = false
 
 export const editorUndos: GameState[] = []
@@ -30,7 +30,7 @@ export const editorRedos: GameState[] = []
 let editorState: GameState | undefined = undefined
 export let levelHasGoal = false
 let cleanup = handleInput(canvas)
-export function setActivityMode(newMode: "edit" | "play" | "menu") {
+export function setActivityMode(newMode: "edit" | "play" | "replay" | "menu") {
   if (activityMode === newMode) return
   console.log("Switching from", activityMode, "to", newMode)
   cleanup()
@@ -45,8 +45,10 @@ export function setActivityMode(newMode: "edit" | "play" | "menu") {
       redos.splice(0, redos.length, ...editorRedos)
       deserialize(editorState)
     }
-  } else if (activityMode === "play") {
-    cleanup = handleInput(canvas)
+  } else if (activityMode === "play" || activityMode === "replay") {
+    if (activityMode === "play") {
+      cleanup = handleInput(canvas)
+    }
     editorUndos.splice(0, editorUndos.length, ...undos)
     editorRedos.splice(0, editorRedos.length, ...redos)
     levelHasGoal = entities.some(e => e instanceof Food)
@@ -76,6 +78,7 @@ export function storeBaseLevelState() {
 }
 
 export function restartLevel() {
+  // TODO: for replay mode, this should (could) go back to the start of the replay
   if (activityMode !== "play") return
   if (currentLevelID()) {
     // I don't want to special case this, but I'm so tired from whacking moles

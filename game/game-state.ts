@@ -150,7 +150,7 @@ export function deserialize(state: GameState, levelId: string | null = null, tem
 
   if (!temporary) {
     const whichSnakeAfter = activePlayer?.id ?? ""
-    if (whichSnakeBefore !== whichSnakeAfter && activityMode == "play") {
+    if (whichSnakeBefore !== whichSnakeAfter && (activityMode == "play" || activityMode == "replay")) {
       activePlayer?.highlight()
     }
 
@@ -270,10 +270,7 @@ function loadPlaythrough(json: string) {
   if (!Array.isArray(playthrough)) {
     throw new Error("Invalid playthrough format")
   }
-  // TODO: make "replay" a separate activity mode, where you can only step through the history?
-  // Not sure if I want to limit it like that, might be useful to continue playing from replay,
-  // if only for testing purposes.
-  loadLevelFromText(playthrough[0], "play")
+  loadLevelFromText(playthrough[0], "replay")
   for (const state of playthrough.toReversed()) {
     redos.push(state)
   }
@@ -306,7 +303,7 @@ export function confirmLoseUnsavedChanges() {
   // While in edit mode, the editor's history is stored in `undos`/`redos`.
   // This is a bit messy with state ownership.
   // Before adding this confirmation dialog, the editor didn't have to know about `editorUndos`/`editorRedos`.
-  if (activityMode === "menu") {
+  if (activityMode === "menu" || activityMode === "replay") {
     return true
   } else if (activityMode === "edit") {
     if (undos.length === 0 && redos.length === 0) return true
@@ -316,7 +313,7 @@ export function confirmLoseUnsavedChanges() {
   }
   return confirm("This will discard any unsaved changes. Are you sure?")
 }
-function loadLevelFromText(fileText: string, newMode: "edit" | "play", levelId: string | null = null): boolean {
+function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "replay", levelId: string | null = null): boolean {
   // Load level or playthrough, and return whether it succeeded...
   // Or, may throw an error while loading a playthrough.
   if (!confirmLoseUnsavedChanges()) return false
