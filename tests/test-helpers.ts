@@ -2,7 +2,7 @@ import { Page, expect } from '@playwright/test'
 import { readFile } from 'fs/promises'
 import { basename } from 'path'
 // import { Readable } from 'stream'
-import { Point, Tile } from '../game/types'
+import { MoveInput, Point, Tile } from '../game/types'
 
 export const dragAndDropFile = async (
   page: Page,
@@ -101,4 +101,30 @@ export async function moveMouseToTile(page: Page, pos: Point | Tile) {
   }, tile)
   const rectCenter = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
   await page.mouse.move(rectCenter.x, rectCenter.y)
+}
+
+export function stringifyMoves(moves: MoveInput[]) {
+  const symbolByKey = { "ArrowUp": "↑", "ArrowDown": "↓", "ArrowLeft": "←", "ArrowRight": "→" }
+  return moves
+    .map((move) => typeof move === 'object' ? `click(${move.click.x},${move.click.y})` : symbolByKey[move])
+    .join(' ')
+}
+
+export function parseMovesString(movesString: string) {
+  const keyBySymbol = { "↑": "ArrowUp", "↓": "ArrowDown", "←": "ArrowLeft", "→": "ArrowRight" }
+  const moves: MoveInput[] = []
+  const regex = /click\s*\(\s*(\d+),\s*(\d+)\s*\)|↑|↓|←|→/gi
+
+  let match
+  while ((match = regex.exec(movesString)) !== null) {
+    if (match[1] && match[2]) {
+      moves.push({ click: { x: Number(match[1]), y: Number(match[2]), width: 1, height: 1 } })
+    } else {
+      // @ts-expect-error string is not known to be a key of moveMap
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      moves.push(keyBySymbol[match[0]] ?? match[0])
+    }
+  }
+
+  return moves
 }

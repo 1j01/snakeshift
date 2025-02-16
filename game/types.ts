@@ -43,6 +43,8 @@ export interface Tile extends Point {
   height: number
 }
 
+export type MoveInput = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | { click: Tile }
+
 export interface Move {
   // snakeId: string
   snake: Snake,

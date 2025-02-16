@@ -3,8 +3,8 @@ import { access, readFile } from 'node:fs/promises'
 import { Collectable } from '../game/collectable.ts'
 import Entity from '../game/entity.ts'
 import Snake from '../game/snake.ts'
-import { GameState, ParsedGameState, Tile } from '../game/types.ts'
-import { clickTile, getCurrentLevelContent, loadLevelToPlay } from './test-helpers.ts'
+import { GameState, MoveInput, ParsedGameState } from '../game/types.ts'
+import { clickTile, getCurrentLevelContent, loadLevelToPlay, stringifyMoves } from './test-helpers.ts'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5569/?show-test-levels')
@@ -172,9 +172,6 @@ test('should not show a message about restarting/undoing if only one snake is st
   await expect(page.getByText(stuckHint)).not.toBeVisible()
 })
 
-
-type MoveInput = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | { click: Tile }
-
 test('game should be beatable (using recorded playthroughs)', async ({ page }) => {
   test.setTimeout(1000 * 60 * 60) // 1 hour
   await page.getByRole('button', { name: 'Play' }).click()
@@ -214,7 +211,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
       throw new Error(`Could not read playthrough file ${playthroughPath}: ${String(e)}`)
     }
     const moves = getMovesFromPlaythrough(playthroughJSON)
-    console.log(`Playing level ${levelId} with ${moves.length} moves: ${moves.map((move) => typeof move === 'object' ? `click(${move.click.x},${move.click.y})` : { "ArrowUp": "↑", "ArrowDown": "↓", "ArrowLeft": "←", "ArrowRight": "→" }[move]).join(' ')}`)
+    console.log(`Playing level ${levelId} with ${moves.length} moves: ${stringifyMoves(moves)}`)
     for (const move of moves) {
       if (move) {
         if (typeof move === 'object' && 'click' in move) {
