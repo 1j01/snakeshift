@@ -141,4 +141,9 @@ These are just ideas, not necessarily planned features.
 - super-food pickup that makes you grow 3 or something, maybe indefinitely
   - appearance: star like normal food except with alternating black and white concentric scaled copies zooming like a fractal, possibly rotated for a spiral effect
     - implies it can be eaten by any snake, which is fine
-
+- cellular automata
+  - entity that spreads to adjacent cells each turn
+    - what if it duplicates food within it as it spreads?
+    - can easily do puzzle where you have to block the spread quickly
+      - par may be less meaningful for these sorts of levels since they may enforce completing the level in a few moves
+  - could get totally crazy with different rulesets
