@@ -72,6 +72,11 @@ export async function getCurrentLevelContent(page: Page) {
     return window._forTesting.serialize()
   })
 }
+export async function getPlaythroughContent(page: Page) {
+  return page.evaluate(() => {
+    return window._forTesting.serializePlaythrough()
+  })
+}
 export async function compareCurrentLevelContentToFile(page: Page, filePath: string) {
   function normalize(content: string) {
     return content.replace(/\r\n/g, '\n')

@@ -11,6 +11,7 @@ declare global {
       tileOnPage: (tile: Tile) => Tile
       playedSounds: SoundID[]
       serialize: () => string
+      serializePlaythrough: () => string
       loadLevelFromText: (fileText: string, newMode: "edit" | "play" | "replay", levelId?: string | null) => boolean
     }
   }
