@@ -391,6 +391,7 @@ export function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "
       loadPlaythrough(fileText)
     } catch (error) {
       // TODO: avoid alert
+      console.error(error)
       alert(`Failed to load playthrough. ${(error as Error).toString()}`)
       return false
     }
@@ -404,6 +405,7 @@ export function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "
       deserialize(before.state)
       undos.splice(0, undos.length, ...before.undos)
       redos.splice(0, redos.length, ...before.redos)
+      console.error(error)
       alert(`Failed to load level. ${(error as Error).toString()}`)
       return false
     }
