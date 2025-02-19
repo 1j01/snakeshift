@@ -1,7 +1,7 @@
 import { Page, expect, test } from '@playwright/test'
 import { access, readFile } from 'node:fs/promises'
-import { Collectable } from '../game/collectable.ts'
 import Entity from '../game/entity.ts'
+import { Food } from '../game/food.ts'
 import { parsePlaythrough } from '../game/shared-helpers.ts'
 import Snake from '../game/snake.ts'
 import { MoveInput, ParsedGameState } from '../game/types.ts'
@@ -236,8 +236,8 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
 
 type EntityLike = Entity & { _type: string }
 function isEntityOfType(entity: EntityLike, type: "Snake"): entity is Snake & { _type: "Snake" }
-function isEntityOfType(entity: EntityLike, type: "Collectable"): entity is Collectable & { _type: "Collectable" }
-function isEntityOfType(entity: EntityLike, type: "Snake" | "Collectable"): boolean {
+function isEntityOfType(entity: EntityLike, type: "Food"): entity is Food & { _type: "Food" }
+function isEntityOfType(entity: EntityLike, type: "Snake" | "Food"): boolean {
   return entity._type === type
 }
 
@@ -302,26 +302,26 @@ function getMovesFromPlaythrough(playthroughJSON: string): MoveInput[] {
   }
 
   // Playthrough might not contain the final state/move (awkward)
-  // However, if that's the case, there should only be one Collectable left, so we can just compare its position to the active snake's head in the last state.
+  // However, if that's the case, there should only be one Food left, so we can just compare its position to the active snake's head in the last state.
   const lastState = playthrough[playthrough.length - 1]
-  const collectables = lastState.entities.filter((entity) => isEntityOfType(entity, 'Collectable'))
-  if (collectables.length === 1) {
-    const collectable = collectables[0]
+  const foods = lastState.entities.filter((entity) => isEntityOfType(entity, 'Food'))
+  if (foods.length === 1) {
+    const food = foods[0]
     const activeSnake = lastState.entities.find((snake) => isEntityOfType(snake, "Snake") && snake.id === lastState.activeSnakeId) as Snake | undefined
     if (!activeSnake) {
       throw new Error(`Could not find snake with ID ${lastState.activeSnakeId}`)
     }
-    if (!isEntityOfType(collectable, 'Collectable')) {
-      throw new Error(`Could not find collectable in last state`)
+    if (!isEntityOfType(food, 'Food')) {
+      throw new Error(`Could not find Food in last state`)
     }
     const head = activeSnake.segments[0]
-    if (head.x < collectable.x) {
+    if (head.x < food.x) {
       moves.push('ArrowRight')
-    } else if (head.x > collectable.x) {
+    } else if (head.x > food.x) {
       moves.push('ArrowLeft')
-    } else if (head.y < collectable.y) {
+    } else if (head.y < food.y) {
       moves.push('ArrowDown')
-    } else if (head.y > collectable.y) {
+    } else if (head.y > food.y) {
       moves.push('ArrowUp')
     }
   }
