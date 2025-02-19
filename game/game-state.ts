@@ -335,6 +335,7 @@ function loadPlaythrough(json: string) {
   if (parsed.format !== "snakeshift-playthrough") throw new Error(`Invalid format. Expected "snakeshift-playthrough", got ${JSON.stringify(parsed.format)}`)
   if (typeof parsed.formatVersion !== "number") throw new Error(`Invalid format. Expected "number", got ${JSON.stringify(parsed.formatVersion)} for "formatVersion" property.`)
   if (parsed.formatVersion > PLAYTHROUGH_FORMAT_VERSION) throw new Error("Format version is too new")
+  if (parsed.formatVersion !== PLAYTHROUGH_FORMAT_VERSION) throw new Error("Invalid format version")
   if (!('baseState' in parsed)) throw new Error('Invalid format. Missing "baseState" property.')
   if (!('deltas' in parsed)) throw new Error('Invalid format. Missing "deltas" property.')
 
