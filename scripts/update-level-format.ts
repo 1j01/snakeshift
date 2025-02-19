@@ -12,7 +12,7 @@ import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
 import { isPlaythrough } from '../game/shared-helpers.ts'
-import { getCurrentLevelContent, setLevelContent } from '../tests/test-helpers.ts'
+import { getCurrentLevelContent, getPlaythroughContent, setLevelContent } from '../tests/test-helpers.ts'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const repoRoot = dirname(__dirname)
@@ -57,22 +57,16 @@ void (async () => {
       continue
     }
     const fileContents = readFileSync(filePath, 'utf8')
-    if (isPlaythrough(fileContents)) {
-      // TODO: upgrade playthroughs
-      console.error("Skipping file which may be a playthrough:", filePath)
-      continue
-    }
-    if (!fileContents.startsWith('{')) {
+    const isAPlaythrough = isPlaythrough(fileContents)
+    if (!isAPlaythrough && !fileContents.startsWith('{')) {
       console.error("Skipping file which does not look like a JSON object:", filePath)
       continue
     }
     console.log("Processing", filePath)
 
-    // Load the level in the editor
-    await setLevelContent(page, fileContents)
+    await setLevelContent(page, fileContents, isAPlaythrough ? "replay" : "edit")
 
-    // Save the level
-    const newContent = await getCurrentLevelContent(page)
+    const newContent = isAPlaythrough ? await getPlaythroughContent(page) : await getCurrentLevelContent(page)
     await writeFile(filePath, newContent, 'utf8')
   }
 

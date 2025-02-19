@@ -262,7 +262,7 @@ export function saveLevel() {
   a.click()
 }
 
-export function savePlaythrough() {
+export function serializePlaythrough() {
   // Include redos in order to support round-trip re-saving of playthroughs for automated upgrading of the format...
   // but maybe only in replay mode? Might be unexpected in play mode.
   const states = (activityMode === "replay" ? [...undos, serialize(), ...redos] : [...undos, serialize()])
@@ -293,6 +293,10 @@ export function savePlaythrough() {
     baseState,
     deltas,
   })
+  return json
+}
+export function savePlaythrough() {
+  const json = serializePlaythrough()
   const blob = new Blob([json], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -395,7 +399,7 @@ export function confirmLoseUnsavedChanges() {
   }
   return confirm("This will discard any unsaved changes. Are you sure?")
 }
-function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "replay", levelId: string | null = null): boolean {
+export function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "replay", levelId: string | null = null): boolean {
   // Load level or playthrough, and return whether it succeeded...
   // Or, may throw an error while loading a playthrough.
   if (!confirmLoseUnsavedChanges()) return false

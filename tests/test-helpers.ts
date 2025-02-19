@@ -72,6 +72,11 @@ export async function getCurrentLevelContent(page: Page) {
     return window._forTesting.serialize()
   })
 }
+export async function getPlaythroughContent(page: Page) {
+  return page.evaluate(() => {
+    return window._forTesting.serializePlaythrough()
+  })
+}
 export async function compareCurrentLevelContentToFile(page: Page, filePath: string) {
   function normalize(content: string) {
     return content.replace(/\r\n/g, '\n')
@@ -81,10 +86,16 @@ export async function compareCurrentLevelContentToFile(page: Page, filePath: str
   expect(actualContent).toEqual(expectedContent)
 }
 
-export async function setLevelContent(page: Page, content: string) {
-  await page.evaluate((content) => {
-    window._forTesting.deserialize(content)
-  }, content)
+export async function setLevelContent(page: Page, fileText: string, newMode: "edit" | "play" | "replay") {
+  await page.evaluate(({ fileText, newMode }) => {
+    window._forTesting.loadLevelFromText(fileText, newMode)
+    // Don't want guessDefaultActivePlayer logic to run when re-saving level files, especially snapshots saved during tests.
+    // Keeping the above even in this case in order to set the activity mode.
+    // Not ideal, but not a big deal either.
+    if (newMode !== "replay") {
+      window._forTesting.deserialize(fileText)
+    }
+  }, { fileText, newMode })
 }
 export async function clickTile(page: Page, pos: Point | Tile) {
   const tile = { x: pos.x, y: pos.y, width: 'width' in pos ? pos.width : 1, height: 'height' in pos ? pos.height : 1 }
