@@ -310,6 +310,7 @@ function loadPlaythrough(json: string) {
   for (const state of playthrough.toReversed()) {
     redos.push(state)
   }
+  // TODO: avoid sound effect? I mean, it's not terribly inappropriate... definitely unintentional though.
   redo()
   undos.length = 0
   const replaySlider = document.getElementById("replay-slider") as HTMLInputElement
