@@ -350,7 +350,7 @@ function loadPlaythrough(json: string) {
     redos.push(state)
   }
   redo()
-  // undos.length = 0 // TODO?
+  undos.length = 0
   const replaySlider = document.getElementById("replay-slider") as HTMLInputElement
   replaySlider.max = `${playthrough.length}`
   replaySlider.value = "0"
