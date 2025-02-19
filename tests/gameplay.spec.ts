@@ -2,8 +2,9 @@ import { Page, expect, test } from '@playwright/test'
 import { access, readFile } from 'node:fs/promises'
 import { Collectable } from '../game/collectable.ts'
 import Entity from '../game/entity.ts'
+import { parsePlaythrough } from '../game/shared-helpers.ts'
 import Snake from '../game/snake.ts'
-import { GameState, MoveInput, ParsedGameState } from '../game/types.ts'
+import { MoveInput, ParsedGameState } from '../game/types.ts'
 import { clickTile, getCurrentLevelContent, loadLevelToPlay, stringifyMoves } from './test-helpers.ts'
 
 test.beforeEach(async ({ page }) => {
@@ -242,7 +243,7 @@ function isEntityOfType(entity: EntityLike, type: "Snake" | "Collectable"): bool
 
 function getMovesFromPlaythrough(playthroughJSON: string): MoveInput[] {
   const moves: MoveInput[] = []
-  const playthrough = ((JSON.parse(playthroughJSON) as GameState[])
+  const playthrough = (parsePlaythrough(playthroughJSON)
     .map((stateString) => {
       const parsed = JSON.parse(stateString) as ParsedGameState
       const entities: EntityLike[] = []

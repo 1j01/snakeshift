@@ -1,5 +1,5 @@
-import Entity from "./entity"
-import Snake from "./snake"
+import type Entity from "./entity"
+import type Snake from "./snake"
 
 export enum ControlScheme {
   KeyboardAbsoluteDirection,
