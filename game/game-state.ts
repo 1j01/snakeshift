@@ -384,12 +384,17 @@ export function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "
     undoable()
   }
   if (isPlaythrough(fileText)) {
-    // TODO: error handling; also, I just realized loadLevelFromText will be at
-    // two places in the call stack in this case. Might be able to simplify by having
+    // NOTE: loadLevelFromText will be at two places in the call stack in this case. Might be able to simplify by having
     // loadPlaythrough (or a replacement with a new name) return the GameState string to load,
     // which would be loaded subsequently in this function, but not recursively.
-    loadPlaythrough(fileText)
-    return true // it's not a lie because it didn't throw an error™ (if it got here)
+    try {
+      loadPlaythrough(fileText)
+    } catch (error) {
+      // TODO: avoid alert
+      alert(`Failed to load playthrough. ${(error as Error).toString()}`)
+      return false
+    }
+    return true
   } else {
     try {
       deserialize(fileText, levelId)
