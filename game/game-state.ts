@@ -1,4 +1,5 @@
 import * as jsondiffpatch from "jsondiffpatch"
+import * as jsonpatch from "jsondiffpatch/formatters/jsonpatch"
 import { playSound } from "./audio"
 import Entity from "./entity"
 import { activityMode, editorRedos, editorUndos, setActivityMode, shouldInputBeAllowed, storeBaseLevelState } from "./game"
@@ -340,11 +341,20 @@ function loadPlaythrough(json: string) {
   if (typeof parsed.formatVersion !== "number") throw new Error(`Invalid format. Expected "number", got ${JSON.stringify(parsed.formatVersion)} for "formatVersion" property.`)
   if (parsed.formatVersion > PLAYTHROUGH_FORMAT_VERSION) throw new Error("Format version is too new")
   if (!('baseState' in parsed)) throw new Error('Invalid format. Missing "baseState" property.')
-  if (!('deltas' in parsed)) throw new Error('Invalid format. Missing "deltas" property.')
+  let deltas: jsondiffpatch.Delta[]
+  if ('deltas' in parsed) {
+    if (!Array.isArray(parsed.deltas)) throw new Error('Invalid format. Expected "deltas" property to be an array.')
+    deltas = parsed.deltas as jsondiffpatch.Delta[]
+  } else if ('patches' in parsed) {
+    if (!Array.isArray(parsed.patches)) throw new Error('Invalid format. Expected "patches" property to be an array.')
+    deltas = parsed.patches.map((patch) => jsonpatch.parse(patch))
+  } else {
+    throw new Error('Invalid format. Missing either "deltas" or "patches" property.')
+  }
 
   let state = parsed.baseState as ParsedGameState
   const playthrough = [JSON.stringify(state)] as GameState[]
-  for (const delta of parsed.deltas as jsondiffpatch.Delta[]) {
+  for (const delta of deltas) {
     const newState = jsondiffpatch.patch(state, delta) as ParsedGameState
     playthrough.push(JSON.stringify(newState))
     state = newState
