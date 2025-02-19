@@ -394,7 +394,7 @@ export function confirmLoseUnsavedChanges() {
   }
   return confirm("This will discard any unsaved changes. Are you sure?")
 }
-function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "replay", levelId: string | null = null): boolean {
+export function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "replay", levelId: string | null = null): boolean {
   // Load level or playthrough, and return whether it succeeded...
   // Or, may throw an error while loading a playthrough.
   if (!confirmLoseUnsavedChanges()) return false

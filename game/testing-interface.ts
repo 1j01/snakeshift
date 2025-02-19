@@ -1,9 +1,9 @@
 import { playedSounds, type SoundID } from "./audio"
-import { deserialize, serialize } from "./game-state"
+import { loadLevelFromText, serialize } from "./game-state"
 import { tileOnPage } from "./rendering"
 import type { Tile } from "./types"
 
-window._forTesting = { tileOnPage, playedSounds, serialize, deserialize }
+window._forTesting = { tileOnPage, playedSounds, serialize, loadLevelFromText }
 
 declare global {
   interface Window {
@@ -11,7 +11,7 @@ declare global {
       tileOnPage: (tile: Tile) => Tile
       playedSounds: SoundID[]
       serialize: () => string
-      deserialize: (serialized: string) => void
+      loadLevelFromText: (fileText: string, newMode: "edit" | "play" | "replay", levelId?: string | null) => boolean
     }
   }
 }

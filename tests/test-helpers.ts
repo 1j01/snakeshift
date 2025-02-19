@@ -81,10 +81,10 @@ export async function compareCurrentLevelContentToFile(page: Page, filePath: str
   expect(actualContent).toEqual(expectedContent)
 }
 
-export async function setLevelContent(page: Page, content: string) {
-  await page.evaluate((content) => {
-    window._forTesting.deserialize(content)
-  }, content)
+export async function setLevelContent(page: Page, fileText: string, newMode: "edit" | "play" | "replay") {
+  await page.evaluate(({ fileText, newMode }) => {
+    window._forTesting.loadLevelFromText(fileText, newMode)
+  }, { fileText, newMode })
 }
 export async function clickTile(page: Page, pos: Point | Tile) {
   const tile = { x: pos.x, y: pos.y, width: 'width' in pos ? pos.width : 1, height: 'height' in pos ? pos.height : 1 }

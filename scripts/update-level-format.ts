@@ -57,19 +57,15 @@ void (async () => {
       continue
     }
     const fileContents = readFileSync(filePath, 'utf8')
-    if (isPlaythrough(fileContents)) {
-      // TODO: upgrade playthroughs
-      console.error("Skipping file which may be a playthrough:", filePath)
-      continue
-    }
-    if (!fileContents.startsWith('{')) {
+    const isAPlaythrough = isPlaythrough(fileContents)
+    if (!isAPlaythrough && !fileContents.startsWith('{')) {
       console.error("Skipping file which does not look like a JSON object:", filePath)
       continue
     }
     console.log("Processing", filePath)
 
     // Load the level in the editor
-    await setLevelContent(page, fileContents)
+    await setLevelContent(page, fileContents, isAPlaythrough ? "replay" : "edit")
 
     // Save the level
     const newContent = await getCurrentLevelContent(page)
