@@ -122,7 +122,7 @@ export async function loadLevelFile(levelURL: string, loadedCallback?: () => voi
     return
   }
   const blob = await request.blob()
-  loadLevel(blob, "play", loadedCallback, levelURL)
+  await loadLevel(blob, "play", loadedCallback, levelURL)
 }
 
 export function loadFirstLevel() {

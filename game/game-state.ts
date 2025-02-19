@@ -357,12 +357,11 @@ function loadPlaythrough(json: string) {
   replaySlider.focus()
   showLevelSplash({ title: `Loaded replay with ${playthrough.length} steps` })
 }
-// TODO: simplify with promises
 
-export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?: () => void, levelId: string | null = null) {
-  // Error Message Itself Test
-  // Promise.reject(new Error("EMIT oh no!")).then((fileText) => {
-  file.text().then((fileText) => {
+// TODO: avoid mixing promise and callback styles?
+export async function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?: () => void, levelId: string | null = null) {
+  try {
+    const fileText = await file.text()
     // TODO: I noticed that without this condition, all the tests passed. Might be good to try to add a test that fails without it.
     // Also if the setStandaloneLevelMode was called before the file was loaded, that would be a race condition, right? Not caught by tests either.
     if (levelId) {
@@ -372,9 +371,9 @@ export function loadLevel(file: Blob, newMode: "edit" | "play", loadedCallback?:
     if (loadLevelFromText(fileText, newMode, levelId)) {
       loadedCallback?.()
     }
-  }, (error) => {
-    alert(`Failed to read level file. ${error}`)
-  })
+  } catch (error) {
+    alert(`Failed to read level file. ${String(error)}`)
+  }
 }
 
 export function confirmLoseUnsavedChanges() {
@@ -449,7 +448,7 @@ export function openLevel() {
   input.addEventListener('change', () => {
     const file = input.files?.[0]
     if (!file) return
-    loadLevel(file, "edit")
+    void loadLevel(file, "edit")
   })
   input.click()
 }

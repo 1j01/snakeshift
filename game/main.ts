@@ -155,7 +155,7 @@ addEventListener('drop', (event) => {
   event.preventDefault()
   const file = event.dataTransfer?.files[0]
   if (file) {
-    loadLevel(file, "edit")
+    void loadLevel(file, "edit")
   }
 })
 
