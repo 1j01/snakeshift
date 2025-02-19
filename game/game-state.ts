@@ -263,7 +263,7 @@ export function saveLevel() {
 export function serializePlaythrough() {
   // Include redos in order to support round-trip re-saving of playthroughs for automated upgrading of the format...
   // but maybe only in replay mode? Might be unexpected in play mode.
-  const states = (activityMode === "replay" ? [...undos, serialize(), ...redos] : [...undos, serialize()])
+  const states = (activityMode === "replay" ? [...undos, serialize(), ...redos.toReversed()] : [...undos, serialize()])
     .map(s => JSON.parse(s) as ParsedGameState)
   const baseState = states[0]
   const deltas: jsondiffpatch.Delta[] = []
