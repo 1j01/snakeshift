@@ -308,11 +308,16 @@ function loadPlaythrough(json: string) {
 
   loadLevelFromText(playthrough[0], "replay")
   for (const state of playthrough.toReversed()) {
-    redos.push(state)
+    // Don't just push the state; it may need upgrading between format versions.
+    // Without this, the playthrough could end up with deltas on formatVersion itself, which would be a mess.
+    // (Could alternatively do this with .map or otherwise modify playthrough before this loop.)
+    deserialize(state)
+    redos.push(serialize())
   }
   // TODO: avoid sound effect? I mean, it's not terribly inappropriate... definitely unintentional though.
   redo()
   undos.length = 0
+
   const replaySlider = document.getElementById("replay-slider") as HTMLInputElement
   replaySlider.max = `${playthrough.length}`
   replaySlider.value = "0"
