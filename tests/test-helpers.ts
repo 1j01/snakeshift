@@ -24,9 +24,10 @@ export const dragAndDropFile = async (
     async ({ bufferData, localFileName, localFileType }) => {
       const dt = new DataTransfer()
 
-      const blobData = await fetch(bufferData).then((res) => res.blob())
+      const response = await fetch(bufferData)
+      const blob = await response.blob()
 
-      const file = new File([blobData], localFileName, { type: localFileType })
+      const file = new File([blob], localFileName, { type: localFileType })
       dt.items.add(file)
       return dt
     },
