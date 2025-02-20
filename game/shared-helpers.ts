@@ -63,9 +63,13 @@ export function parsePlaythrough(json: string): GameState[] {
   let state = parsed.baseState as ParsedGameState
   const playthrough = [JSON.stringify(state)] as GameState[]
   for (const delta of parsed.deltas as jsondiffpatch.Delta[]) {
-    const newState = jsondiffpatch.patch(state, delta) as ParsedGameState
-    playthrough.push(JSON.stringify(newState))
-    state = newState
+    if (delta) {
+      const newState = jsondiffpatch.patch(state, delta) as ParsedGameState
+      playthrough.push(JSON.stringify(newState))
+      state = newState
+    } else {
+      playthrough.push(JSON.stringify(state))
+    }
   }
   return playthrough
 }
