@@ -88,7 +88,10 @@ export async function compareCurrentLevelContentToFile(page: Page, filePath: str
 
 export async function setLevelContent(page: Page, fileText: string, newMode: "edit" | "play" | "replay") {
   await page.evaluate(({ fileText, newMode }) => {
-    window._forTesting.loadLevelFromText(fileText, newMode)
+    const success = window._forTesting.loadLevelFromText(fileText, newMode)
+    if (!success) {
+      throw new Error("Failed to load level from text")
+    }
     // Don't want guessDefaultActivePlayer logic to run when re-saving level files, especially snapshots saved during tests.
     // Keeping the above even in this case in order to set the activity mode.
     // Not ideal, but not a big deal either.
