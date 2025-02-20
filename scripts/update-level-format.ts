@@ -6,8 +6,7 @@
 
 import { glob } from 'glob'
 import { exec } from 'node:child_process'
-import { readFileSync } from 'node:fs'
-import { writeFile } from 'node:fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
@@ -56,7 +55,7 @@ void (async () => {
       console.error("Skipping file because it's related to version numbering:", filePath)
       continue
     }
-    const fileContents = readFileSync(filePath, 'utf8')
+    const fileContents = await readFile(filePath, 'utf8')
     const isAPlaythrough = isPlaythrough(fileContents)
     if (!isAPlaythrough && !fileContents.startsWith('{')) {
       console.error("Skipping file which does not look like a JSON object:", filePath)
