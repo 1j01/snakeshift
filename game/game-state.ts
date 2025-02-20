@@ -306,6 +306,7 @@ export function savePlaythrough() {
 function loadPlaythrough(json: string) {
   const playthrough = parsePlaythrough(json)
 
+  redos.length = 0
   loadLevelFromText(playthrough[0], "replay")
   for (const state of playthrough.toReversed()) {
     // Don't just push the state; it may need upgrading between format versions.
