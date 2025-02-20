@@ -55,15 +55,15 @@ void (async () => {
       console.error("Skipping file because it's related to version numbering:", filePath)
       continue
     }
-    const fileContents = await readFile(filePath, 'utf8')
-    const isAPlaythrough = isPlaythrough(fileContents)
-    if (!isAPlaythrough && !fileContents.startsWith('{')) {
+    const originalContent = await readFile(filePath, 'utf8')
+    const isAPlaythrough = isPlaythrough(originalContent)
+    if (!isAPlaythrough && !originalContent.startsWith('{')) {
       console.error("Skipping file which does not look like a JSON object:", filePath)
       continue
     }
     console.log("Processing", filePath)
 
-    await setLevelContent(page, fileContents, isAPlaythrough ? "replay" : "edit")
+    await setLevelContent(page, originalContent, isAPlaythrough ? "replay" : "edit")
 
     const newContent = isAPlaythrough ? await getPlaythroughContent(page) : await getCurrentLevelContent(page)
     await writeFile(filePath, newContent, 'utf8')
