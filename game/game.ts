@@ -126,7 +126,9 @@ function storeLevelSolution() {
   const moveCount = getMovesFromPlaythrough(solution).filter(m => typeof m === "string").length
   try {
     const bestMoveCount = Number(localStorage.getItem(storageKeys.bestMoveCount(levelId)) ?? Infinity)
-    if (isNaN(bestMoveCount) || moveCount < bestMoveCount) {
+    // Should it replace the solution if it's the same number of moves?
+    // My gut says yes, so that if you wanted to change it for some (aesthetic?) reason, you could.
+    if (isNaN(bestMoveCount) || moveCount <= bestMoveCount) {
       console.log("New best move count for level", levelId, moveCount, "previous best:", bestMoveCount)
 
       // Prefer storing the move count if there happens to be no space for the solution
