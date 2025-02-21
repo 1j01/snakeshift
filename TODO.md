@@ -19,7 +19,6 @@
 - stretch goal: submit solutions to a server for verification and compare with others
 
 ## Saving playthroughs
-- limit to undos pertaining to the current level (using `levelId` which is now in the undo shape)
 - make sure playthroughs can include the final (winning) state
 - improve playthrough format
   - include inputs
