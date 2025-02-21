@@ -88,6 +88,7 @@ export function initLevelSelect() {
       } catch (error) {
         levelPreviewError.textContent = `Failed to load level preview.\n${String(error)}`
         levelPreviewError.hidden = false
+        deserialize(oldState)
         return
       }
 
