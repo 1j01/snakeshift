@@ -6,6 +6,8 @@
 // █   █ █████ ████  ███ █████       \_| '  /
 //                                         '
 
+import { storageKeys } from "./shared-helpers"
+
 declare global {
   interface Window {
     webkitAudioContext: typeof AudioContext
@@ -21,11 +23,6 @@ window.AudioContext ??= window.webkitAudioContext
 const audioCtx = new AudioContext()
 const mainGain = audioCtx.createGain()
 mainGain.connect(audioCtx.destination)
-
-const storageKeys = {
-  muteSoundEffects: 'snakeshift:muteSoundEffects',
-  volume: 'snakeshift:volume',
-}
 
 const loadProgress = document.getElementById("load-progress")!
 const muteButton = document.getElementById("mute-button")!
