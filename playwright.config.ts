@@ -36,6 +36,9 @@ export default defineConfig({
     acceptDownloads: true,
   },
 
+  /* Remove browser+OS suffix from snapshot file names, so that snapshots don't have to be generated for every combination of browser and OS. */
+  snapshotPathTemplate: '{snapshotDir}/{testFileDir}/{testFileName}-snapshots/{arg}{ext}',
+
   /* Configure projects for major browsers */
   projects: [
     {
