@@ -6,7 +6,7 @@ import { canMove } from "./game-logic"
 import { makeEntity } from "./helpers"
 import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { hideScreens, showLevelSplash } from "./menus"
-import { FORMAT_VERSION, PLAYTHROUGH_FORMAT_VERSION, isPlaythrough, parsePlaythrough } from "./shared-helpers"
+import { LEVEL_FORMAT_VERSION, PLAYTHROUGH_FORMAT_VERSION, isPlaythrough, parsePlaythrough } from "./shared-helpers"
 import Snake from "./snake"
 import { ControlScheme, GameState, ParsedGameState } from "./types"
 
@@ -92,7 +92,7 @@ export function goToHistoryIndex(index: number) {
 export function serialize(): GameState {
   return JSON.stringify({
     format: "snakeshift",
-    formatVersion: FORMAT_VERSION,
+    formatVersion: LEVEL_FORMAT_VERSION,
     levelInfo,
     entities,
     entityTypes: entities.map(e => e.constructor.name),
@@ -106,7 +106,7 @@ export function deserialize(state: GameState, levelId: string | null = null, tem
 
   const parsed = JSON.parse(state) as ParsedGameState
   if (parsed.format !== "snakeshift") throw new Error("Invalid format")
-  if (parsed.formatVersion > FORMAT_VERSION) throw new Error("Format version is too new")
+  if (parsed.formatVersion > LEVEL_FORMAT_VERSION) throw new Error("Format version is too new")
   // Upgrade save format, version by version
   if (parsed.formatVersion === 1) {
     parsed.formatVersion = 2
@@ -145,7 +145,7 @@ export function deserialize(state: GameState, levelId: string | null = null, tem
       }
     }
   }
-  if (parsed.formatVersion !== FORMAT_VERSION) throw new Error("Invalid format version")
+  if (parsed.formatVersion !== LEVEL_FORMAT_VERSION) throw new Error("Invalid format version")
 
   for (let i = 0; i < parsed.entities.length; i++) {
     const entityData = parsed.entities[i]

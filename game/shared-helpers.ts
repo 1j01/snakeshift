@@ -8,7 +8,7 @@ import type { Food } from "./food"
 import type Snake from "./snake"
 import type { GameState, MoveInput, ParsedGameState } from "./types"
 
-export const FORMAT_VERSION = 5
+export const LEVEL_FORMAT_VERSION = 5
 export const PLAYTHROUGH_FORMAT_VERSION = 2
 
 export function isPlaythrough(fileContent: string) {
