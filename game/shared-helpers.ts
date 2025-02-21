@@ -3,7 +3,10 @@
 // nor Node.js-only modules.
 
 import * as jsondiffpatch from "jsondiffpatch"
-import { GameState, ParsedGameState } from "./types"
+import type Entity from "./entity"
+import type { Food } from "./food"
+import type Snake from "./snake"
+import type { GameState, MoveInput, ParsedGameState } from "./types"
 
 export const FORMAT_VERSION = 5
 export const PLAYTHROUGH_FORMAT_VERSION = 2
@@ -73,3 +76,97 @@ export function parsePlaythrough(json: string): GameState[] {
   }
   return playthrough
 }
+
+type EntityLike = Entity & { _type: string }
+function isEntityOfType(entity: EntityLike, type: "Snake"): entity is Snake & { _type: "Snake" }
+function isEntityOfType(entity: EntityLike, type: "Food"): entity is Food & { _type: "Food" }
+function isEntityOfType(entity: EntityLike, type: "Snake" | "Food"): boolean {
+  return entity._type === type
+}
+
+export function getMovesFromPlaythrough(playthroughJSON: string): MoveInput[] {
+  const moves: MoveInput[] = []
+  const playthrough = (parsePlaythrough(playthroughJSON)
+    .map((stateString) => {
+      const parsed = JSON.parse(stateString) as ParsedGameState
+      const entities: EntityLike[] = []
+      for (let i = 0; i < parsed.entities.length; i++) {
+        const entityData = parsed.entities[i]
+        const entityType = parsed.entityTypes[i]
+        entities.push({ ...entityData, _type: entityType })
+      }
+      return { entities, activeSnakeId: (parsed.entities[parsed.activePlayerEntityIndex] as Snake)?.id }
+    })
+    .filter(({ activeSnakeId }) => activeSnakeId) // needed for logic that handles missing final winning state in playthrough (it might actually include the initial state of the next level... hopefully always with `activePlayerEntityIndex` of -1 so that we can detect it...)
+  ) as { entities: EntityLike[]; activeSnakeId: string }[]
+  let prevState: { entities: EntityLike[]; activeSnakeId: string } | null = null
+  let activeSnakeId: string | null = null
+  for (const state of playthrough) {
+    if (prevState) {
+      // Try to figure out the move from the difference between states
+      // If the active snake changed, we need to click the snake; otherwise it's an arrow key
+      // (The Tab key or other controls may be used to switch snakes, but since we need to handle switching to arbitrary snakes,
+      // clicking is the way to go.)
+      if (state.activeSnakeId && activeSnakeId !== state.activeSnakeId) {
+        const activeSnake = state.entities.find((snake) => isEntityOfType(snake, "Snake") && snake.id === state.activeSnakeId) as Snake | undefined
+        if (!activeSnake) {
+          throw new Error(`Could not find snake with ID ${state.activeSnakeId}`)
+        }
+        const head = activeSnake.segments[0]
+        moves.push({ click: head })
+      }
+      for (const entity of state.entities) {
+        for (const prevStateEntity of prevState.entities) {
+          if (isEntityOfType(entity, 'Snake') &&
+            isEntityOfType(prevStateEntity, 'Snake') &&
+            prevStateEntity.id === entity.id) {
+            let moveKey: MoveInput | null = null
+            if (prevStateEntity.segments[0].x < entity.segments[0].x) {
+              moveKey = 'ArrowRight'
+            } else if (prevStateEntity.segments[0].x > entity.segments[0].x) {
+              moveKey = 'ArrowLeft'
+            } else if (prevStateEntity.segments[0].y < entity.segments[0].y) {
+              moveKey = 'ArrowDown'
+            } else if (prevStateEntity.segments[0].y > entity.segments[0].y) {
+              moveKey = 'ArrowUp'
+            }
+            if (moveKey) {
+              moves.push(moveKey)
+              break
+            }
+          }
+        }
+      }
+    }
+    prevState = state
+    activeSnakeId = state.activeSnakeId
+  }
+
+  // Playthrough might not contain the final state/move (awkward)
+  // However, if that's the case, there should only be one Food left, so we can just compare its position to the active snake's head in the last state.
+  const lastState = playthrough[playthrough.length - 1]
+  const foods = lastState.entities.filter((entity) => isEntityOfType(entity, 'Food'))
+  if (foods.length === 1) {
+    const food = foods[0]
+    const activeSnake = lastState.entities.find((snake) => isEntityOfType(snake, "Snake") && snake.id === lastState.activeSnakeId) as Snake | undefined
+    if (!activeSnake) {
+      throw new Error(`Could not find snake with ID ${lastState.activeSnakeId}`)
+    }
+    if (!isEntityOfType(food, 'Food')) {
+      throw new Error(`Could not find Food in last state`)
+    }
+    const head = activeSnake.segments[0]
+    if (head.x < food.x) {
+      moves.push('ArrowRight')
+    } else if (head.x > food.x) {
+      moves.push('ArrowLeft')
+    } else if (head.y < food.y) {
+      moves.push('ArrowDown')
+    } else if (head.y > food.y) {
+      moves.push('ArrowUp')
+    }
+  }
+
+  return moves
+}
+
