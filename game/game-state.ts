@@ -151,7 +151,7 @@ export function deserialize(state: GameState, levelId: string | null = null, tem
     const entityData = parsed.entities[i]
     const entityType = parsed.entityTypes[i]
     const instance = makeEntity(entityType)
-    Object.assign(instance, entityData)
+    instance.fromJSON(entityData)
     entities.push(instance)
   }
 

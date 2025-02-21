@@ -1,4 +1,5 @@
 import Entity from "./entity"
+import { entities } from "./game-state"
 import { selectedEntities } from "./level-editor"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
@@ -9,6 +10,7 @@ export interface SnakeSegment extends Tile {
 export default class Snake extends Entity {
   // When adding new properties, remember to update toJSON()!
   public segments: SnakeSegment[] = []
+  public fusedSnakeIds = new Set<string>()
   public id: string = crypto.randomUUID()
   public growOnNextMove = false
 
@@ -31,11 +33,20 @@ export default class Snake extends Entity {
   toJSON(): object {
     // Must exclude _highlightCanvas; by default it will be serialized
     // as an empty object, and will overwrite the canvas when deserialized.
+    const fusedSnakeIds = Array.from(this.fusedSnakeIds).filter(id => id !== this.id && entities.some(e => e instanceof Snake && e.id === id))
     return {
       id: this.id,
       segments: this.segments,
       growOnNextMove: this.growOnNextMove,
+      fusedSnakeIds: fusedSnakeIds.length ? fusedSnakeIds : undefined, // too weird of a feature to include in all level files
     }
+  }
+  fromJSON(data: object): void {
+    const { id, segments, growOnNextMove, fusedSnakeIds } = data as Snake
+    this.id = id
+    this.segments = segments
+    this.growOnNextMove = growOnNextMove
+    this.fusedSnakeIds = new Set(fusedSnakeIds ?? [])
   }
   highlight(): void {
     this._highlightTime = performance.now()

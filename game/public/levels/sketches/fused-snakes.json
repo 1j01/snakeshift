@@ -1,0 +1,366 @@
+{
+  "format": "snakeshift",
+  "formatVersion": 5,
+  "levelInfo": {
+    "width": 16,
+    "height": 16
+  },
+  "entities": [
+    {
+      "solid": true,
+      "x": 6,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 7,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 8,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 9,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 10,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 11,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 11,
+      "y": 7,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 11,
+      "y": 6,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 10,
+      "y": 5,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 9,
+      "y": 4,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 8,
+      "y": 3,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 7,
+      "y": 3,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "solid": true,
+      "x": 6,
+      "y": 3,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "id": "071f8820-60f2-4c62-98c4-5116b1479dfa",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 2,
+          "y": 10,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 2,
+          "y": 11,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 2,
+          "y": 12,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 2,
+          "y": 13,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false
+    },
+    {
+      "id": "d24822bc-69e5-4533-92f5-0c1929f65efc",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 5,
+          "y": 10,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 5,
+          "y": 11,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 5,
+          "y": 12,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 5,
+          "y": 13,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false,
+      "fusedSnakeIds": [
+        "6eb41157-b9cd-459d-8df6-a954e9a12d60"
+      ]
+    },
+    {
+      "id": "01856ded-f545-42cb-b411-68112b568a53",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 10,
+          "y": 12,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 10,
+          "y": 11,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 10,
+          "y": 10,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 9,
+          "y": 10,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false,
+      "fusedSnakeIds": [
+        "b72eb37c-8b80-46f6-abc2-545487fce7a6",
+        "4f59bbe1-77d8-4a09-8d13-0aae06bb0acb"
+      ]
+    },
+    {
+      "id": "b72eb37c-8b80-46f6-abc2-545487fce7a6",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 7,
+          "y": 11,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 8,
+          "y": 11,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 8,
+          "y": 10,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 9,
+          "y": 10,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false,
+      "fusedSnakeIds": [
+        "01856ded-f545-42cb-b411-68112b568a53",
+        "4f59bbe1-77d8-4a09-8d13-0aae06bb0acb"
+      ]
+    },
+    {
+      "id": "6eb41157-b9cd-459d-8df6-a954e9a12d60",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 6,
+          "y": 14,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 5,
+          "y": 14,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 4,
+          "y": 14,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 4,
+          "y": 13,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 5,
+          "y": 13,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false,
+      "fusedSnakeIds": [
+        "d24822bc-69e5-4533-92f5-0c1929f65efc"
+      ]
+    },
+    {
+      "id": "4f59bbe1-77d8-4a09-8d13-0aae06bb0acb",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 9,
+          "y": 13,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 9,
+          "y": 12,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 9,
+          "y": 11,
+          "width": 1,
+          "height": 1
+        },
+        {
+          "layer": 1,
+          "x": 9,
+          "y": 10,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "growOnNextMove": false,
+      "fusedSnakeIds": [
+        "b72eb37c-8b80-46f6-abc2-545487fce7a6",
+        "01856ded-f545-42cb-b411-68112b568a53"
+      ]
+    }
+  ],
+  "entityTypes": [
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Snake",
+    "Snake",
+    "Snake",
+    "Snake",
+    "Snake",
+    "Snake"
+  ],
+  "activePlayerEntityIndex": 13,
+  "levelId": ""
+}

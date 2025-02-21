@@ -6,10 +6,10 @@ import Entity from "./entity"
 import { Food } from "./food"
 import { checkLevelWon } from "./game"
 import { entities, undoable } from "./game-state"
-import { hitTestAllEntities, invertCollisionLayer, layersCollide, sortEntities, topLayer, translateEntity, withinLevel } from "./helpers"
+import { hitTestAllEntities, invertCollisionLayer, layersCollide, lineNoDiagonals, sortEntities, topLayer, translateEntity, withinLevel } from "./helpers"
 import { Inverter } from "./inverter"
 import { RectangularEntity } from "./rectangular-entity"
-import Snake from "./snake"
+import Snake, { SnakeSegment } from "./snake"
 import { CollisionLayer, Move, Tile } from "./types"
 
 export function analyzeMoveAbsolute(snake: Snake, tile: Tile): Move {
@@ -32,7 +32,8 @@ export function analyzeMoveRelative(snake: Snake, dirX: number, dirY: number): M
   const encumbered = hitsAllAlong.some(hit =>
     hit.entity.solid &&
     hit.entity !== snake &&
-    entities.indexOf(hit.entity) > entities.indexOf(snake)
+    entities.indexOf(hit.entity) > entities.indexOf(snake) &&
+    !(hit.entity instanceof Snake && snake.fusedSnakeIds.has(hit.entity.id))
   )
 
   // Prevent moving backwards when two segments long
@@ -178,7 +179,57 @@ export function takeMove(move: Move): void {
       }
     }
   }
+  // Pull fused snakes
+  for (const fusedSnakeId of snake.fusedSnakeIds) {
+    const fusedSnake = entities.find(entity => entity instanceof Snake && entity.id === fusedSnakeId) as Snake
+    if (!fusedSnake) {
+      // Invalid fusedSnakeIds will be cleaned up when serializing.
+      // It's easier than trying to actively clear relationships when entities are deleted.
+      continue
+    }
+    // Assuming snakes are fused at the tails.
+    dragSnake(fusedSnake, fusedSnake.segments.length - 1, snake.segments[snake.segments.length - 1])
+  }
 }
+
+// TODO: DRY, copied from function `drag` in level-editor.ts
+function dragSnake(dragging: Snake, draggingSegmentIndex: number, to: Tile) {
+  const draggingSegment = dragging.segments[draggingSegmentIndex]
+  if (
+    draggingSegment.x !== to.x ||
+    draggingSegment.y !== to.y
+  ) {
+    // Avoids diagonals and segments longer than 1 tile
+    const from = { x: draggingSegment.x, y: draggingSegment.y } // needs copy since it's mutated and lineNoDiagonals is a generator, so it computes lazily
+    // Skip the first point, since it's the same as the segment's current position
+    for (const point of [...lineNoDiagonals(from, to)].slice(1)) {
+      for (let i = dragging.segments.length - 1; i > draggingSegmentIndex; i--) {
+        lead(dragging.segments[i - 1], dragging.segments[i])
+      }
+      for (let i = 0; i < draggingSegmentIndex; i++) {
+        lead(dragging.segments[i + 1], dragging.segments[i])
+      }
+      draggingSegment.x = point.x
+      draggingSegment.y = point.y
+      // if (Snake.DEBUG_SNAKE_DRAGGING) {
+      //   draw()
+      // }
+    }
+  }
+}
+// TODO: DRY, copied from function `lead` in level-editor.ts
+function lead(leader: SnakeSegment, follower: SnakeSegment) {
+  follower.x = leader.x
+  follower.y = leader.y
+  // Portals may be able to change the size of the snake in the future
+  follower.width = leader.width
+  follower.height = leader.height
+  // Visualize dragging algorithm while paused in the debugger
+  // if (Snake.DEBUG_SNAKE_DRAGGING) {
+  //   draw()
+  // }
+}
+
 function growSnake(snake: Snake): void {
   const tail = snake.segments[snake.segments.length - 1]
   // This only works because SnakeSegment is a flat object.

@@ -472,6 +472,7 @@ export function handleInputForLevelEditing(
         }
       }
       if (entityInstance instanceof Snake) {
+        const existingSnakes = hits.filter(hit => hit.entity instanceof Snake).map(hit => hit.entity as Snake)
         entityInstance.segments.unshift({
           layer: brushColor,
           x: mouseHoveredTile.x,
@@ -479,6 +480,10 @@ export function handleInputForLevelEditing(
           width: 1,
           height: 1,
         })
+        for (const existingSnake of existingSnakes) {
+          existingSnake.fusedSnakeIds.add(entityInstance.id)
+          entityInstance.fusedSnakeIds.add(existingSnake.id)
+        }
       } else if (entityInstance instanceof RectangularEntity) {
         entityInstance.layer = brushColor
         entityInstance.x = mouseHoveredTile.x

@@ -136,6 +136,17 @@ These are just ideas, not necessarily planned features.
   - can move in both directions
   - would require two focus stops, one for each head
   - would probably look silly and not be worth it
+  - I implemented a proof of concept, see level `fused-snakes.json`
+  - does more than two heads make any mechanical sense?
+  - some details:
+    - need to draw the fused snake's tails differently
+    - need to allow it to move snakes into the space that the head of the fused snake leaves within the move (it has logic for the tail of the snake, but not the head of a conjoined snake which should act like the tail in a given move)
+    - in the editor I've made it easy to create snakes joined backwards, and hard to join them correctly (you have to move them after creating and fusing them)
+    - there's no way to unfuse snakes in the editor
+    - existing snakes can't be fused in the editor, only new ones
+    - it shows an invalid overlap/collision warning indicator where the snakes are fused
+    - for more than two fused snakes to work, I need more logic for movement to avoid the snakes overlapping or colliding with the environment
+    - should probably disallow fusing snakes of different colors
 - super-food pickup that makes you grow 3 or something, maybe indefinitely
   - appearance: star like normal food except with alternating black and white concentric scaled copies zooming like a fractal, possibly rotated for a spiral effect
     - implies it can be eaten by any snake, which is fine
