@@ -11,7 +11,6 @@
 - on mobile, viewport has an unintended sort of animation when resizing the view (i.e. by rotating the device), and the viewport can end up cut off 
 
 ## Par system
-- keep track of the fewest number of moves and best solution for each level
 - show the number of moves in the level select
 - define a par for each level
 - store hash of the level content; if it differs, test the stored solution against the new level; if it works, keep it; if it doesn't, discard it

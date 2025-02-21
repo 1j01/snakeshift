@@ -173,5 +173,7 @@ export function getMovesFromPlaythrough(playthroughJSON: string): MoveInput[] {
 export const storageKeys = {
   muteSoundEffects: 'snakeshift:muteSoundEffects',
   volume: 'snakeshift:volume',
+  bestSolution: (levelId: string) => `snakeshift:bestSolution:${levelId}`,
+  bestMoveCount: (levelId: string) => `snakeshift:bestMoveCount:${levelId}`,
 }
 

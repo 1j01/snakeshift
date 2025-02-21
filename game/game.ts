@@ -1,10 +1,11 @@
 import { Food } from "./food"
 import { canMove } from "./game-logic"
-import { clearLevel, deserialize, entities, goToHistoryIndex, guessDefaultActivePlayer, onUpdate, redos, serialize, undoable, undos } from "./game-state"
+import { clearLevel, deserialize, entities, goToHistoryIndex, guessDefaultActivePlayer, onUpdate, redos, serialize, serializePlaythrough, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
 import { currentLevelID, loadLevelFile, loadNextLevel, setStandaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { canvas, draw } from "./rendering"
+import { getMovesFromPlaythrough, storageKeys } from "./shared-helpers"
 import Snake from "./snake"
 import { GameState } from "./types"
 
@@ -118,12 +119,37 @@ function checkLevelStuck() {
   return entities.every((entity) => !(entity instanceof Snake) || !canMove(entity))
 }
 
+function storeLevelSolution() {
+  const levelId = currentLevelID()
+  if (!levelId) return
+  const solution = serializePlaythrough()
+  const moveCount = getMovesFromPlaythrough(solution).filter(m => typeof m === "string").length
+  try {
+    const bestMoveCount = Number(localStorage.getItem(storageKeys.bestMoveCount(levelId)) ?? Infinity)
+    if (isNaN(bestMoveCount) || moveCount < bestMoveCount) {
+      console.log("New best move count for level", levelId, moveCount, "previous best:", bestMoveCount)
+
+      // Prefer storing the move count if there happens to be no space for the solution
+      // (Of course, this doesn't mean much without reserving space for all move counts...
+      // TODO: Hey, could do that by just storing "Infinity" for all levels on load (unless already set.))
+      // (Not that that would probably be a problem. The solutions shouldn't take up that much space, but they COULD, if you did something weird.)
+      localStorage.setItem(storageKeys.bestMoveCount(levelId), moveCount.toString())
+      localStorage.setItem(storageKeys.bestSolution(levelId), solution)
+    } else {
+      console.log("Not a new best move count for level", levelId, moveCount, "previous best:", bestMoveCount)
+    }
+  } catch (e) {
+    console.error("Failed to store level solution:", e)
+  }
+}
+
 export function handleLevelCompletion() {
   onUpdate(() => {
     if (activityMode !== "play") return
     if (!wonLevel && checkLevelWon()) {
       wonLevel = true
       console.log('Level won!', currentLevelID())
+      storeLevelSolution()
       loadNextLevel()
     } else {
       // in case you undo the winning move
