@@ -174,14 +174,39 @@ body:not(.replaying) #replay-bar {
 }
 
 #main-menu button,
-#level-select button {
+#level-select .level-button {
   min-height: 50px;
   margin: 10px;
 }
 
-#level-select button {
+#level-select .level-button {
   display: inline-flex;
   min-width: 100px;
+  position: relative;
+}
+
+#level-select .level-button[data-completed="true"]::after,
+#level-select .level-button[data-completed="true"]::before {
+  content: "✦";
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(50%, -50%) translate(-2rem, 2rem);
+  font-size: 5em;
+  color: #fff;
+  z-index: 2;
+}
+
+#level-select .level-button[data-completed="true"]::before {
+  font-size: 6.7em;
+  color: #000;
+  z-index: 1;
 }
 
 #main-menu button {

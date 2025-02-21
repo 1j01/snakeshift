@@ -3,6 +3,7 @@ import { activityMode, restartLevel } from "./game"
 import { deserialize, entities, levelInfo, loadLevel, serialize, undo } from "./game-state"
 import { showLevelSplash } from "./menus"
 import { drawEntities } from "./rendering"
+import { storageKeys } from "./shared-helpers"
 
 /**
  * This stores the current level in the progression. Yes, it's a bit awkward to use the DOM elements like this. 
@@ -109,6 +110,20 @@ export function initLevelSelect() {
     void renderLevelPreview()
     // TODO: handle zooming (DPI changes)
     // addEventListener('resize', renderIcon)
+  }
+}
+
+/**
+ * Update level solution status in the level select screen.
+ */
+export function updateLevelSelect() {
+  for (const button of document.querySelectorAll<HTMLButtonElement>('.level-button')) {
+    const levelId = button.getAttribute('data-level')!
+    const moveCount = Number(localStorage.getItem(storageKeys.bestMoveCount(levelId)) ?? Infinity)
+    // const hasPlaythrough = localStorage.hasItem(storageKeys.bestSolution(levelId))
+    const completed = moveCount < Infinity
+    button.dataset.moveCount = String(moveCount)
+    button.dataset.completed = String(completed)
   }
 }
 

@@ -1,7 +1,7 @@
 import { playSound } from "./audio"
 import { activityMode, setActivityMode } from "./game"
 import { clearLevel, confirmLoseUnsavedChanges } from "./game-state"
-import { loadFirstLevel, standaloneLevelMode } from "./level-select"
+import { loadFirstLevel, standaloneLevelMode, updateLevelSelect } from "./level-select"
 
 const playButton = document.querySelector<HTMLButtonElement>('#play-button')!
 const levelSelectButton = document.querySelector<HTMLButtonElement>('#level-select-button')!
@@ -24,6 +24,7 @@ export function initMainMenu() {
   levelSelectButton.addEventListener('click', () => {
     hideScreens()
     levelSelect.classList.add('active')
+    updateLevelSelect()
     document.body.dataset.screen = "level-select"
   })
 
