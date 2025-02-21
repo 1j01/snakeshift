@@ -10,6 +10,7 @@ import type { GameState, MoveInput, ParsedGameState } from "./types"
 
 export const LEVEL_FORMAT_VERSION = 5
 export const PLAYTHROUGH_FORMAT_VERSION = 2
+export const LOCAL_STORAGE_FORMAT_VERSION = 1
 
 export function isPlaythrough(fileContent: string) {
   const testString = fileContent.slice(0, 1000)
@@ -175,5 +176,6 @@ export const storageKeys = {
   volume: 'snakeshift:volume',
   bestSolution: (levelId: string) => `snakeshift:bestSolution:${levelId}`,
   bestMoveCount: (levelId: string) => `snakeshift:bestMoveCount:${levelId}`,
+  localStorageFormatVersion: 'snakeshift:localStorageFormatVersion',
 }
 

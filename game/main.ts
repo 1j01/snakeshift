@@ -5,6 +5,7 @@ import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translat
 import { initLevelSelect } from "./level-select"
 import { hideLevelSplash, initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
+import { LOCAL_STORAGE_FORMAT_VERSION, storageKeys } from "./shared-helpers"
 import './testing-interface'
 
 export const playEditToggleButton = document.querySelector<HTMLButtonElement>('#play-edit-toggle-button')!
@@ -159,6 +160,35 @@ addEventListener('drop', (event) => {
   }
 })
 
+function initLocalStorage() {
+  try {
+    const storageVersion = Number(localStorage.getItem(storageKeys.localStorageFormatVersion) ?? LOCAL_STORAGE_FORMAT_VERSION)
+    if (storageVersion > LOCAL_STORAGE_FORMAT_VERSION) {
+      console.error("Saved local storage format version is newer than this version of the game. Some data may be lost.")
+    }
+    // Format upgrades would go here, e.g. in case a level was renamed.
+    // This is a sketch of an upgrade, but untested as it's not needed yet:
+    // if (storageVersion === 1) {
+    //   storageVersion = 2
+    //   localStorage[storageKeys.bestMoveCount("levels/newLevelName.json")] = localStorage[storageKeys.bestMoveCount("levels/oldLevelName.json")]
+    //   localStorage[storageKeys.bestSolution("levels/newLevelName.json")] = localStorage[storageKeys.bestSolution("levels/oldLevelName.json")]
+    //   delete localStorage[storageKeys.bestMoveCount("levels/oldLevelName.json")]
+    //   delete localStorage[storageKeys.bestSolution("levels/oldLevelName.json")]
+    //   localStorage[storageKeys.localStorageFormatVersion] = storageVersion
+    // }
+    if (storageVersion !== LOCAL_STORAGE_FORMAT_VERSION) {
+      console.error("Invalid local storage format version.")
+    } else {
+      // Initialize local storage with default values
+      localStorage.setItem(storageKeys.localStorageFormatVersion, LOCAL_STORAGE_FORMAT_VERSION.toString())
+      // TODO: Reserve space for level move counts and all settings so that variable size solution replays can never prevent saving basic progress/settings
+    }
+  } catch (error) {
+    console.error("Failed to initialize local storage", error)
+  }
+}
+
+initLocalStorage()
 handleLevelCompletion()
 initMainMenu()
 initLevelEditorGUI()
