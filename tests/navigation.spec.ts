@@ -131,6 +131,11 @@ test('should stay on the same level when switching to edit mode after winning a 
 })
 
 test('should restart level when pressing R', async ({ page }) => {
+  // FIXME: This test is flaky.
+  // Skipping the splash screen doesn't necessarily guarantee that the level is loaded,
+  // but I don't know that that's the problem, necessarily.
+  // When it fails it shows a diff where the level content is the same except with the snake in a different position.
+  // That seems more like the up or r keypress is being missed or something.
   await page.getByRole('button', { name: 'Level Select' }).click()
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
   await expect(page).toHaveTitle('Snakeshift - Test Level 001 (Just move right to win)')
