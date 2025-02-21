@@ -85,14 +85,7 @@ export function initLevelSelect() {
       const oldState = serialize()
       try {
         deserialize(stateToPreview, levelURL, true)
-      } catch (error) {
-        levelPreviewError.textContent = `Failed to load level preview.\n${String(error)}`
-        levelPreviewError.hidden = false
-        deserialize(oldState)
-        return
-      }
 
-      try {
         ctx.save()
         ctx.translate(canvas.width / 2, canvas.height / 2)
         const borderSize = 0.2
@@ -106,6 +99,9 @@ export function initLevelSelect() {
 
         drawEntities(ctx, entities)
         ctx.restore()
+      } catch (error) {
+        levelPreviewError.textContent = `Failed to load level preview.\n${String(error)}`
+        levelPreviewError.hidden = false
       } finally {
         deserialize(oldState)
       }
