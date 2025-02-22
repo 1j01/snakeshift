@@ -287,11 +287,11 @@ function invertSnake(snake: Snake): void {
 }
 
 function updateCellularAutomata() {
-  const occupiedTiles = new Set<string>()
+  const occupiedTiles = new Map<string, CellularAutomata>()
   for (const entity of entities) {
     if (entity instanceof CellularAutomata) {
       const key = `${entity.x},${entity.y}`
-      occupiedTiles.add(key)
+      occupiedTiles.set(key, entity)
     }
   }
   const newOccupiedTiles = new Set<string>()
@@ -308,7 +308,10 @@ function updateCellularAutomata() {
         `${x - 1},${y + 1}`,
         `${x - 1},${y}`,
       ]
-      const neighborCount = neighbors.filter(n => occupiedTiles.has(n)).length
+      // Real inefficient, computing the top collision layer for each neighbor, filtering to ignore the cellular automata itself
+      // Could precompute a 2D array (or Map) of top collision layers. Might be able to do this totally differently.
+      // Not sure exactly how the cellular automata should interact with everything.
+      const neighborCount = neighbors.filter(n => occupiedTiles.get(n)?.layer === invertCollisionLayer(topLayer(hitTestAllEntities(x, y).filter((hit) => !(hit.entity instanceof CellularAutomata))))).length
       // Simplest rule: just grow
       // if (neighborCount >= 3 || occupiedTiles.has(key)) {
 
@@ -341,10 +344,10 @@ function updateCellularAutomata() {
       continue
     }
     const [x, y] = key.split(',').map(Number)
-    // TODO: handle color (collision layer)
     const cell = new CellularAutomata()
     cell.x = x
     cell.y = y
+    cell.layer = invertCollisionLayer(topLayer(hitTestAllEntities(x, y)))
     entities.push(cell)
   }
 }
