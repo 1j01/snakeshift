@@ -1,11 +1,12 @@
 import { playMelodicSound, playSound } from "./audio"
 import { Block } from "./block"
+import { CellularAutomata } from "./cellular-automata"
 import { Collectable } from "./collectable"
 import { Crate } from "./crate"
 import Entity from "./entity"
 import { Food } from "./food"
 import { checkLevelWon } from "./game"
-import { entities, undoable } from "./game-state"
+import { entities, levelInfo, undoable } from "./game-state"
 import { hitTestAllEntities, invertCollisionLayer, layersCollide, lineNoDiagonals, sortEntities, topLayer, translateEntity, withinLevel } from "./helpers"
 import { Inverter } from "./inverter"
 import { RectangularEntity } from "./rectangular-entity"
@@ -190,6 +191,8 @@ export function takeMove(move: Move): void {
     // Assuming snakes are fused at the tails.
     dragSnake(fusedSnake, fusedSnake.segments.length - 1, snake.segments[snake.segments.length - 1])
   }
+  // Update cellular automata
+  updateCellularAutomata()
 }
 
 // TODO: DRY, copied from function `drag` in level-editor.ts
@@ -280,5 +283,68 @@ function invertSnake(snake: Snake): void {
       block.y = y
       entities.unshift(block)
     }
+  }
+}
+
+function updateCellularAutomata() {
+  const occupiedTiles = new Set<string>()
+  for (const entity of entities) {
+    if (entity instanceof CellularAutomata) {
+      const key = `${entity.x},${entity.y}`
+      occupiedTiles.add(key)
+    }
+  }
+  const newOccupiedTiles = new Set<string>()
+  for (let y = 0; y < levelInfo.height; y++) {
+    for (let x = 0; x < levelInfo.width; x++) {
+      const key = `${x},${y}`
+      const neighbors = [
+        `${x - 1},${y - 1}`,
+        `${x},${y - 1}`,
+        `${x + 1},${y - 1}`,
+        `${x + 1},${y}`,
+        `${x + 1},${y + 1}`,
+        `${x},${y + 1}`,
+        `${x - 1},${y + 1}`,
+        `${x - 1},${y}`,
+      ]
+      const neighborCount = neighbors.filter(n => occupiedTiles.has(n)).length
+      // Simplest rule: just grow
+      // if (neighborCount >= 3 || occupiedTiles.has(key)) {
+
+      // Conway's Game of Life rules:
+      // Any live cell with fewer than two live neighbours dies (referred to as underpopulation).
+      // Any live cell with more than three live neighbours dies (referred to as overpopulation).
+      // Any live cell with two or three live neighbours lives, unchanged, to the next generation.
+      // Any dead cell with exactly three live neighbours comes to life.
+      if (neighborCount === 3 || (neighborCount === 2 && occupiedTiles.has(key))) {
+        if (!hitTestAllEntities(x, y).some(hit => hit.entity instanceof Snake)) {
+          newOccupiedTiles.add(key)
+        }
+      }
+    }
+  }
+  for (let i = entities.length - 1; i >= 0; i--) {
+    const entity = entities[i]
+    if (entity instanceof CellularAutomata) {
+      const key = `${entity.x},${entity.y}`
+      if (newOccupiedTiles.has(key)) {
+        continue
+      }
+      if (!hitTestAllEntities(entity.x, entity.y).some(hit => hit.entity instanceof Snake)) {
+        entities.splice(i, 1)
+      }
+    }
+  }
+  for (const key of newOccupiedTiles) {
+    if (occupiedTiles.has(key)) {
+      continue
+    }
+    const [x, y] = key.split(',').map(Number)
+    // TODO: handle color (collision layer)
+    const cell = new CellularAutomata()
+    cell.x = x
+    cell.y = y
+    entities.push(cell)
   }
 }

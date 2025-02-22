@@ -1,4 +1,5 @@
 import { Block } from "./block"
+import { CellularAutomata } from "./cellular-automata"
 import { Collectable } from "./collectable"
 import { Crate } from "./crate"
 import Entity from "./entity"
@@ -116,6 +117,8 @@ export function makeEntity(entityType: string): Entity {
       return new Inverter()
     case "Crate":
       return new Crate()
+    case "CellularAutomata":
+      return new CellularAutomata()
     default:
       throw new Error(`Unknown entity type: ${entityType}`)
   }
