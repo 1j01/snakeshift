@@ -1,5 +1,6 @@
 import Entity from "./entity"
 import { entities } from "./game-state"
+import { angleLerp } from "./helpers"
 import { selectedEntities } from "./level-editor"
 import { CollisionLayer, Hit, Move, Tile } from "./types"
 
@@ -21,6 +22,7 @@ export default class Snake extends Entity {
   private _movementPreviewHeadRelative: { x: number, y: number } = { x: 0, y: 0 }
   private _movementPreviewHeadRotation = 0
   private _movementPreviewTailDistance = 0
+  private _previousTailPosition: Tile | null = null
   private _animateTail = 0
   private _xEyes = false
   static readonly HIGHLIGHT_DURATION = 500
@@ -291,7 +293,13 @@ export default class Snake extends Entity {
         // when two snake heads overlapped, the eye would be invisible.
       } else if (i === this.segments.length - 1) {
         // tail
-        ctx.rotate(foreAngle)
+        let angle = foreAngle
+        if (this._previousTailPosition) {
+          const previousAngle = Math.atan2(this._previousTailPosition.y - segment.y, this._previousTailPosition.x - segment.x)
+          // const previousAngle = Math.atan2(segment.y - this._previousTailPosition.y, segment.x - this._previousTailPosition.x)
+          angle = angleLerp(foreAngle, previousAngle, this._movementPreviewTailDistance)
+        }
+        ctx.rotate(angle)
         ctx.scale(1, 0.9)
         mirrored(() => ctx.lineTo(-1 / 2, -1 / 2)) // only needed during animation
         ctx.translate(this._movementPreviewTailDistance, 0)
@@ -327,10 +335,10 @@ export default class Snake extends Entity {
     return null
   }
   // TODO: DRY animating valid and invalid moves
-  animateMove(move: Move): void {
+  animateMove(move: Move, originalTailPosition: Tile): void {
     // TODO: handle canceling animations
     // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
-    // FIXME: tail does not appear to come from the previous cell when tail rounds a corner
+    // FIXME: tail rotation animation is wonky
     const startTime = performance.now()
     const duration = 60
     const animate = () => {
@@ -350,6 +358,7 @@ export default class Snake extends Entity {
       const pos = (1 + progress) / 2 - 1
 
       this._animateTail = 1
+      this._previousTailPosition = originalTailPosition
       this.previewMovement(move.delta.x * pos, move.delta.y * pos)
 
       requestAnimationFrame(animate)

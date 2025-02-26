@@ -42,6 +42,16 @@ export function clampToLevel(tile: Tile) {
   }
 }
 
+function shortAngleDist(a0: number, a1: number) {
+  const maxAngle = Math.PI * 2
+  const angleDifference = (a1 - a0) % maxAngle
+  return 2 * angleDifference % maxAngle - angleDifference
+}
+
+export function angleLerp(a0: number, a1: number, t: number) {
+  return a0 + shortAngleDist(a0, a1) * t
+}
+
 export function* bresenham(start: Point, end: Point): Generator<Point> {
   const xDist = Math.abs(end.x - start.x)
   const yDist = -Math.abs(end.y - start.y)

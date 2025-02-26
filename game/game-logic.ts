@@ -117,6 +117,7 @@ export function canMove(snake: Snake): boolean {
 export function takeMove(move: Move): void {
   // const snake = entities.find(entity => entity instanceof Snake && entity.id === move.snakeId) as Snake
   const snake = move.snake
+  const originalTailPosition = { ...snake.segments[snake.segments.length - 1] }
   undoable()
   playSound('move')
   if (snake.growOnNextMove) {
@@ -194,7 +195,7 @@ export function takeMove(move: Move): void {
   // Update cellular automata
   updateCellularAutomata()
   // Animate
-  snake.animateMove(move)
+  snake.animateMove(move, originalTailPosition)
 }
 
 // TODO: DRY, copied from function `drag` in level-editor.ts
