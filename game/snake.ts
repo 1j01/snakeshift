@@ -400,6 +400,16 @@ export default class Snake extends Entity {
 
       this._xEyes = move.encumbered
       this._animateTail = !move.encumbered && (move.to.x !== this.segments[1].x || move.to.y !== this.segments[1].y) ? -0.3 : 0
+      // Extrapolate the "previous" tail position from the current tail position
+      // This may not actually be the previous tail position, but we don't want it to animate rotation
+      // just because the last move had the tail turn a corner.
+      // A more generic name might be "tailAnimationOrigin" or "tailBasePosition" or "tailAnimationStartPoint"
+      this._previousTailPosition = {
+        x: this.segments[this.segments.length - 1].x + (this.segments[this.segments.length - 1].x - this.segments[this.segments.length - 2].x),
+        y: this.segments[this.segments.length - 1].y + (this.segments[this.segments.length - 1].y - this.segments[this.segments.length - 2].y),
+        width: this.segments[this.segments.length - 1].width,
+        height: this.segments[this.segments.length - 1].height,
+      }
       // this._animateTail = 0
       this.previewMovement(move.delta.x * pos, move.delta.y * pos)
 
