@@ -321,7 +321,7 @@ function updateCellularAutomata() {
       // Any live cell with two or three live neighbours lives, unchanged, to the next generation.
       // Any dead cell with exactly three live neighbours comes to life.
       if (neighborCount === 3 || (neighborCount === 2 && occupiedTiles.has(key))) {
-        if (!hitTestAllEntities(x, y).some(hit => hit.entity instanceof Snake)) {
+        if (!hitTestAllEntities(x, y).some(hit => !(hit.entity instanceof Block || hit.entity instanceof CellularAutomata))) {
           newOccupiedTiles.add(key)
         }
       }
@@ -334,7 +334,7 @@ function updateCellularAutomata() {
       if (newOccupiedTiles.has(key)) {
         continue
       }
-      if (!hitTestAllEntities(entity.x, entity.y).some(hit => hit.entity instanceof Snake)) {
+      if (!hitTestAllEntities(entity.x, entity.y).some(hit => !(hit.entity instanceof Block || hit.entity instanceof CellularAutomata))) {
         entities.splice(i, 1)
       }
     }
