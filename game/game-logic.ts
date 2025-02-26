@@ -299,28 +299,29 @@ function updateCellularAutomata() {
     for (let x = 0; x < levelInfo.width; x++) {
       const key = `${x},${y}`
       const neighbors = [
-        `${x - 1},${y - 1}`,
+        // `${x - 1},${y - 1}`,
         `${x},${y - 1}`,
-        `${x + 1},${y - 1}`,
+        // `${x + 1},${y - 1}`,
         `${x + 1},${y}`,
-        `${x + 1},${y + 1}`,
+        // `${x + 1},${y + 1}`,
         `${x},${y + 1}`,
-        `${x - 1},${y + 1}`,
+        // `${x - 1},${y + 1}`,
         `${x - 1},${y}`,
       ]
       // Real inefficient, computing the top collision layer for each neighbor, filtering to ignore the cellular automata itself
       // Could precompute a 2D array (or Map) of top collision layers. Might be able to do this totally differently.
       // Not sure exactly how the cellular automata should interact with everything.
       const neighborCount = neighbors.filter(n => occupiedTiles.get(n)?.layer === invertCollisionLayer(topLayer(hitTestAllEntities(x, y).filter((hit) => !(hit.entity instanceof CellularAutomata))))).length
-      // Simplest rule: just grow
-      // if (neighborCount >= 3 || occupiedTiles.has(key)) {
 
-      // Conway's Game of Life rules:
+      // Conway's Game of Life rules (requires 8 neighbors):
       // Any live cell with fewer than two live neighbours dies (referred to as underpopulation).
       // Any live cell with more than three live neighbours dies (referred to as overpopulation).
       // Any live cell with two or three live neighbours lives, unchanged, to the next generation.
       // Any dead cell with exactly three live neighbours comes to life.
-      if (neighborCount === 3 || (neighborCount === 2 && occupiedTiles.has(key))) {
+      // if (neighborCount === 3 || (neighborCount === 2 && occupiedTiles.has(key))) {
+
+      // Simplest rule: just grow (designed for 4 neighbors):
+      if (neighborCount >= 1 || occupiedTiles.has(key)) {
         if (!hitTestAllEntities(x, y).some(hit => !(hit.entity instanceof Block || hit.entity instanceof CellularAutomata))) {
           newOccupiedTiles.add(key)
         }
