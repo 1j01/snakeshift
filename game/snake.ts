@@ -337,11 +337,9 @@ export default class Snake extends Entity {
 
       const progress = Math.min(1, elapsed / duration)
       const pos = Math.sin(progress * Math.PI) * 0.08
-      const deltaX = move.to.x - this.segments[0].x
-      const deltaY = move.to.y - this.segments[0].y
 
       this._xEyes = move.encumbered
-      this.previewMovement(deltaX * pos, deltaY * pos)
+      this.previewMovement(move.delta.x * pos, move.delta.y * pos)
 
       requestAnimationFrame(animate)
     }
