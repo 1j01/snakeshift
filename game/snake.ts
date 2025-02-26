@@ -20,6 +20,8 @@ export default class Snake extends Entity {
   private _movementPreview: { x: number, y: number } = { x: 0, y: 0 }
   private _movementPreviewHeadRelative: { x: number, y: number } = { x: 0, y: 0 }
   private _movementPreviewHeadRotation = 0
+  private _movementPreviewTailDistance = 0
+  private _animateTail = 0
   private _xEyes = false
   static readonly HIGHLIGHT_DURATION = 500
   static DEBUG_SNAKE_DRAGGING = false
@@ -72,6 +74,7 @@ export default class Snake extends Entity {
       y: Math.sin(movementPreviewAngle - headAngle) * movementPreviewDistance,
     }
     this._movementPreviewHeadRotation = this._movementPreviewHeadRelative.y * -1
+    this._movementPreviewTailDistance = this._animateTail * movementPreviewDistance
   }
   draw(ctx: CanvasRenderingContext2D): void {
     // body
@@ -290,6 +293,8 @@ export default class Snake extends Entity {
         // tail
         ctx.rotate(foreAngle)
         ctx.scale(1, 0.9)
+        mirrored(() => ctx.lineTo(-1 / 2, -1 / 2)) // only needed during animation
+        ctx.translate(this._movementPreviewTailDistance, 0)
         ctx.lineTo(-1 / 2, -1 / 2)
         const extent = .5
         const pointiness = 0
@@ -325,13 +330,14 @@ export default class Snake extends Entity {
   animateMove(move: Move): void {
     // TODO: handle canceling animations
     // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
-    // TODO: animate tail moving toward the next cell
+    // FIXME: tail does not appear to come from the previous cell when tail rounds a corner
     const startTime = performance.now()
     const duration = 60
     const animate = () => {
       const elapsed = performance.now() - startTime
 
       if (elapsed > duration) {
+        this._animateTail = 0
         this.previewMovement(0, 0)
         return
       }
@@ -343,6 +349,7 @@ export default class Snake extends Entity {
       // because it's not handled by the rendering code at the moment
       const pos = (1 + progress) / 2 - 1
 
+      this._animateTail = 1
       this.previewMovement(move.delta.x * pos, move.delta.y * pos)
 
       requestAnimationFrame(animate)
@@ -352,15 +359,17 @@ export default class Snake extends Entity {
   animateInvalidMove(move: Move): void {
     // TODO: handle canceling animations
     // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
-    // TODO: animate tail (always moving toward the next cell, unless implementing a wriggling animation for encumbrance)
+    // TODO: maybe don't animate tail? even a subtle animation is kinda weird
+    // feels like it distracts from the reason the move is invalid, which has to do with the front of the snake
     const startTime = performance.now()
     const duration = move.encumbered ? 230 : 120
     const animate = () => {
       const elapsed = performance.now() - startTime
 
       if (elapsed > duration) {
-        this.previewMovement(0, 0)
+        this._animateTail = 0
         this._xEyes = false
+        this.previewMovement(0, 0)
         return
       }
 
@@ -368,6 +377,8 @@ export default class Snake extends Entity {
       const pos = Math.sin(progress * Math.PI) * 0.08
 
       this._xEyes = move.encumbered
+      this._animateTail = !move.encumbered && (move.to.x !== this.segments[1].x || move.to.y !== this.segments[1].y) ? -0.3 : 0
+      // this._animateTail = 0
       this.previewMovement(move.delta.x * pos, move.delta.y * pos)
 
       requestAnimationFrame(animate)
