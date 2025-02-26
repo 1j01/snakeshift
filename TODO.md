@@ -1,16 +1,23 @@
 # Snakeshift Todo List
 
+- URL routing (see `// TODO: proper routing` in level-select.ts)
 - skip/merge extra undo steps for switching snakes
 - readme image
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes
 - should probably disallow pushing stars on top of other stars with crates
 - bug: ctrl+o isn't always loading a level, sometimes it just switches to edit mode for the current level
+- bug: why is there a big DELAY on restarting a level (sometimes)? is it loading the level file? even that shouldn't be so slow. is it waiting for some time related to splash screens?
+- bug: got a "Level Complete" splash screen when dragging a level file onto the page while in the first level
+- bug: drag and drop isn't clearing undo history IN SOME UNREPRODUCIBLE CASE? I've tried twice to add tests, see stashes, for some bug but no reproduction yet
+
 
 ## Mobile viewport issues
 - the whole page can be scrolled if zoomed in; it can be unclear what's happening, and hard to zoom out since pinching on the canvas doesn't work
 - on mobile, viewport has an unintended sort of animation when resizing the view (i.e. by rotating the device), and the viewport can end up cut off 
 
 ## Par system
+- bug: restarts shouldn't be counted in the moves of a playthrough, but it's adding up separate runs of the same level
+  - could introduce a level *session* id to compliment the level id and use it instead for partitioning playthroughs
 - show the number of moves in the level select
 - define a par for each level
 - store hash of the level content; if it differs, test the stored solution against the new level; if it works, keep it; if it doesn't, discard it
@@ -55,6 +62,7 @@
 - visuals:
   - there's a slight bug where Block is not always sorted to bottom, which I can see when dragging with the pointer control scheme, which animates the snake slightly beyond its cell, in the level Ferry
   - enlarge level border
+  - gong ripple visual effect doesn't always reach edges of screen; could use max instead of min of screen dimensions
   - 1x1 snake should change direction when moving
     - need to store heading in a different way, to work with a single segment
   - do something about weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
@@ -69,8 +77,13 @@
     - feels like you shouldn't be able to go on top of another snake's head, like you'd eat the snake
       - I have since made food more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
 - animation:
+  - when using pointer controls, movement preview conflicts slightly with the animation; it should add the effects together, ideally, but right now the movement preview cancels out the movement animation; it's super subtle, you can just see a frame of jitter sometimes
+  - animate undo/redo (implies timeline abstraction, moving animation state outside of entities)
+  - animate pushing crates
+    - valid move: slide (synced with snake movement)
+    - invalid move: push crate slightly through wall? or squash it? I think it shouldn't look too weird with the monochrome aesthetic masking the overlap in silhouette
+  - animate birth/death for cellular automata
   - when snake is encumbered by another snake (or crate): wriggle whole snake? so far I've implemented x eyes, but you can't always see the head
-  - pushing crates (or snakes?) into a wall: push crate slightly through wall? or squash it? I think it shouldn't look too weird with the monochrome aesthetic masking the overlap in silhouette  
 - audio:
   - sound effect for restart level
   - more appropriate undo/redo sfx
@@ -91,9 +104,15 @@
   - simplify tests (remove `exact`)
   - fix aria-keyshortcuts semantics (the attribute shouldn't be present on things that won't activate, such as some hidden buttons)
   - see `/* TODO: hide back button properly, for (in)accessibility */`
+- move `guessDefaultActivePlayer()` into `storeBaseLevelState`?
 
 
 ## Tests
+- add tests for replay viewer:
+	- toggling edit mode (what should that do?)
+	- arrow keys to navigate steps (currently relies on slider focus and native arrow key handling)
+	- undo/redo buttons to navigate steps (should update slider)
+- move unsaved changes prompt tests to level editor spec?
 - game playthrough test:
   - upgrade the playthrough format to include inputs instead of inferring them
   - ensure that it's finding some levels; don't want to find out that "whoops, it's not testing anything" for such an important test
