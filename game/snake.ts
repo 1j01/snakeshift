@@ -61,9 +61,16 @@ export default class Snake extends Entity {
     // - squash/stretch
     // - preview the movement closer to being activated: horizontal or vertical, not both
     //   (although perhaps a combination when its not near the threshold where it will take a move, for some fluidity)
-    // - animate the whole body path, including the tail
+    // - animate the whole body path, not just the head/tail
     //   (if the snake had scales, this would have a greater visual impact)
     // - springiness
+    // - haptic feedback
+
+    // This function is also used by animation code.
+    // TODO: allow instantaneous movement preview to interact nicely with animations,
+    // without fighting over the displayed state. Addition should work.
+    // But not addition of animations, because that could lead to overshooting.
+    // Only combine instantaneous movement preview with one animation.
 
     this._movementPreview.x = deltaX
     this._movementPreview.y = deltaY
