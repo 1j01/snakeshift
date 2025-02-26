@@ -18,11 +18,11 @@ export default class Snake extends Entity {
   private _highlightCanvas = document.createElement('canvas')
   private _melodyIndex = 0
   private _movementPreview: { x: number, y: number } = { x: 0, y: 0 }
-  private _movementPreviewHeadRelative: { x: number, y: number } = { x: 0, y: 0 }
-  private _movementPreviewHeadRotation = 0
-  private _movementPreviewTailDistance = 0
-  private _previousTailPosition: Tile | null = null
-  private _animateTail = 0
+  private _headRelativeOffset: { x: number, y: number } = { x: 0, y: 0 }
+  private _headAngularOffset = 0
+  private _tailTravelOffset = 0
+  private _tailAnimStartPos: Tile | null = null
+  private _tailAnimFactor = 0
   private _xEyes = false
   static readonly HIGHLIGHT_DURATION = 500
   static DEBUG_SNAKE_DRAGGING = false
@@ -70,12 +70,12 @@ export default class Snake extends Entity {
     const movementPreviewAngle = Math.atan2(this._movementPreview.y, this._movementPreview.x)
     const movementPreviewDistance = Math.hypot(this._movementPreview.y, this._movementPreview.x)
     const headAngle = this.segments.length > 1 ? Math.atan2(this.segments[1].y - this.segments[0].y, this.segments[1].x - this.segments[0].x) : Math.PI / 2
-    this._movementPreviewHeadRelative = {
+    this._headRelativeOffset = {
       x: Math.cos(movementPreviewAngle - headAngle) * movementPreviewDistance,
       y: Math.sin(movementPreviewAngle - headAngle) * movementPreviewDistance,
     }
-    this._movementPreviewHeadRotation = this._movementPreviewHeadRelative.y * -1
-    this._movementPreviewTailDistance = this._animateTail * movementPreviewDistance
+    this._headAngularOffset = this._headRelativeOffset.y * -1
+    this._tailTravelOffset = this._tailAnimFactor * movementPreviewDistance
   }
   draw(ctx: CanvasRenderingContext2D): void {
     // body
@@ -186,9 +186,9 @@ export default class Snake extends Entity {
     ctx.translate(head.x + head.width / 2, head.y + head.height / 2)
     ctx.scale(head.width, head.height)
     const angle = this.segments[1] ? Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x) : Math.PI / 2
-    ctx.rotate(angle + this._movementPreviewHeadRotation)
+    ctx.rotate(angle + this._headAngularOffset)
     const movementPreviewFactor = this.segments[1] ? 1 : 2 // Exaggerate eye movement for 1-long snakes sine they're like spheres, and it gives it a 3D appearance
-    ctx.translate(this._movementPreviewHeadRelative.x * movementPreviewFactor, this._movementPreviewHeadRelative.y * movementPreviewFactor)
+    ctx.translate(this._headRelativeOffset.x * movementPreviewFactor, this._headRelativeOffset.y * movementPreviewFactor)
 
     // eyes
     ctx.beginPath()
@@ -277,13 +277,13 @@ export default class Snake extends Entity {
         if (this.segments.length === 1) {
           // head circle
           ctx.rotate(Math.PI / 2) // only matters for offset, for movement preview
-          ctx.arc(this._movementPreviewHeadRelative.x, this._movementPreviewHeadRelative.y, 1 / 2, 0, Math.PI * 2)
+          ctx.arc(this._headRelativeOffset.x, this._headRelativeOffset.y, 1 / 2, 0, Math.PI * 2)
         } else {
           // head
           ctx.rotate(backAngle)
           ctx.scale(1, 0.9)
           // mirrored(() => ctx.lineTo(1 / 2, 1 / 2))
-          ctx.arc(this._movementPreviewHeadRelative.x, this._movementPreviewHeadRelative.y, 1 / 2, Math.PI / 2, -Math.PI / 2)
+          ctx.arc(this._headRelativeOffset.x, this._headRelativeOffset.y, 1 / 2, Math.PI / 2, -Math.PI / 2)
           // ctx.lineTo(1 / 2, -1 / 2)
           // ctx.lineTo(1 / 2, 1 / 2)
         }
@@ -296,16 +296,16 @@ export default class Snake extends Entity {
         ctx.scale(1, 0.9)
         mirrored(() => ctx.lineTo(-1 / 2, -1 / 2)) // only needed during animation
 
-        if (this._previousTailPosition) {
+        if (this._tailAnimStartPos) {
           // interpolate tail position
           const tailPos: Point = {
-            x: this._previousTailPosition.x + (segment.x - this._previousTailPosition.x) * (1 - this._movementPreviewTailDistance),
-            y: this._previousTailPosition.y + (segment.y - this._previousTailPosition.y) * (1 - this._movementPreviewTailDistance),
+            x: this._tailAnimStartPos.x + (segment.x - this._tailAnimStartPos.x) * (1 - this._tailTravelOffset),
+            y: this._tailAnimStartPos.y + (segment.y - this._tailAnimStartPos.y) * (1 - this._tailTravelOffset),
           }
           // interpolate the adjacent body segment position in order to rotate the tail correctly
           const hipBonePos: Point = {
-            x: segment.x + (this.segments[i - 1]!.x - segment.x) * (1 - this._movementPreviewTailDistance),
-            y: segment.y + (this.segments[i - 1]!.y - segment.y) * (1 - this._movementPreviewTailDistance),
+            x: segment.x + (this.segments[i - 1]!.x - segment.x) * (1 - this._tailTravelOffset),
+            y: segment.y + (this.segments[i - 1]!.y - segment.y) * (1 - this._tailTravelOffset),
           }
           // undo and recalculate transformations with interpolated positions
           ctx.restore()
@@ -358,7 +358,7 @@ export default class Snake extends Entity {
       const elapsed = performance.now() - startTime
 
       if (elapsed > duration) {
-        this._animateTail = 0
+        this._tailAnimFactor = 0
         this.previewMovement(0, 0)
         return
       }
@@ -370,8 +370,8 @@ export default class Snake extends Entity {
       // because it's not handled by the rendering code at the moment
       const pos = (1 + progress) / 2 - 1
 
-      this._animateTail = 1
-      this._previousTailPosition = originalTailPosition
+      this._tailAnimFactor = 1
+      this._tailAnimStartPos = originalTailPosition
       this.previewMovement(move.delta.x * pos, move.delta.y * pos)
 
       requestAnimationFrame(animate)
@@ -389,7 +389,7 @@ export default class Snake extends Entity {
       const elapsed = performance.now() - startTime
 
       if (elapsed > duration) {
-        this._animateTail = 0
+        this._tailAnimFactor = 0
         this._xEyes = false
         this.previewMovement(0, 0)
         return
@@ -399,22 +399,21 @@ export default class Snake extends Entity {
       const pos = Math.sin(progress * Math.PI) * 0.08
 
       this._xEyes = move.encumbered
-      this._animateTail = !move.encumbered && this.segments.length > 1 && (move.to.x !== this.segments[1].x || move.to.y !== this.segments[1].y) ? -0.3 : 0
-      // Extrapolate the "previous" tail position from the current tail position
-      // This may not actually be the previous tail position, but we don't want it to animate rotation
-      // just because the last move had the tail turn a corner.
-      // A more generic name might be "tailAnimationOrigin" or "tailBasePosition" or "tailAnimationStartPoint"
+      this._tailAnimFactor = !move.encumbered && this.segments.length > 1 && (move.to.x !== this.segments[1].x || move.to.y !== this.segments[1].y) ? -0.3 : 0
+      // Extrapolate the tail animation start position from the current tail position.
+      // In this case it may not actually be the previous tail position; we don't want to animate rotation
+      // just because the last move had the tail turn a corner. That's not relevant once the move is over.
       if (this.segments.length > 1) {
-        this._previousTailPosition = {
+        this._tailAnimStartPos = {
           x: this.segments[this.segments.length - 1].x + (this.segments[this.segments.length - 1].x - this.segments[this.segments.length - 2].x),
           y: this.segments[this.segments.length - 1].y + (this.segments[this.segments.length - 1].y - this.segments[this.segments.length - 2].y),
           width: this.segments[this.segments.length - 1].width,
           height: this.segments[this.segments.length - 1].height,
         }
       } else {
-        this._previousTailPosition = null
+        this._tailAnimStartPos = null
       }
-      // this._animateTail = 0
+      // this._tailAnimFactor = 0
       this.previewMovement(move.delta.x * pos, move.delta.y * pos)
 
       requestAnimationFrame(animate)
