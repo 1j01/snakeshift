@@ -41,10 +41,11 @@ export class CellularAutomata extends RectangularEntity {
     ctx.scale(this.width, this.height)
     ctx.fillStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
     ctx.beginPath()
-    const t = performance.now() / 1000
-    const out = Math.sin(t) * 0.3
-    const along = Math.cos(t) * 0.1
+    const t = performance.now() / 1000 + this.x * 0.3 + this.y * 0.3
     for (let i = 0; i < basePoints2.length; i++) {
+      const out = Math.sin(t) * 0.3
+      // const out = Math.sin(t + Math.PI * i / basePoints2.length) * 0.1
+      const along = Math.cos(t) * 0.1
       const point = basePoints2[i]
       const nextPoint = basePoints2[(i + 1) % basePoints2.length]
       // Difference vector
@@ -56,6 +57,11 @@ export class CellularAutomata extends RectangularEntity {
       const ny = dx / len
 
       ctx.lineTo(point.x, point.y)
+      // ctx.lineTo(
+      //   point.x + dx * along + nx * out,
+      //   point.y + dy * along + ny * out,
+      // )
+      // ctx.lineTo(point.x + nx * out, point.y + ny * out)
       ctx.bezierCurveTo(
         point.x + dx * along + nx * out,
         point.y + dy * along + ny * out,
