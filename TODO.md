@@ -70,7 +70,7 @@
       - I have since made food more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
 - animation:
   - when snake is encumbered by another snake (or crate): wriggle whole snake? so far I've implemented x eyes, but you can't always see the head
-  - pushing crates (or snakes?) into a wall: push crash slightly through wall? or squash it? I think it shouldn't look too weird with the monochrome aesthetic masking the overlap in silhouette  
+  - pushing crates (or snakes?) into a wall: push crate slightly through wall? or squash it? I think it shouldn't look too weird with the monochrome aesthetic masking the overlap in silhouette  
 - audio:
   - sound effect for restart level
   - more appropriate undo/redo sfx
