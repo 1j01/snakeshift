@@ -106,9 +106,11 @@ export function handleInput(
           takeMove(move)
           postUpdate() // for level win condition (weirdly, this was handled via setControlScheme previously)
           movedSincePointerDown = true
+          navigator.vibrate?.(6)
         } else {
           // for x eyes (liable to conflict with previewMovement if things are refactored)
           activePlayer.animateInvalidMove(move)
+          navigator.vibrate?.(60)
         }
         // Update the reference point even if the move is invalid. Otherwise you have to move the pointer weirdly far in some cases,
         // specifically you'd have to move it further in a valid direction than you'd moved it in an invalid direction,

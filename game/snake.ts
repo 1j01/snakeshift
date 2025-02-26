@@ -64,7 +64,6 @@ export default class Snake extends Entity {
     // - animate the whole body path, not just the head/tail
     //   (if the snake had scales, this would have a greater visual impact)
     // - springiness
-    // - haptic feedback
 
     // This function is also used by animation code.
     // TODO: allow instantaneous movement preview to interact nicely with animations,
