@@ -1,8 +1,7 @@
 import Entity from "./entity"
 import { entities } from "./game-state"
-import { angleLerp } from "./helpers"
 import { selectedEntities } from "./level-editor"
-import { CollisionLayer, Hit, Move, Tile } from "./types"
+import { CollisionLayer, Hit, Move, Point, Tile } from "./types"
 
 export interface SnakeSegment extends Tile {
   layer: CollisionLayer
@@ -293,16 +292,31 @@ export default class Snake extends Entity {
         // when two snake heads overlapped, the eye would be invisible.
       } else if (i === this.segments.length - 1) {
         // tail
-        let angle = foreAngle
-        if (this._previousTailPosition) {
-          const previousAngle = Math.atan2(this._previousTailPosition.y - segment.y, this._previousTailPosition.x - segment.x)
-          // const previousAngle = Math.atan2(segment.y - this._previousTailPosition.y, segment.x - this._previousTailPosition.x)
-          angle = angleLerp(foreAngle, previousAngle, this._movementPreviewTailDistance)
-        }
-        ctx.rotate(angle)
+        ctx.rotate(foreAngle)
         ctx.scale(1, 0.9)
         mirrored(() => ctx.lineTo(-1 / 2, -1 / 2)) // only needed during animation
-        ctx.translate(this._movementPreviewTailDistance, 0)
+
+        if (this._previousTailPosition) {
+          // interpolate tail position
+          const tailPos: Point = {
+            x: this._previousTailPosition.x + (segment.x - this._previousTailPosition.x) * (1 - this._movementPreviewTailDistance),
+            y: this._previousTailPosition.y + (segment.y - this._previousTailPosition.y) * (1 - this._movementPreviewTailDistance),
+          }
+          // interpolate the adjacent body segment position in order to rotate the tail correctly
+          const hipBonePos: Point = {
+            x: segment.x + (this.segments[i - 1]!.x - segment.x) * (1 - this._movementPreviewTailDistance),
+            y: segment.y + (this.segments[i - 1]!.y - segment.y) * (1 - this._movementPreviewTailDistance),
+          }
+          // undo and recalculate transformations with interpolated positions
+          ctx.restore()
+          ctx.save()
+          ctx.translate(tailPos.x + segment.width / 2, tailPos.y + segment.height / 2)
+          // const backAngle = Math.atan2(this.segments[i + 1]?.y - segment.y, this.segments[i + 1]?.x - segment.x)
+          const foreAngle = Math.atan2(tailPos.y - hipBonePos.y, tailPos.x - hipBonePos.x)
+          ctx.rotate(foreAngle)
+          ctx.scale(1, 0.9)
+        }
+
         ctx.lineTo(-1 / 2, -1 / 2)
         const extent = .5
         const pointiness = 0
@@ -338,7 +352,6 @@ export default class Snake extends Entity {
   animateMove(move: Move, originalTailPosition: Tile): void {
     // TODO: handle canceling animations
     // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
-    // FIXME: tail rotation animation is wonky
     const startTime = performance.now()
     const duration = 60
     const animate = () => {
