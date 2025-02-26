@@ -2,13 +2,13 @@ import { RectangularEntity } from "./rectangular-entity"
 import { CollisionLayer } from "./types"
 
 export class CellularAutomata extends RectangularEntity {
-  draw(ctx: CanvasRenderingContext2D) {
+  #drawLife(ctx: CanvasRenderingContext2D, fill: boolean, stroke: boolean) {
     ctx.save()
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2)
     ctx.scale(this.width, this.height)
     ctx.fillStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
-    ctx.strokeStyle = this.layer === CollisionLayer.White ? '#fff' : '#000'
-    ctx.lineWidth = 0.2
+    ctx.strokeStyle = this.layer === CollisionLayer.White ? '#000' : '#fff'
+    ctx.lineWidth = 0.1
     ctx.lineJoin = 'round'
     ctx.lineCap = 'round'
     ctx.beginPath()
@@ -34,8 +34,14 @@ export class CellularAutomata extends RectangularEntity {
       )
     }
     ctx.closePath()
-    ctx.fill()
-    // ctx.stroke()
+    if (fill) ctx.fill()
+    if (stroke) ctx.stroke()
     ctx.restore()
+  }
+  draw(ctx: CanvasRenderingContext2D) {
+    this.#drawLife(ctx, false, true)
+  }
+  draw2(ctx: CanvasRenderingContext2D) {
+    this.#drawLife(ctx, true, false)
   }
 }
