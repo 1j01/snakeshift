@@ -404,11 +404,15 @@ export default class Snake extends Entity {
       // This may not actually be the previous tail position, but we don't want it to animate rotation
       // just because the last move had the tail turn a corner.
       // A more generic name might be "tailAnimationOrigin" or "tailBasePosition" or "tailAnimationStartPoint"
-      this._previousTailPosition = {
-        x: this.segments[this.segments.length - 1].x + (this.segments[this.segments.length - 1].x - this.segments[this.segments.length - 2].x),
-        y: this.segments[this.segments.length - 1].y + (this.segments[this.segments.length - 1].y - this.segments[this.segments.length - 2].y),
-        width: this.segments[this.segments.length - 1].width,
-        height: this.segments[this.segments.length - 1].height,
+      if (this.segments.length > 1) {
+        this._previousTailPosition = {
+          x: this.segments[this.segments.length - 1].x + (this.segments[this.segments.length - 1].x - this.segments[this.segments.length - 2].x),
+          y: this.segments[this.segments.length - 1].y + (this.segments[this.segments.length - 1].y - this.segments[this.segments.length - 2].y),
+          width: this.segments[this.segments.length - 1].width,
+          height: this.segments[this.segments.length - 1].height,
+        }
+      } else {
+        this._previousTailPosition = null
       }
       // this._animateTail = 0
       this.previewMovement(move.delta.x * pos, move.delta.y * pos)
