@@ -19,7 +19,7 @@ export class CellularAutomata extends RectangularEntity {
       const out = Math.sin(t) * (isCorner ? 0.1 : 0.02) + 0.6
       // const out = Math.sin(t + Math.PI * i / n) * 0.1 + 0.6
       const along = Math.cos(t) * 0.05 + 0.2
-      const lobeThickness = Math.sin(t + Math.PI * i / n) * 0.1 + 0.1
+      const lobeThickness = Math.sin(t + Math.PI * i / n) * 0.1 + 0.5
       ctx.rotate(Math.PI * 2 / n)
       ctx.moveTo(0, 0)
       ctx.bezierCurveTo(
@@ -35,7 +35,7 @@ export class CellularAutomata extends RectangularEntity {
     }
     ctx.closePath()
     ctx.fill()
-    ctx.stroke()
+    // ctx.stroke()
     ctx.restore()
   }
 }
