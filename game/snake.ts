@@ -321,6 +321,30 @@ export default class Snake extends Entity {
     }
     return null
   }
+  // TODO: DRY animating valid and invalid moves
+  animateMove(move: Move): void {
+    // TODO: handle canceling animations
+    // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
+    const startTime = performance.now()
+    const duration = 1000
+    const animate = () => {
+      const elapsed = performance.now() - startTime
+
+      if (elapsed > duration) {
+        this.previewMovement(0, 0)
+        return
+      }
+
+      const progress = Math.min(1, elapsed / duration)
+      // const pos = -1 - (Math.cos(progress * Math.PI) * 0.5)
+      const pos = progress - 1
+
+      this.previewMovement(move.delta.x * pos, move.delta.y * pos)
+
+      requestAnimationFrame(animate)
+    }
+    animate()
+  }
   animateInvalidMove(move: Move): void {
     // TODO: handle canceling animations
     // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)

@@ -193,6 +193,8 @@ export function takeMove(move: Move): void {
   }
   // Update cellular automata
   updateCellularAutomata()
+  // Animate
+  snake.animateMove(move)
 }
 
 // TODO: DRY, copied from function `drag` in level-editor.ts
