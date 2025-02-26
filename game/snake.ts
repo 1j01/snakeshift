@@ -278,10 +278,10 @@ export default class Snake extends Entity {
           // head
           ctx.rotate(backAngle)
           ctx.scale(1, 0.9)
-          mirrored(() => ctx.lineTo(1 / 2, 1 / 2))
+          // mirrored(() => ctx.lineTo(1 / 2, 1 / 2))
           ctx.arc(this._movementPreviewHeadRelative.x, this._movementPreviewHeadRelative.y, 1 / 2, Math.PI / 2, -Math.PI / 2)
-          ctx.lineTo(1 / 2, -1 / 2)
-          ctx.lineTo(1 / 2, 1 / 2)
+          // ctx.lineTo(1 / 2, -1 / 2)
+          // ctx.lineTo(1 / 2, 1 / 2)
         }
         // eye and tongue are drawn separately
         // If the eye was rendered as a hole in the head, then
@@ -325,6 +325,7 @@ export default class Snake extends Entity {
   animateMove(move: Move): void {
     // TODO: handle canceling animations
     // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
+    // TODO: animate tail moving toward the next cell
     const startTime = performance.now()
     const duration = 1000
     const animate = () => {
@@ -337,7 +338,10 @@ export default class Snake extends Entity {
 
       const progress = Math.min(1, elapsed / duration)
       // const pos = -1 - (Math.cos(progress * Math.PI) * 0.5)
-      const pos = progress - 1
+      // const pos = progress - 1 // linear
+      // linear, skipping the first half of the animation, where the center of the head would be within the previous cell
+      // because it's not handled by the rendering code at the moment
+      const pos = (1 + progress) / 2 - 1
 
       this.previewMovement(move.delta.x * pos, move.delta.y * pos)
 
@@ -348,6 +352,7 @@ export default class Snake extends Entity {
   animateInvalidMove(move: Move): void {
     // TODO: handle canceling animations
     // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
+    // TODO: animate tail (always moving toward the next cell, unless implementing a wriggling animation for encumbrance)
     const startTime = performance.now()
     const duration = move.encumbered ? 230 : 120
     const animate = () => {
