@@ -78,7 +78,7 @@ export function parsePlaythrough(json: string): GameState[] {
   return playthrough
 }
 
-type EntityLike = Entity & { _type: string }
+type EntityLike = Omit<Entity, "fromJSON"> & { _type: string }
 function isEntityOfType(entity: EntityLike, type: "Snake"): entity is Snake & { _type: "Snake" }
 function isEntityOfType(entity: EntityLike, type: "Food"): entity is Food & { _type: "Food" }
 function isEntityOfType(entity: EntityLike, type: "Snake" | "Food"): boolean {
