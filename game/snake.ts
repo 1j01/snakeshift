@@ -399,7 +399,7 @@ export default class Snake extends Entity {
       const pos = Math.sin(progress * Math.PI) * 0.08
 
       this._xEyes = move.encumbered
-      this._animateTail = !move.encumbered && (move.to.x !== this.segments[1].x || move.to.y !== this.segments[1].y) ? -0.3 : 0
+      this._animateTail = !move.encumbered && this.segments.length > 1 && (move.to.x !== this.segments[1].x || move.to.y !== this.segments[1].y) ? -0.3 : 0
       // Extrapolate the "previous" tail position from the current tail position
       // This may not actually be the previous tail position, but we don't want it to animate rotation
       // just because the last move had the tail turn a corner.
