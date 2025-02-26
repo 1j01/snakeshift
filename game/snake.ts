@@ -327,7 +327,7 @@ export default class Snake extends Entity {
     // (it's not a big deal because 1. the animation is short, 2. the same animation will "win" each frame when there are multiple simultaneous animations, so it won't really jitter)
     // TODO: animate tail moving toward the next cell
     const startTime = performance.now()
-    const duration = 1000
+    const duration = 60
     const animate = () => {
       const elapsed = performance.now() - startTime
 
