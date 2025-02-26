@@ -156,3 +156,19 @@ These are just ideas, not necessarily planned features.
     - can easily do puzzle where you have to block the spread quickly
       - par may be less meaningful for these sorts of levels since they may enforce completing the level in a few moves
   - could get totally crazy with different rulesets
+- meme-themed sequel
+  - Snekshift: Year of the Doge expansion pack edition DLC: Electric Boogaloo
+  - gravity, inspired by [Growmi](https://carlospedroso.itch.io/growmi) and [Coil](https://www.nitrome.com/html5-games/coil/) (other examples: [Snakebird](https://store.steampowered.com/app/357300/Snakebird/), [Ooze Odyssey](https://poki.com/en/g/ooze-odyssey))
+  - longcat/catnarok can extend upwards and retract
+  - weiner dog can extend sideways and retract (inspired by but probably not like [Silly Sausage](https://www.nitrome.com/html5-games/sillysausage/))
+  - nyan cat can fly, plays music while selected
+  - dr. octagonapus can destroy walls
+  - troll physicist, with magnets, portal gun, etc.
+  - i can haz cheezburger for collectibles
+  - rickroll teleporter???
+  - levels with special effects, e.g.
+    - item "bone hurting juice", and item "juice that makes you drink the other juice in the level" which makes you pathfind to the other juice
+    - pattern replacement, indicated by https://knowyourmeme.com/memes/drakeposting/
+  - can obviously include random memes for flavor
+    - taunt player with https://knowyourmeme.com/memes/huh-cat or https://knowyourmeme.com/memes/polite-cat or https://knowyourmeme.com/memes/ok-smart-guy-lets-see-you-take-a-crack-at-it or https://knowyourmeme.com/memes/spongebob-reading-two-pages-at-once
+    - MLG hype every time you win a level ("MOM GET THE CAMERA" etc.) with doritos and mountain dew flying everywhere, and "congratulations, you've won!" advertisement "remix" at the end of the game (Note: I've implemented this in a separate project, which I believe was called "find-it-remix")
