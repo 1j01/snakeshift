@@ -31,6 +31,7 @@ export const levelInfo = {
 export let activePlayer: Snake | undefined = undefined
 
 export let controlScheme = ControlScheme.KeyboardAbsoluteDirection
+document.body.dataset.controlScheme = controlScheme // TODO: DRY? but don't want to call postUpdate too early
 
 export const undos: GameState[] = []
 export const redos: GameState[] = []
@@ -225,6 +226,7 @@ export function postResize() {
 
 export function setControlScheme(scheme: ControlScheme) {
   controlScheme = scheme
+  document.body.dataset.controlScheme = scheme
   postUpdate()
 }
 

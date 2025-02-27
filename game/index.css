@@ -401,6 +401,23 @@ kbd:not(.grouping-kbd) {
   text-shadow: none;
 }
 
+[data-control-scheme="KeyboardAbsoluteDirection"] .pointer-only,
+[data-control-scheme="KeyboardFacingRelative"] .pointer-only,
+[data-control-scheme="Gamepad"] .pointer-only {
+  display: none;
+}
+
+[data-control-scheme="Pointer"] .keyboard-only,
+[data-control-scheme="Gamepad"] .keyboard-only {
+  display: none;
+}
+
+[data-control-scheme="Pointer"] .gamepad-only,
+[data-control-scheme="KeyboardAbsoluteDirection"] .gamepad-only,
+[data-control-scheme="KeyboardFacingRelative"] .gamepad-only {
+  display: none;
+}
+
 .gong-effect {
   overflow: hidden;
   position: absolute;

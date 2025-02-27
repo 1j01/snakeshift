@@ -2,10 +2,10 @@ import type Entity from "./entity"
 import type Snake from "./snake"
 
 export enum ControlScheme {
-  KeyboardAbsoluteDirection,
-  KeyboardFacingRelative,
-  Gamepad,
-  Pointer, // mouse/pen/touch
+  KeyboardAbsoluteDirection = "KeyboardAbsoluteDirection",
+  KeyboardFacingRelative = "KeyboardFacingRelative",
+  Gamepad = "Gamepad",
+  Pointer = "Pointer", // mouse/pen/touch
 }
 
 export enum CollisionLayer {

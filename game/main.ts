@@ -1,12 +1,13 @@
 import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
 import { activityMode, animate, handleLevelCompletion, restartLevel, setActivityMode, shouldInputBeAllowed } from "./game"
-import { clearLevel, goToHistoryIndex, loadLevel, openLevel, redo, saveLevel, savePlaythrough, undo, undoable } from "./game-state"
+import { clearLevel, goToHistoryIndex, loadLevel, openLevel, redo, saveLevel, savePlaythrough, setControlScheme, undo, undoable } from "./game-state"
 import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
 import { hideLevelSplash, initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
 import { LOCAL_STORAGE_FORMAT_VERSION, storageKeys } from "./shared-helpers"
 import './testing-interface'
+import { ControlScheme } from "./types"
 
 export const playEditToggleButton = document.querySelector<HTMLButtonElement>('#play-edit-toggle-button')!
 const restartLevelButton = document.querySelector<HTMLButtonElement>('#restart-level-button')!
@@ -194,10 +195,14 @@ canvas.addEventListener('pointerdown', (event) => {
   // so preventDefault can make it harder to deselect text by default.
   window.getSelection()?.removeAllRanges()
 })
-// This should be triggered by clicking in menus as well, not just on the canvas,
-// in order for the first level start sound effect to play.
-window.addEventListener('pointerdown', () => {
+window.addEventListener('pointerdown', (event) => {
+  // This should be triggered by clicking in menus as well, not just on the canvas,
+  // in order for the first level start sound effect to play.
   enableAudioViaUserGesture()
+  // This should be triggered in menus, in order for the tutorial text to give appropriate instructions immediately.
+  if (event.pointerType === "touch") {
+    setControlScheme(ControlScheme.Pointer)
+  }
 })
 
 canvas.addEventListener('contextmenu', (event) => {
