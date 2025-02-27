@@ -3,7 +3,8 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- If the page is zoomed with pinch on mobile, it can be hard to undo since the canvas prevents the gesture, and hard to understand, and it can cause things to be cut off. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
   <title>Snakeshift</title>
   <link rel="stylesheet" type="text/css" href="./index.css" />
   <!-- <link rel="icon" type="image/png" href="/graphics/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->

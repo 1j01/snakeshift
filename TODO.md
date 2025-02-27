@@ -11,10 +11,6 @@
 - bug: drag and drop isn't clearing undo history IN SOME UNREPRODUCIBLE CASE? I've tried twice to add tests, see stashes, for some bug but no reproduction yet
 
 
-## Mobile viewport issues
-- the whole page can be scrolled if zoomed in; it can be unclear what's happening, and hard to zoom out since pinching on the canvas doesn't work
-- on mobile, viewport has an unintended sort of animation when resizing the view (i.e. by rotating the device), and the viewport can end up cut off 
-
 ## Par system
 - bug: restarts shouldn't be counted in the moves of a playthrough, but it's adding up separate runs of the same level
   - could introduce a level *session* id to compliment the level id and use it instead for partitioning playthroughs
