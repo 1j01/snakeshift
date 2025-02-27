@@ -112,7 +112,10 @@ addEventListener('keydown', (event) => {
     }
     return
   }
-  if (event.key === '`' && !event.repeat) {
+  if (event.key === ',') { // Ctrl+Comma is common for settings
+    settingsButton.click()
+    event.preventDefault()
+  } else if (event.key === '`' && !event.repeat) {
     if (activityMode === "play") {
       setActivityMode("edit")
     } else if (activityMode === "edit") {
