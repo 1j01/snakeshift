@@ -17,6 +17,9 @@ export default defineConfig({
         '**/.history/**', // VS Code "Local History" extension
       ],
     },
+    allowedHosts: [
+      'tunnel.isaiahodhner.io',
+    ],
   },
   // Without this, you don't get errors when files fail to load!
   // It'll "successfully" return your index.html when trying to load .css or anything.
