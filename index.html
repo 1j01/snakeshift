@@ -7,8 +7,8 @@
   <title>Snakeshift</title>
   <!-- <link rel="icon" type="image/png" href="/graphics/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
   <link rel="icon" type="image/png" href="./graphics/yin-yang-larger-sneks-180px.png" sizes="180x180" />
-  <script type="module" crossorigin src="./assets/index-9rgFu8mq.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BonbNIg1.css">
+  <script type="module" crossorigin src="./assets/index-CCpf96Ah.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CrWVQ2qn.css">
 </head>
 
 <body>
@@ -180,6 +180,10 @@
     <button class="bw-button" id="mute-button" aria-keyshortcuts="M" aria-pressed="false">
       <img src="./graphics/speaker.svg" alt="" />
       <span class="button-text" id="mute-button-text">Mute</span>
+    </button>
+    <button class="bw-button" id="settings-button" aria-keyshortcuts="Control+," aria-controls="settings-dialog">
+      <img src="./graphics/cog.svg" alt="" />
+      <span class="button-text">Settings</span>
     </button>
     <button class="bw-button" id="fullscreen-button" aria-keyshortcuts="F">
       <!-- <img src="/graphics/fullscreen.svg" alt="" /> -->
@@ -403,7 +407,35 @@
     <!-- Want neutral language that doesn't imply you're having trouble. -->
     <!-- <h2>Stuck?</h2> -->
     <p>Press <kbd>Z</kbd> to undo or <kbd>R</kbd> to restart</p>
-  </div>
+  </div>
+  <dialog id="settings-dialog">
+    <h2>Settings</h2>
+    <form method="dialog">
+      <!-- <div class="control-row">
+        <label for="settings-music-volume">Music Volume:</label>
+        <input type="range" id="settings-music-volume" min="0" max="1" step="0.01" />
+      </div>
+      <div class="control-row">
+        <label for="settings-sfx-volume">Sound Effects Volume:</label>
+        <input type="range" id="settings-sfx-volume" min="0" max="1" step="0.01" />
+      </div> -->
+      <div class="control-row">
+        <input type="checkbox" id="settings-haptics-enabled" />
+        <label for="settings-haptics-enabled">Enable haptic feedback</label>
+      </div>
+      <div class="control-row enabled-by-haptics">
+        <label for="settings-haptics-valid-move-ms">Valid move vibration (ms):</label>
+        <input type="number" id="settings-haptics-valid-move-ms" min="0" max="300" step="1" value="6" />
+      </div>
+      <div class="control-row enabled-by-haptics">
+        <label for="settings-haptics-invalid-move-ms">Invalid move vibration (ms):</label>
+        <input type="number" id="settings-haptics-invalid-move-ms" min="0" max="300" step="1" value="60" />
+      </div>
+      <div class="control-row">
+        <button value="ok" class="bw-button" id="settings-dialog-ok-button">OK</button>
+        <button value="cancel" formmethod="dialog" class="bw-button" id="settings-dialog-cancel-button">Cancel</button>
+      </div>
+  </dialog>
 </body>
 
 </html>
