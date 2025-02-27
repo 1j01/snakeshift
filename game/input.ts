@@ -5,6 +5,7 @@ import { activePlayer, controlScheme, cyclePlayerControl, entities, onResize, on
 import { hitTestAllEntities, makeEventListenerGroup, neighborOf } from './helpers'
 import { showMainMenu } from './menus'
 import { pageToWorldTile } from './rendering'
+import { storageKeys } from './shared-helpers'
 import Snake from './snake'
 import { highlightMove } from './tile-highlight'
 import { ControlScheme, DIRECTIONS, Tile } from './types'
@@ -106,11 +107,23 @@ export function handleInput(
           takeMove(move)
           postUpdate() // for level win condition (weirdly, this was handled via setControlScheme previously)
           movedSincePointerDown = true
-          navigator.vibrate?.(6)
+          try {
+            if (localStorage.getItem(storageKeys.hapticsEnabled) === "true") {
+              navigator.vibrate?.(parseInt(localStorage.getItem(storageKeys.hapticsValidDuration) ?? "6"))
+            }
+          } catch (error) {
+            console.error("Vibration related error:", error)
+          }
         } else {
           // for x eyes (liable to conflict with previewMovement if things are refactored)
           activePlayer.animateInvalidMove(move)
-          navigator.vibrate?.(60)
+          try {
+            if (localStorage.getItem(storageKeys.hapticsEnabled) === "true") {
+              navigator.vibrate?.(parseInt(localStorage.getItem(storageKeys.hapticsInvalidDuration) ?? "6"))
+            }
+          } catch (error) {
+            console.error("Vibration related error:", error)
+          }
         }
         // Update the reference point even if the move is invalid. Otherwise you have to move the pointer weirdly far in some cases,
         // specifically you'd have to move it further in a valid direction than you'd moved it in an invalid direction,

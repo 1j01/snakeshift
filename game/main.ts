@@ -14,6 +14,13 @@ const undoButton = document.querySelector<HTMLButtonElement>('#undo-button')!
 const redoButton = document.querySelector<HTMLButtonElement>('#redo-button')!
 const fullscreenButton = document.getElementById("fullscreen-button")!
 const replaySlider = document.getElementById("replay-slider") as HTMLInputElement
+const settingsButton = document.querySelector<HTMLButtonElement>("#settings-button")!
+const settingsDialog = document.querySelector<HTMLDialogElement>('#settings-dialog')!
+const settingsDialogOKButton = document.querySelector<HTMLDialogElement>('#settings-dialog-ok-button')!
+const settingsDialogCancelButton = document.querySelector<HTMLDialogElement>('#settings-dialog-cancel-button')!
+const hapticsEnabledCheckbox = settingsDialog.querySelector<HTMLInputElement>('#settings-haptics-enabled')!
+const hapticsValidDurationInput = settingsDialog.querySelector<HTMLInputElement>('#settings-haptics-valid-move-ms')!
+const hapticsInvalidDurationInput = settingsDialog.querySelector<HTMLInputElement>('#settings-haptics-invalid-move-ms')!
 
 playEditToggleButton.addEventListener('click', () => {
   setActivityMode(activityMode === "play" ? "edit" : "play")
@@ -22,6 +29,52 @@ restartLevelButton.addEventListener('click', restartLevel)
 undoButton.addEventListener('click', undo)
 redoButton.addEventListener('click', redo)
 fullscreenButton.addEventListener('click', toggleFullscreen)
+
+function updateSubSettings() {
+  hapticsValidDurationInput.disabled = !hapticsEnabledCheckbox.checked
+  hapticsInvalidDurationInput.disabled = !hapticsEnabledCheckbox.checked
+}
+hapticsEnabledCheckbox.addEventListener('change', updateSubSettings)
+settingsButton.addEventListener('click', () => {
+  settingsDialog.showModal()
+  try {
+    hapticsEnabledCheckbox.checked = localStorage.getItem(storageKeys.hapticsEnabled) === "true"
+    hapticsValidDurationInput.value = localStorage.getItem(storageKeys.hapticsValidDuration) ?? "6"
+    hapticsInvalidDurationInput.value = localStorage.getItem(storageKeys.hapticsInvalidDuration) ?? "60"
+  } catch (error) {
+    console.error("Failed to load settings from local storage", error)
+  }
+  hapticsEnabledCheckbox.focus()
+  updateSubSettings()
+})
+settingsDialog.addEventListener('close', () => {
+  console.log(settingsDialog.returnValue)
+})
+settingsDialog.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    settingsDialog.close()
+    event.stopPropagation()
+  }
+})
+settingsDialogOKButton.addEventListener('click', (event) => {
+  event.preventDefault()
+  const hapticsValidDuration = parseInt(hapticsValidDurationInput.value)
+  const hapticsInvalidDuration = parseInt(hapticsInvalidDurationInput.value)
+  try {
+    localStorage.setItem(storageKeys.hapticsEnabled, hapticsEnabledCheckbox.checked ? "true" : "false")
+    localStorage.setItem(storageKeys.hapticsValidDuration, hapticsValidDuration.toString())
+    localStorage.setItem(storageKeys.hapticsInvalidDuration, hapticsInvalidDuration.toString())
+  } catch (error) {
+    console.error("Failed to save settings to local storage", error)
+    alert("Failed to save settings. Make sure cookies are enabled and try again.")
+  }
+  settingsDialog.close()
+})
+settingsDialogCancelButton.addEventListener('click', (event) => {
+  event.preventDefault()
+  settingsDialog.close()
+})
+
 
 function toggleFullscreen() {
   if (document.fullscreenElement) {

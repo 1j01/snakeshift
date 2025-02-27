@@ -95,7 +95,7 @@ body:not(.replaying) #replay-bar {
   accent-color: #fff;
 }
 
-#level-info-editor .control-row {
+.control-row {
   display: flex;
   margin: 5px 0;
   gap: 5px;
@@ -109,6 +109,15 @@ body:not(.replaying) #replay-bar {
 #level-info-editor .control-row input,
 #level-info-editor .control-row textarea {
   width: 200px;
+}
+
+#settings-dialog .control-row label {
+  width: 235px;
+  display: inline-block;
+}
+
+#settings-dialog .control-row input[type="number"] {
+  width: 50px;
 }
 
 .bw-button {
