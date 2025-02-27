@@ -232,8 +232,13 @@ body:not(.replaying) #replay-bar {
   z-index: 1;
 }
 
+#main-menu h1 {
+  font-size: min(2em, 15vw);
+}
+
 #main-menu button {
-  min-width: 200px;
+  width: 200px;
+  max-width: calc(100% - 10px);
 }
 
 button:focus,
