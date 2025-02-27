@@ -8,8 +8,8 @@
   <title>Snakeshift</title>
   <!-- <link rel="icon" type="image/png" href="/graphics/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
   <link rel="icon" type="image/png" href="./graphics/yin-yang-larger-sneks-180px.png" sizes="180x180" />
-  <script type="module" crossorigin src="./assets/index-BqjqwiJY.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-B8DbB0xm.css">
+  <script type="module" crossorigin src="./assets/index-BIlpJM2c.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-9G5kQTsF.css">
 </head>
 
 <body>
@@ -325,7 +325,6 @@
     <input type="range" id="replay-slider" min="0" max="0" step="1" value="0" />
   </div>
   <div class="level-specific-overlay" data-for-level="levels/easy/001-movement.json" hidden>
-    <!-- It is actually possible to get stuck on this level. TODO: detect this or limit the size of the snake -->
     <h2>How to Move</h2>
     <!-- <p>You can use a gamepad, keyboard, mouse, pen, or touch to play.</p> -->
     <table>
@@ -356,11 +355,7 @@
           <span style="display: inline-block;">
             <kbd style="opacity:0;user-select:none;margin-bottom:-0.1em" aria-hidden="true">7</kbd><!--
             --><kbd style="margin-bottom:-0.1em">8</kbd><br style="user-select:none" aria-hidden="true"><!--
-            --><kbd>4</kbd><kbd style="opacity:0;user-select:none;" aria-hidden="true">5</kbd><kbd>6</kbd><!--
-            --><br style="user-select:none" aria-hidden="true"><!--
-            why does this one line break sneak into the clipboard whereas user-select:none works for the others?
-            --><kbd style="opacity:0;user-select:none;margin-top:-0.1em" aria-hidden="true">1</kbd><!--
-            --><kbd style="margin-top:-0.1em">2</kbd>
+            --><kbd>4</kbd><kbd>5</kbd><kbd>6</kbd>
           </span>
         </td>
       </tr>
@@ -376,10 +371,8 @@
     </table>
   </div>
   <div class="level-specific-overlay" data-for-level="levels/easy/002-bridge.json" hidden>
-    <!-- It is actually possible to get stuck on this level. TODO: detect this? I don't want to clutter the tutorial text...-->
     <!-- TODO: show controls specific to the active control scheme -->
     <!-- <p>Press <kbd>Tab</kbd> to switch snakes, or use shoulder buttons on a gamepad, or click/tap a snake to switch to it.</p> -->
-    <!-- It is actually possible to get stuck on this level. TODO: detect this or limit the size of the snake -->
     <h2>How to Switch Snakes</h2>
     <table>
       <tr>
@@ -436,6 +429,7 @@
         <button value="ok" class="bw-button" id="settings-dialog-ok-button">OK</button>
         <button value="cancel" formmethod="dialog" class="bw-button" id="settings-dialog-cancel-button">Cancel</button>
       </div>
+    </form>
   </dialog>
 </body>
 
