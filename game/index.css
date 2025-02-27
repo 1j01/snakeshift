@@ -186,8 +186,8 @@ body:not(.replaying) #replay-bar {
 #level-select .level-button {
   min-height: 50px;
   margin: 10px;
-  /* clip the pseudo elements used for level completion indication; might get rid of this by switching to SVG icons or some-such */
-  /* to avoid a horizontal scrollbar on small screens */
+  /* clip the pseudo elements used for level completion indication, to avoid a horizontal scrollbar on small screens */
+  /* might get rid of this by switching to SVG icons or some-such for level completion indicators */
   overflow: hidden;
 }
 
