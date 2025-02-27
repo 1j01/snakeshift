@@ -95,7 +95,6 @@
 - reign in `onUpdate` over-extension/repurposing/overuse, maybe adding an onResize in renderer or something
 - preload levels, and share cache between level select's level previews and level loading
 - bug: undoing isn't hiding game win screen... right away, consistently? test might not catch this if it's a delay; not sure if it was a delay or it required hitting undo multiple times
-- update tutorial text to recommend numpad 5 instead of numpad 2?
 - configure eslint rules
 - ensure accessible name for buttons when labels are hidden (include aria-label or hide label spans visually instead of using `display: none`)
   - tooltips would also be nice... including keyboard shortcut hints
