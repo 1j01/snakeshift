@@ -107,23 +107,11 @@ export function handleInput(
           takeMove(move)
           postUpdate() // for level win condition (weirdly, this was handled via setControlScheme previously)
           movedSincePointerDown = true
-          try {
-            if (localStorage.getItem(storageKeys.hapticsEnabled) === "true") {
-              navigator.vibrate?.(parseInt(localStorage.getItem(storageKeys.hapticsValidDuration) ?? "6"))
-            }
-          } catch (error) {
-            console.error("Vibration related error:", error)
-          }
+          vibrate(true)
         } else {
           // for x eyes (liable to conflict with previewMovement if things are refactored)
           activePlayer.animateInvalidMove(move)
-          try {
-            if (localStorage.getItem(storageKeys.hapticsEnabled) === "true") {
-              navigator.vibrate?.(parseInt(localStorage.getItem(storageKeys.hapticsInvalidDuration) ?? "6"))
-            }
-          } catch (error) {
-            console.error("Vibration related error:", error)
-          }
+          vibrate(false)
         }
         // Update the reference point even if the move is invalid. Otherwise you have to move the pointer weirdly far in some cases,
         // specifically you'd have to move it further in a valid direction than you'd moved it in an invalid direction,
@@ -406,3 +394,15 @@ export function handleInput(
     clearInterval(intervalID)
   }
 }
+
+function vibrate(valid: boolean) {
+  // TODO: allow configuring vibration duration temporarily if localStorage is disabled
+  try {
+    if (localStorage.getItem(storageKeys.hapticsEnabled) === "true") {
+      navigator.vibrate?.(parseInt(localStorage.getItem(valid ? storageKeys.hapticsValidDuration : storageKeys.hapticsInvalidDuration) ?? (valid ? "6" : "60")))
+    }
+  } catch (error) {
+    console.error("Vibration related error:", error)
+  }
+}
+
