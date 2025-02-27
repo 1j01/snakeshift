@@ -251,12 +251,24 @@ dialog button {
 
 #game-options-bar {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 5px;
+  box-sizing: border-box;
   z-index: 3;
   display: flex;
   flex-direction: row;
   gap: 5px;
+  display: flex;
+  width: 100%;
+  overflow: auto;
+}
+
+#game-options-bar .bw-button {
+  padding: 5px 0;
+  flex: 1;
+  max-width: 100px;
 }
 
 body:not([data-standalone-level]) .hide-in-campaign {

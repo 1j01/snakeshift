@@ -12,7 +12,6 @@
 
 
 ## Mobile viewport issues
-- not all buttons fit on the screen; in particular, the fullscreen button is cut off, ironically
 - tutorial text is too small
 
 ## Par system
