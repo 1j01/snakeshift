@@ -188,6 +188,17 @@ body:not(.replaying) #replay-bar {
   margin: 10px;
 }
 
+#level-select {
+  /* give room for #game-options-bar */
+  padding-top: 50px;
+  box-sizing: border-box;
+}
+
+#level-list {
+  text-align: center;
+  max-width: 900px;
+}
+
 #level-select .level-button {
   display: inline-flex;
   min-width: 100px;
