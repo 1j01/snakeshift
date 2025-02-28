@@ -316,6 +316,11 @@ export function handleInput(
     return gamepad.buttons[button].pressed && !last
   }
   function justPressedOrRepeated(button: number, gamepad: Gamepad) {
+    // TODO: delay before repeating (kinda important to actually balance single press with moving long distances)
+    // Can probably simplify this a lot by using timestamps instead of setInterval especially if I'd be introducing a separate delay
+    // Would have access to the up-to-date gamepad object too.
+    // TODO: maybe only repeat one button at a time
+    // (unless pressed at almost exactly the same time? Windows seems to make this exception for arrow keys, allowing diagonals.)
     if (justPressed(button, gamepad)) {
       // console.log('just pressed', button, buttonRepeatIIDs, gamepad.index)
       clearInterval(buttonRepeatIIDs.get(gamepad.index)?.get(button))
