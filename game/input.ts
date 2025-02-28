@@ -329,21 +329,23 @@ export function handleInput(
         console.error("Failed to get gamepad repeat rate:", error)
       }
       // console.log(gamepad.timestamp)
-      // @ts-expect-error conflict with @types/node
-      buttonRepeatIIDs.get(gamepad.index)!.set(button, setInterval(() => {
-        // console.log('repeating', button, gamepad.buttons[button].pressed, gamepad.timestamp)
-        // gamepad is actually a snapshot, so we need to get an up to date one
-        // this sucks, this ended up way more complicated than I thought
-        // "oh, I'll just encapsulate it in a simple function like the other one" -- my naive ass 40 minutes ago
-        // if (!gamepad.buttons[button].pressed) {
-        const currentGamepad = navigator.getGamepads()[gamepad.index]
-        if (!currentGamepad || !currentGamepad.buttons[button].pressed) {
-          clearInterval(buttonRepeatIIDs.get(gamepad.index)!.get(button))
-          buttonRepeatIIDs.get(gamepad.index)!.delete(button)
-          return
-        }
-        buttonsRepeatingNow.get(gamepad.index)?.set(button, true)
-      }, gamepadRepeatRate))
+      if (gamepadRepeatRate !== 0) {
+        // @ts-expect-error conflict with @types/node
+        buttonRepeatIIDs.get(gamepad.index)!.set(button, setInterval(() => {
+          // console.log('repeating', button, gamepad.buttons[button].pressed, gamepad.timestamp)
+          // gamepad is actually a snapshot, so we need to get an up to date one
+          // this sucks, this ended up way more complicated than I thought
+          // "oh, I'll just encapsulate it in a simple function like the other one" -- my naive ass 40 minutes ago
+          // if (!gamepad.buttons[button].pressed) {
+          const currentGamepad = navigator.getGamepads()[gamepad.index]
+          if (!currentGamepad || !currentGamepad.buttons[button].pressed) {
+            clearInterval(buttonRepeatIIDs.get(gamepad.index)!.get(button))
+            buttonRepeatIIDs.get(gamepad.index)!.delete(button)
+            return
+          }
+          buttonsRepeatingNow.get(gamepad.index)?.set(button, true)
+        }, gamepadRepeatRate))
+      }
       return true
     }
     const repeatingNow = !!buttonsRepeatingNow.get(gamepad.index)?.get(button)
