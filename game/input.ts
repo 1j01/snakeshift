@@ -168,7 +168,7 @@ export function handleInput(
   // Shared between keyboard and gamepad
   // ----------------
 
-  function move(dx: number, dy: number, controlScheme = ControlScheme.KeyboardAbsoluteDirection) {
+  function move(dx: number, dy: number, controlScheme = ControlScheme.KeyboardAbsoluteDirection, gamepad?: Gamepad) {
     // TODO: maybe show highlight for invalid move even though normally absolute direction doesn't use a highlight
     if (!activePlayer) {
       // TODO: if no focus or focus is on body, focus via DOM order instead of from center of page
@@ -242,6 +242,7 @@ export function handleInput(
     if (!move.valid) {
       activePlayer.animateInvalidMove(move)
       setControlScheme(controlScheme) // signals level update uselessly
+      vibrate(false, gamepad)
       return
     }
     takeMove(move)
@@ -379,6 +380,7 @@ export function handleInput(
               activePlayer.animateInvalidMove(move)
               setControlScheme(ControlScheme.Gamepad) // not thinking about this
               hoveredTile = undefined // not thinking about this
+              vibrate(false, gamepad)
             }
             // break // need to update buttonsLast!
           } else {
@@ -392,13 +394,13 @@ export function handleInput(
       }
       // D-pad
       if (justPressedOrRepeated(12, gamepad)) {
-        move(0, -1, ControlScheme.Gamepad)
+        move(0, -1, ControlScheme.Gamepad, gamepad)
       } else if (justPressedOrRepeated(13, gamepad)) {
-        move(0, 1, ControlScheme.Gamepad)
+        move(0, 1, ControlScheme.Gamepad, gamepad)
       } else if (justPressedOrRepeated(14, gamepad)) {
-        move(-1, 0, ControlScheme.Gamepad)
+        move(-1, 0, ControlScheme.Gamepad, gamepad)
       } else if (justPressedOrRepeated(15, gamepad)) {
-        move(1, 0, ControlScheme.Gamepad)
+        move(1, 0, ControlScheme.Gamepad, gamepad)
       }
       // Bumpers
       if (justPressed(4, gamepad)) {
@@ -450,9 +452,18 @@ export function handleInput(
   }
 }
 
-function vibrate(valid: boolean) {
+function vibrate(valid: boolean, gamepad?: Gamepad) {
   if (safeStorage.getItem(storageKeys.hapticsEnabled) === "true") {
-    navigator.vibrate?.(parseInt(safeStorage.getItem(valid ? storageKeys.hapticsValidDuration : storageKeys.hapticsInvalidDuration) ?? (valid ? "6" : "60")))
+    const duration = parseInt(safeStorage.getItem(valid ? storageKeys.hapticsValidDuration : storageKeys.hapticsInvalidDuration) ?? (valid ? "6" : "60"))
+    if (gamepad) {
+      void gamepad?.vibrationActuator?.playEffect("dual-rumble", {
+        duration,
+        weakMagnitude: 0.5,
+        strongMagnitude: 0.3,
+      })
+    } else {
+      navigator.vibrate?.(duration)
+    }
   }
 }
 
