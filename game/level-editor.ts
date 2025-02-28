@@ -508,28 +508,10 @@ export function handleInputForLevelEditing(
           undoable()
           createdUndoState = true
         }
-        if (hit.entity instanceof Snake && hit.entity.segments.length >= 2) {
-          const before = hit.entity.segments.slice(0, hit.segmentIndex)
-          const after = hit.entity.segments.slice(hit.segmentIndex! + 1)
-          hit.entity.segments.length = before.length
-          if (after.length > 0) {
-            const newSnake = new Snake()
-            newSnake.segments.length = 0
-            newSnake.segments.push(...after)
-            entities.push(newSnake)
-            if (hit.entity.segments.length === 0) {
-              entities.splice(index, 1)
-              if (hit.entity === activePlayer) {
-                setActivePlayer(newSnake)
-              }
-            }
-            sortEntities()
-          }
+        if (hit.entity instanceof Snake) {
+          deleteSnakeSegment(hit.entity, hit.segmentIndex!)
         } else {
-          entities.splice(index, 1)
-          if (hit.entity === activePlayer) {
-            setActivePlayer(undefined)
-          }
+          deleteEntity(hit.entity)
         }
       }
     }
@@ -668,4 +650,36 @@ export function translateSelection(dx: number, dy: number) {
   selectionRange.endTile.y += dy
   // updateHighlight() // not available here... TODO: refactor (I don't know if the selection should really be a "highlight", but, regardless, it's certainly awkward how it is now...)
   setHighlight(getSelectionBox(), { isSelection: true, valid: true })
+}
+
+export function deleteEntity(entity: Entity) {
+  const index = entities.indexOf(entity)
+  entities.splice(index, 1)
+  if (entity === activePlayer) {
+    setActivePlayer(undefined)
+  }
+}
+
+export function deleteSnakeSegment(snake: Snake, segmentIndex: number) {
+  if (snake.segments.length >= 2) {
+    const index = entities.indexOf(snake)
+    const before = snake.segments.slice(0, segmentIndex)
+    const after = snake.segments.slice(segmentIndex + 1)
+    snake.segments.length = before.length
+    if (after.length > 0) {
+      const newSnake = new Snake()
+      newSnake.segments.length = 0
+      newSnake.segments.push(...after)
+      entities.push(newSnake)
+      if (snake.segments.length === 0) {
+        entities.splice(index, 1)
+        if (snake === activePlayer) {
+          setActivePlayer(newSnake)
+        }
+      }
+      sortEntities()
+    }
+  } else {
+    deleteEntity(snake)
+  }
 }
