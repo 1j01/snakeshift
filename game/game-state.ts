@@ -3,9 +3,10 @@ import { playSound } from "./audio"
 import Entity from "./entity"
 import { activityMode, editorRedos, editorUndos, setActivityMode, shouldInputBeAllowed, storeBaseLevelState } from "./game"
 import { canMove } from "./game-logic"
-import { makeEntity } from "./helpers"
+import { makeEntity, withinLevel } from "./helpers"
 import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { hideScreens, showLevelSplash } from "./menus"
+import { RectangularEntity } from "./rectangular-entity"
 import { LEVEL_FORMAT_VERSION, PLAYTHROUGH_FORMAT_VERSION, isPlaythrough, parsePlaythrough } from "./shared-helpers"
 import Snake from "./snake"
 import { ControlScheme, GameState, ParsedGameState } from "./types"
@@ -260,6 +261,17 @@ declare global {
 }
 
 export function saveLevel() {
+  // TODO: handle snakes
+  const entitiesOutsideBounds = entities.filter((entity) => entity instanceof RectangularEntity && !withinLevel(entity))
+  if (entitiesOutsideBounds.length > 0) {
+    if (confirm(`Remove ${entitiesOutsideBounds.length} entities outside the level bounds?`)) {
+      undoable()
+      for (const entity of entitiesOutsideBounds) {
+        entities.splice(entities.indexOf(entity), 1)
+      }
+      postUpdate() // hide warning overlays for out of bounds entities that no longer exist
+    }
+  }
   const levelJSON = serialize(true)
   const blob = new Blob([levelJSON], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
