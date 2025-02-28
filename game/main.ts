@@ -22,6 +22,7 @@ const settingsDialogCancelButton = document.querySelector<HTMLDialogElement>('#s
 const hapticsEnabledCheckbox = settingsDialog.querySelector<HTMLInputElement>('#settings-haptics-enabled')!
 const hapticsValidDurationInput = settingsDialog.querySelector<HTMLInputElement>('#settings-haptics-valid-move-ms')!
 const hapticsInvalidDurationInput = settingsDialog.querySelector<HTMLInputElement>('#settings-haptics-invalid-move-ms')!
+const gamepadRepeatRateInput = settingsDialog.querySelector<HTMLInputElement>('#settings-gamepad-repeat-rate')!
 
 playEditToggleButton.addEventListener('click', () => {
   setActivityMode(activityMode === "play" ? "edit" : "play")
@@ -39,9 +40,11 @@ hapticsEnabledCheckbox.addEventListener('change', updateSubSettings)
 settingsButton.addEventListener('click', () => {
   settingsDialog.showModal()
   try {
+    // TODO: DRY default values, ensure a single source of truth
     hapticsEnabledCheckbox.checked = localStorage.getItem(storageKeys.hapticsEnabled) === "true"
     hapticsValidDurationInput.value = localStorage.getItem(storageKeys.hapticsValidDuration) ?? "6"
     hapticsInvalidDurationInput.value = localStorage.getItem(storageKeys.hapticsInvalidDuration) ?? "60"
+    gamepadRepeatRateInput.value = localStorage.getItem(storageKeys.gamepadRepeatRate) ?? "250"
   } catch (error) {
     console.error("Failed to load settings from local storage", error)
   }
@@ -61,10 +64,12 @@ settingsDialogOKButton.addEventListener('click', (event) => {
   event.preventDefault()
   const hapticsValidDuration = parseInt(hapticsValidDurationInput.value)
   const hapticsInvalidDuration = parseInt(hapticsInvalidDurationInput.value)
+  const gamepadRepeatRate = parseInt(gamepadRepeatRateInput.value)
   try {
     localStorage.setItem(storageKeys.hapticsEnabled, hapticsEnabledCheckbox.checked ? "true" : "false")
     localStorage.setItem(storageKeys.hapticsValidDuration, hapticsValidDuration.toString())
     localStorage.setItem(storageKeys.hapticsInvalidDuration, hapticsInvalidDuration.toString())
+    localStorage.setItem(storageKeys.gamepadRepeatRate, gamepadRepeatRate.toString())
   } catch (error) {
     console.error("Failed to save settings to local storage", error)
     alert("Failed to save settings. Make sure cookies are enabled and try again.")

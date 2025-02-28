@@ -309,9 +309,45 @@ export function handleInput(
   // ---------------
 
   const buttonsLast = new Map<number, Map<number, boolean>>()
+  const buttonsRepeatingNow = new Map<number, Map<number, boolean>>()
+  const buttonRepeatIIDs = new Map<number, Map<number, number>>()
   function justPressed(button: number, gamepad: Gamepad) {
     const last = buttonsLast.get(gamepad.index)?.get(button)
     return gamepad.buttons[button].pressed && !last
+  }
+  function justPressedOrRepeated(button: number, gamepad: Gamepad) {
+    if (justPressed(button, gamepad)) {
+      // console.log('just pressed', button, buttonRepeatIIDs, gamepad.index)
+      clearInterval(buttonRepeatIIDs.get(gamepad.index)?.get(button))
+      if (!buttonRepeatIIDs.has(gamepad.index)) {
+        buttonRepeatIIDs.set(gamepad.index, new Map())
+      }
+      let gamepadRepeatRate = 250
+      try {
+        gamepadRepeatRate = parseInt(localStorage.getItem(storageKeys.gamepadRepeatRate) ?? String(gamepadRepeatRate))
+      } catch (error) {
+        console.error("Failed to get gamepad repeat rate:", error)
+      }
+      // console.log(gamepad.timestamp)
+      // @ts-expect-error conflict with @types/node
+      buttonRepeatIIDs.get(gamepad.index)!.set(button, setInterval(() => {
+        // console.log('repeating', button, gamepad.buttons[button].pressed, gamepad.timestamp)
+        // gamepad is actually a snapshot, so we need to get an up to date one
+        // this sucks, this ended up way more complicated than I thought
+        // "oh, I'll just encapsulate it in a simple function like the other one" -- my naive ass 40 minutes ago
+        // if (!gamepad.buttons[button].pressed) {
+        const currentGamepad = navigator.getGamepads()[gamepad.index]
+        if (!currentGamepad || !currentGamepad.buttons[button].pressed) {
+          clearInterval(buttonRepeatIIDs.get(gamepad.index)!.get(button))
+          buttonRepeatIIDs.get(gamepad.index)!.delete(button)
+          return
+        }
+        buttonsRepeatingNow.get(gamepad.index)?.set(button, true)
+      }, gamepadRepeatRate))
+      return true
+    }
+    const repeatingNow = !!buttonsRepeatingNow.get(gamepad.index)?.get(button)
+    return repeatingNow
   }
   const minDistance = 0.5
   function pollGamepads() {
@@ -360,13 +396,13 @@ export function handleInput(
         }
       }
       // D-pad
-      if (justPressed(12, gamepad)) {
+      if (justPressedOrRepeated(12, gamepad)) {
         move(0, -1, ControlScheme.Gamepad)
-      } else if (justPressed(13, gamepad)) {
+      } else if (justPressedOrRepeated(13, gamepad)) {
         move(0, 1, ControlScheme.Gamepad)
-      } else if (justPressed(14, gamepad)) {
+      } else if (justPressedOrRepeated(14, gamepad)) {
         move(-1, 0, ControlScheme.Gamepad)
-      } else if (justPressed(15, gamepad)) {
+      } else if (justPressedOrRepeated(15, gamepad)) {
         move(1, 0, ControlScheme.Gamepad)
       }
       // Bumpers
@@ -397,6 +433,7 @@ export function handleInput(
       }
 
       buttonsLast.set(gamepad.index, new Map(gamepad.buttons.map((button, index) => [index, button.pressed])))
+      buttonsRepeatingNow.set(gamepad.index, new Map(gamepad.buttons.map((button, index) => [index, false])))
       for (const button of gamepad.buttons) {
         if (button.pressed) {
           usingGamepad = true

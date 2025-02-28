@@ -25,7 +25,6 @@
 ## Controls
 - gamepad: use joystick directly instead of requiring a button press to move each tile (this should also do away with the highlight visual which is the only thing not black and white during gameplay)
   - although perhaps the current behavior should be left in as an option, but the tile highlight should be changed to a black and white arrow of some kind
-- gamepad: key repeat
 - keyboard: key repeat
 - keyboard: cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
 - touch: could try a virtual joystick/dpad as an alternative to gliding anywhere on the screen
