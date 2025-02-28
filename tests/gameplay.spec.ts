@@ -254,6 +254,8 @@ test('restarting a level should not affect the move count', async ({ page }) => 
   await page.keyboard.press('ArrowUp')
   await page.keyboard.press('ArrowUp')
   await page.keyboard.press('r')
+  // FIXME: level restart should be instant (test was flaky without this)
+  await page.waitForTimeout(500)
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('#level-splash')).toBeVisible()
   await page.keyboard.press('Enter') // skip splash screen
