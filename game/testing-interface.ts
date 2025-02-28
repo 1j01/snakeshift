@@ -10,7 +10,7 @@ declare global {
     _forTesting: {
       tileOnPage: (tile: Tile) => Tile
       playedSounds: SoundID[]
-      serialize: () => string
+      serialize: (forSave?: boolean) => string
       serializePlaythrough: () => string
       deserialize: (serialized: string) => void
       loadLevelFromText: (fileText: string, newMode: "edit" | "play" | "replay", levelId?: string | null) => boolean

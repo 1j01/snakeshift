@@ -69,7 +69,7 @@ export async function getCurrentLevelContent(page: Page) {
   // This is more reliable, faster, and more efficient.
   // (Of course we need tests specifically for the level saving functionality now. TODO.)
   return page.evaluate(() => {
-    return window._forTesting.serialize()
+    return window._forTesting.serialize(true)
   })
 }
 export async function getPlaythroughContent(page: Page) {

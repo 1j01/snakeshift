@@ -33,6 +33,11 @@ export let activePlayer: Snake | undefined = undefined
 export let controlScheme = ControlScheme.KeyboardAbsoluteDirection
 document.body.dataset.controlScheme = controlScheme // TODO: DRY? but don't want to call postUpdate too early
 
+let levelSessionId = 0
+export function startNewLevelSession() {
+  levelSessionId += 1
+}
+
 export const undos: GameState[] = []
 export const redos: GameState[] = []
 export function undoable() {
@@ -90,7 +95,7 @@ export function goToHistoryIndex(index: number) {
   }
 }
 
-export function serialize(): GameState {
+export function serialize(forSave = false): GameState {
   return JSON.stringify({
     format: "snakeshift",
     formatVersion: LEVEL_FORMAT_VERSION,
@@ -99,6 +104,7 @@ export function serialize(): GameState {
     entityTypes: entities.map(e => e.constructor.name),
     activePlayerEntityIndex: entities.indexOf(activePlayer!),
     levelId: currentLevelID(),
+    levelSessionId: forSave ? undefined : levelSessionId,
   }, null, 2) + "\n"
 }
 export function deserialize(state: GameState, levelId: string | null = null, temporary = false) {
@@ -253,7 +259,7 @@ declare global {
 }
 
 export function saveLevel() {
-  const levelJSON = serialize()
+  const levelJSON = serialize(true)
   const blob = new Blob([levelJSON], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -265,10 +271,10 @@ export function saveLevel() {
 export function serializePlaythrough() {
   // Include redos in order to support round-trip re-saving of playthroughs for automated upgrading of the format...
   // but maybe only in replay mode? Might be unexpected in play mode.
-  const levelId = currentLevelID()
   const states = (activityMode === "replay" ? [...undos, serialize(), ...redos.toReversed()] : [...undos, serialize()])
     .map(s => JSON.parse(s) as ParsedGameState)
-    .filter(s => s.levelId === levelId)
+    .filter(s => s.levelSessionId === levelSessionId)
+    .map(s => { delete s.levelSessionId; return s })
   const baseState = states[0]
   const deltas: jsondiffpatch.Delta[] = []
   let prevState = baseState
@@ -381,6 +387,7 @@ export function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "
     state: serialize(),
     undos: [...undos],
     redos: [...redos],
+    levelSessionId,
   }
   // Allow undoing/redoing across levels
   // But don't create an extraneous undo state when loading a level into level editor
@@ -392,6 +399,7 @@ export function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "
     // NOTE: loadLevelFromText will be at two places in the call stack in this case. Might be able to simplify by having
     // loadPlaythrough (or a replacement with a new name) return the GameState string to load,
     // which would be loaded subsequently in this function, but not recursively.
+    // startNewLevelSession() will happen during loadPlaythrough's call to loadLevelFromText.
     try {
       loadPlaythrough(fileText)
     } catch (error) {
@@ -403,6 +411,7 @@ export function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "
     return true
   } else {
     try {
+      startNewLevelSession()
       deserialize(fileText, levelId)
       guessDefaultActivePlayer()
       storeBaseLevelState()
@@ -410,6 +419,7 @@ export function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "
       deserialize(before.state)
       undos.splice(0, undos.length, ...before.undos)
       redos.splice(0, redos.length, ...before.redos)
+      levelSessionId = before.levelSessionId
       console.error(error)
       alert(`Failed to load level. ${(error as Error).toString()}`)
       return false

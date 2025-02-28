@@ -244,7 +244,7 @@ test('should mark level completed if won', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Test Level 002 (Just move left to win)' })).toHaveAttribute('data-completed', 'false')
 })
 
-test.fail('restarting a level should not affect the move count', async ({ page }) => {
+test('restarting a level should not affect the move count', async ({ page }) => {
   await page.getByRole('button', { name: 'Level Select' }).click()
   await expect(page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' })).toHaveAttribute('data-move-count', 'Infinity')
   await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()

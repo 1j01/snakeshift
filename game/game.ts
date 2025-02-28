@@ -1,6 +1,6 @@
 import { Food } from "./food"
 import { canMove } from "./game-logic"
-import { clearLevel, deserialize, entities, goToHistoryIndex, guessDefaultActivePlayer, onUpdate, redos, serialize, serializePlaythrough, undoable, undos } from "./game-state"
+import { clearLevel, deserialize, entities, goToHistoryIndex, guessDefaultActivePlayer, onUpdate, redos, serialize, serializePlaythrough, startNewLevelSession, undoable, undos } from "./game-state"
 import { handleInput } from "./input"
 import { handleInputForLevelEditing } from "./level-editor"
 import { currentLevelID, loadLevelFile, loadNextLevel, setStandaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
@@ -32,6 +32,7 @@ let editorState: GameState | undefined = undefined
 export let levelHasGoal = false
 let cleanup = handleInput(canvas)
 export function setActivityMode(newMode: "edit" | "play" | "replay" | "menu") {
+  // might make sense to manage levelSessionId here, but it might not matter
   if (activityMode === newMode) return
   console.log("Switching from", activityMode, "to", newMode)
   cleanup()
@@ -100,6 +101,7 @@ export function restartLevel() {
   undoable()
   deserialize(editorState)
   wonLevel = false
+  startNewLevelSession()
 }
 
 export function checkLevelWon() {

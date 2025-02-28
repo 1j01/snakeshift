@@ -11,8 +11,6 @@
 
 
 ## Par system
-- bug: restarts shouldn't be counted in the moves of a playthrough, but it's adding up separate runs of the same level
-  - could introduce a level *session* id to compliment the level id and use it instead for partitioning playthroughs
 - show the number of moves in the level select
 - define a par for each level
 - store hash of the level content; if it differs, test the stored solution against the new level; if it works, keep it; if it doesn't, discard it
