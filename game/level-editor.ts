@@ -116,6 +116,10 @@ export function initLevelEditorGUI() {
     undoable()
     const width = parseInt(levelInfoEditor.querySelector<HTMLInputElement>('#level-width')!.value)
     const height = parseInt(levelInfoEditor.querySelector<HTMLInputElement>('#level-height')!.value)
+    if (isNaN(width) || isNaN(height)) {
+      alert("Invalid input. Please enter a number.")
+      return
+    }
     if (width !== levelInfo.width || height !== levelInfo.height) {
       levelInfo.width = width
       levelInfo.height = height

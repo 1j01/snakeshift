@@ -65,6 +65,10 @@ settingsDialogOKButton.addEventListener('click', (event) => {
   const hapticsValidDuration = parseInt(hapticsValidDurationInput.value)
   const hapticsInvalidDuration = parseInt(hapticsInvalidDurationInput.value)
   const gamepadRepeatRate = parseInt(gamepadRepeatRateInput.value)
+  if (isNaN(hapticsValidDuration) || isNaN(hapticsInvalidDuration) || isNaN(gamepadRepeatRate)) {
+    alert("Invalid input. Please enter a number.")
+    return
+  }
   try {
     localStorage.setItem(storageKeys.hapticsEnabled, hapticsEnabledCheckbox.checked ? "true" : "false")
     localStorage.setItem(storageKeys.hapticsValidDuration, hapticsValidDuration.toString())
