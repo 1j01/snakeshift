@@ -134,8 +134,14 @@ export function initLevelSelect() {
 export function updateLevelSelect() {
   for (const button of document.querySelectorAll<HTMLButtonElement>('.level-button')) {
     const levelId = button.getAttribute('data-level')!
-    const moveCount = Number(localStorage.getItem(storageKeys.bestMoveCount(levelId)) ?? Infinity)
-    const solution = localStorage.getItem(storageKeys.bestSolution(levelId))
+    let moveCount = Infinity
+    let solution: string | null = null
+    try {
+      moveCount = Number(localStorage.getItem(storageKeys.bestMoveCount(levelId)) ?? Infinity)
+      solution = localStorage.getItem(storageKeys.bestSolution(levelId))
+    } catch (error) {
+      console.error("Failed to check level solution in localStorage", error)
+    }
     const completed = moveCount < Infinity
     button.dataset.moveCount = String(moveCount)
     button.dataset.completed = String(completed)
@@ -145,7 +151,7 @@ export function updateLevelSelect() {
       replayButton.className = 'bw-button replay-button'
       button.parentElement!.append(replayButton)
       replayButton.addEventListener('click', () => {
-        loadLevelFromText(solution, "replay")
+        loadLevelFromText(solution!, "replay")
       })
       // replayButton.textContent = "View Replay"
       const img = document.createElement('img')
