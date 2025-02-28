@@ -469,11 +469,11 @@ kbd:not(.grouping-kbd) {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(100vw, 100vh);
-  height: min(100vw, 100vh);
+  width: max(100vw, 100vh);
+  height: max(100vw, 100vh);
   border-radius: 50%;
   border: 10px solid #fff;
-  box-sizing: border-box;
+  box-sizing: content-box;
   transform: translate(-50%, -50%);
   animation: gong 1s ease forwards;
 }
@@ -490,7 +490,10 @@ kbd:not(.grouping-kbd) {
   }
 
   100% {
-    transform: translate(-50%, -50%) scale(2);
+    /* for a square in a circle, side length = √2 × radius */
+    /* so if we want the circle to be scaled to the screen rect, with the base diameter as the max of the screen dimensions, we can scale by √2 */
+    /* to test this for yourself, make the page a perfect square (device toolbar in chrome devtools helps) and increase border-width in the end state */
+    transform: translate(-50%, -50%) scale(sqrt(2));
     border-width: 0;
   }
 }

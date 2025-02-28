@@ -54,7 +54,6 @@
 - visuals:
   - there's a slight bug where Block is not always sorted to bottom, which I can see when dragging with the pointer control scheme, which animates the snake slightly beyond its cell, in the level Ferry
   - enlarge level border
-  - gong ripple visual effect doesn't always reach edges of screen; could use max instead of min of screen dimensions
   - 1x1 snake should change direction when moving
     - need to store heading in a different way, to work with a single segment
   - do something about weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
