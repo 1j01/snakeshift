@@ -11,9 +11,6 @@
 - bug: drag and drop isn't clearing undo history IN SOME UNREPRODUCIBLE CASE? I've tried twice to add tests, see stashes, for some bug but no reproduction yet
 
 
-## Mobile viewport issues
-- tutorial text is too small
-
 ## Par system
 - bug: restarts shouldn't be counted in the moves of a playthrough, but it's adding up separate runs of the same level
   - could introduce a level *session* id to compliment the level id and use it instead for partitioning playthroughs
