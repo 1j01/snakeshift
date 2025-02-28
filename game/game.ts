@@ -118,7 +118,7 @@ export function checkLevelWon() {
 }
 
 function checkLevelStuck() {
-  return entities.every((entity) => !(entity instanceof Snake) || !canMove(entity))
+  return levelHasGoal && entities.every((entity) => !(entity instanceof Snake) || !canMove(entity))
 }
 
 function storeLevelSolution() {
