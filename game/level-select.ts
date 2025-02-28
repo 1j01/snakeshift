@@ -24,12 +24,17 @@ let currentLevelButton: HTMLButtonElement | undefined = undefined
  */
 export let standaloneLevelMode = true
 
-const cache = new Map<string, Promise<Response>>()
-async function fetchCached(url: string) {
+const cache = new Map<string, Promise<string>>()
+async function fetchTextCached(url: string) {
   if (!cache.has(url)) {
-    cache.set(url, fetch(url))
+    cache.set(url, fetch(url).then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${url}: ${response.statusText}`)
+      }
+      return response.text()
+    }))
   }
-  return (await cache.get(url)!).clone()
+  return cache.get(url)!
 }
 
 export function initLevelSelect() {
@@ -89,14 +94,14 @@ export function initLevelSelect() {
       ctx.fillStyle = '#000'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      const request = await fetchCached(levelURL)
-      if (!request.ok) {
-        levelPreviewError.textContent = `Failed to load level preview.\nStatus: ${request.statusText}`
+      let stateToPreview
+      try {
+        stateToPreview = await fetchTextCached(levelURL)
+      } catch (error) {
+        levelPreviewError.textContent = `Failed to load level preview.\n${String(error)}`
         levelPreviewError.hidden = false
         return
       }
-      const blob = await request.blob()
-      const stateToPreview = await blob.text()
       // TODO: segregate the game state so as not to need to reset it or include a flag to avoid triggering side effects
       // Could use OOP, i.e. a Game class, for instance (of Game class) (haha so funny)
       const oldState = serialize()
@@ -160,7 +165,7 @@ export function updateLevelSelect() {
 }
 
 export async function loadLevelFile(levelURL: string, loadedCallback?: () => void) {
-  const request = await fetchCached(levelURL)
+  const request = await fetchTextCached(levelURL)
   if (!request.ok) {
     alert(`Failed to load level ${JSON.stringify(levelURL)}: ${request.statusText}`)
     return
