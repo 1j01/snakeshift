@@ -255,6 +255,8 @@ test('restarting a level should not affect the move count', async ({ page }) => 
   await page.keyboard.press('ArrowUp')
   await page.keyboard.press('r')
   await page.keyboard.press('ArrowRight')
+  await expect(page.locator('#level-splash')).toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
   await page.getByRole('button', { name: 'Back' }).click()
   await page.getByRole('button', { name: 'Level Select' }).click()
   await expect(page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' })).toHaveAttribute('data-move-count', '1')
