@@ -3,7 +3,8 @@ import { playSound } from "./audio"
 import Entity from "./entity"
 import { activityMode, editorRedos, editorUndos, setActivityMode, shouldInputBeAllowed, storeBaseLevelState } from "./game"
 import { canMove } from "./game-logic"
-import { makeEntity, withinLevel } from "./helpers"
+import { hitTestAllEntities, makeEntity, withinLevel } from "./helpers"
+import { deleteSnakeSegment } from "./level-editor"
 import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { hideScreens, showLevelSplash } from "./menus"
 import { RectangularEntity } from "./rectangular-entity"
@@ -261,13 +262,39 @@ declare global {
 }
 
 export function saveLevel() {
-  // TODO: handle snakes
   const entitiesOutsideBounds = entities.filter((entity) => entity instanceof RectangularEntity && !withinLevel(entity))
-  if (entitiesOutsideBounds.length > 0) {
-    if (confirm(`Remove ${entitiesOutsideBounds.length} entities outside the level bounds?`)) {
+  const snakeSegmentsOutsideBounds = (entities.filter((entity) => entity instanceof Snake) as Snake[])
+    .flatMap((snake) =>
+      snake.segments
+        .map((segment, segmentIndex) => ({ snake, segment, segmentIndex }))
+        .filter(({ segment }) => !withinLevel(segment))
+    )
+  if (entitiesOutsideBounds.length > 0 || snakeSegmentsOutsideBounds.length > 0) {
+    const both = entitiesOutsideBounds.length > 0 && snakeSegmentsOutsideBounds.length > 0
+    const andText = both ? " and " : ""
+    const entitiesText = entitiesOutsideBounds.length === 0 ? "" : entitiesOutsideBounds.length === 1 ? "1 entity" : `${entitiesOutsideBounds.length} entities`
+    const segmentsText = snakeSegmentsOutsideBounds.length === 0 ? "" : snakeSegmentsOutsideBounds.length === 1 ? "1 snake segment" : `${snakeSegmentsOutsideBounds.length} snake segments`
+    if (confirm(`Remove ${entitiesText}${andText}${segmentsText} outside the level bounds?`)) {
       undoable()
       for (const entity of entitiesOutsideBounds) {
         entities.splice(entities.indexOf(entity), 1)
+      }
+      for (const { snake, segment, segmentIndex } of snakeSegmentsOutsideBounds) {
+        // Simply calling `deleteSnakeSegment(snake, segmentIndex)` here won't work because
+        // `deleteSnakeSegment` creates new snakes when splitting them,
+        // so subsequent iterations will have outdated Snake references.
+        // I could either do a hit test to find the (possibly new) snake segment each time,
+        // or make deleteSnakeSegment return more information, or store IDs for each snake segment (but that feels excessive).
+        // Just do a hit test.
+        const hits = hitTestAllEntities(segment.x, segment.y)
+        for (const hit of hits) {
+          const index = entities.indexOf(hit.entity)
+          if (index >= 0) {
+            if (hit.entity instanceof Snake) {
+              deleteSnakeSegment(hit.entity, hit.segmentIndex!)
+            }
+          }
+        }
       }
       postUpdate() // hide warning overlays for out of bounds entities that no longer exist
     }

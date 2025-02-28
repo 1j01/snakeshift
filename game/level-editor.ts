@@ -654,6 +654,9 @@ export function translateSelection(dx: number, dy: number) {
 
 export function deleteEntity(entity: Entity) {
   const index = entities.indexOf(entity)
+  if (index === -1) {
+    throw new Error(`Could not find entity to delete in entities array`)
+  }
   entities.splice(index, 1)
   if (entity === activePlayer) {
     setActivePlayer(undefined)
@@ -663,6 +666,9 @@ export function deleteEntity(entity: Entity) {
 export function deleteSnakeSegment(snake: Snake, segmentIndex: number) {
   if (snake.segments.length >= 2) {
     const index = entities.indexOf(snake)
+    if (index === -1) {
+      throw new Error(`Could not find snake in entities array`)
+    }
     const before = snake.segments.slice(0, segmentIndex)
     const after = snake.segments.slice(segmentIndex + 1)
     snake.segments.length = before.length
