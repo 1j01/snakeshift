@@ -4,7 +4,7 @@ import { analyzeMoveRelative, takeMove } from './game-logic'
 import { activePlayer, controlScheme, cyclePlayerControl, entities, onResize, onUpdate, postUpdate, redo, setActivePlayer, setControlScheme, undo } from './game-state'
 import { hitTestAllEntities, makeEventListenerGroup, neighborOf } from './helpers'
 import { showMainMenu } from './menus'
-import { pageToWorldTile } from './rendering'
+import { pageToWorldTile, tileOnPage } from './rendering'
 import { storageKeys } from './shared-helpers'
 import Snake from './snake'
 import { highlightMove } from './tile-highlight'
@@ -48,10 +48,34 @@ export function handleInput(
     let movedSincePointerDown = false
 
     const snakeUnderPointer = (event: { clientX: number, clientY: number }): Snake | undefined => {
+      // this is redundant with the below more lenient check
+      // except MAYBE if the tiles are really big on the page
+      // (I could increase the maxDistance to account for that, by measuring a tile on the page, and take the max)
       const mouseTile = pageToWorldTile(event)
       const hits = hitTestAllEntities(mouseTile.x, mouseTile.y)
       const snakeHit = hits.find((hit) => hit.entity instanceof Snake)
-      return snakeHit?.entity as Snake | undefined
+      if (snakeHit) {
+        return snakeHit?.entity as Snake | undefined
+      }
+
+      // more lenient so you can fat-finger it and don't have to think as much about things irrelevant to the puzzle
+      const maxDistance = 40
+      let closestSnake: Snake | undefined = undefined
+      let closestDistance = maxDistance
+      for (const entity of entities) {
+        if (entity instanceof Snake) {
+          for (const segment of entity.segments) {
+            const segmentOnPage = tileOnPage(segment)
+            const center = { x: segmentOnPage.x + segmentOnPage.width / 2, y: segmentOnPage.y + segmentOnPage.height / 2 }
+            const distance = Math.hypot(center.x - event.clientX, center.y - event.clientY)
+            if (distance < closestDistance) {
+              closestSnake = entity
+              closestDistance = distance
+            }
+          }
+        }
+      }
+      return closestSnake
     }
 
     on(eventTarget, "pointerdown", (event) => {

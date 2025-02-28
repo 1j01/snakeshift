@@ -33,7 +33,6 @@
 - keyboard: key repeat
 - keyboard: cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
 - touch: could try a virtual joystick/dpad as an alternative to gliding anywhere on the screen
-- touch: when tapping to switch snakes, search for closest snake within a radius of the tap
 - gamepad/touch support for level editor (currently requires keyboard/mouse)
 - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
 
