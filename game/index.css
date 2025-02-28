@@ -166,6 +166,10 @@ input::selection,
   display: inline-block;
 }
 
+.disabled {
+  color: #aaa;
+}
+
 .control-row input[type="number"] {
   width: 50px;
 }

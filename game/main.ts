@@ -37,6 +37,9 @@ fullscreenButton.addEventListener('click', toggleFullscreen)
 function updateSubSettings() {
   hapticsValidDurationInput.disabled = !hapticsEnabledCheckbox.checked
   hapticsInvalidDurationInput.disabled = !hapticsEnabledCheckbox.checked
+  for (const element of document.querySelectorAll('.enabled-by-haptics')) {
+    element.classList.toggle('disabled', !hapticsEnabledCheckbox.checked)
+  }
 }
 hapticsEnabledCheckbox.addEventListener('change', updateSubSettings)
 settingsButton.addEventListener('click', () => {
