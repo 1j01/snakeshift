@@ -63,7 +63,7 @@ export function setActivityMode(newMode: "edit" | "play" | "replay" | "menu") {
   } else {
     setStandaloneLevelMode()
     cleanup = handleInput(canvas)
-    clearLevel(false)
+    clearLevel(false, false)
     undos.length = 0
     redos.length = 0
     editorUndos.length = 0

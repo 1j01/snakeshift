@@ -87,7 +87,7 @@ export function initLevelEditorGUI() {
     if (selectedEntities.length || selectionRange) {
       deleteSelectedEntities()
     } else {
-      clearLevel()
+      clearLevel(true, false)
     }
   })
   invertButton.addEventListener('click', invert)

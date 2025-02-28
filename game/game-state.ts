@@ -183,14 +183,15 @@ export function deserialize(state: GameState, levelId: string | null = null, tem
   }
 }
 
-export function clearLevel(shouldBeUndoable = true) {
+export function clearLevel(shouldBeUndoable: boolean, resetSize: boolean) {
   // Hm, using an adjective for a function name makes this a bit awkward.
   // (Not that I really need to make this a parameter.)
   if (shouldBeUndoable) undoable()
   entities.length = 0
-  // TODO: Don't really want to reset the level size with the clear button (but I do when entering the editor)
-  levelInfo.width = defaultLevelInfo.width
-  levelInfo.height = defaultLevelInfo.height
+  if (resetSize) {
+    levelInfo.width = defaultLevelInfo.width
+    levelInfo.height = defaultLevelInfo.height
+  }
   activePlayer = undefined
   postUpdate()
 }

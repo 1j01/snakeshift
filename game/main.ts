@@ -151,7 +151,7 @@ addEventListener('keydown', (event) => {
     openLevel()
     event.preventDefault()
   } else if (event.key === 'n' && activityMode == "edit") { // Ctrl+N is new window and can't be overridden
-    clearLevel()
+    clearLevel(true, false)
     event.preventDefault()
   } else if (event.key === 'a' && activityMode == "edit") {
     selectAll()

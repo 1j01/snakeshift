@@ -31,7 +31,7 @@ export function initMainMenu() {
   levelEditorButton.addEventListener('click', () => {
     hideScreens()
     setActivityMode("edit") // before clearing because it switches to separate edit mode undo stacks
-    clearLevel(false)
+    clearLevel(false, true)
     document.body.dataset.screen = "level-editor"
   })
 
