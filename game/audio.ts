@@ -31,9 +31,8 @@ const muteButtonText = document.getElementById("mute-button-text")!
 export let muted = false
 
 try {
-  muted = localStorage[storageKeys.muteSoundEffects] === "true"
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  let volume = parseFloat(localStorage[storageKeys.volume])
+  muted = localStorage.getItem(storageKeys.muteSoundEffects) === "true"
+  let volume = parseFloat(localStorage.getItem(storageKeys.volume)!)
   if (!isFinite(volume) || volume < 0 || volume > 1) {
     volume = 0.5
   }
@@ -110,7 +109,7 @@ export const toggleMute = ({ savePreference = true } = {}) => {
   updateMuteButton()
   try {
     if (savePreference) {
-      localStorage[storageKeys.muteSoundEffects] = muted
+      localStorage.setItem(storageKeys.muteSoundEffects, String(muted))
     }
   } catch (error) {
     // that's okay
@@ -128,7 +127,7 @@ export const setVolume = (volume: number) => {
   mainGain.gain.value = volume
   updateMuteButton()
   try {
-    localStorage[storageKeys.volume] = volume
+    localStorage.setItem(storageKeys.volume, String(volume))
   } catch (error) {
     // no big deal
   }

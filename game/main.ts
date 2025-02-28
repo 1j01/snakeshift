@@ -244,11 +244,11 @@ function initLocalStorage() {
     // This is a sketch of an upgrade, but untested as it's not needed yet:
     // if (storageVersion === 1) {
     //   storageVersion = 2
-    //   localStorage[storageKeys.bestMoveCount("levels/newLevelName.json")] = localStorage[storageKeys.bestMoveCount("levels/oldLevelName.json")]
-    //   localStorage[storageKeys.bestSolution("levels/newLevelName.json")] = localStorage[storageKeys.bestSolution("levels/oldLevelName.json")]
-    //   delete localStorage[storageKeys.bestMoveCount("levels/oldLevelName.json")]
-    //   delete localStorage[storageKeys.bestSolution("levels/oldLevelName.json")]
-    //   localStorage[storageKeys.localStorageFormatVersion] = storageVersion
+    //   localStorage.setItem(storageKeys.bestMoveCount("levels/newLevelName.json"), localStorage.getItem(storageKeys.bestMoveCount("levels/oldLevelName.json")))
+    //   localStorage.setItem(storageKeys.bestSolution("levels/newLevelName.json"), localStorage.getItem(storageKeys.bestSolution("levels/oldLevelName.json")))
+    //   localStorage.deleteItem(storageKeys.bestMoveCount("levels/oldLevelName.json"))
+    //   localStorage.deleteItem(storageKeys.bestSolution("levels/oldLevelName.json"))
+    //   localStorage.setItem(storageKeys.localStorageFormatVersion, storageVersion)
     // }
     if (storageVersion !== LOCAL_STORAGE_FORMAT_VERSION) {
       console.error("Invalid local storage format version.")
