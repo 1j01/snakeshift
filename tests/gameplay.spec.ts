@@ -229,3 +229,17 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
   }
   await expect(page.locator('#game-win-screen')).toBeVisible()
 })
+
+test('should mark level completed if won', async ({ page }) => {
+  await page.getByRole('button', { name: 'Level Select' }).click()
+  await expect(page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' })).toHaveAttribute('data-completed', 'false')
+  await expect(page.getByRole('button', { name: 'Test Level 002 (Just move left to win)' })).toHaveAttribute('data-completed', 'false')
+  await page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' }).click()
+  await expect(page.locator('#level-splash')).toBeVisible()
+  await page.keyboard.press('Enter') // skip splash screen
+  await page.keyboard.press('ArrowRight')
+  await page.getByRole('button', { name: 'Back' }).click()
+  await page.getByRole('button', { name: 'Level Select' }).click()
+  await expect(page.getByRole('button', { name: 'Test Level 001 (Just move right to win)' })).toHaveAttribute('data-completed', 'true')
+  await expect(page.getByRole('button', { name: 'Test Level 002 (Just move left to win)' })).toHaveAttribute('data-completed', 'false')
+})
