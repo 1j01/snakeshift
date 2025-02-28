@@ -265,9 +265,7 @@ export function saveLevel() {
   const entitiesOutsideBounds = entities.filter((entity) => entity instanceof RectangularEntity && !withinLevel(entity))
   const snakeSegmentsOutsideBounds = (entities.filter((entity) => entity instanceof Snake) as Snake[])
     .flatMap((snake) =>
-      snake.segments
-        .map((segment, segmentIndex) => ({ snake, segment, segmentIndex }))
-        .filter(({ segment }) => !withinLevel(segment))
+      snake.segments.filter((segment) => !withinLevel(segment))
     )
   if (entitiesOutsideBounds.length > 0 || snakeSegmentsOutsideBounds.length > 0) {
     const both = entitiesOutsideBounds.length > 0 && snakeSegmentsOutsideBounds.length > 0
@@ -279,13 +277,10 @@ export function saveLevel() {
       for (const entity of entitiesOutsideBounds) {
         entities.splice(entities.indexOf(entity), 1)
       }
-      for (const { snake, segment, segmentIndex } of snakeSegmentsOutsideBounds) {
-        // Simply calling `deleteSnakeSegment(snake, segmentIndex)` here won't work because
-        // `deleteSnakeSegment` creates new snakes when splitting them,
-        // so subsequent iterations will have outdated Snake references.
-        // I could either do a hit test to find the (possibly new) snake segment each time,
-        // or make deleteSnakeSegment return more information, or store IDs for each snake segment (but that feels excessive).
-        // Just do a hit test.
+      for (const segment of snakeSegmentsOutsideBounds) {
+        // Note that `deleteSnakeSegment` creates new snakes when splitting them,
+        // so subsequent iterations will have outdated Snake and SnakeSegment references.
+        // Do a hit test to find the (possibly new) snake segment.
         const hits = hitTestAllEntities(segment.x, segment.y)
         for (const hit of hits) {
           const index = entities.indexOf(hit.entity)
