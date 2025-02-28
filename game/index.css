@@ -102,6 +102,7 @@ input {
   display: flex;
   margin: 5px 0;
   gap: 5px;
+  align-items: center;
 }
 
 #level-info-editor .control-row label {
@@ -119,8 +120,13 @@ input {
   display: inline-block;
 }
 
-#settings-dialog .control-row input[type="number"] {
+.control-row input[type="number"] {
   width: 50px;
+}
+
+.control-row input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
 }
 
 .bw-button {
