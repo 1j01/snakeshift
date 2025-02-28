@@ -370,6 +370,12 @@ body[data-screen="credits"] .level-flow-control-button {
   padding-top: min(6vh, 6vw);
 }
 
+.level-specific-overlay big {
+  font-size: 2em;
+  display: inline-block;
+  vertical-align: sub;
+}
+
 #level-stuck-hint {
   bottom: 10px;
   top: auto !important;
