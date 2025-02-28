@@ -105,7 +105,6 @@
 - move unsaved changes prompt tests to level editor spec?
 - game playthrough test:
   - upgrade the playthrough format to include inputs instead of inferring them
-  - ensure that it's finding some levels; don't want to find out that "whoops, it's not testing anything" for such an important test
 - Node.js 23 breaks Playwright tests:
   - How does Playwright normally load typescript files, that the new Node.js built-in support is able to interfere with?
   - What am I supposed to do as a user?

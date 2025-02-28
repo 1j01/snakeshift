@@ -177,6 +177,7 @@ test('game should be beatable (using recorded playthroughs)', async ({ page }) =
   const levels = await page.$$eval('.level-button', (buttons) => buttons.map((button) => {
     return { levelId: button.getAttribute('data-level'), levelName: button.querySelector('.button-text')!.textContent! }
   }))
+  expect(levels.length).toBeGreaterThan(10)
   // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < levels.length; i++) {
     const { levelId, levelName } = levels[i]
