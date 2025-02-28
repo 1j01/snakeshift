@@ -98,6 +98,17 @@ input {
   accent-color: #fff;
 }
 
+*::selection {
+  background-color: #fff;
+  color: #000;
+}
+
+input::selection,
+#main-menu h1 span::selection {
+  background-color: #000;
+  color: #fff;
+}
+
 .control-row {
   display: flex;
   margin: 5px 0;
