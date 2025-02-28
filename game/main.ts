@@ -5,6 +5,7 @@ import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translat
 import { initLevelSelect } from "./level-select"
 import { hideLevelSplash, initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
+import { safeStorage } from "./safe-storage"
 import { LOCAL_STORAGE_FORMAT_VERSION, storageKeys } from "./shared-helpers"
 import './testing-interface'
 import { ControlScheme } from "./types"
@@ -40,16 +41,12 @@ function updateSubSettings() {
 hapticsEnabledCheckbox.addEventListener('change', updateSubSettings)
 settingsButton.addEventListener('click', () => {
   settingsDialog.showModal()
-  try {
-    // TODO: DRY default values, ensure a single source of truth
-    hapticsEnabledCheckbox.checked = localStorage.getItem(storageKeys.hapticsEnabled) === "true"
-    hapticsValidDurationInput.value = localStorage.getItem(storageKeys.hapticsValidDuration) ?? "6"
-    hapticsInvalidDurationInput.value = localStorage.getItem(storageKeys.hapticsInvalidDuration) ?? "60"
-    gamepadRepeatRateInput.value = localStorage.getItem(storageKeys.gamepadRepeatRate) ?? "150"
-    gamepadRepeatDelayInput.value = localStorage.getItem(storageKeys.gamepadRepeatDelay) ?? "300"
-  } catch (error) {
-    console.error("Failed to load settings from local storage", error)
-  }
+  // TODO: DRY default values, ensure a single source of truth
+  hapticsEnabledCheckbox.checked = safeStorage.getItem(storageKeys.hapticsEnabled) === "true"
+  hapticsValidDurationInput.value = safeStorage.getItem(storageKeys.hapticsValidDuration) ?? "6"
+  hapticsInvalidDurationInput.value = safeStorage.getItem(storageKeys.hapticsInvalidDuration) ?? "60"
+  gamepadRepeatRateInput.value = safeStorage.getItem(storageKeys.gamepadRepeatRate) ?? "150"
+  gamepadRepeatDelayInput.value = safeStorage.getItem(storageKeys.gamepadRepeatDelay) ?? "300"
   hapticsEnabledCheckbox.focus()
   updateSubSettings()
 })
@@ -72,14 +69,15 @@ settingsDialogOKButton.addEventListener('click', (event) => {
     alert("Invalid input. Please enter a number.")
     return
   }
-  try {
-    localStorage.setItem(storageKeys.hapticsEnabled, hapticsEnabledCheckbox.checked ? "true" : "false")
-    localStorage.setItem(storageKeys.hapticsValidDuration, hapticsValidDuration.toString())
-    localStorage.setItem(storageKeys.hapticsInvalidDuration, hapticsInvalidDuration.toString())
-    localStorage.setItem(storageKeys.gamepadRepeatRate, gamepadRepeatRate.toString())
-    localStorage.setItem(storageKeys.gamepadRepeatDelay, gamepadRepeatDelay.toString())
-  } catch (error) {
-    console.error("Failed to save settings to local storage", error)
+  const success = [
+    safeStorage.setItem(storageKeys.hapticsEnabled, hapticsEnabledCheckbox.checked ? "true" : "false"),
+    safeStorage.setItem(storageKeys.hapticsValidDuration, hapticsValidDuration.toString()),
+    safeStorage.setItem(storageKeys.hapticsInvalidDuration, hapticsInvalidDuration.toString()),
+    safeStorage.setItem(storageKeys.gamepadRepeatRate, gamepadRepeatRate.toString()),
+    safeStorage.setItem(storageKeys.gamepadRepeatDelay, gamepadRepeatDelay.toString()),
+  ].every(Boolean)
+  if (!success) {
+    console.error("Failed to save settings to local storage")
     alert("Failed to save settings. Make sure cookies are enabled and try again.")
   }
   settingsDialog.close()
@@ -235,30 +233,26 @@ addEventListener('drop', (event) => {
 })
 
 function initLocalStorage() {
-  try {
-    const storageVersion = Number(localStorage.getItem(storageKeys.localStorageFormatVersion) ?? LOCAL_STORAGE_FORMAT_VERSION)
-    if (storageVersion > LOCAL_STORAGE_FORMAT_VERSION) {
-      console.error("Saved local storage format version is newer than this version of the game. Some data may be lost.")
-    }
-    // Format upgrades would go here, e.g. in case a level was renamed.
-    // This is a sketch of an upgrade, but untested as it's not needed yet:
-    // if (storageVersion === 1) {
-    //   storageVersion = 2
-    //   localStorage.setItem(storageKeys.bestMoveCount("levels/newLevelName.json"), localStorage.getItem(storageKeys.bestMoveCount("levels/oldLevelName.json")))
-    //   localStorage.setItem(storageKeys.bestSolution("levels/newLevelName.json"), localStorage.getItem(storageKeys.bestSolution("levels/oldLevelName.json")))
-    //   localStorage.deleteItem(storageKeys.bestMoveCount("levels/oldLevelName.json"))
-    //   localStorage.deleteItem(storageKeys.bestSolution("levels/oldLevelName.json"))
-    //   localStorage.setItem(storageKeys.localStorageFormatVersion, storageVersion)
-    // }
-    if (storageVersion !== LOCAL_STORAGE_FORMAT_VERSION) {
-      console.error("Invalid local storage format version.")
-    } else {
-      // Initialize local storage with default values
-      localStorage.setItem(storageKeys.localStorageFormatVersion, LOCAL_STORAGE_FORMAT_VERSION.toString())
-      // TODO: Reserve space for level move counts and all settings so that variable size solution replays can never prevent saving basic progress/settings
-    }
-  } catch (error) {
-    console.error("Failed to initialize local storage", error)
+  const storageVersion = Number(safeStorage.getItem(storageKeys.localStorageFormatVersion) ?? LOCAL_STORAGE_FORMAT_VERSION)
+  if (storageVersion > LOCAL_STORAGE_FORMAT_VERSION) {
+    console.error("Saved local storage format version is newer than this version of the game. Some data may be lost.")
+  }
+  // Format upgrades would go here, e.g. in case a level was renamed.
+  // This is a sketch of an upgrade, but untested as it's not needed yet:
+  // if (storageVersion === 1) {
+  //   storageVersion = 2
+  //   safeStorage.setItem(storageKeys.bestMoveCount("levels/newLevelName.json"), safeStorage.getItem(storageKeys.bestMoveCount("levels/oldLevelName.json")))
+  //   safeStorage.setItem(storageKeys.bestSolution("levels/newLevelName.json"), safeStorage.getItem(storageKeys.bestSolution("levels/oldLevelName.json")))
+  //   safeStorage.deleteItem(storageKeys.bestMoveCount("levels/oldLevelName.json"))
+  //   safeStorage.deleteItem(storageKeys.bestSolution("levels/oldLevelName.json"))
+  //   safeStorage.setItem(storageKeys.localStorageFormatVersion, storageVersion)
+  // }
+  if (storageVersion !== LOCAL_STORAGE_FORMAT_VERSION) {
+    console.error("Invalid local storage format version.")
+  } else {
+    // Initialize local storage with default values
+    safeStorage.setItem(storageKeys.localStorageFormatVersion, LOCAL_STORAGE_FORMAT_VERSION.toString())
+    // TODO: Reserve space for level move counts and all settings so that variable size solution replays can never prevent saving basic progress/settings
   }
 }
 

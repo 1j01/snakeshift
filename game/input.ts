@@ -5,6 +5,7 @@ import { activePlayer, controlScheme, cyclePlayerControl, entities, onResize, on
 import { hitTestAllEntities, makeEventListenerGroup, neighborOf } from './helpers'
 import { showMainMenu } from './menus'
 import { pageToWorldTile, tileOnPage } from './rendering'
+import { safeStorage } from './safe-storage'
 import { storageKeys } from './shared-helpers'
 import Snake from './snake'
 import { highlightMove } from './tile-highlight'
@@ -315,14 +316,8 @@ export function handleInput(
     return gamepad.buttons[button].pressed && !last
   }
   function justPressedOrRepeated(button: number, gamepad: Gamepad) {
-    let gamepadRepeatRate = 150
-    let gamepadRepeatDelay = 300
-    try {
-      gamepadRepeatRate = parseInt(localStorage.getItem(storageKeys.gamepadRepeatRate) ?? String(gamepadRepeatRate))
-      gamepadRepeatDelay = parseInt(localStorage.getItem(storageKeys.gamepadRepeatDelay) ?? String(gamepadRepeatDelay))
-    } catch (error) {
-      console.error("Failed to get gamepad repeat settings:", error)
-    }
+    const gamepadRepeatRate = parseInt(safeStorage.getItem(storageKeys.gamepadRepeatRate) ?? '150')
+    const gamepadRepeatDelay = parseInt(safeStorage.getItem(storageKeys.gamepadRepeatDelay) ?? '300')
 
     const now = performance.now()
     // TODO: maybe only repeat one button at a time
@@ -456,13 +451,8 @@ export function handleInput(
 }
 
 function vibrate(valid: boolean) {
-  // TODO: allow configuring vibration duration temporarily if localStorage is disabled
-  try {
-    if (localStorage.getItem(storageKeys.hapticsEnabled) === "true") {
-      navigator.vibrate?.(parseInt(localStorage.getItem(valid ? storageKeys.hapticsValidDuration : storageKeys.hapticsInvalidDuration) ?? (valid ? "6" : "60")))
-    }
-  } catch (error) {
-    console.error("Vibration related error:", error)
+  if (safeStorage.getItem(storageKeys.hapticsEnabled) === "true") {
+    navigator.vibrate?.(parseInt(safeStorage.getItem(valid ? storageKeys.hapticsValidDuration : storageKeys.hapticsInvalidDuration) ?? (valid ? "6" : "60")))
   }
 }
 

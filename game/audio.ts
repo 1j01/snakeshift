@@ -6,6 +6,7 @@
 // █   █ █████ ████  ███ █████       \_| '  /
 //                                         '
 
+import { safeStorage } from "./safe-storage"
 import { storageKeys } from "./shared-helpers"
 
 declare global {
@@ -28,18 +29,12 @@ const loadProgress = document.getElementById("load-progress")!
 const muteButton = document.getElementById("mute-button")!
 const muteButtonText = document.getElementById("mute-button-text")!
 
-export let muted = false
-
-try {
-  muted = localStorage.getItem(storageKeys.muteSoundEffects) === "true"
-  let volume = parseFloat(localStorage.getItem(storageKeys.volume)!)
-  if (!isFinite(volume) || volume < 0 || volume > 1) {
-    volume = 0.5
-  }
-  mainGain.gain.value = volume
-} catch (error) {
-  console.error("Couldn't initialize preferences:", error)
+export let muted = safeStorage.getItem(storageKeys.muteSoundEffects) === "true"
+let volume = parseFloat(safeStorage.getItem(storageKeys.volume)!)
+if (!isFinite(volume) || volume < 0 || volume > 1) {
+  volume = 0.5
 }
+mainGain.gain.value = volume
 
 export const resources: Record<string, AudioBuffer> = {}
 
@@ -107,12 +102,8 @@ export const enableAudioViaUserGesture = () => {
 export const toggleMute = ({ savePreference = true } = {}) => {
   muted = !muted
   updateMuteButton()
-  try {
-    if (savePreference) {
-      localStorage.setItem(storageKeys.muteSoundEffects, String(muted))
-    }
-  } catch (error) {
-    // that's okay
+  if (savePreference) {
+    safeStorage.setItem(storageKeys.muteSoundEffects, String(muted))
   }
   if (muted) {
     void audioCtx.suspend()
@@ -126,11 +117,7 @@ export const setVolume = (volume: number) => {
   }
   mainGain.gain.value = volume
   updateMuteButton()
-  try {
-    localStorage.setItem(storageKeys.volume, String(volume))
-  } catch (error) {
-    // no big deal
-  }
+  safeStorage.setItem(storageKeys.volume, String(volume))
 }
 
 const updateMuteButton = () => {
