@@ -92,6 +92,9 @@ body:not(.replaying) #replay-bar {
 #replay-slider {
   width: 100%;
   height: 40px;
+}
+
+input {
   accent-color: #fff;
 }
 
