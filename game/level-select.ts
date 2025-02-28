@@ -23,6 +23,14 @@ let currentLevelButton: HTMLButtonElement | undefined = undefined
  */
 export let standaloneLevelMode = true
 
+const cache = new Map<string, Promise<Response>>()
+async function fetchCached(url: string) {
+  if (!cache.has(url)) {
+    cache.set(url, fetch(url))
+  }
+  return (await cache.get(url)!).clone()
+}
+
 export function initLevelSelect() {
   const levelButtons = document.querySelectorAll<HTMLButtonElement>('.level-button')
   for (const button of levelButtons) {
@@ -73,7 +81,7 @@ export function initLevelSelect() {
       ctx.fillStyle = '#000'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      const request = await fetch(levelURL)
+      const request = await fetchCached(levelURL)
       if (!request.ok) {
         levelPreviewError.textContent = `Failed to load level preview.\nStatus: ${request.statusText}`
         levelPreviewError.hidden = false
@@ -128,7 +136,7 @@ export function updateLevelSelect() {
 }
 
 export async function loadLevelFile(levelURL: string, loadedCallback?: () => void) {
-  const request = await fetch(levelURL)
+  const request = await fetchCached(levelURL)
   if (!request.ok) {
     alert(`Failed to load level ${JSON.stringify(levelURL)}: ${request.statusText}`)
     return

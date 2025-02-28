@@ -6,7 +6,6 @@
 - clarify which snake in a snake stack (snack) is selected, possibly with a minimalist popup bubble listing the overlapping snakes
 - should probably disallow pushing stars on top of other stars with crates
 - bug: ctrl+o isn't always loading a level, sometimes it just switches to edit mode for the current level
-- bug: restarting a level can incur load time (it should just cache the level in memory)
 - bug: got a "Level Complete" splash screen when dragging a level file onto the page while in the first level
 - bug: drag and drop isn't clearing undo history IN SOME UNREPRODUCIBLE CASE? I've tried twice to add tests, see stashes, for some bug but no reproduction yet
 
@@ -89,7 +88,6 @@
 ## Less important
 - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
 - reign in `onUpdate` over-extension/repurposing/overuse, maybe adding an onResize in renderer or something
-- preload levels, and share cache between level select's level previews and level loading
 - bug: undoing isn't hiding game win screen... right away, consistently? test might not catch this if it's a delay; not sure if it was a delay or it required hitting undo multiple times
 - configure eslint rules
 - ensure accessible name for buttons when labels are hidden (include aria-label or hide label spans visually instead of using `display: none`)
