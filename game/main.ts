@@ -23,6 +23,7 @@ const hapticsEnabledCheckbox = settingsDialog.querySelector<HTMLInputElement>('#
 const hapticsValidDurationInput = settingsDialog.querySelector<HTMLInputElement>('#settings-haptics-valid-move-ms')!
 const hapticsInvalidDurationInput = settingsDialog.querySelector<HTMLInputElement>('#settings-haptics-invalid-move-ms')!
 const gamepadRepeatRateInput = settingsDialog.querySelector<HTMLInputElement>('#settings-gamepad-repeat-rate')!
+const gamepadRepeatDelayInput = settingsDialog.querySelector<HTMLInputElement>('#settings-gamepad-repeat-delay')!
 
 playEditToggleButton.addEventListener('click', () => {
   setActivityMode(activityMode === "play" ? "edit" : "play")
@@ -44,7 +45,8 @@ settingsButton.addEventListener('click', () => {
     hapticsEnabledCheckbox.checked = localStorage.getItem(storageKeys.hapticsEnabled) === "true"
     hapticsValidDurationInput.value = localStorage.getItem(storageKeys.hapticsValidDuration) ?? "6"
     hapticsInvalidDurationInput.value = localStorage.getItem(storageKeys.hapticsInvalidDuration) ?? "60"
-    gamepadRepeatRateInput.value = localStorage.getItem(storageKeys.gamepadRepeatRate) ?? "250"
+    gamepadRepeatRateInput.value = localStorage.getItem(storageKeys.gamepadRepeatRate) ?? "150"
+    gamepadRepeatDelayInput.value = localStorage.getItem(storageKeys.gamepadRepeatDelay) ?? "300"
   } catch (error) {
     console.error("Failed to load settings from local storage", error)
   }
@@ -65,7 +67,8 @@ settingsDialogOKButton.addEventListener('click', (event) => {
   const hapticsValidDuration = parseInt(hapticsValidDurationInput.value)
   const hapticsInvalidDuration = parseInt(hapticsInvalidDurationInput.value)
   const gamepadRepeatRate = parseInt(gamepadRepeatRateInput.value)
-  if (isNaN(hapticsValidDuration) || isNaN(hapticsInvalidDuration) || isNaN(gamepadRepeatRate)) {
+  const gamepadRepeatDelay = parseInt(gamepadRepeatDelayInput.value)
+  if (isNaN(hapticsValidDuration) || isNaN(hapticsInvalidDuration) || isNaN(gamepadRepeatRate) || isNaN(gamepadRepeatDelay)) {
     alert("Invalid input. Please enter a number.")
     return
   }
@@ -74,6 +77,7 @@ settingsDialogOKButton.addEventListener('click', (event) => {
     localStorage.setItem(storageKeys.hapticsValidDuration, hapticsValidDuration.toString())
     localStorage.setItem(storageKeys.hapticsInvalidDuration, hapticsInvalidDuration.toString())
     localStorage.setItem(storageKeys.gamepadRepeatRate, gamepadRepeatRate.toString())
+    localStorage.setItem(storageKeys.gamepadRepeatDelay, gamepadRepeatDelay.toString())
   } catch (error) {
     console.error("Failed to save settings to local storage", error)
     alert("Failed to save settings. Make sure cookies are enabled and try again.")

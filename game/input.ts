@@ -315,14 +315,14 @@ export function handleInput(
     return gamepad.buttons[button].pressed && !last
   }
   function justPressedOrRepeated(button: number, gamepad: Gamepad) {
-    let gamepadRepeatRate = 250
+    let gamepadRepeatRate = 150
+    let gamepadRepeatDelay = 300
     try {
       gamepadRepeatRate = parseInt(localStorage.getItem(storageKeys.gamepadRepeatRate) ?? String(gamepadRepeatRate))
+      gamepadRepeatDelay = parseInt(localStorage.getItem(storageKeys.gamepadRepeatDelay) ?? String(gamepadRepeatDelay))
     } catch (error) {
-      console.error("Failed to get gamepad repeat rate:", error)
+      console.error("Failed to get gamepad repeat settings:", error)
     }
-    // TODO: allow configuring this separately (kinda important to actually balance single press with moving long distances)
-    const gamepadRepeatDelay = gamepadRepeatRate
 
     const now = performance.now()
     // TODO: maybe only repeat one button at a time

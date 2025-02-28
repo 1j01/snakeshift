@@ -178,6 +178,7 @@ export const storageKeys = {
   hapticsValidDuration: 'snakeshift:hapticsValidDuration',
   hapticsInvalidDuration: 'snakeshift:hapticsInvalidDuration',
   gamepadRepeatRate: 'snakeshift:gamepadRepeatRate',
+  gamepadRepeatDelay: 'snakeshift:gamepadRepeatDelay',
   bestSolution: (levelId: string) => `snakeshift:bestSolution:${levelId}`,
   bestMoveCount: (levelId: string) => `snakeshift:bestMoveCount:${levelId}`,
   localStorageFormatVersion: 'snakeshift:localStorageFormatVersion',
