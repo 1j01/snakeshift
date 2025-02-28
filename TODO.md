@@ -41,7 +41,7 @@
 - rotate/flip?
 - bug: outdated tile highlight after closing level info dialog can be confusing, with the old tile size implying the dimensions aren't changed
 - handle edge case of toggling edit mode while dragging something
-- restart button doesn't make sense in level editor; clear is the closest, could replace it, and move other action buttons in the level editor into the game options bar
+- could try moving action buttons in the level editor into the game options bar (or a third bar??); clear button could replace the restart button since they're semantically similar
 - make black and white behave symmetrically, where you can't tell which is an entity and which is empty space
   - "erase" on black to add white
   - selection tool should be able to drag black onto white even if it's not formed from entities

@@ -337,6 +337,10 @@ body[data-screen="credits"] .level-flow-control-button {
   display: none;
 }
 
+.editing #restart-level-button {
+  display: none;
+}
+
 :fullscreen #fullscreen-button {
   display: none;
 }

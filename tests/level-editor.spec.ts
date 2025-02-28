@@ -333,14 +333,16 @@ test.describe('level editor', () => {
     test.skip('tool bar should be centered if there is enough space', () => { /* TODO */ })
   })
   test.describe('inapplicable actions', () => {
-    test.fail('restart level (R) should not do anything, and button should be hidden', async ({ page }) => {
+    test('restart level (R) should not do anything, and button should be hidden', async ({ page }) => {
       // Arguably I could make R clear the level same as N, to make it more guessable.
       // Then again, R could mean different things, so maybe clear shouldn't be "guessable".
       // Even if it's undoable, it may be upsetting and you may not consider that it could be undoable.
       await expect(page.getByText('Restart Level')).not.toBeVisible()
       await expect(page.locator('#restart-level')).not.toBeVisible()
+      await page.getByRole('button', { name: 'Wall (White)' }).click()
       await clickTile(page, { x: 1, y: 1 })
       await page.keyboard.press('r')
+      // Presumably the way that it would fail would be if the level was reset to an empty level.
       expect(await getCurrentLevelContent(page)).toMatchSnapshot()
     })
   })
