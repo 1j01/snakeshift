@@ -147,7 +147,13 @@ export function updateLevelSelect() {
       replayButton.addEventListener('click', () => {
         loadLevelFromText(solution, "replay")
       })
-      replayButton.textContent = "View Replay"
+      // replayButton.textContent = "View Replay"
+      const img = document.createElement('img')
+      img.src = "graphics/view-replay.svg"
+      img.alt = "View Replay"
+      img.width = 32
+      img.height = 32
+      replayButton.append(img)
     }
   }
 }
