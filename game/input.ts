@@ -309,52 +309,45 @@ export function handleInput(
   // ---------------
 
   const buttonsLast = new Map<number, Map<number, boolean>>()
-  const buttonsRepeatingNow = new Map<number, Map<number, boolean>>()
-  const buttonRepeatIIDs = new Map<number, Map<number, number>>()
+  const buttonRepeatTimes = new Map<number, Map<number, number>>()
   function justPressed(button: number, gamepad: Gamepad) {
     const last = buttonsLast.get(gamepad.index)?.get(button)
     return gamepad.buttons[button].pressed && !last
   }
   function justPressedOrRepeated(button: number, gamepad: Gamepad) {
-    // TODO: delay before repeating (kinda important to actually balance single press with moving long distances)
-    // Can probably simplify this a lot by using timestamps instead of setInterval especially if I'd be introducing a separate delay
-    // Would have access to the up-to-date gamepad object too.
+    let gamepadRepeatRate = 250
+    try {
+      gamepadRepeatRate = parseInt(localStorage.getItem(storageKeys.gamepadRepeatRate) ?? String(gamepadRepeatRate))
+    } catch (error) {
+      console.error("Failed to get gamepad repeat rate:", error)
+    }
+    // TODO: allow configuring this separately (kinda important to actually balance single press with moving long distances)
+    const gamepadRepeatDelay = gamepadRepeatRate
+
+    const now = performance.now()
     // TODO: maybe only repeat one button at a time
     // (unless pressed at almost exactly the same time? Windows seems to make this exception for arrow keys, allowing diagonals.)
     if (justPressed(button, gamepad)) {
-      // console.log('just pressed', button, buttonRepeatIIDs, gamepad.index)
-      clearInterval(buttonRepeatIIDs.get(gamepad.index)?.get(button))
-      if (!buttonRepeatIIDs.has(gamepad.index)) {
-        buttonRepeatIIDs.set(gamepad.index, new Map())
+      if (!buttonRepeatTimes.has(gamepad.index)) {
+        buttonRepeatTimes.set(gamepad.index, new Map())
       }
-      let gamepadRepeatRate = 250
-      try {
-        gamepadRepeatRate = parseInt(localStorage.getItem(storageKeys.gamepadRepeatRate) ?? String(gamepadRepeatRate))
-      } catch (error) {
-        console.error("Failed to get gamepad repeat rate:", error)
-      }
-      // console.log(gamepad.timestamp)
-      if (gamepadRepeatRate !== 0) {
-        // @ts-expect-error conflict with @types/node
-        buttonRepeatIIDs.get(gamepad.index)!.set(button, setInterval(() => {
-          // console.log('repeating', button, gamepad.buttons[button].pressed, gamepad.timestamp)
-          // gamepad is actually a snapshot, so we need to get an up to date one
-          // this sucks, this ended up way more complicated than I thought
-          // "oh, I'll just encapsulate it in a simple function like the other one" -- my naive ass 40 minutes ago
-          // if (!gamepad.buttons[button].pressed) {
-          const currentGamepad = navigator.getGamepads()[gamepad.index]
-          if (!currentGamepad || !currentGamepad.buttons[button].pressed) {
-            clearInterval(buttonRepeatIIDs.get(gamepad.index)!.get(button))
-            buttonRepeatIIDs.get(gamepad.index)!.delete(button)
-            return
-          }
-          buttonsRepeatingNow.get(gamepad.index)?.set(button, true)
-        }, gamepadRepeatRate))
-      }
+      buttonRepeatTimes.get(gamepad.index)!.set(button, now + gamepadRepeatDelay)
       return true
     }
-    const repeatingNow = !!buttonsRepeatingNow.get(gamepad.index)?.get(button)
-    return repeatingNow
+    if (
+      gamepad.buttons[button].pressed &&
+      gamepadRepeatRate !== 0 &&
+      buttonRepeatTimes.has(gamepad.index) &&
+      buttonRepeatTimes.get(gamepad.index)!.has(button) &&
+      now >= buttonRepeatTimes.get(gamepad.index)!.get(button)!
+    ) {
+      // TODO: avoid dropping time on the floor by using existing timestamp instead of `now`
+      // (should theoretically give a more even rhythm in the face of variable frame rates)
+      // console.log(now - buttonRepeatTimes.get(gamepad.index)!.get(button)!)
+      buttonRepeatTimes.get(gamepad.index)!.set(button, now + gamepadRepeatRate)
+      return true
+    }
+    return false
   }
   const minDistance = 0.5
   function pollGamepads() {
@@ -440,7 +433,6 @@ export function handleInput(
       }
 
       buttonsLast.set(gamepad.index, new Map(gamepad.buttons.map((button, index) => [index, button.pressed])))
-      buttonsRepeatingNow.set(gamepad.index, new Map(gamepad.buttons.map((button, index) => [index, false])))
       for (const button of gamepad.buttons) {
         if (button.pressed) {
           usingGamepad = true
