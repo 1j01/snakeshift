@@ -8,14 +8,13 @@
   <title>Snakeshift</title>
   <!-- <link rel="icon" type="image/png" href="/graphics/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
   <link rel="icon" type="image/png" href="./graphics/yin-yang-larger-sneks-180px.png" sizes="180x180" />
-  <script type="module" crossorigin src="./assets/index-DpRRMBxE.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-uHJk7J-m.css">
+  <script type="module" crossorigin src="./assets/index-Sqze4CI8.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-OcSSeRzh.css">
 </head>
 
 <body>
   <div class="screen active" id="main-menu">
-    <h1>Snake<span
-        style="color: black; background: white; border-radius: 20px 30px / 10px 0px; padding: 4px">Shift</span></h1>
+    <h1>Snake<span class="logo-shift">Shift</span></h1>
     <button class="bw-button" id="play-button" autofocus>Play</button>
     <button class="bw-button" id="level-select-button">Level Select</button>
     <button class="bw-button" id="level-editor-button">Level Editor</button>
@@ -179,6 +178,7 @@
       <span class="button-text">Redo</span>
     </button>
     <button class="bw-button" id="mute-button" aria-keyshortcuts="M" aria-pressed="false">
+      <!-- TODO: indicate toggle state through icon, not just the sometimes-hidden text -->
       <img src="./graphics/speaker.svg" alt="" />
       <span class="button-text" id="mute-button-text">Mute</span>
     </button>
@@ -386,13 +386,14 @@
   <div class="level-specific-overlay" data-for-level="levels/easy/003-ferry.json" hidden>
     <!-- <h2>How to Undo</h2> -->
     <p class="keyboard-only">
-      Press <kbd>Z</kbd> to undo, or <kbd>R</kbd> to restart the level.
+      You can press <kbd>Z</kbd> to undo, or <kbd>R</kbd> to restart the level.
     </p>
     <p class="gamepad-only">
-      Press <big>ⓧ</big> to undo, or <big>Ⓨ</big> to restart the level.
+      You can press <big>ⓧ</big> to undo, or <big>Ⓨ</big> to restart the level.
     </p>
+    <!-- TODO: for non-touch pointer devices, show keyboard shortcuts? -->
     <p class="pointer-only">
-      Press <img src="./graphics/undo.svg" alt="the curved left arrow button"
+      You can press <img src="./graphics/undo.svg" alt="the curved left arrow button"
         style="filter: invert(); vertical-align: middle; height: 2em" /> to undo,
       or <img src="./graphics/restart.svg" alt="the circular arrow button"
         style="filter: invert(); vertical-align: middle; height: 2em" /> to restart the level.
@@ -402,14 +403,15 @@
     <!-- Want neutral language that doesn't imply you're having trouble. -->
     <!-- <h2>Stuck?</h2> -->
     <p class="keyboard-only">
-      Press <kbd>Z</kbd> to undo, or <kbd>R</kbd> to restart
+      Press <kbd>Z</kbd> to undo or <kbd>R</kbd> to restart
     </p>
     <p class="gamepad-only">
-      Press <big>ⓧ</big> to undo, or <big>Ⓨ</big> to restart
+      Press <big>ⓧ</big> to undo or <big>Ⓨ</big> to restart
     </p>
+    <!-- TODO: for non-touch pointer devices, show keyboard shortcuts? -->
     <p class="pointer-only">
       Press <img src="./graphics/undo.svg" alt="the curved left arrow button"
-        style="filter: invert(); vertical-align: middle; height: 2em" /> to undo,
+        style="filter: invert(); vertical-align: middle; height: 2em" /> to undo
       or <img src="./graphics/restart.svg" alt="the circular arrow button"
         style="filter: invert(); vertical-align: middle; height: 2em" /> to restart
     </p>
