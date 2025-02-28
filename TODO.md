@@ -34,7 +34,7 @@
 - would be fun/disappointing to try and play this on a kindle (see branch `kindle-attempt-2`)
 
 ## Level Editor
-- shouldn't place Grass or Wall (Both) on top of snakes
+- shouldn't place Grass or Wall (Both) on top of snakes (Grass could go under, but Wall (Both) should not be allowed (or should erase the snake segment))
 - auto-save and/or onbeforeunload
 - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
 - should be easier to deselect (escape, ctrl+d, enter?)
@@ -51,7 +51,7 @@
 
 ## Aesthetics:
 - visuals:
-  - there's a slight bug where Block is not always sorted to bottom, which I can see when dragging with the pointer control scheme, which animates the snake slightly beyond its cell, in the level Ferry
+  - there's a slight bug where Block is not always sorted to bottom, which I can see when dragging with the pointer control scheme, which animates the snake slightly beyond its cell, in the level Ferry (this might just be the specific level isn't sorted because sorting logic wasn't in place when it was created; but I could add a `sortEntities` call when loading the level)
   - enlarge level border
   - 1x1 snake should change direction when moving
     - need to store heading in a different way, to work with a single segment
@@ -101,8 +101,7 @@
 	- arrow keys to navigate steps (currently relies on slider focus and native arrow key handling)
 	- undo/redo buttons to navigate steps (should update slider)
 - move unsaved changes prompt tests to level editor spec?
-- game playthrough test:
-  - upgrade the playthrough format to include inputs instead of inferring them
+- simplify game playthrough test by upgrading the playthrough format to include inputs instead of inferring them
 - Node.js 23 breaks Playwright tests:
   - How does Playwright normally load typescript files, that the new Node.js built-in support is able to interfere with?
   - What am I supposed to do as a user?
