@@ -14,7 +14,6 @@
 - show the number of moves in the level select
 - define a par for each level
 - store hash of the level content; if it differs, test the stored solution against the new level; if it works, keep it; if it doesn't, discard it
-- maybe allow viewing your best solution
 - stretch goal: submit solutions to a server for verification and compare with others
 
 ## Saving playthroughs

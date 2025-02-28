@@ -1,6 +1,6 @@
 import { playSound } from "./audio"
 import { activityMode, restartLevel } from "./game"
-import { deserialize, entities, levelInfo, loadLevel, serialize, undo } from "./game-state"
+import { deserialize, entities, levelInfo, loadLevel, loadLevelFromText, serialize, undo } from "./game-state"
 import { showLevelSplash } from "./menus"
 import { drawEntities } from "./rendering"
 import { storageKeys } from "./shared-helpers"
@@ -34,6 +34,13 @@ async function fetchCached(url: string) {
 export function initLevelSelect() {
   const levelButtons = document.querySelectorAll<HTMLButtonElement>('.level-button')
   for (const button of levelButtons) {
+    // Creating a button inside a button is not valid, so wrap the button in a div.
+    // (Doing this in the HTML would be too repetitive.)
+    const wrapper = document.createElement('div')
+    wrapper.className = 'level-button-wrapper'
+    button.replaceWith(wrapper)
+    wrapper.append(button)
+
     const levelURL = button.getAttribute('data-level')!
     button.addEventListener('click', () => {
       // Show splash before file is loaded to mask loading time
@@ -128,10 +135,20 @@ export function updateLevelSelect() {
   for (const button of document.querySelectorAll<HTMLButtonElement>('.level-button')) {
     const levelId = button.getAttribute('data-level')!
     const moveCount = Number(localStorage.getItem(storageKeys.bestMoveCount(levelId)) ?? Infinity)
-    // const hasPlaythrough = localStorage.hasItem(storageKeys.bestSolution(levelId))
+    const solution = localStorage.getItem(storageKeys.bestSolution(levelId))
     const completed = moveCount < Infinity
     button.dataset.moveCount = String(moveCount)
     button.dataset.completed = String(completed)
+    let replayButton = button.parentElement!.querySelector('.replay-button')
+    if (solution && !replayButton) {
+      replayButton = document.createElement('button')
+      replayButton.className = 'bw-button replay-button'
+      button.parentElement!.append(replayButton)
+      replayButton.addEventListener('click', () => {
+        loadLevelFromText(solution, "replay")
+      })
+      replayButton.textContent = "View Replay"
+    }
   }
 }
 

@@ -222,10 +222,21 @@ input::selection,
   max-width: 900px;
 }
 
+.level-button-wrapper {
+  display: inline-flex;
+  position: relative;
+}
+
 #level-select .level-button {
   display: inline-flex;
   min-width: 100px;
   position: relative;
+}
+
+.replay-button {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 #level-select .level-button[data-completed="true"]::after,
