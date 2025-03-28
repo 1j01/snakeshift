@@ -93,13 +93,13 @@ export const loadResources = async (resourcePathsByID: Record<string, string>): 
 }
 // export let allResourcesLoadedPromise
 
-export const enableAudioViaUserGesture = () => {
+export function enableAudioViaUserGesture() {
   if (!muted) {
     void audioCtx.resume()
   }
 }
 
-export const toggleMute = ({ savePreference = true } = {}) => {
+export function toggleMute({ savePreference = true } = {}) {
   muted = !muted
   updateMuteButton()
   if (savePreference) {
@@ -111,7 +111,7 @@ export const toggleMute = ({ savePreference = true } = {}) => {
     void audioCtx.resume()
   }
 }
-export const setVolume = (volume: number) => {
+export function setVolume(volume: number) {
   if (muted) {
     toggleMute()
   }
@@ -155,7 +155,7 @@ const showErrorMessage = (message: string, error: unknown) => {
   alert(`${message}\n\n${error}`)
 }
 
-export const playSound = (soundName: SoundID, { playbackRate = 1, volume = 1, cutOffEndFraction = 0 } = {}) => {
+export function playSound(soundName: SoundID, { playbackRate = 1, volume = 1, cutOffEndFraction = 0 } = {}) {
   try {
     if (muted) {
       return
@@ -248,7 +248,7 @@ const melodyMidi = [...songABC.replace(/^([A-Z]:|%).*$/gim, "").matchAll(/([A-G]
   return midiNote
 })
 const melodyFrequencies = melodyMidi.map(midiToFreq)
-export const playMelodicSound = (soundName: SoundID, noteIndex: number) => {
+export function playMelodicSound(soundName: SoundID, noteIndex: number) {
   // const playbackRate = Math.pow(2, this.segments.length / 10) / 10
   // const playbackRate = [1, 2, 3, 4, 5, 6, 4, 3, 2][this.segments.length % 8] * 10
   // const scale = [1, 9 / 8, 5 / 4, 4 / 3, 3 / 2, 5 / 3, 15 / 8, 2]
