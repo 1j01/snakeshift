@@ -39,25 +39,25 @@ export let controlScheme = ControlScheme.KeyboardAbsoluteDirection
 document.body.dataset.controlScheme = controlScheme // TODO: DRY? but don't want to call postUpdate too early
 
 let levelSessionId = 0
-export function startNewLevelSession() {
+function startNewLevelSession() {
   levelSessionId += 1
 }
 
 export let activityMode: "edit" | "play" | "replay" | "menu" = "menu"
 
-export let wonLevel = false
+let wonLevel = false
 export let levelHasGoal = false // This can be derived from `entities` at any time, but is cached for performance, theoretically.
 
 /** base level state, i.e. the designed initial state of the current level */
 let editorState: GameStateString | undefined = undefined
 
-export const undos: GameStateString[] = []
-export const redos: GameStateString[] = []
+const undos: GameStateString[] = []
+const redos: GameStateString[] = []
 
 // Note that in edit mode, `undos` and `redos` are used for the editor's history.
 // Only in play mode are `editorUndos` and `editorRedos` used, to hold the editor's history while play-testing a level.
-export const editorUndos: GameStateString[] = []
-export const editorRedos: GameStateString[] = []
+const editorUndos: GameStateString[] = []
+const editorRedos: GameStateString[] = []
 
 
 export function undoable() {
@@ -262,7 +262,7 @@ export function setActivePlayer(snake: Snake | undefined) {
   postUpdate()
 }
 
-export function guessDefaultActivePlayer() {
+function guessDefaultActivePlayer() {
   if (!activePlayer) {
     // Ideally, levels would be saved with an active player, but currently there's nothing to activate a player in edit mode,
     // and anyway I have a bunch of levels saved at this point.
@@ -541,7 +541,7 @@ export function setActivityMode(newMode: "edit" | "play" | "replay" | "menu") {
   updatePageTitleAndLevelSpecificOverlays()
 }
 
-export function storeBaseLevelState() {
+function storeBaseLevelState() {
   editorState = serialize()
   levelHasGoal = entities.some(e => e instanceof Food)
   wonLevel = false
