@@ -15,7 +15,6 @@ export default class Snake extends Entity {
   public growOnNextMove = false
 
   private _highlightTime = -Infinity
-  private _highlightCanvas = document.createElement('canvas')
   private _melodyIndex = 0
   private _movementPreview: { x: number, y: number } = { x: 0, y: 0 }
   private _headRelativeOffset: { x: number, y: number } = { x: 0, y: 0 }
@@ -34,8 +33,6 @@ export default class Snake extends Entity {
     }
   }
   toJSON(): object {
-    // Must exclude _highlightCanvas; by default it will be serialized
-    // as an empty object, and will overwrite the canvas when deserialized.
     const fusedSnakeIds = Array.from(this.fusedSnakeIds).filter(id => id !== this.id && entities.some(e => e instanceof Snake && e.id === id))
     return {
       id: this.id,
@@ -95,21 +92,21 @@ export default class Snake extends Entity {
     // Tongue should always go on top of other snakes.
     this._drawHeadDetails(ctx)
     // Restful outlines for general clarity
-    this._drawBodyOutline(ctx, (highlightCtx, transform) => {
+    this._drawBodyOutline(ctx, (ctx, transform) => {
       // if (selectedInLevelEditor) {
-      //   highlightCtx.setLineDash([0.1, 0.2])
+      //   ctx.setLineDash([0.1, 0.2])
       // }
-      highlightCtx.strokeStyle = this.segments[0].layer === CollisionLayer.White ? '#fff' : '#000'
-      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
-      highlightCtx.stroke()
+      ctx.strokeStyle = this.segments[0].layer === CollisionLayer.White ? '#fff' : '#000'
+      ctx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
+      ctx.stroke()
     })
-    this._drawBodyOutline(ctx, (highlightCtx, transform) => {
+    this._drawBodyOutline(ctx, (ctx, transform) => {
       if (selectedInLevelEditor) {
-        highlightCtx.setLineDash([0.1, 0.2])
+        ctx.setLineDash([0.1, 0.2])
       }
-      highlightCtx.strokeStyle = this.segments[0].layer === CollisionLayer.White ? '#000' : '#fff'
-      highlightCtx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
-      highlightCtx.stroke()
+      ctx.strokeStyle = this.segments[0].layer === CollisionLayer.White ? '#000' : '#fff'
+      ctx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
+      ctx.stroke()
     })
   }
   draw3(ctx: CanvasRenderingContext2D): void {
@@ -117,10 +114,10 @@ export default class Snake extends Entity {
     const msSinceHighlight = performance.now() - this._highlightTime
     const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
     if (highlight > 0) {
-      this._drawBodyOutline(ctx, (highlightCtx, transform) => {
-        highlightCtx.strokeStyle = `hsla(40, 100%, 50%, ${highlight})`
-        highlightCtx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
-        highlightCtx.stroke()
+      this._drawBodyOutline(ctx, (ctx, transform) => {
+        ctx.strokeStyle = `hsla(40, 100%, 50%, ${highlight})`
+        ctx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
+        ctx.stroke()
       })
     }
     // debug
@@ -146,36 +143,22 @@ export default class Snake extends Entity {
     ctx: CanvasRenderingContext2D,
     draw: (ctx: CanvasRenderingContext2D, transform: DOMMatrix) => void,
   ): void {
-    const transform = ctx.getTransform()
-    this._highlightCanvas.width = ctx.canvas.width
-    this._highlightCanvas.height = ctx.canvas.height
-    const highlightCtx = this._highlightCanvas.getContext('2d')!
-    highlightCtx.save()
-    highlightCtx.clearRect(0, 0, highlightCtx.canvas.width, highlightCtx.canvas.height)
-    highlightCtx.lineJoin = "round"
-    highlightCtx.lineCap = "round"
-    highlightCtx.setTransform(transform)
-    this._bodyPath(highlightCtx)
-    draw(highlightCtx, transform)
+    ctx.save()
 
-    // Cut out the snake's fill, leaving a clean outline.
-    highlightCtx.globalCompositeOperation = 'destination-out'
-    this._bodyPath(highlightCtx)
-    highlightCtx.fill()
-    highlightCtx.restore()
+    // clip() does the inverse of what I want
+    // so create a combined clip path with the body path and the canvas bounds
+    // have to save/restore for the transform reset
+    ctx.save()
+    this._bodyPath(ctx)
     ctx.resetTransform()
-    try {
-      ctx.drawImage(this._highlightCanvas, 0, 0)
-    } catch (e) {
-      // I'm getting "Uncaught DOMException: CanvasRenderingContext2D.drawImage: Passed-in canvas is empty"
-      // and searching online for this error, there's only one result,
-      // and it's in Chinese,
-      // and it looks AI-generated.
-      // Does this error message literally just mean the canvas is blank?
-      // Who decided to make that an error!? This is in Firefox, by the way.
-    }
-    ctx.setTransform(transform)
+    ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height)
+    ctx.restore()
 
+    ctx.clip("evenodd")
+    this._bodyPath(ctx)
+    draw(ctx, ctx.getTransform())
+
+    ctx.restore()
   }
   private _drawHeadDetails(ctx: CanvasRenderingContext2D): void {
     const head = this.segments[0]
