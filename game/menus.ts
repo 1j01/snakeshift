@@ -91,7 +91,7 @@ export function showMainMenu() {
   return true
 }
 
-export const splashScreenTimeouts = new Set<number>()
+const splashScreenTimeouts = new Set<number>()
 export function showLevelSplash(options: { title: string, duration?: number }) {
   // Note: splash screens may be dismissed early by pressing Enter/Space/Escape
   hideScreens()

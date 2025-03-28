@@ -136,7 +136,7 @@ export function addProblem(tile: Tile, type: "overlap" | "collision" | "out-of-b
 export function clearProblems() {
   problems.length = 0
 }
-export function drawProblems(ctx: CanvasRenderingContext2D) {
+function drawProblems(ctx: CanvasRenderingContext2D) {
   ctx.save()
   ctx.globalAlpha = 0.5 // makes emoji transparent as well, as opposed to rgba() color, although this may look weird on some platforms, where emoji are multi-layer vector graphics
   ctx.fillStyle = '#f00'
@@ -155,7 +155,7 @@ export function drawProblems(ctx: CanvasRenderingContext2D) {
   ctx.restore()
 }
 
-export function viewToWorld(clientPoint: { clientX: number, clientY: number }): Point {
+function viewToWorld(clientPoint: { clientX: number, clientY: number }): Point {
   const rect = canvas.getBoundingClientRect()
   const x = clientPoint.clientX - rect.left
   const y = clientPoint.clientY - rect.top
@@ -174,7 +174,7 @@ export function viewToWorld(clientPoint: { clientX: number, clientY: number }): 
   }
 }
 
-export function worldToView(worldPoint: Point): Point {
+function worldToView(worldPoint: Point): Point {
   const rect = canvas.getBoundingClientRect()
   const point = new DOMPoint(worldPoint.x, worldPoint.y).matrixTransform(transform)
   return {

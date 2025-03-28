@@ -29,7 +29,7 @@ const loadProgress = document.getElementById("load-progress")!
 const muteButton = document.getElementById("mute-button")!
 const muteButtonText = document.getElementById("mute-button-text")!
 
-export let muted = safeStorage.getItem(storageKeys.muteSoundEffects) === "true"
+let muted = safeStorage.getItem(storageKeys.muteSoundEffects) === "true"
 let volume = parseFloat(safeStorage.getItem(storageKeys.volume)!)
 if (!isFinite(volume) || volume < 0 || volume > 1) {
   volume = 0.5

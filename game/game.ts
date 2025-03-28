@@ -30,7 +30,7 @@ let wonLevel = false
 export const editorUndos: GameStateString[] = []
 export const editorRedos: GameStateString[] = []
 let editorState: GameStateString | undefined = undefined
-export let levelHasGoal = false
+let levelHasGoal = false
 let cleanup = handleInput(canvas)
 export function setActivityMode(newMode: "edit" | "play" | "replay" | "menu") {
   // might make sense to manage levelSessionId here, but it might not matter

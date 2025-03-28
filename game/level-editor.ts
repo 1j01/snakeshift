@@ -656,7 +656,7 @@ export function translateSelection(dx: number, dy: number) {
   setHighlight(getSelectionBox(), { isSelection: true, valid: true })
 }
 
-export function deleteEntity(entity: Entity) {
+function deleteEntity(entity: Entity) {
   const index = entities.indexOf(entity)
   if (index === -1) {
     throw new Error(`Could not find entity to delete in entities array`)

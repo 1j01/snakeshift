@@ -10,7 +10,7 @@ import { LOCAL_STORAGE_FORMAT_VERSION, storageKeys } from "./shared-helpers"
 import './testing-interface'
 import { ControlScheme } from "./types"
 
-export const playEditToggleButton = document.querySelector<HTMLButtonElement>('#play-edit-toggle-button')!
+const playEditToggleButton = document.querySelector<HTMLButtonElement>('#play-edit-toggle-button')!
 const restartLevelButton = document.querySelector<HTMLButtonElement>('#restart-level-button')!
 const undoButton = document.querySelector<HTMLButtonElement>('#undo-button')!
 const redoButton = document.querySelector<HTMLButtonElement>('#redo-button')!
