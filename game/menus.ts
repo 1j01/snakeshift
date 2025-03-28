@@ -1,6 +1,5 @@
 import { playSound } from "./audio"
-import { activityMode, setActivityMode } from "./game"
-import { clearLevel, confirmLoseUnsavedChanges } from "./game-state"
+import { activityMode, clearLevel, confirmLoseUnsavedChanges, setActivityMode } from "./game-state"
 import { loadFirstLevel, standaloneLevelMode, updateLevelSelect } from "./level-select"
 
 const playButton = document.querySelector<HTMLButtonElement>('#play-button')!

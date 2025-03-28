@@ -1,6 +1,6 @@
 import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
-import { activityMode, animate, handleLevelCompletion, restartLevel, setActivityMode, shouldInputBeAllowed } from "./game"
-import { clearLevel, goToHistoryIndex, loadLevel, openLevel, redo, saveLevel, savePlaythrough, setControlScheme, undo, undoable } from "./game-state"
+import { animate, shouldInputBeAllowed } from "./game"
+import { activityMode, clearLevel, goToHistoryIndex, handleLevelCompletion, loadLevel, openLevel, redo, restartLevel, saveLevel, savePlaythrough, setActivityMode, setControlScheme, undo, undoable } from "./game-state"
 import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
 import { hideLevelSplash, initMainMenu, showMainMenu } from "./menus"

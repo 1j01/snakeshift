@@ -1,7 +1,7 @@
 import { playSound } from './audio'
-import { activityMode, restartLevel, shouldInputBeAllowed } from './game'
+import { shouldInputBeAllowed } from './game'
 import { analyzeMoveRelative, takeMove } from './game-logic'
-import { activePlayer, controlScheme, cyclePlayerControl, entities, onResize, onUpdate, postUpdate, redo, setActivePlayer, setControlScheme, undo } from './game-state'
+import { activePlayer, activityMode, controlScheme, cyclePlayerControl, entities, onResize, onUpdate, postUpdate, redo, restartLevel, setActivePlayer, setControlScheme, undo } from "./game-state"
 import { hitTestAllEntities, makeEventListenerGroup, neighborOf } from './helpers'
 import { showMainMenu } from './menus'
 import { pageToWorldTile, tileOnPage } from './rendering'

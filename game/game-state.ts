@@ -1,13 +1,16 @@
 import * as jsondiffpatch from "jsondiffpatch"
 import { playSound } from "./audio"
 import Entity from "./entity"
-import { activityMode, editorRedos, editorUndos, setActivityMode, shouldInputBeAllowed, storeBaseLevelState } from "./game"
+import { Food } from "./food"
+import { checkLevelStuck, checkLevelWon, shouldInputBeAllowed, storeLevelSolution } from "./game"
 import { canMove } from "./game-logic"
 import { hitTestAllEntities, makeEntity, withinLevel } from "./helpers"
-import { deleteSnakeSegment } from "./level-editor"
-import { currentLevelID, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
+import { handleInput } from "./input"
+import { deleteSnakeSegment, handleInputForLevelEditing } from "./level-editor"
+import { currentLevelID, loadLevelFile, loadNextLevel, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
 import { hideScreens, showLevelSplash } from "./menus"
 import { RectangularEntity } from "./rectangular-entity"
+import { canvas } from "./rendering"
 import { LEVEL_FORMAT_VERSION, PLAYTHROUGH_FORMAT_VERSION, isPlaythrough, parsePlaythrough } from "./shared-helpers"
 import Snake from "./snake"
 import { ControlScheme, GameStateString, ParsedGameState } from "./types"
@@ -40,8 +43,23 @@ export function startNewLevelSession() {
   levelSessionId += 1
 }
 
+export let activityMode: "edit" | "play" | "replay" | "menu" = "menu"
+
+export let wonLevel = false
+export let levelHasGoal = false // This can be derived from `entities` at any time, but is cached for performance, theoretically.
+
+/** base level state, i.e. the designed initial state of the current level */
+let editorState: GameStateString | undefined = undefined
+
 export const undos: GameStateString[] = []
 export const redos: GameStateString[] = []
+
+// Note that in edit mode, `undos` and `redos` are used for the editor's history.
+// Only in play mode are `editorUndos` and `editorRedos` used, to hold the editor's history while play-testing a level.
+export const editorUndos: GameStateString[] = []
+export const editorRedos: GameStateString[] = []
+
+
 export function undoable() {
   undos.push(serialize())
   redos.length = 0
@@ -476,5 +494,98 @@ export function openLevel() {
     loadLevel(file, "edit")
   })
   input.click()
+}
+
+let cleanup = handleInput(canvas)
+export function setActivityMode(newMode: "edit" | "play" | "replay" | "menu") {
+  // might make sense to manage levelSessionId here, but it might not matter
+  if (activityMode === newMode) return
+  console.log("Switching from", activityMode, "to", newMode)
+  cleanup()
+  activityMode = newMode
+  // Could unify with a [data-activity-mode] data attribute...
+  document.body.classList.toggle('editing', activityMode === "edit")
+  document.body.classList.toggle('replaying', activityMode === "replay")
+
+  if (activityMode === "edit") {
+    setStandaloneLevelMode()
+    cleanup = handleInputForLevelEditing(canvas)
+    if (editorState) {
+      undos.splice(0, undos.length, ...editorUndos)
+      redos.splice(0, redos.length, ...editorRedos)
+      deserialize(editorState)
+    }
+  } else if (activityMode === "play" || activityMode === "replay") {
+    if (activityMode === "play") {
+      cleanup = handleInput(canvas)
+    }
+    editorUndos.splice(0, editorUndos.length, ...undos)
+    editorRedos.splice(0, editorRedos.length, ...redos)
+    levelHasGoal = entities.some(e => e instanceof Food)
+    undos.length = 0
+    redos.length = 0
+    guessDefaultActivePlayer()
+    storeBaseLevelState()
+  } else {
+    setStandaloneLevelMode()
+    cleanup = handleInput(canvas)
+    clearLevel(false, false)
+    undos.length = 0
+    redos.length = 0
+    editorUndos.length = 0
+    editorRedos.length = 0
+    editorState = undefined
+    levelHasGoal = false
+  }
+  wonLevel = false // might not need this
+  updatePageTitleAndLevelSpecificOverlays()
+}
+
+export function storeBaseLevelState() {
+  editorState = serialize()
+  levelHasGoal = entities.some(e => e instanceof Food)
+  wonLevel = false
+}
+
+export function restartLevel() {
+  if (activityMode === "replay") {
+    goToHistoryIndex(0)
+    return
+  }
+  if (activityMode !== "play") return
+  if (currentLevelID()) {
+    // I don't want to special case this, but I'm so tired from whacking moles
+    // TODO: XXX: refactor
+    void loadLevelFile(currentLevelID(), () => {
+      // currentLevelButton = button
+      // setStandaloneLevelMode(false)
+      updatePageTitleAndLevelSpecificOverlays()
+    })
+    return
+  }
+  if (!editorState) return
+  undoable()
+  deserialize(editorState)
+  wonLevel = false
+  startNewLevelSession()
+}
+
+export function handleLevelCompletion() {
+  onUpdate(() => {
+    if (activityMode !== "play") return
+    if (!wonLevel && checkLevelWon()) {
+      wonLevel = true
+      console.log('Level won!', currentLevelID())
+      storeLevelSolution()
+      loadNextLevel()
+    } else {
+      // in case you undo the winning move
+      // Might need to disable movement while the level is won though, if I'm unsetting this...
+      if (!checkLevelWon()) {
+        wonLevel = false
+      }
+      document.querySelector<HTMLElement>("#level-stuck-hint")!.hidden = !checkLevelStuck()
+    }
+  })
 }
 

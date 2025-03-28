@@ -1,6 +1,5 @@
 import { playSound } from "./audio"
-import { activityMode, restartLevel } from "./game"
-import { deserialize, entities, levelInfo, loadLevel, loadLevelFromText, serialize, undo } from "./game-state"
+import { activityMode, deserialize, entities, levelInfo, loadLevel, loadLevelFromText, restartLevel, serialize, undo } from "./game-state"
 import { showLevelSplash } from "./menus"
 import { drawEntities } from "./rendering"
 import { safeStorage } from "./safe-storage"

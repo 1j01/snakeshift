@@ -1,6 +1,5 @@
-import { activityMode } from "./game"
 import { analyzeMoveAbsolute } from "./game-logic"
-import { activePlayer } from "./game-state"
+import { activePlayer, activityMode } from "./game-state"
 import { tileOnPage } from "./rendering"
 import { Tile } from "./types"
 
