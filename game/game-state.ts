@@ -10,7 +10,7 @@ import { hideScreens, showLevelSplash } from "./menus"
 import { RectangularEntity } from "./rectangular-entity"
 import { LEVEL_FORMAT_VERSION, PLAYTHROUGH_FORMAT_VERSION, isPlaythrough, parsePlaythrough } from "./shared-helpers"
 import Snake from "./snake"
-import { ControlScheme, GameState, ParsedGameState } from "./types"
+import { ControlScheme, GameStateString, ParsedGameState } from "./types"
 
 export const entities: Entity[] = []
 
@@ -40,8 +40,8 @@ export function startNewLevelSession() {
   levelSessionId += 1
 }
 
-export const undos: GameState[] = []
-export const redos: GameState[] = []
+export const undos: GameStateString[] = []
+export const redos: GameStateString[] = []
 export function undoable() {
   undos.push(serialize())
   redos.length = 0
@@ -70,7 +70,7 @@ export function redo() {
     }, 400)
   }
 }
-function stepHistory(from: GameState[], to: GameState[], skipOverWinState = false) {
+function stepHistory(from: GameStateString[], to: GameStateString[], skipOverWinState = false) {
   const state = from.pop()
   if (!state) return false
   const oldState = serialize()
@@ -97,7 +97,7 @@ export function goToHistoryIndex(index: number) {
   }
 }
 
-export function serialize(forSave = false): GameState {
+export function serialize(forSave = false): GameStateString {
   return JSON.stringify({
     format: "snakeshift",
     formatVersion: LEVEL_FORMAT_VERSION,
@@ -109,7 +109,7 @@ export function serialize(forSave = false): GameState {
     levelSessionId: forSave ? undefined : levelSessionId,
   }, null, 2) + "\n"
 }
-export function deserialize(state: GameState, levelId: string | null = null, temporary = false) {
+export function deserialize(state: GameStateString, levelId: string | null = null, temporary = false) {
   const whichSnakeBefore = activePlayer?.id ?? ""
   entities.length = 0
 
@@ -432,7 +432,7 @@ export function loadLevelFromText(fileText: string, newMode: "edit" | "play" | "
   }
   if (isPlaythrough(fileText)) {
     // NOTE: loadLevelFromText will be at two places in the call stack in this case. Might be able to simplify by having
-    // loadPlaythrough (or a replacement with a new name) return the GameState string to load,
+    // loadPlaythrough (or a replacement with a new name) return the GameStateString to load,
     // which would be loaded subsequently in this function, but not recursively.
     // startNewLevelSession() will happen during loadPlaythrough's call to loadLevelFromText.
     try {

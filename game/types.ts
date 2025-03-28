@@ -28,7 +28,7 @@ export interface ParsedGameState {
   levelId?: string
   levelSessionId?: number
 }
-export type GameState = string
+export type GameStateString = string
 
 // Note: Interfaces are better than classes for serialization.
 // No special constructor handling! Still need to worry about

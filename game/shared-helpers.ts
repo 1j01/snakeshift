@@ -6,7 +6,7 @@ import * as jsondiffpatch from "jsondiffpatch"
 import type Entity from "./entity"
 import type { Food } from "./food"
 import type Snake from "./snake"
-import type { GameState, MoveInput, ParsedGameState } from "./types"
+import type { GameStateString, MoveInput, ParsedGameState } from "./types"
 
 export const LEVEL_FORMAT_VERSION = 5
 export const PLAYTHROUGH_FORMAT_VERSION = 2
@@ -26,7 +26,7 @@ export function isPlaythrough(fileContent: string) {
   return false
 }
 
-export function parsePlaythrough(json: string): GameState[] {
+export function parsePlaythrough(json: string): GameStateString[] {
   let parsed = JSON.parse(json) as object
   if (Array.isArray(parsed)) {
     // V1 -> V2
@@ -65,7 +65,7 @@ export function parsePlaythrough(json: string): GameState[] {
   if (!('deltas' in parsed)) throw new Error('Invalid format. Missing "deltas" property.')
 
   let state = parsed.baseState as ParsedGameState
-  const playthrough = [JSON.stringify(state)] as GameState[]
+  const playthrough = [JSON.stringify(state)] as GameStateString[]
   for (const delta of parsed.deltas as jsondiffpatch.Delta[]) {
     if (delta) {
       const newState = jsondiffpatch.patch(state, delta) as ParsedGameState

@@ -8,7 +8,7 @@ import { canvas, draw } from "./rendering"
 import { safeStorage } from "./safe-storage"
 import { getMovesFromPlaythrough, storageKeys } from "./shared-helpers"
 import Snake from "./snake"
-import { GameState } from "./types"
+import { GameStateString } from "./types"
 
 
 function step(time: number) {
@@ -27,9 +27,9 @@ export function animate(time = 0) {
 export let activityMode: "edit" | "play" | "replay" | "menu" = "menu"
 let wonLevel = false
 
-export const editorUndos: GameState[] = []
-export const editorRedos: GameState[] = []
-let editorState: GameState | undefined = undefined
+export const editorUndos: GameStateString[] = []
+export const editorRedos: GameStateString[] = []
+let editorState: GameStateString | undefined = undefined
 export let levelHasGoal = false
 let cleanup = handleInput(canvas)
 export function setActivityMode(newMode: "edit" | "play" | "replay" | "menu") {
