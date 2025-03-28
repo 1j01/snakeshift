@@ -92,20 +92,20 @@ export default class Snake extends Entity {
     // Tongue should always go on top of other snakes.
     this._drawHeadDetails(ctx)
     // Restful outlines for general clarity
-    this._drawBodyOutline(ctx, (ctx, transform) => {
+    this._drawBodyOutline(ctx, () => {
       // if (selectedInLevelEditor) {
       //   ctx.setLineDash([0.1, 0.2])
       // }
       ctx.strokeStyle = this.segments[0].layer === CollisionLayer.White ? '#fff' : '#000'
-      ctx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a)) * 2
+      ctx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / ctx.getTransform().a)) * 2
       ctx.stroke()
     })
-    this._drawBodyOutline(ctx, (ctx, transform) => {
+    this._drawBodyOutline(ctx, () => {
       if (selectedInLevelEditor) {
         ctx.setLineDash([0.1, 0.2])
       }
       ctx.strokeStyle = this.segments[0].layer === CollisionLayer.White ? '#000' : '#fff'
-      ctx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / transform.a))
+      ctx.lineWidth = Math.min(0.6, Math.max(0.1, 2 / ctx.getTransform().a))
       ctx.stroke()
     })
   }
@@ -114,9 +114,9 @@ export default class Snake extends Entity {
     const msSinceHighlight = performance.now() - this._highlightTime
     const highlight = Math.min(1, Math.max(0, 1 - msSinceHighlight / Snake.HIGHLIGHT_DURATION))
     if (highlight > 0) {
-      this._drawBodyOutline(ctx, (ctx, transform) => {
+      this._drawBodyOutline(ctx, () => {
         ctx.strokeStyle = `hsla(40, 100%, 50%, ${highlight})`
-        ctx.lineWidth = Math.min(1, Math.max(0.2, 10 / transform.a))
+        ctx.lineWidth = Math.min(1, Math.max(0.2, 10 / ctx.getTransform().a))
         ctx.stroke()
       })
     }
@@ -141,7 +141,7 @@ export default class Snake extends Entity {
   }
   private _drawBodyOutline(
     ctx: CanvasRenderingContext2D,
-    draw: (ctx: CanvasRenderingContext2D, transform: DOMMatrix) => void,
+    draw: () => void,
   ): void {
     ctx.save()
 
@@ -156,7 +156,7 @@ export default class Snake extends Entity {
 
     ctx.clip("evenodd")
     this._bodyPath(ctx)
-    draw(ctx, ctx.getTransform())
+    draw()
 
     ctx.restore()
   }
