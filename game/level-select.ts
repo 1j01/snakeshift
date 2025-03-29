@@ -74,6 +74,13 @@ export function initLevelSelect() {
     const styleWidth = 200
     const styleHeight = 200
     const renderLevelPreview = async () => {
+      if (location.search.includes("no-level-previews")) {
+        // Disable level previews for tests, so that snapshot tests don't fail meaninglessly
+        // with entity IDs changing due to the mocked randomUUID function's counter incrementing for each entity in the level previews.
+        // Level content changes (new levels, etc.) shouldn't cause unrelated tests to fail.
+        // Also avoid any flakiness due to the timing of the level previews loading.
+        return
+      }
       canvas.style.width = `${styleWidth}px`
       canvas.style.height = `${styleHeight}px`
       // Needs rounding (or else the condition below may be true at rest, since canvas.height is an integer)

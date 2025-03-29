@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
     `
   })
 
-  await page.goto('http://localhost:5569/?show-test-levels')
+  await page.goto('http://localhost:5569/?show-test-levels&no-level-previews')
 
   // Fail test on any page error
   // TODO: move this earlier, also in other tests

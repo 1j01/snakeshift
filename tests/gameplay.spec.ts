@@ -4,7 +4,7 @@ import { getMovesFromPlaythrough } from '../game/shared-helpers.ts'
 import { clickTile, getCurrentLevelContent, loadLevelToPlay, stringifyMoves } from './test-helpers.ts'
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:5569/?show-test-levels')
+  await page.goto('http://localhost:5569/?show-test-levels&no-level-previews')
 
   // Fail test on any page error
   page.on('pageerror', (error) => {
