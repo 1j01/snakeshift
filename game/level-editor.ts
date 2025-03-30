@@ -423,17 +423,25 @@ export function handleInputForLevelEditing(
       event.buttons === 1 &&
       tool === Tool.Brush
     ) {
+      // While defining a snake, start from the last segment placed instead of the last mouse position.
+      // This prevents jumping over invalid tiles and creating diagonals or long segments.
+      if (brushEntityClass === Snake && defining instanceof Snake) {
+        from = defining.segments[0]
+      }
       // Don't want diagonals for snake. Do I really want it in general though?
       const lineFn = brushEntityClass === Snake ? lineNoDiagonals : bresenham
       for (const point of lineFn(from, to)) {
-        const tile = { x: point.x, y: point.y, width: 1, height: 1 }
+        let tile = { x: point.x, y: point.y, width: 1, height: 1 }
         // Clamp to level for snake creation, which is, as of writing,
         // otherwise exempt from level bounds checking, although it may no longer need to be,
         // since it's now clamped here.
         if (brushEntityClass === Snake) {
-          brush(clampToLevel(tile))
-        } else {
-          brush(tile)
+          tile = clampToLevel(tile)
+          // could stop if it's the same tile...
+        }
+        if (!brush(tile)) {
+          // Stop at self intersection. In conjunction with the above, this prevents diagonals/long segments.
+          break
         }
       }
     }
@@ -476,7 +484,13 @@ export function handleInputForLevelEditing(
         }
       }
       if (entityInstance instanceof Snake) {
-        // const existingSnakes = hits.filter(hit => hit.entity instanceof Snake).map(hit => hit.entity as Snake)
+        const existingSnakes = hits.filter(hit => hit.entity instanceof Snake).map(hit => hit.entity as Snake)
+        if (existingSnakes.includes(entityInstance)) {
+          // Stop at self intersection.
+          // This is especially important for pen tablet usage (inaccurate digitizer?) where the mouse can jump back and forth (apparently).
+          // TODO: even more useful would be to allow backtracking: if you hover over the second-last placed segment, it could remove the last placed segment.
+          return false
+        }
         entityInstance.segments.unshift({
           layer: brushColor,
           x: mouseHoveredTile.x,
@@ -502,7 +516,7 @@ export function handleInputForLevelEditing(
       sortEntities()
       postUpdate() // I don't remember why this is needed, I'm just copying tbh, feeling lazy
     }
-
+    return true
   }
 
   function erase(mouseHoveredTile: Tile) {
