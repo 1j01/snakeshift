@@ -670,6 +670,7 @@ export async function clipboardCopy() {
   const before = serialize()
   const selectedEntityIndicesBefore = selectedEntities.map(entity => entities.indexOf(entity))
   const selectionRangeBefore = JSON.parse(JSON.stringify(selectionRange)) as typeof selectionRange
+  let copied: string
   try {
     // levelInfo can store the selection box width/height
     // but doesn't have an existing way to store the x/y position,
@@ -679,17 +680,18 @@ export async function clipboardCopy() {
     translateSelection(-selectionBox.x, -selectionBox.y)
 
     entities.splice(0, entities.length, ...selectedEntities)
-    const copied = serialize()
-    await navigator.clipboard.writeText(copied)
+    copied = serialize()
   } finally {
-    deserialize(before)
+    deserialize(before, null, true)
     selectedEntities = selectedEntityIndicesBefore.map(index => entities[index])
     selectionRange = selectionRangeBefore
     // ugh. translateSelection moves the selection box visual. need this to reset it.
     // (TODO: refactor (maybe use a parameter to translateSelection?))
-    // FIXME: flash of incorrect selection box when copying, sometimes
     postUpdate()
   }
+  // This must be at end to avoid a flash of the temporary level state, since it's async.
+  // TODO: error handling
+  await navigator.clipboard.writeText(copied)
 }
 
 export async function clipboardCut() {
