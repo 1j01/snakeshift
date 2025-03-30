@@ -476,7 +476,7 @@ export function handleInputForLevelEditing(
         }
       }
       if (entityInstance instanceof Snake) {
-        const existingSnakes = hits.filter(hit => hit.entity instanceof Snake).map(hit => hit.entity as Snake)
+        // const existingSnakes = hits.filter(hit => hit.entity instanceof Snake).map(hit => hit.entity as Snake)
         entityInstance.segments.unshift({
           layer: brushColor,
           x: mouseHoveredTile.x,
@@ -484,10 +484,13 @@ export function handleInputForLevelEditing(
           width: 1,
           height: 1,
         })
-        for (const existingSnake of existingSnakes) {
-          existingSnake.fusedSnakeIds.add(entityInstance.id)
-          entityInstance.fusedSnakeIds.add(existingSnake.id)
-        }
+        // Implicitly fusing snakes is not a very good idea, especially since there's no way to split them,
+        // and especially if they're not the same color (in which case overlap is totally valid!)
+        // This is an experimental feature, so I'm just disabling it for now.
+        // for (const existingSnake of existingSnakes) {
+        //   existingSnake.fusedSnakeIds.add(entityInstance.id)
+        //   entityInstance.fusedSnakeIds.add(existingSnake.id)
+        // }
       } else if (entityInstance instanceof RectangularEntity) {
         entityInstance.layer = brushColor
         entityInstance.x = mouseHoveredTile.x
