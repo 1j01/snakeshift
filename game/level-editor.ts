@@ -710,8 +710,13 @@ export async function clipboardPaste() {
   // Temporarily load the clipboard as a level since deserialization currently only works with the global game state.
   const before = serialize()
   try {
-    // TODO: ensure unique ids
     deserialize(text)
+    // Ensure unique ids
+    for (const entity of entities) {
+      if ('id' in entity) {
+        entity.id = crypto.randomUUID()
+      }
+    }
     selectionRange = {
       startTile: { x: 0, y: 0, width: 1, height: 1 },
       endTile: { x: levelInfo.width - 1, y: levelInfo.height - 1, width: 1, height: 1 },
