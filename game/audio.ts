@@ -124,6 +124,9 @@ const updateMuteButton = () => {
   muteButton.ariaPressed = muted ? "true" : "false"
   muteButtonText.textContent = muted ? "Unmute" : "Mute"
 
+  muteButton.querySelector<HTMLElement>(".when-muted")!.hidden = !muted
+  muteButton.querySelector<HTMLElement>(".when-unmuted")!.hidden = muted
+
   // const volume = mainGain.gain.value
   // const icon = muteButton.querySelector(".sprited-icon")
   // let iconIndex
