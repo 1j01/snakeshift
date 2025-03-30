@@ -690,8 +690,11 @@ export async function clipboardCopy() {
     postUpdate()
   }
   // This must be at end to avoid a flash of the temporary level state, since it's async.
-  // TODO: error handling
-  await navigator.clipboard.writeText(copied)
+  try {
+    await navigator.clipboard.writeText(copied)
+  } catch (error) {
+    alert(`Error copying: ${String(error)}`)
+  }
 }
 
 export async function clipboardCut() {
