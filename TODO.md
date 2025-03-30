@@ -37,6 +37,11 @@
 - bug: selection box from editor isn't cleared when switching levels or returning to menu, and even shows up during gameplay if you click
 - should be easier to deselect (escape, ctrl+d, enter?)
   - undo should clear selection
+- bug: deleting entities with right click (eraser shortcut) is possible inside the selection, but entities reappear when dragging the selection
+  - could disallow erasing entities inside the selection
+  - could disable the eraser shortcut entirely while there's a selection
+  - could meld the selection when erasing entities
+  - could make it properly delete entities within the selection, but that seems unconventional and wouldn't be handled by the undo system
 - rotate/flip?
 - bug: outdated tile highlight after closing level info dialog can be confusing, with the old tile size implying the dimensions aren't changed
 - handle edge case of toggling edit mode while dragging something
