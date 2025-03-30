@@ -487,8 +487,10 @@ export function handleInputForLevelEditing(
         const existingSnakes = hits.filter(hit => hit.entity instanceof Snake).map(hit => hit.entity as Snake)
         if (existingSnakes.includes(entityInstance)) {
           // Stop at self intersection.
-          // This is especially important for pen tablet usage (inaccurate digitizer?) where the mouse can jump back and forth (apparently).
-          // TODO: even more useful would be to allow backtracking: if you hover over the second-last placed segment, it could remove the last placed segment.
+          // Allow backtracking: if you hover over the second-last placed segment, it could remove the last placed segment.
+          if (entityInstance.segments.length > 1 && sameTile(entityInstance.segments[1], mouseHoveredTile)) {
+            entityInstance.segments.shift()
+          }
           return false
         }
         entityInstance.segments.unshift({
