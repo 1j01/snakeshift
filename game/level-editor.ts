@@ -2,7 +2,7 @@ import { playSound } from './audio'
 import { Block } from './block'
 import { Collectable } from './collectable'
 import Entity from './entity'
-import { activePlayer, clearLevel, entities, levelInfo, onResize, onUpdate, openLevel, postUpdate, saveLevel, setActivePlayer, undoable } from './game-state'
+import { activePlayer, clearLevel, deserialize, entities, levelInfo, onResize, onUpdate, openLevel, postUpdate, saveLevel, serialize, setActivePlayer, undoable } from './game-state'
 import { bresenham, clampToLevel, hitTestAllEntities, invertCollisionLayer, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, translateEntity, within, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
@@ -660,6 +660,71 @@ export function invert() {
     }
   }
   postUpdate() // I guess?
+}
+
+export async function clipboardCopy() {
+  const selectionBox = getSelectionBox()
+  if (!selectionBox) return
+  // Temporarily delete everything except the selection
+  // in order to use serialization which currently operates only on the global game state.
+  const before = serialize()
+  const selectedEntityIndicesBefore = selectedEntities.map(entity => entities.indexOf(entity))
+  const selectionRangeBefore = JSON.parse(JSON.stringify(selectionRange)) as typeof selectionRange
+  try {
+    // levelInfo can store the selection box width/height
+    // but doesn't have an existing way to store the x/y position,
+    // so move the entities so they'll match the selection box when pasting at 0,0.
+    levelInfo.width = selectionBox.width
+    levelInfo.height = selectionBox.height
+    translateSelection(-selectionBox.x, -selectionBox.y)
+
+    entities.splice(0, entities.length, ...selectedEntities)
+    const copied = serialize()
+    await navigator.clipboard.writeText(copied)
+  } finally {
+    deserialize(before)
+    selectedEntities = selectedEntityIndicesBefore.map(index => entities[index])
+    selectionRange = selectionRangeBefore
+    // ugh. translateSelection moves the selection box visual. need this to reset it.
+    // (TODO: refactor (maybe use a parameter to translateSelection?))
+    // FIXME: flash of incorrect selection box when copying, sometimes
+    postUpdate()
+  }
+}
+
+export async function clipboardCut() {
+  await clipboardCopy()
+  deleteSelectedEntities()
+}
+
+export async function clipboardPaste() {
+  let text: string
+  try {
+    text = await navigator.clipboard.readText()
+  } catch (error) {
+    alert(`Error pasting: ${String(error)}`)
+    return
+  }
+  // Temporarily load the clipboard as a level since deserialization currently only works with the global game state.
+  const before = serialize()
+  try {
+    // TODO: ensure unique ids
+    deserialize(text)
+    selectionRange = {
+      startTile: { x: 0, y: 0, width: 1, height: 1 },
+      endTile: { x: levelInfo.width - 1, y: levelInfo.height - 1, width: 1, height: 1 },
+      defining: false,
+    }
+    selectedEntities = [...entities]
+  } catch (error) {
+    alert(`Error pasting: ${String(error)}`)
+  } finally {
+    deserialize(before)
+  }
+  undoable()
+  entities.splice(0, 0, ...selectedEntities)
+  sortEntities()
+  postUpdate()
 }
 
 export function translateSelection(dx: number, dy: number) {

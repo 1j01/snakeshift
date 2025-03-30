@@ -1,7 +1,7 @@
 import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
 import { animate, shouldInputBeAllowed } from "./game"
 import { activityMode, clearLevel, goToHistoryIndex, handleLevelCompletion, loadLevel, openLevel, redo, restartLevel, saveLevel, savePlaythrough, setActivityMode, setControlScheme, undo, undoable } from "./game-state"
-import { deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
+import { clipboardCopy, clipboardCut, clipboardPaste, deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
 import { hideLevelSplash, initMainMenu, showMainMenu } from "./menus"
 import { canvas } from "./rendering"
@@ -175,6 +175,15 @@ addEventListener('keydown', (event) => {
     event.preventDefault()
   } else if (event.key === 'i' && activityMode == "edit") {
     invert()
+    event.preventDefault()
+  } else if (event.key === 'c' && activityMode == "edit") {
+    void clipboardCopy()
+    event.preventDefault()
+  } else if (event.key === 'x' && activityMode == "edit") {
+    void clipboardCut()
+    event.preventDefault()
+  } else if (event.key === 'v' && activityMode == "edit") {
+    void clipboardPaste()
     event.preventDefault()
   } else if (event.key === 'e' && (event.altKey) && activityMode == "edit") {
     // Alt+E is Image Attributes in MS Paint, the equivalent of Level Info here
