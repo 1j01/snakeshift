@@ -61,8 +61,6 @@
 - visuals:
   - there's a slight bug where Block is not always sorted to bottom, which I can see when dragging with the pointer control scheme, which animates the snake slightly beyond its cell, in the level Ferry (this might just be the specific level isn't sorted because sorting logic wasn't in place when it was created; but I could add a `sortEntities` call when loading the level)
   - enlarge level border
-  - 1x1 snake should change direction when moving
-    - need to store heading in a different way, to work with a single segment
   - do something about weird four-eyed appearance when three snake heads are on top of each other and perpendicular (where the middle snake's eyes don't cover up the bottom snake's eyes); see level `four-eyes.json`
   - grass should have more natural edges
   - possibly obsolete feedback:
@@ -77,7 +75,6 @@
 - loading progress could be shown with a snake, eating stars :)
   - can use `previewMovement` to give finer resolution than the grid
 - animation:
-  - bug: 1x1 snake's eyes move outside the head when moving left/right
   - when using pointer controls, movement preview conflicts slightly with the animation; it should add the effects together, ideally, but right now the movement preview cancels out the movement animation; it's super subtle, you can just see a frame of jitter sometimes
   - animate undo/redo (implies timeline abstraction, moving animation state outside of entities)
   - animate pushing crates

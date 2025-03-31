@@ -10,6 +10,7 @@ export interface SnakeSegment extends Tile {
 export default class Snake extends Entity {
   // When adding new properties, remember to update toJSON()!
   public segments: SnakeSegment[] = []
+  public facing: Point = { x: 1, y: 0 }
   public fusedSnakeIds = new Set<string>()
   public id: string = crypto.randomUUID()
   public growOnNextMove = false
@@ -37,14 +38,16 @@ export default class Snake extends Entity {
     return {
       id: this.id,
       segments: this.segments,
+      facing: this.segments.length === 1 ? this.facing : undefined,
       growOnNextMove: this.growOnNextMove,
       fusedSnakeIds: fusedSnakeIds.length ? fusedSnakeIds : undefined, // too weird of a feature to include in all level files
     }
   }
   fromJSON(data: object): void {
-    const { id, segments, growOnNextMove, fusedSnakeIds } = data as Snake
+    const { id, segments, facing, growOnNextMove, fusedSnakeIds } = data as Snake
     this.id = id
     this.segments = segments
+    this.facing = facing ?? (segments.length > 1 ? { x: segments[1].x - segments[0].x, y: segments[1].y - segments[0].y } : { x: 0, y: -1 })
     this.growOnNextMove = growOnNextMove
     this.fusedSnakeIds = new Set(fusedSnakeIds ?? [])
   }
@@ -72,7 +75,7 @@ export default class Snake extends Entity {
     this._movementPreview.y = deltaY
     const movementPreviewAngle = Math.atan2(this._movementPreview.y, this._movementPreview.x)
     const movementPreviewDistance = Math.hypot(this._movementPreview.y, this._movementPreview.x)
-    const headAngle = this.segments.length > 1 ? Math.atan2(this.segments[1].y - this.segments[0].y, this.segments[1].x - this.segments[0].x) : Math.PI / 2
+    const headAngle = this.segments.length > 1 ? Math.atan2(this.segments[1].y - this.segments[0].y, this.segments[1].x - this.segments[0].x) : (this.facing ? Math.atan2(-this.facing.y, -this.facing.x) : Math.PI / 2)
     this._headRelativeOffset = {
       x: Math.cos(movementPreviewAngle - headAngle) * movementPreviewDistance,
       y: Math.sin(movementPreviewAngle - headAngle) * movementPreviewDistance,
@@ -165,9 +168,10 @@ export default class Snake extends Entity {
     ctx.save()
     ctx.translate(head.x + head.width / 2, head.y + head.height / 2)
     ctx.scale(head.width, head.height)
-    const angle = this.segments[1] ? Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x) : Math.PI / 2
+    const angle = this.segments[1] ? Math.atan2(this.segments[1].y - head.y, this.segments[1].x - head.x) : (this.facing ? Math.atan2(-this.facing.y, -this.facing.x) : Math.PI / 2)
     ctx.rotate(angle + this._headAngularOffset)
     const movementPreviewFactor = this.segments[1] ? 1 : 2 // Exaggerate eye movement for 1-long snakes since they're like spheres, and it gives it a 3D appearance
+    // TODO: only exaggerate movement PREVIEW, not movement animation
     ctx.translate(this._headRelativeOffset.x * movementPreviewFactor, this._headRelativeOffset.y * movementPreviewFactor)
 
     // eyes
@@ -256,7 +260,7 @@ export default class Snake extends Entity {
       if (i === 0) {
         if (this.segments.length === 1) {
           // head circle
-          ctx.rotate(Math.PI / 2) // only matters for offset, for movement preview
+          ctx.rotate(this.facing ? Math.atan2(-this.facing.y, -this.facing.x) : Math.PI / 2) // only matters for offset, for movement preview
           ctx.arc(this._headRelativeOffset.x, this._headRelativeOffset.y, 1 / 2, 0, Math.PI * 2)
         } else {
           // head
