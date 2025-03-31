@@ -164,19 +164,23 @@ input::selection,
   }
 }
 
-#level-info-editor .control-row label {
-  width: 130px;
-  display: inline-block;
-}
+@media not (max-width: 450px) {
 
-#level-info-editor .control-row input,
-#level-info-editor .control-row textarea {
-  width: 200px;
-}
+  #level-info-editor .control-row label {
+    width: 130px;
+    display: inline-block;
+  }
 
-#settings-dialog .control-row label {
-  width: 235px;
-  display: inline-block;
+  #level-info-editor .control-row input,
+  #level-info-editor .control-row textarea {
+    width: 200px;
+  }
+
+  #settings-dialog .control-row label {
+    width: 235px;
+    display: inline-block;
+  }
+
 }
 
 #settings-dialog fieldset {
@@ -188,7 +192,7 @@ input::selection,
 
 .fieldset-description {
   font-size: 0.8em;
-  max-width: min(300px, calc(100vw - 60px));
+  max-width: 300px;
 }
 
 .disabled {
