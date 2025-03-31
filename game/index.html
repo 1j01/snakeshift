@@ -445,8 +445,15 @@
         </div>
       </fieldset>
       <fieldset>
-        <legend>Haptics</legend>
+        <legend>Pointer (mouse/pen/touch)</legend>
         <div class="control-row">
+          <label for="settings-pointer-move-threshold">Move Threshold (pixels):</label>
+          <input type="number" id="settings-pointer-move-threshold" min="0" max="100" step="1" />
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Haptics</legend>
+        <div class=" control-row">
           <input type="checkbox" id="settings-haptics-enabled" />
           <label for="settings-haptics-enabled">Enable haptic feedback</label>
         </div>

@@ -35,12 +35,6 @@ export function handleInput(
   // Mouse/pen/touch support
   // -----------------------
 
-  // Minimum drag distance before moving.
-  // Should this be based on the tile size on screen?
-  // Maybe not since you need to be able to easily move one tile, even if the level is large.
-  // Maybe it should be based on the screen size though. Could be nice if it was configurable as a "move sensitivity" setting.
-  const MOVE_THRESHOLD = 40
-
   let dragging = false
   let lastPointerPosition: { x: number, y: number } | undefined = undefined
 
@@ -112,9 +106,15 @@ export function handleInput(
       const deltaX = event.clientX - lastPointerPosition.x
       const deltaY = event.clientY - lastPointerPosition.y
 
-      activePlayer.previewMovement(deltaX / MOVE_THRESHOLD / 10, deltaY / MOVE_THRESHOLD / 10)
+      // Minimum drag distance before moving.
+      // Should this be based on the tile size on screen?
+      // Maybe not since you need to be able to easily move one tile, even if the level is large.
+      // Maybe it should be based on the screen size though. Could be nice if it was configurable as a "move sensitivity" setting.
+      const moveThreshold = parseInt(safeStorage.getItem(storageKeys.pointerMoveThreshold) ?? "40")
 
-      if (Math.abs(deltaX) < MOVE_THRESHOLD && Math.abs(deltaY) < MOVE_THRESHOLD) {
+      activePlayer.previewMovement(deltaX / moveThreshold / 10, deltaY / moveThreshold / 10)
+
+      if (Math.abs(deltaX) < moveThreshold && Math.abs(deltaY) < moveThreshold) {
         return
       }
 

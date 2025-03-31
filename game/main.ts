@@ -25,6 +25,7 @@ const hapticsValidDurationInput = settingsDialog.querySelector<HTMLInputElement>
 const hapticsInvalidDurationInput = settingsDialog.querySelector<HTMLInputElement>('#settings-haptics-invalid-move-ms')!
 const gamepadRepeatRateInput = settingsDialog.querySelector<HTMLInputElement>('#settings-gamepad-repeat-rate')!
 const gamepadRepeatDelayInput = settingsDialog.querySelector<HTMLInputElement>('#settings-gamepad-repeat-delay')!
+const pointerMoveThresholdInput = settingsDialog.querySelector<HTMLInputElement>('#settings-pointer-move-threshold')!
 
 playEditToggleButton.addEventListener('click', () => {
   setActivityMode(activityMode === "play" ? "edit" : "play")
@@ -50,6 +51,7 @@ settingsButton.addEventListener('click', () => {
   hapticsInvalidDurationInput.value = safeStorage.getItem(storageKeys.hapticsInvalidDuration) ?? "60"
   gamepadRepeatRateInput.value = safeStorage.getItem(storageKeys.gamepadRepeatRate) ?? "150"
   gamepadRepeatDelayInput.value = safeStorage.getItem(storageKeys.gamepadRepeatDelay) ?? "300"
+  pointerMoveThresholdInput.value = safeStorage.getItem(storageKeys.pointerMoveThreshold) ?? "40"
   hapticsEnabledCheckbox.focus()
   updateSubSettings()
 })
@@ -68,7 +70,8 @@ settingsDialogOKButton.addEventListener('click', (event) => {
   const hapticsInvalidDuration = parseInt(hapticsInvalidDurationInput.value)
   const gamepadRepeatRate = parseInt(gamepadRepeatRateInput.value)
   const gamepadRepeatDelay = parseInt(gamepadRepeatDelayInput.value)
-  if (isNaN(hapticsValidDuration) || isNaN(hapticsInvalidDuration) || isNaN(gamepadRepeatRate) || isNaN(gamepadRepeatDelay)) {
+  const pointerMoveThreshold = parseInt(pointerMoveThresholdInput.value)
+  if (isNaN(hapticsValidDuration) || isNaN(hapticsInvalidDuration) || isNaN(gamepadRepeatRate) || isNaN(gamepadRepeatDelay) || isNaN(pointerMoveThreshold)) {
     alert("Invalid input. Please enter a number.")
     return
   }
@@ -78,6 +81,7 @@ settingsDialogOKButton.addEventListener('click', (event) => {
     safeStorage.setItem(storageKeys.hapticsInvalidDuration, hapticsInvalidDuration.toString()),
     safeStorage.setItem(storageKeys.gamepadRepeatRate, gamepadRepeatRate.toString()),
     safeStorage.setItem(storageKeys.gamepadRepeatDelay, gamepadRepeatDelay.toString()),
+    safeStorage.setItem(storageKeys.pointerMoveThreshold, pointerMoveThreshold.toString()),
   ].every(Boolean)
   if (!success) {
     console.error("Failed to save settings to local storage")
