@@ -435,6 +435,10 @@
       </div> -->
       <fieldset>
         <legend>Gamepad</legend>
+        <p style="font-size: 0.8em; max-width: 300px">
+          Control how long you have to hold a button on the directional pad before it starts repeating,
+          and how quickly it repeats.
+        </p>
         <div class="control-row">
           <label for="settings-gamepad-repeat-delay">Button Repeat Delay (ms):</label>
           <input type="number" id="settings-gamepad-repeat-delay" min="0" max="1000" step="1" />
@@ -446,6 +450,10 @@
       </fieldset>
       <fieldset>
         <legend>Pointer (mouse/pen/touch)</legend>
+        <p style="font-size: 0.8em; max-width: 300px">
+          Control the sensitivity of swiping to move the snake.
+          Lower values are more sensitive.
+        </p>
         <div class="control-row">
           <label for="settings-pointer-move-threshold">Move Threshold (pixels):</label>
           <input type="number" id="settings-pointer-move-threshold" min="0" max="100" step="1" />
@@ -453,6 +461,9 @@
       </fieldset>
       <fieldset>
         <legend>Haptics</legend>
+        <p style="font-size: 0.8em; max-width: 300px">
+          Haptic feedback is supported for both mobile devices and gamepads.
+        </p>
         <div class=" control-row">
           <input type="checkbox" id="settings-haptics-enabled" />
           <label for="settings-haptics-enabled">Enable haptic feedback</label>
