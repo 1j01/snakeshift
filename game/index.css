@@ -158,7 +158,7 @@ input::selection,
     max-width: 100vw;
   }
 
-  .control-row:not(.checkbox-control-row) {
+  .control-row:not(.checkbox-control-row):not(.buttons-control-row) {
     flex-direction: column;
     align-items: flex-start;
   }
