@@ -61,8 +61,10 @@ settingsDialog.addEventListener('close', () => {
 settingsDialog.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
     settingsDialog.close()
-    event.stopPropagation()
   }
+  // Allow keyboard control within the dialog (tabbing, changing input values with arrow keys, etc.)
+  // and prevent Escape key from double-acting.
+  event.stopPropagation()
 })
 settingsDialogOKButton.addEventListener('click', (event) => {
   event.preventDefault()

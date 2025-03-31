@@ -108,8 +108,10 @@ export function initLevelEditorGUI() {
   levelInfoEditor.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       levelInfoEditor.close()
-      event.stopPropagation()
     }
+    // Allow keyboard control within the dialog (tabbing, changing input values with arrow keys, etc.)
+    // and prevent Escape key from double-acting.
+    event.stopPropagation()
   })
   levelInfoEditorOKButton.addEventListener('click', (event) => {
     event.preventDefault()
