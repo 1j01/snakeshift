@@ -151,6 +151,19 @@ input::selection,
   align-items: center;
 }
 
+@media (max-width: 450px) {
+  dialog {
+    margin: 0;
+    width: 100vw;
+    max-width: 100vw;
+  }
+
+  .control-row:not(.checkbox-control-row) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 #level-info-editor .control-row label {
   width: 130px;
   display: inline-block;
@@ -175,7 +188,7 @@ input::selection,
 
 .fieldset-description {
   font-size: 0.8em;
-  max-width: 300px;
+  max-width: min(300px, calc(100vw - 60px));
 }
 
 .disabled {
@@ -341,10 +354,12 @@ a:focus {
 dialog {
   border: 30px solid #fff;
   border-image: url(/graphics/border-2.png) calc(15/32*100%) round;
-  border-image-outset: 9px;
+  /* border-image-outset: 9px; */
   image-rendering: pixelated;
   background-color: #000;
   color: #fff;
+  padding: min(16px, 1vw);
+  box-sizing: border-box;
 }
 
 dialog>h2 {
