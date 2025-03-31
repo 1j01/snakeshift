@@ -173,6 +173,11 @@ input::selection,
   margin: 15px 0;
 }
 
+.fieldset-description {
+  font-size: 0.8em;
+  max-width: 300px;
+}
+
 .disabled {
   color: #aaa;
 }
