@@ -52,7 +52,9 @@ settingsButton.addEventListener('click', () => {
   gamepadRepeatRateInput.value = safeStorage.getItem(storageKeys.gamepadRepeatRate) ?? "150"
   gamepadRepeatDelayInput.value = safeStorage.getItem(storageKeys.gamepadRepeatDelay) ?? "300"
   pointerMoveThresholdInput.value = safeStorage.getItem(storageKeys.pointerMoveThreshold) ?? "40"
-  hapticsEnabledCheckbox.focus()
+  const defaultControl = settingsDialog.querySelector<HTMLInputElement | HTMLTextAreaElement>('input, textarea')
+  defaultControl?.focus()
+  defaultControl?.select?.()
   updateSubSettings()
 })
 settingsDialog.addEventListener('close', () => {
