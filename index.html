@@ -8,8 +8,8 @@
   <title>Snakeshift</title>
   <!-- <link rel="icon" type="image/png" href="/graphics/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
   <link rel="icon" type="image/png" href="./graphics/yin-yang-larger-sneks-180px.png" sizes="180x180" />
-  <script type="module" crossorigin src="./assets/index-CBuGxJLF.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-C3KAJJJO.css">
+  <script type="module" crossorigin src="./assets/index-B6HWqNsr.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DhQOS2Zs.css">
 </head>
 
 <body>
@@ -436,18 +436,38 @@
       </div> -->
       <fieldset>
         <legend>Gamepad</legend>
+        <p class="fieldset-description">
+          Control how long you have to hold a button on the directional pad before it starts repeating,
+          and how quickly it repeats.
+        </p>
         <div class="control-row">
-          <label for="settings-gamepad-repeat-delay">Gamepad Repeat Delay (ms):</label>
+          <label for="settings-gamepad-repeat-delay">Button Repeat Delay (ms):</label>
           <input type="number" id="settings-gamepad-repeat-delay" min="0" max="1000" step="1" />
         </div>
         <div class="control-row">
-          <label for="settings-gamepad-repeat-rate">Gamepad Repeat Rate (ms):</label>
+          <label for="settings-gamepad-repeat-rate">Button Repeat Rate (ms):</label>
           <input type="number" id="settings-gamepad-repeat-rate" min="0" max="1000" step="1" />
         </div>
       </fieldset>
       <fieldset>
-        <legend>Haptics</legend>
+        <!-- <legend>Pointer (mouse/pen/touch)</legend> -->
+        <!-- <legend>Mouse, Pen, and Touch</legend> -->
+        <legend>Mouse / Pen / Touch</legend>
+        <p class="fieldset-description">
+          Control the sensitivity of swiping to move the snake.
+          Lower values are more sensitive.
+        </p>
         <div class="control-row">
+          <label for="settings-pointer-move-threshold">Move Threshold (pixels):</label>
+          <input type="number" id="settings-pointer-move-threshold" min="0" max="100" step="1" />
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Haptics</legend>
+        <p class="fieldset-description">
+          Haptic feedback is supported for both mobile devices and gamepads.
+        </p>
+        <div class="checkbox-control-row control-row">
           <input type="checkbox" id="settings-haptics-enabled" />
           <label for="settings-haptics-enabled">Enable haptic feedback</label>
         </div>
@@ -460,7 +480,7 @@
           <input type="number" id="settings-haptics-invalid-move-ms" min="0" max="300" step="1" value="60" />
         </div>
       </fieldset>
-      <div class="control-row">
+      <div class="buttons-control-row control-row">
         <button value="ok" class="bw-button" id="settings-dialog-ok-button">OK</button>
         <button value="cancel" formmethod="dialog" class="bw-button" id="settings-dialog-cancel-button">Cancel</button>
       </div>
