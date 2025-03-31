@@ -25,6 +25,10 @@
           "height": 1
         }
       ],
+      "facing": {
+        "x": 1,
+        "y": 0
+      },
       "growOnNextMove": false
     },
     {
