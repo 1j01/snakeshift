@@ -8,7 +8,10 @@
 - bug: ctrl+o isn't always loading a level, sometimes it just switches to edit mode for the current level
 - bug: got a "Level Complete" splash screen when dragging a level file onto the page while in the first level
 - bug: drag and drop isn't clearing undo history IN SOME UNREPRODUCIBLE CASE? I've tried twice to add tests, see stashes, for some bug but no reproduction yet
-
+- avoid `alert`/`confirm` dialogs as they cause mobile Chrome at least to exit full screen (and they're not thematic)
+  - might run into async trouble with file saving though. ugh.
+- ensure final state of a level is shown before the level complete screen, for satisfaction (right now it can lag before the level complete screen shows up on slow devices, making this worse)
+- hitting "back" from replay should return to level select screen, not main menu, when navigated from level select screen
 
 ## Par system
 - show the number of moves in the level select
@@ -25,6 +28,8 @@
 ## Controls
 - gamepad: use joystick directly instead of requiring a button press to move each tile (this should also do away with the highlight visual which is the only thing not black and white during gameplay)
   - although perhaps the current behavior should be left in as an option, but the tile highlight should be changed to a black and white arrow of some kind
+- gamepad: configurable deadzone
+- gamepad: sticky directionality (threshold to move from one direction to another)
 - keyboard: key repeat
 - keyboard: cycling backwards with shift+tab would be nice when there are more than two snakes (particularly if there are way too many snakes), maybe shift shouldn't act as tab; could also use Q and E
 - touch: could try a virtual joystick/dpad as an alternative to gliding anywhere on the screen
@@ -42,6 +47,7 @@
   - could disable the eraser shortcut entirely while there's a selection
   - could meld the selection when erasing entities
   - could make it properly delete entities within the selection, but that seems unconventional and wouldn't be handled by the undo system
+- bug: when playtesting a level and then returning to edit mode, the selection remains but the entities appear deselected; when dragging the selection the entities are duplicated (deserialization creates new entities when returning to edit mode; the old references are invalid)
 - rotate/flip?
 - bug: outdated tile highlight after closing level info dialog can be confusing, with the old tile size implying the dimensions aren't changed
 - handle edge case of toggling edit mode while dragging something
@@ -68,7 +74,10 @@
       - oh, could prevent key repeat on switching snakes, and make it keep the highlight as long as the key is held
     - feels like you shouldn't be able to go on top of another snake's head, like you'd eat the snake
       - I have since made food more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
+- loading progress could be shown with a snake, eating stars :)
+  - can use `previewMovement` to give finer resolution than the grid
 - animation:
+  - bug: 1x1 snake's eyes move outside the head when moving left/right
   - when using pointer controls, movement preview conflicts slightly with the animation; it should add the effects together, ideally, but right now the movement preview cancels out the movement animation; it's super subtle, you can just see a frame of jitter sometimes
   - animate undo/redo (implies timeline abstraction, moving animation state outside of entities)
   - animate pushing crates
@@ -82,6 +91,8 @@
   - invalid move sfx
   - invert sfx (for both editor and gameplay)
   - clear sfx (for editor)
+- haptics:
+  - echo the gong sound with a haptic pulse!? seems weird to do a long vibration for a "good" event, but I wonder what it would feel like
 
 ## Less important
 - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
@@ -95,9 +106,17 @@
   - fix aria-keyshortcuts semantics (the attribute shouldn't be present on things that won't activate, such as some hidden buttons)
   - see `/* TODO: hide back button properly, for (in)accessibility */`
 - move `guessDefaultActivePlayer()` into `storeBaseLevelState`?
+- could show a hint when there's no goal in a custom level ("Level has no goal." or "Level is unwinnable.")
+- add save/open buttons in replay mode, for saving/loading replays... and make ctrl+s save the replay? idk, you COULD want to export a single state... this is very low priority
+- I observed it not counting a level as won when eating the last food, after completing the level and undoing back to it...  
+  oh I think it has to do with it moving to the next level being "Test Level With No Goal"  
+  I think the `levelHasGoal` state is not being reset properly when undoing across level boundaries, but that's not important to the game  
+  It probably can't come up in the campaign or even using the level editor and creating a level with no goal; only when visiting `?show-test-levels` where there's a level in a pseudo campaign that has no goal does it come into play.  
 
 
 ## Tests
+- HTML validation
+- DOM structure / accessibility validation
 - add tests for replay viewer:
 	- toggling edit mode (what should that do?)
 	- arrow keys to navigate steps (currently relies on slider focus and native arrow key handling)
