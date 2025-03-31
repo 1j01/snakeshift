@@ -135,6 +135,7 @@ export function takeMove(move: Move): void {
   head.y = move.to.y
   head.width = move.to.width
   head.height = move.to.height
+  snake.facing = { x: move.delta.x, y: move.delta.y }
   // Sort entities so the snake is on top of anything it's moving onto.
   // This handles the visual as well as making it so
   // you can't double back while inside an inverse snake.
