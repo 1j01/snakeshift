@@ -278,6 +278,11 @@ input::selection,
   position: relative;
 }
 
+#level-select .level-button canvas {
+  max-width: calc(100vw - 26px);
+  max-height: calc(100vw - 26px);
+}
+
 .replay-button {
   position: absolute;
   right: 0;
