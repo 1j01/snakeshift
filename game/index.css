@@ -275,7 +275,6 @@ input::selection,
 
 #level-select .level-button {
   display: inline-flex;
-  min-width: 100px;
   position: relative;
 }
 
