@@ -156,7 +156,7 @@ export function updateLevelSelect() {
       })
       // replayButton.textContent = "View Replay"
       const img = document.createElement('img')
-      img.src = "graphics/view-replay.svg"
+      img.src = "graphics/view-replay-3.svg"
       img.alt = "View Replay"
       img.width = 32
       img.height = 32
