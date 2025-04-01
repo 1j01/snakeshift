@@ -274,6 +274,17 @@ input::selection,
   overflow: hidden;
 }
 
+#main-menu button {
+  position: relative;
+}
+
+@media (min-width: 200px) {
+  #main-menu button img {
+    position: absolute;
+    left: 10px;
+  }
+}
+
 #level-select {
   /* give room for #game-options-bar */
   padding-top: 50px;
