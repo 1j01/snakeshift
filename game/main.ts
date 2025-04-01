@@ -252,21 +252,34 @@ addEventListener('drop', (event) => {
   }
 })
 
+function handleRenamedLevel(oldId: string, newId: string) {
+  const oldBestMoveCount = safeStorage.getItem(storageKeys.bestMoveCount(oldId))
+  const oldBestSolution = safeStorage.getItem(storageKeys.bestSolution(oldId))
+  if (oldBestMoveCount) {
+    safeStorage.setItem(storageKeys.bestMoveCount(newId), oldBestMoveCount)
+  }
+  if (oldBestSolution) {
+    safeStorage.setItem(storageKeys.bestSolution(newId), oldBestSolution)
+  }
+  safeStorage.removeItem(storageKeys.bestMoveCount(oldId))
+  safeStorage.removeItem(storageKeys.bestSolution(oldId))
+}
+
 function initLocalStorage() {
-  const storageVersion = Number(safeStorage.getItem(storageKeys.localStorageFormatVersion) ?? LOCAL_STORAGE_FORMAT_VERSION)
+  let storageVersion = Number(safeStorage.getItem(storageKeys.localStorageFormatVersion) ?? LOCAL_STORAGE_FORMAT_VERSION)
   if (storageVersion > LOCAL_STORAGE_FORMAT_VERSION) {
     console.error("Saved local storage format version is newer than this version of the game. Some data may be lost.")
   }
-  // Format upgrades would go here, e.g. in case a level was renamed.
-  // This is a sketch of an upgrade, but untested as it's not needed yet:
-  // if (storageVersion === 1) {
-  //   storageVersion = 2
-  //   safeStorage.setItem(storageKeys.bestMoveCount("levels/newLevelName.json"), safeStorage.getItem(storageKeys.bestMoveCount("levels/oldLevelName.json")))
-  //   safeStorage.setItem(storageKeys.bestSolution("levels/newLevelName.json"), safeStorage.getItem(storageKeys.bestSolution("levels/oldLevelName.json")))
-  //   safeStorage.deleteItem(storageKeys.bestMoveCount("levels/oldLevelName.json"))
-  //   safeStorage.deleteItem(storageKeys.bestSolution("levels/oldLevelName.json"))
-  //   safeStorage.setItem(storageKeys.localStorageFormatVersion, storageVersion)
-  // }
+  // Format upgrades should go here, e.g. in case a level was renamed.
+  if (storageVersion === 1) {
+    storageVersion = 2
+    handleRenamedLevel("levels/easy/002-bridge.json", "levels/easy/003-bridge.json")
+    handleRenamedLevel("levels/easy/003-ferry.json", "levels/easy/004-ferry.json")
+    handleRenamedLevel("levels/easy/004-yin-yang-give-and-take.json", "levels/easy/005-yin-yang-give-and-take.json")
+    handleRenamedLevel("levels/easy/005-fill-the-box-further-too-many-solutions.json", "levels/easy/006-fill-the-box-further-too-many-solutions.json")
+    handleRenamedLevel("levels/easy/006-north-star.json", "levels/easy/007-north-star.json")
+    safeStorage.setItem(storageKeys.localStorageFormatVersion, String(storageVersion))
+  }
   if (storageVersion !== LOCAL_STORAGE_FORMAT_VERSION) {
     console.error("Invalid local storage format version.")
   } else {

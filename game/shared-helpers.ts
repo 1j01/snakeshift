@@ -10,7 +10,7 @@ import type { GameStateString, MoveInput, ParsedGameState } from "./types"
 
 export const LEVEL_FORMAT_VERSION = 5
 export const PLAYTHROUGH_FORMAT_VERSION = 2
-export const LOCAL_STORAGE_FORMAT_VERSION = 1
+export const LOCAL_STORAGE_FORMAT_VERSION = 2
 
 export function isPlaythrough(fileContent: string) {
   const testString = fileContent.slice(0, 1000)
