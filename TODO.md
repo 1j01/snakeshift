@@ -12,6 +12,8 @@
   - might run into async trouble with file saving though. ugh.
 - ensure final state of a level is shown before the level complete screen, for satisfaction (right now it can lag before the level complete screen shows up on slow devices, making this worse)
 - hitting "back" from replay should return to level select screen, not main menu, when navigated from level select screen
+- bug: replays are being saved with only one step (an empty `deltas` array)
+  - see test: "should save a playthrough file from play mode after winning and undoing winning a level"
 
 ## Par system
 - show the number of moves in the level select
