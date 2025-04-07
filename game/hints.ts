@@ -19,7 +19,7 @@ export const hintsByLevelName: Record<string, string[] | undefined> = {
     "One way to make the bridges is a 2x2 square.",
   ],
   "Fill The Box": [
-    "Avoid creating 1-wide gaps. If there are two of these, it's impossible to fill both.",
+    "Avoid creating 1-wide gaps. If there are two dead ends, it's impossible to fill both.",
     "The initial moves of each snake can make it easier.",
     "Construct a Hamiltonian path on a grid graph.",
   ],
@@ -33,9 +33,9 @@ export const hintsByLevelName: Record<string, string[] | undefined> = {
     "The remaining star should be on the side, not the middle, so it can be eaten while crossing to the top.",
   ],
   "The Three Pagodas": [
-    "Alternate bridging?",
+    // "Alternate bridging?", TODO: a useful first hint?
     "The black snake (black chicken in the myth) can turn around when growing from one to two segments",
-    "The longer white snake can provide a pathway with an exit for the black snake",
+    "The long white snake can provide a pathway with an exit for the black snake",
     "Get the white food last",
   ],
   "Lock Picking": [
@@ -47,12 +47,13 @@ export const hintsByLevelName: Record<string, string[] | undefined> = {
   "Yin and Yang: Challenge": [
     "While symmetrical, there is an imbalance.",
     "The black snake has plenty of room to get out of the way if you grow it first.",
+    // TODO: the following hint is probably too direct, or at least FEELS too direct/specific/instructional.
     "Bridge the black food, then grow the black snake, then move the black snake around the rim to get it off of the white snake. Finally, bridge the white food and collect all of it.",
     "Avoid creating 1-wide gaps (dead ends) in which food needs to be collected. If you create multiple of these it can become impossible.",
     "You can simplify collecting the white food by removing white boundaries with the black snake, making the area box like or easier to navigate.",
   ],
   "Security by Obscurity": [
-    "Don't be fooled by similarity to the prior level.", // too aggressive/negative?
+    "Don't be fooled by similarity to the prior level...", // too aggressive/negative?
     "Think outside the box!", // vague but accurate...!
   ],
   "Greedy Eyes": [
