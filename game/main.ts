@@ -16,6 +16,11 @@ const undoButton = document.querySelector<HTMLButtonElement>('#undo-button')!
 const redoButton = document.querySelector<HTMLButtonElement>('#redo-button')!
 const fullscreenButton = document.getElementById("fullscreen-button")!
 const replaySlider = document.getElementById("replay-slider") as HTMLInputElement
+
+const hintButton = document.querySelector<HTMLButtonElement>("#hint-button")!
+const hintsDialog = document.querySelector<HTMLDialogElement>('#hints-dialog')!
+const hintsDialogOKButton = document.querySelector<HTMLDialogElement>('#hints-dialog-ok-button')!
+
 const settingsButton = document.querySelector<HTMLButtonElement>("#settings-button")!
 const settingsDialog = document.querySelector<HTMLDialogElement>('#settings-dialog')!
 const settingsDialogOKButton = document.querySelector<HTMLDialogElement>('#settings-dialog-ok-button')!
@@ -34,6 +39,19 @@ restartLevelButton.addEventListener('click', restartLevel)
 undoButton.addEventListener('click', undo)
 redoButton.addEventListener('click', redo)
 fullscreenButton.addEventListener('click', toggleFullscreen)
+
+hintButton.addEventListener('click', () => {
+  hintsDialog.showModal()
+  // Hints list is updated in `updatePageTitleAndLevelSpecificOverlaysAndHints` currently.
+  // Could be done here instead. Whatever.
+  const defaultControl = hintsDialog.querySelector<HTMLInputElement | HTMLTextAreaElement>('input, textarea')
+  defaultControl?.focus()
+  defaultControl?.select?.()
+})
+hintsDialogOKButton.addEventListener('click', (event) => {
+  event.preventDefault()
+  hintsDialog.close()
+})
 
 function updateSubSettings() {
   hapticsValidDurationInput.disabled = !hapticsEnabledCheckbox.checked

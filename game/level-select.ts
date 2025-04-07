@@ -1,5 +1,6 @@
 import { playSound } from "./audio"
 import { activityMode, deserialize, entities, levelInfo, loadLevel, loadLevelFromText, restartLevel, serialize, undo } from "./game-state"
+import { hintsByLevelName } from "./hints"
 import { showLevelSplash } from "./menus"
 import { drawEntities } from "./rendering"
 import { safeStorage } from "./safe-storage"
@@ -49,7 +50,7 @@ export function initLevelSelect() {
       void loadLevelFile(levelURL, () => {
         currentLevelButton = button
         standaloneLevelMode = false
-        updatePageTitleAndLevelSpecificOverlays()
+        updatePageTitleAndLevelSpecificOverlaysAndHints()
       })
     })
 
@@ -227,7 +228,9 @@ export function currentLevelID() {
   return currentLevelButton?.getAttribute('data-level') ?? ''
 }
 
-export function updatePageTitleAndLevelSpecificOverlays() {
+// TODO: treat this more as an event, instead of progressively making the function name longer or less descriptive
+// ("on screen change"? "on navigate"? when all should this be called? could be multiple distinct events too)
+export function updatePageTitleAndLevelSpecificOverlaysAndHints() {
   if (activityMode === "edit") {
     document.title = "Snakeshift - Level Editor"
   } else if (activityMode === "replay") {
@@ -241,6 +244,32 @@ export function updatePageTitleAndLevelSpecificOverlays() {
   }
   for (const overlayElement of document.querySelectorAll<HTMLDivElement>('.level-specific-overlay, #level-stuck-hint')) {
     overlayElement.hidden = overlayElement.dataset.forLevel !== currentLevelID()
+  }
+
+  const hintButton = document.querySelector<HTMLButtonElement>('#hint-button')!
+  const hintsList = document.querySelector<HTMLButtonElement>('#hints-list')!
+  hintsList.innerHTML = ""
+  hintButton.hidden = true
+  if (currentLevelButton) {
+    const levelName = currentLevelButton.querySelector(".button-text")?.textContent ?? ""
+    const levelHints = hintsByLevelName[levelName]
+    // TODO: to encourage using minimal hints, don't show how many hints are available,
+    // at least not laid out all at once.
+    // A button to reveal the next hint would be better.
+    if (levelHints) {
+      for (const hint of levelHints) {
+        const li = document.createElement('li')
+        li.textContent = hint
+        hintsList.append(li)
+        li.classList.add('hint')
+        li.addEventListener('click', () => {
+          li.classList.add('hint-revealed')
+        })
+      }
+      hintButton.hidden = false
+    } else {
+      hintsList.innerHTML = "<li>No hints available for this level.</li>"
+    }
   }
 }
 

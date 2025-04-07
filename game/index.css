@@ -203,7 +203,7 @@ input::selection,
   width: 50px;
 }
 
-.bw-button {
+.bw-button:not([hidden]) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -515,6 +515,16 @@ body[data-screen="credits"] .level-flow-control-button {
   100% {
     opacity: 1;
   }
+}
+
+.hint {
+  margin-bottom: 15px;
+}
+
+.hint:not(.hint-revealed) {
+  background-color: white;
+  color: white;
+  cursor: pointer;
 }
 
 kbd:not(.grouping-kbd) {

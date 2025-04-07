@@ -7,7 +7,7 @@ import { canMove } from "./game-logic"
 import { hitTestAllEntities, makeEntity, withinLevel } from "./helpers"
 import { handleInput } from "./input"
 import { deleteSnakeSegment, handleInputForLevelEditing } from "./level-editor"
-import { currentLevelID, loadLevelFile, loadNextLevel, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlays } from "./level-select"
+import { currentLevelID, loadLevelFile, loadNextLevel, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlaysAndHints } from "./level-select"
 import { hideScreens, showLevelSplash } from "./menus"
 import { RectangularEntity } from "./rectangular-entity"
 import { canvas } from "./rendering"
@@ -197,7 +197,7 @@ export function deserialize(state: GameStateString, levelId: string | null = nul
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       setCurrentLevel(levelId || parsed.levelId)
     }
-    updatePageTitleAndLevelSpecificOverlays()
+    updatePageTitleAndLevelSpecificOverlaysAndHints()
 
     postUpdate()
   }
@@ -538,7 +538,7 @@ export function setActivityMode(newMode: "edit" | "play" | "replay" | "menu") {
     levelHasGoal = false
   }
   wonLevel = false // might not need this
-  updatePageTitleAndLevelSpecificOverlays()
+  updatePageTitleAndLevelSpecificOverlaysAndHints()
 }
 
 function storeBaseLevelState() {
@@ -559,7 +559,7 @@ export function restartLevel() {
     void loadLevelFile(currentLevelID(), () => {
       // currentLevelButton = button
       // setStandaloneLevelMode(false)
-      updatePageTitleAndLevelSpecificOverlays()
+      updatePageTitleAndLevelSpecificOverlaysAndHints()
     })
     return
   }

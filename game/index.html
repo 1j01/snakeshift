@@ -200,6 +200,10 @@
       <img src="/graphics/speaker-muted.svg" alt="" class="when-muted" />
       <span class="button-text" id="mute-button-text">Mute</span>
     </button>
+    <button class="bw-button" id="hint-button" aria-keyshortcuts="Control+," aria-controls="hints-dialog">
+      <img src="/graphics/hint-2.svg" alt="" />
+      <span class="button-text">Hint</span>
+    </button>
     <button class="bw-button" id="settings-button" aria-keyshortcuts="Control+," aria-controls="settings-dialog">
       <img src="/graphics/cog.svg" alt="" />
       <span class="button-text">Settings</span>
@@ -498,6 +502,15 @@
       <div class="buttons-control-row control-row">
         <button value="ok" class="bw-button" id="settings-dialog-ok-button">OK</button>
         <button value="cancel" formmethod="dialog" class="bw-button" id="settings-dialog-cancel-button">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+  <dialog id="hints-dialog">
+    <h2>Hints</h2>
+    <ol id="hints-list"></ol>
+    <form method="dialog">
+      <div class="buttons-control-row control-row">
+        <button value="ok" class="bw-button" id="hints-dialog-ok-button">OK</button>
       </div>
     </form>
   </dialog>
