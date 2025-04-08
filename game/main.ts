@@ -20,6 +20,7 @@ const replaySlider = document.getElementById("replay-slider") as HTMLInputElemen
 const hintButton = document.querySelector<HTMLButtonElement>("#hint-button")!
 const hintsDialog = document.querySelector<HTMLDialogElement>('#hints-dialog')!
 const hintsDialogOKButton = document.querySelector<HTMLDialogElement>('#hints-dialog-ok-button')!
+const nextHintButton = document.querySelector<HTMLDialogElement>('#hints-dialog-next-hint-button')!
 
 const settingsButton = document.querySelector<HTMLButtonElement>("#settings-button")!
 const settingsDialog = document.querySelector<HTMLDialogElement>('#settings-dialog')!
@@ -51,6 +52,11 @@ hintButton.addEventListener('click', () => {
 hintsDialogOKButton.addEventListener('click', (event) => {
   event.preventDefault()
   hintsDialog.close()
+})
+nextHintButton.addEventListener('click', (event) => {
+  event.preventDefault()
+  hintsDialog.querySelector('.hint[hidden]')?.removeAttribute('hidden')
+  nextHintButton.hidden = !hintsDialog.querySelector('.hint[hidden]')
 })
 
 function updateSubSettings() {

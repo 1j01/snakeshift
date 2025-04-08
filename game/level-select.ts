@@ -248,27 +248,28 @@ export function updatePageTitleAndLevelSpecificOverlaysAndHints() {
 
   const hintButton = document.querySelector<HTMLButtonElement>('#hint-button')!
   const hintsList = document.querySelector<HTMLButtonElement>('#hints-list')!
+  const nextHintButton = document.querySelector<HTMLDialogElement>('#hints-dialog-next-hint-button')!
+  const hintsDialog = document.querySelector<HTMLDialogElement>('#hints-dialog')!
+
   hintsList.innerHTML = ""
   hintButton.hidden = true
   if (currentLevelButton) {
     const levelName = currentLevelButton.querySelector(".button-text")?.textContent ?? ""
     const levelHints = hintsByLevelName[levelName]
-    // TODO: to encourage using minimal hints, don't show how many hints are available,
-    // at least not laid out all at once.
-    // A button to reveal the next hint would be better.
     if (levelHints) {
       for (const hint of levelHints) {
         const li = document.createElement('li')
         li.textContent = hint
         hintsList.append(li)
         li.classList.add('hint')
-        li.addEventListener('click', () => {
-          li.classList.add('hint-revealed')
-        })
+        li.hidden = true
       }
       hintButton.hidden = false
+      hintsDialog.querySelector('.hint[hidden]')?.removeAttribute('hidden')
+      nextHintButton.hidden = !hintsDialog.querySelector('.hint[hidden]')
     } else {
       hintsList.innerHTML = "<li>No hints available for this level.</li>"
+      nextHintButton.hidden = true
     }
   }
 }
