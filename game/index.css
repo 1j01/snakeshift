@@ -352,6 +352,16 @@ input::selection,
   padding: 4px;
 }
 
+#main-menu main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
 #main-menu button {
   width: 200px;
   max-width: calc(100% - 10px);
@@ -364,6 +374,14 @@ a:focus {
 
 a:focus {
   outline-offset: 5px;
+}
+
+a {
+  color: inherit;
+}
+
+footer {
+  flex: 0 0 50px;
 }
 
 dialog {
