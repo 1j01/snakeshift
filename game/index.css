@@ -403,6 +403,11 @@ a {
 
 footer {
   flex: 0 0 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
 }
 
 /* precedence hack to override dialog-polyfill's CSS */
