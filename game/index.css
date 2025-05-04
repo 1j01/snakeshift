@@ -152,7 +152,9 @@ input::selection,
 }
 
 @media (max-width: 450px) {
-  dialog {
+
+  /* precedence hack to override dialog-polyfill's CSS */
+  :root dialog {
     margin: 0;
     width: 100vw;
     max-width: 100vw;
@@ -384,7 +386,8 @@ footer {
   flex: 0 0 50px;
 }
 
-dialog {
+/* precedence hack to override dialog-polyfill's CSS */
+:root dialog {
   border: 30px solid #fff;
   border-image: url(/graphics/border-2.png) calc(15/32*100%) round;
   /* border-image-outset: 9px; */
