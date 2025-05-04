@@ -315,6 +315,9 @@ function initLocalStorage() {
   }
 }
 
+let id = 1
+// @ts-ignore violating template string type for UUIDs
+window.crypto.randomUUID ??= () => 'fake polyfilled randomUUID: ' + (id++).toString()
 
 async function main() {
 
