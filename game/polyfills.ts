@@ -1,5 +1,6 @@
 import dialogPolyfill from 'dialog-polyfill'
 import 'dialog-polyfill/dialog-polyfill.css'
+import 'fullscreen-polyfill'
 
 const hintsDialog = document.querySelector<HTMLDialogElement>('#hints-dialog')!
 const settingsDialog = document.querySelector<HTMLDialogElement>('#settings-dialog')!
