@@ -1,9 +1,11 @@
 import { enableAudioViaUserGesture, loadResources, resourcePaths, resources, toggleMute } from "./audio"
 import { animate, shouldInputBeAllowed } from "./game"
 import { activityMode, clearLevel, goToHistoryIndex, handleLevelCompletion, loadLevel, openLevel, redo, restartLevel, saveLevel, savePlaythrough, setActivityMode, setControlScheme, undo, undoable } from "./game-state"
+import { yinYangTextureLoaded } from "./inverter"
 import { clipboardCopy, clipboardCut, clipboardPaste, deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
 import { hideLevelSplash, initMainMenu, showMainMenu } from "./menus"
+import { grassTextureLoaded } from "./rectangular-entity"
 import { canvas } from "./rendering"
 import { safeStorage } from "./safe-storage"
 import { LOCAL_STORAGE_FORMAT_VERSION, storageKeys } from "./shared-helpers"
@@ -313,10 +315,21 @@ function initLocalStorage() {
   }
 }
 
-initLocalStorage()
-handleLevelCompletion()
-initMainMenu()
-initLevelEditorGUI()
-initLevelSelect()
-Object.assign(resources, await loadResources(resourcePaths))
-animate()
+
+async function main() {
+
+  await grassTextureLoaded
+  await yinYangTextureLoaded
+  initLocalStorage()
+  handleLevelCompletion()
+  initMainMenu()
+  initLevelEditorGUI()
+  initLevelSelect()
+  Object.assign(resources, await loadResources(resourcePaths))
+  animate()
+}
+
+main().catch((error) => {
+  console.error("Error during initialization:", error)
+  alert("An error occurred during initialization. Please try reloading the page.\n\n" + error)
+})

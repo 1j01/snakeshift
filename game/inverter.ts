@@ -1,7 +1,7 @@
 import { Collectable } from "./collectable"
 
 const yinYangTexture = document.createElement('img')
-const yinYangTextureLoaded = new Promise(resolve => yinYangTexture.onload = resolve)
+export const yinYangTextureLoaded = new Promise(resolve => yinYangTexture.onload = resolve)
 yinYangTexture.src = 'graphics/yin-yang.svg'
 // yinYangTexture.src = 'graphics/brick-2.svg'
 yinYangTexture.width = 128
@@ -9,7 +9,8 @@ yinYangTexture.height = 128
 
 // Simplest way to ensure the texture is loaded before drawing it
 // TODO: integrate with resource loading used for audio
-await yinYangTextureLoaded
+// await yinYangTextureLoaded
+// Second-simplest way is to export the promise and await it in main.ts (avoids top-level await)
 
 let yinYangPattern: CanvasPattern | null = null
 

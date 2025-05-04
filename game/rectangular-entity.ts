@@ -2,7 +2,7 @@ import Entity from "./entity"
 import { CollisionLayer, Hit } from "./types"
 
 const grassTexture = document.createElement('img')
-const grassTextureLoaded = new Promise(resolve => grassTexture.onload = resolve)
+export const grassTextureLoaded = new Promise(resolve => grassTexture.onload = resolve)
 grassTexture.src = 'graphics/shrubbery-24.svg' // my favorite design
 // grassTexture.src = 'graphics/shrubbery-22.svg' // more grass-like
 // grassTexture.src = 'graphics/shrubbery-18.svg' // more grass-like
@@ -12,7 +12,8 @@ grassTexture.height = 128
 
 // Simplest way to ensure the texture is loaded before drawing it
 // TODO: integrate with resource loading used for audio
-await grassTextureLoaded
+// await grassTextureLoaded
+// Second-simplest way is to export the promise and await it in main.ts (avoids top-level await)
 
 let grassPattern: CanvasPattern | null = null
 
