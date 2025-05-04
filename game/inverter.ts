@@ -19,10 +19,10 @@ export class Inverter extends Collectable {
 
   solid = false
 
-  #time = 0
+  _time = 0
 
   step(time: number): void { // weird that this isn't a delta
-    this.#time = time
+    this._time = time
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -30,7 +30,7 @@ export class Inverter extends Collectable {
     ctx.translate(this.x, this.y)
     ctx.scale(this.width, this.height)
     ctx.translate(1 / 2, 1 / 2)
-    ctx.rotate(-(this.#time / 1000 + this.x / 10 + this.y / 10) * Math.PI / 12)
+    ctx.rotate(-(this._time / 1000 + this.x / 10 + this.y / 10) * Math.PI / 12)
 
     // drawImage is REALLY slow, so we use a pattern instead
     // ctx.drawImage(yinYangTexture, this.x, this.y, this.width + pixel, this.height + pixel)

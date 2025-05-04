@@ -2,7 +2,7 @@ import { RectangularEntity } from "./rectangular-entity"
 import { CollisionLayer } from "./types"
 
 export class CellularAutomata extends RectangularEntity {
-  #drawLife(ctx: CanvasRenderingContext2D, fill: boolean, stroke: boolean) {
+  _drawLife(ctx: CanvasRenderingContext2D, fill: boolean, stroke: boolean) {
     ctx.save()
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2)
     ctx.scale(this.width, this.height)
@@ -39,9 +39,9 @@ export class CellularAutomata extends RectangularEntity {
     ctx.restore()
   }
   draw(ctx: CanvasRenderingContext2D) {
-    this.#drawLife(ctx, false, true)
+    this._drawLife(ctx, false, true)
   }
   draw2(ctx: CanvasRenderingContext2D) {
-    this.#drawLife(ctx, true, false)
+    this._drawLife(ctx, true, false)
   }
 }
