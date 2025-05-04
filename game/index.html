@@ -12,8 +12,8 @@
 </head>
 
 <body>
-  <div class="screen active" id="main-menu">
-    <main>
+  <div class="screen safe-center active" id="main-menu">
+    <main class="safe-center">
       <h1>Snake<span class="logo-shift">Shift</span></h1>
       <button class="bw-button" id="play-button" autofocus>
         <img src="/graphics/play.svg" alt="" />
@@ -38,7 +38,8 @@
       <a href="https://www.paypal.com/paypalme/isaiahodhner">Donate</a>
     </footer>
   </div>
-  <div class="screen" id="credits">
+  <div class="screen safe-center" id="credits">
+    <div class="dummy-for-safe-center-child-margin"></div>
     <h1>Credits</h1>
     <p>
       <a href="https://isaiahodhner.io/games">Isaiah Odhner</a> — Programming, Design, Art
@@ -69,8 +70,9 @@
     <p>
       <a href="https://freesound.org/people/MindlessTrails/sounds/509532/">MindlessTrails (Freesound) — Crate push</a>
     </p>
+    <div class="dummy-for-safe-center-child-margin"></div>
   </div>
-  <div class="screen" id="level-select">
+  <div class="screen safe-center" id="level-select">
     <h2>Level Select</h2>
     <!-- If changing a level's id, add an upgrade step in initLocalStorage to preserve the player's solution status. -->
     <div id="level-list">
@@ -149,14 +151,17 @@
       </div>
     </div>
   </div>
-  <div class="screen" id="loading-screen">
+  <div class="screen safe-center" id="loading-screen">
     <div id="load-progress"></div>
   </div>
-  <div class="screen splash-screen" id="level-splash">
+  <div class="screen safe-center splash-screen" id="level-splash">
+    <div class="dummy-for-safe-center-child-margin"></div>
     <h1 id="level-splash-title"></h1>
     <div class="gong-effect"></div>
+    <div class="dummy-for-safe-center-child-margin"></div>
   </div>
-  <div class="screen" id="game-win-screen">
+  <div class="screen safe-center" id="game-win-screen">
+    <div class="dummy-for-safe-center-child-margin"></div>
     <h1>You Win!</h1>
     <blockquote id="tao-te-ching-quote">
       <div class="line-a">Thirty spokes share the wheel's hub;</div><br>
@@ -173,6 +178,7 @@
       </footer>
     </blockquote>
     <div class="gong-effect"></div>
+    <div class="dummy-for-safe-center-child-margin"></div>
   </div>
   <div id="game-options-bar">
     <button class="bw-button" id="back-to-main-menu-button" aria-keyshortcuts="Escape">
@@ -222,7 +228,7 @@
     </button>
   </div>
   <div id="level-editor">
-    <div id="entities-bar">
+    <div id="entities-bar" class="safe-center">
       <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="White">
         <span class="button-text">Snake (White)</span>
       </button>
@@ -346,7 +352,7 @@
       </form>
     </dialog>
   </div>
-  <div id="replay-bar">
+  <div id="replay-bar" class="safe-center">
     <!-- <button class="bw-button" id="replay-play-pause-button" aria-keyshortcuts="Space">
       <span>▶</span>
       <span class="button-text">Play</span>

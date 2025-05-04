@@ -71,7 +71,7 @@ body {
   z-index: 2;
   width: 100%;
   display: flex;
-  justify-content: safe center;
+  /* justify-content: safe center; see .safe-center */
   overflow: auto;
   box-sizing: border-box;
   padding: 5px;
@@ -289,7 +289,9 @@ input::selection,
 
 #level-select {
   /* give room for #game-options-bar */
-  padding-top: 50px;
+  /* padding-top: 50px; with real `safe center`, "Level Select" heading has some margin of its own */
+  /* but with .safe-center on container it's reset to `auto` which can be zero if there's more content than viewport */
+  padding-top: 70px;
   box-sizing: border-box;
 }
 
@@ -359,9 +361,26 @@ input::selection,
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: safe center;
+  /* justify-content: safe center; see .safe-center */
   box-sizing: border-box;
   width: 100%;
+}
+
+.safe-center {
+  /* justify-content: safe center; */
+
+  /* `safe` keyword is not supported in Safari Version 14.1.2 and support cannot be detected with @supports since it parses even though it's ignored */
+  /* a workaround is to use auto margins on children */
+
+  padding-block: 10px;
+}
+
+.safe-center>*:first-child {
+  margin-block-start: auto !important;
+}
+
+.safe-center>*:last-child {
+  margin-block-end: auto !important;
 }
 
 #main-menu button {
@@ -466,7 +485,7 @@ body[data-screen="credits"] .level-flow-control-button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: safe center;
+  /* justify-content: safe center; see .safe-center */
   overflow: auto;
   /* Absolute position makes menus play nice with the editor transition. */
   /* Otherwise, the editor UI jumps to the bottom when returning to the main menu. */
