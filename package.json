@@ -31,6 +31,7 @@
     "@typescript-eslint/parser": "^6.13.1",
     "@vitejs/plugin-legacy": "^6.0.2",
     "cspell-cli": "^8.17.2",
+    "dialog-polyfill": "^0.5.6",
     "eslint": "^8.54.0",
     "gh-pages": "^6.3.0",
     "glob": "^11.0.1",

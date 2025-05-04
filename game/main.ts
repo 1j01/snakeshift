@@ -5,6 +5,7 @@ import { yinYangTextureLoaded } from "./inverter"
 import { clipboardCopy, clipboardCut, clipboardPaste, deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
 import { initLevelSelect } from "./level-select"
 import { hideLevelSplash, initMainMenu, showMainMenu } from "./menus"
+import './polyfills'
 import { grassTextureLoaded } from "./rectangular-entity"
 import { canvas } from "./rendering"
 import { safeStorage } from "./safe-storage"
@@ -315,12 +316,7 @@ function initLocalStorage() {
   }
 }
 
-let id = 1
-// @ts-ignore violating template string type for UUIDs
-window.crypto.randomUUID ??= () => 'fake polyfilled randomUUID: ' + (id++).toString()
-
 async function main() {
-
   await grassTextureLoaded
   await yinYangTextureLoaded
   initLocalStorage()
