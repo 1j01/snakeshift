@@ -1,5 +1,6 @@
 # Snakeshift Todo List
 
+- prevent losing level progress when hitting tilde (currently toggles level edit mode, but it's too close to Tab key)
 - URL routing (see `// TODO: proper routing` in level-select.ts)
 - skip/merge extra undo steps for switching snakes
 - readme image
@@ -61,6 +62,7 @@
 
 ## Aesthetics:
 - visuals:
+  - level stuck hint can be hard to read, especially on narrow level Corkscrew (it can overlap black/white level details and it currently is wrapped within the level border)
   - there's a slight bug where Block is not always sorted to bottom, which I can see when dragging with the pointer control scheme, which animates the snake slightly beyond its cell, in the level Ferry (this might just be the specific level isn't sorted because sorting logic wasn't in place when it was created; but I could add a `sortEntities` call when loading the level)
   - enlarge level border
   - 1x1 snake should change direction when moving
@@ -74,6 +76,9 @@
       - might help to add scales
       - probably need texture-based rendering to sort this out
       - oh, could prevent key repeat on switching snakes, and make it keep the highlight as long as the key is held
+      - maybe inset border dynamically based on how many snakes are on top?
+        - this implies a snake's border changes based on other snakes moving on/off, which is a bit weird
+        - per segment or per snake?
     - feels like you shouldn't be able to go on top of another snake's head, like you'd eat the snake
       - I have since made food more distinct from snake eyes by making them bigger, changing their shape to be pointy, and giving the snake two eyes; however, it could be explored for gameplay reasons (keeping head visible, etc.)
 - loading progress could be shown with a snake, eating stars :)
@@ -117,6 +122,7 @@
 
 
 ## Tests
+- keyboard focus navigation with arrow keys (navigating to offscreen elements isn't working)
 - HTML validation
 - DOM structure / accessibility validation
 - add tests for replay viewer:
@@ -130,6 +136,10 @@
   - What am I supposed to do as a user?
 
 ## Puzzles
+- Ferry level is too hard for a beginning puzzle; I liked having it follow Bridge but it should probably be later. Also, it probably doesn't need to have the goal at the end be a bunch of food that you have to be careful not to get stuck while eating. Could resize the level for balance.
+- The Three Pagodas is probably easier than Corkscrew.
+- convey that snakes get longer when they eat (I tried to do this with the Switching Snakes level, but it's not clear enough; it's not the focus of the level, and it's only the next level where it matters)
+- Fill The Box level is basically just two similar levels in one (someone even said "I just messed up, didn't I?" after completing half of the level)
 - see `game/public/levels/sketches` folder for some ideas
 - lock levels are cheese-able; you can bridge the left and middle vertical lanes with the black snake; the intentionally cheese-able "security by obscurity" version can also be solved in two different ways, bridging it vertically (intended) or horizontally (in the same way as the prior level); I've got a more solid version in `proper-lock-v2` but want to consider if it makes the difference between the two levels too obvious, and maybe adjust the latter level as well (but it might be fine)
 
