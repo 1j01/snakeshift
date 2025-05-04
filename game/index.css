@@ -238,7 +238,7 @@ input::selection,
 .level-border {
   position: absolute;
   pointer-events: none;
-  border: 30px solid #fff;
+  border: 30px solid transparent;
   border-image: url(/graphics/border-2.png) calc(15/32*100%) round;
   border-image-outset: 9px;
   image-rendering: pixelated;
@@ -413,7 +413,7 @@ footer {
 
 /* precedence hack to override dialog-polyfill's CSS */
 :root dialog {
-  border: 30px solid #fff;
+  border: 30px solid transparent;
   border-image: url(/graphics/border-2.png) calc(15/32*100%) round;
   /* border-image-outset: 9px; */
   image-rendering: pixelated;
