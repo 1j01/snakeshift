@@ -287,7 +287,8 @@ input::selection,
   }
 }
 
-#level-select {
+#level-select,
+#credits {
   /* give room for #game-options-bar */
   /* padding-top: 50px; with real `safe center`, "Level Select" heading has some margin of its own */
   /* but with .safe-center on container it's reset to `auto` which can be zero if there's more content than viewport */
