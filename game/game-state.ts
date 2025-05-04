@@ -172,6 +172,24 @@ export function deserialize(state: GameStateString, levelId: string | null = nul
       }
     }
   }
+  if (parsed.formatVersion === 5) {
+    parsed.formatVersion = 6
+    // Remove accidentally serialized _time and solid properties from Collectable entities
+    // _time was added back temporarily by changing #time back to _time
+    // to avoid private property syntax for older browsers,
+    // although no levels were necessarily saved with the junk data.
+    // While we're at it, we don't need the solid property either.
+    // That said, the solid property is still serialized for Block entities
+    // even though it's always true.
+    for (let i = 0; i < parsed.entities.length; i++) {
+      const entDef = parsed.entities[i]
+      if (parsed.entityTypes[i] !== "Food" && parsed.entityTypes[i] !== "Inverter") continue
+      // @ts-expect-error property is not defined on Entity
+      delete entDef._time
+      // @ts-expect-error property is not defined on Entity
+      delete entDef.solid
+    }
+  }
   if (parsed.formatVersion !== LEVEL_FORMAT_VERSION) throw new Error("Invalid format version")
 
   for (let i = 0; i < parsed.entities.length; i++) {

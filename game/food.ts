@@ -9,6 +9,13 @@ export class Food extends Collectable {
 
   _time = 0
 
+  toJSON(): object {
+    const obj = { ...this } as Partial<this>
+    delete obj._time
+    delete obj.solid
+    return obj
+  }
+
   step(time: number): void { // weird that this isn't a delta
     this._time = time
   }
