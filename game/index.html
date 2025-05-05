@@ -710,6 +710,15 @@
     </form>
   </dialog>
   <script type="module" src="./main.ts"></script>
+  <script>
+    setTimeout((function () {
+      for (var i = 0; i < document.scripts.length; i++) {
+        var script = document.scripts[i]
+        var maxLength = 100
+        console.log(script.outerHTML.slice(0, maxLength) + (script.outerHTML.length > maxLength ? '...' : ''))
+      }
+    }), 0)
+  </script>
 </body>
 
 </html>
