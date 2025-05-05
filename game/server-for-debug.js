@@ -68,7 +68,7 @@ async function createServer() {
   app.use(vite.middlewares)
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  app.use('*', async (req, res, next) => {
+  app.use('*splat', async (req, res, next) => {
     const url = req.originalUrl
 
     try {
