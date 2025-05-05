@@ -302,7 +302,7 @@ export function handleInput(
         break
     }
     if (handling) {
-      event.preventDefault()
+      // event.preventDefault()
     }
   })
 
