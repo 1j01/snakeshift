@@ -8,6 +8,9 @@
 // - `JSON` is not supported (I've tried to include a polyfill with @vitejs/plugin-legacy, but that's not working, maybe because this is just a script tag and not a module?)
 // - `{variableAsKey}` is not supported
 // - Canvas is supported
+// - External JS is cached and is not reloaded when reloading the page.
+//   There is no option to clear the cache, disable caching, or hard reload the page.
+//   It has to be cache-busted with a query string.
 
 const originalConsole = window.console
 window.console = {}
