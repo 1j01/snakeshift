@@ -20,6 +20,7 @@ export default defineConfig({
     },
     allowedHosts: [
       'tunnel.isaiahodhner.io',
+      'ss.isaiahodhner.io',
     ],
   },
   // Without this, you don't get errors when files fail to load!
