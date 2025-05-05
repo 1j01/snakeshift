@@ -7,7 +7,7 @@ import express from 'express'
 import { createServer as createViteServer } from 'vite'
 import bodyParser from 'body-parser'
 
-const PORT = process.env.PORT ?? 5173
+const PORT = process.env.PORT ?? 5569
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
