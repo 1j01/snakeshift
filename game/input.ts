@@ -254,6 +254,7 @@ export function handleInput(
   // ----------------
 
   on(window, 'keydown', (event) => {
+    return
     // Using `event.code` instead of `event.key` since the control scheme relies on the physical key layout, not the letters.
     // Undo/redo is handled separately.
     // Don't prevent default behavior with modifier keys held,

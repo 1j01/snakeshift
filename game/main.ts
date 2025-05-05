@@ -142,6 +142,7 @@ replaySlider.addEventListener('input', () => {
 })
 
 addEventListener('keydown', (event) => {
+  return
   // While a screen is overtop the game, only allow certain actions that will dismiss the screen.
   // - Allow Ctrl+Z while win screen is shown to undo winning the level/game (in case you want to try to solve it with less moves for instance)
   // - Allow Enter/Space/Escape to dismiss the screen
