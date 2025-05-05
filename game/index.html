@@ -92,7 +92,7 @@
           }
         }
         //xhr.send(JSON.stringify({ message: message }))
-        xhr.send(message)
+        //xhr.send(message)
       } catch (e) {
         logOnPage(e)
       }
@@ -173,7 +173,7 @@
       }
       xhr.send()
     }
-    setInterval(receiveCommand, 1000)
+    //setInterval(receiveCommand, 1000)
 
     const input = document.getElementById('debug-input')
     input.addEventListener('keydown', function (event) {
