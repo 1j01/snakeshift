@@ -1,6 +1,6 @@
 {
   "format": "snakeshift",
-  "formatVersion": 5,
+  "formatVersion": 6,
   "levelInfo": {
     "width": 3,
     "height": 16
@@ -245,7 +245,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 0,
       "y": 3,
       "width": 1,
@@ -253,7 +252,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 2,
       "y": 3,
       "width": 1,
@@ -261,7 +259,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 0,
       "y": 7,
       "width": 1,
@@ -269,7 +266,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 0,
       "y": 8,
       "width": 1,
@@ -277,7 +273,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 2,
       "y": 7,
       "width": 1,
@@ -285,7 +280,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 2,
       "y": 8,
       "width": 1,
@@ -293,7 +287,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 1,
       "y": 7,
       "width": 1,
@@ -301,7 +294,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 1,
       "y": 8,
       "width": 1,
@@ -309,7 +301,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 0,
       "y": 2,
       "width": 1,
@@ -317,7 +308,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 2,
       "y": 2,
       "width": 1,
@@ -325,7 +315,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 1,
       "y": 0,
       "width": 1,
@@ -333,7 +322,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 1,
       "y": 5,
       "width": 1,

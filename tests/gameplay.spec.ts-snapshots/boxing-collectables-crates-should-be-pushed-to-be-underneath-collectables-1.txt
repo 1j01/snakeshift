@@ -1,6 +1,6 @@
 {
   "format": "snakeshift",
-  "formatVersion": 5,
+  "formatVersion": 6,
   "levelInfo": {
     "width": 3,
     "height": 10
@@ -228,7 +228,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 2,
       "y": 0,
       "width": 1,
@@ -236,7 +235,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 2,
       "y": 1,
       "width": 1,
@@ -244,7 +242,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 2,
       "y": 2,
       "width": 1,
@@ -252,7 +249,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 2,
       "y": 3,
       "width": 1,
@@ -260,7 +256,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 2,
       "y": 4,
       "width": 1,
@@ -268,7 +263,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 2,
       "y": 5,
       "width": 1,
@@ -276,7 +270,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 2,
       "y": 7,
       "width": 1,
@@ -284,7 +277,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 2,
       "y": 6,
       "width": 1,
@@ -292,7 +284,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 2,
       "y": 9,
       "width": 1,
@@ -300,7 +291,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 2,
       "y": 8,
       "width": 1,

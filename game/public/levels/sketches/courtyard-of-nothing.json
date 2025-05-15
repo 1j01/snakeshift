@@ -1,6 +1,6 @@
 {
   "format": "snakeshift",
-  "formatVersion": 5,
+  "formatVersion": 6,
   "levelInfo": {
     "width": 16,
     "height": 16
@@ -619,7 +619,6 @@
       "growOnNextMove": false
     },
     {
-      "solid": false,
       "x": 3,
       "y": 7,
       "width": 1,
@@ -627,7 +626,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 4,
       "y": 7,
       "width": 1,
@@ -635,7 +633,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 4,
       "y": 8,
       "width": 1,
@@ -643,7 +640,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 3,
       "y": 8,
       "width": 1,
@@ -651,7 +647,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 7,
       "y": 4,
       "width": 1,
@@ -659,7 +654,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 7,
       "y": 3,
       "width": 1,
@@ -667,7 +661,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 8,
       "y": 3,
       "width": 1,
@@ -675,7 +668,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 8,
       "y": 4,
       "width": 1,
@@ -683,7 +675,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 11,
       "y": 7,
       "width": 1,
@@ -691,7 +682,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 11,
       "y": 8,
       "width": 1,
@@ -699,7 +689,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 12,
       "y": 8,
       "width": 1,
@@ -707,7 +696,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 12,
       "y": 7,
       "width": 1,

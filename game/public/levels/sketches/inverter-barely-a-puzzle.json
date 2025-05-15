@@ -1,6 +1,6 @@
 {
   "format": "snakeshift",
-  "formatVersion": 5,
+  "formatVersion": 6,
   "levelInfo": {
     "width": 9,
     "height": 9
@@ -576,7 +576,6 @@
       "layer": 0
     },
     {
-      "solid": false,
       "x": 8,
       "y": 0,
       "width": 1,
@@ -584,7 +583,6 @@
       "layer": 3
     },
     {
-      "solid": false,
       "x": 0,
       "y": 8,
       "width": 1,
@@ -592,7 +590,6 @@
       "layer": 3
     },
     {
-      "solid": false,
       "x": 0,
       "y": 0,
       "width": 1,
@@ -600,7 +597,6 @@
       "layer": 3
     },
     {
-      "solid": false,
       "x": 8,
       "y": 8,
       "width": 1,
@@ -608,7 +604,6 @@
       "layer": 3
     },
     {
-      "solid": false,
       "x": 4,
       "y": 4,
       "width": 1,
@@ -616,7 +611,6 @@
       "layer": 3
     },
     {
-      "solid": false,
       "x": 6,
       "y": 2,
       "width": 1,
@@ -624,7 +618,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 2,
       "y": 6,
       "width": 1,
@@ -632,7 +625,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 6,
       "y": 6,
       "width": 1,
@@ -640,7 +632,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 2,
       "y": 2,
       "width": 1,
@@ -648,7 +639,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 7,
       "y": 1,
       "width": 1,
@@ -656,7 +646,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 7,
       "y": 7,
       "width": 1,
@@ -664,7 +653,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 1,
       "y": 7,
       "width": 1,
@@ -672,7 +660,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 1,
       "y": 1,
       "width": 1,
@@ -680,7 +667,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 3,
       "y": 3,
       "width": 1,
@@ -688,7 +674,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 5,
       "y": 5,
       "width": 1,
@@ -696,7 +681,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 5,
       "y": 3,
       "width": 1,
@@ -704,7 +688,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 3,
       "y": 5,
       "width": 1,

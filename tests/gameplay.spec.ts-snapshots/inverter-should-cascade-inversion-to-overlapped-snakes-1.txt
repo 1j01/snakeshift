@@ -1,6 +1,6 @@
 {
   "format": "snakeshift",
-  "formatVersion": 5,
+  "formatVersion": 6,
   "levelInfo": {
     "width": 4,
     "height": 5
@@ -255,7 +255,6 @@
       "growOnNextMove": false
     },
     {
-      "solid": false,
       "x": 1,
       "y": 3,
       "width": 1,
