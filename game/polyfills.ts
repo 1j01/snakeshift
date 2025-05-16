@@ -14,5 +14,6 @@ for (const dialog of dialogs) {
 }
 
 let id = 1
-// @ts-ignore violating template string type for UUIDs
+// @ts-expect-error violating template string type for UUIDs
+// eslint-disable-next-line @typescript-eslint/unbound-method
 window.crypto.randomUUID ??= () => 'fake polyfilled randomUUID: ' + (id++).toString()
