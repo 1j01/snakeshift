@@ -119,10 +119,10 @@ const entityConstructors: Record<string, EntityConstructor> = {
 /**
  * Get the name of an entity class.
  * 
- * This is used instead of `entity.constructor.name` because identifiers
+ * This function is used instead of `entity.constructor.name` because identifiers
  * may be mangled in production builds.
- * Even with `minifyIdentifiers: false` in vite.config.js,
- * @vitejs/plugin-legacy still mangles identifiers.
+ * Even with `minifyIdentifiers: false` in `vite.config.js`,
+ * `@vitejs/plugin-legacy` still mangles identifiers. Just not by minifying them.
  */
 export function nameOfEntityClass(entityConstructor: EntityConstructor): string {
   for (const [name, constructor] of Object.entries(entityConstructors)) {
