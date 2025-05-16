@@ -1,6 +1,6 @@
 {
   "format": "snakeshift",
-  "formatVersion": 5,
+  "formatVersion": 6,
   "levelInfo": {
     "width": 16,
     "height": 16
@@ -989,7 +989,6 @@
       "layer": 1
     },
     {
-      "solid": false,
       "x": 2,
       "y": 11,
       "width": 1,
@@ -997,7 +996,6 @@
       "layer": 3
     },
     {
-      "solid": false,
       "x": 2,
       "y": 14,
       "width": 1,
@@ -1005,7 +1003,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 11,
       "y": 0,
       "width": 1,
@@ -1013,7 +1010,6 @@
       "layer": 3
     },
     {
-      "solid": false,
       "x": 7,
       "y": 14,
       "width": 1,
@@ -1021,7 +1017,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 12,
       "y": 14,
       "width": 1,
@@ -1029,7 +1024,6 @@
       "layer": 2
     },
     {
-      "solid": false,
       "x": 7,
       "y": 11,
       "width": 1,

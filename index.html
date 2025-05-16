@@ -8,13 +8,15 @@
   <title>Snakeshift</title>
   <!-- <link rel="icon" type="image/png" href="/graphics/yin-yang-smol-sneks-128px.png" sizes="128x128" /> -->
   <link rel="icon" type="image/png" href="./graphics/yin-yang-larger-sneks-180px.png" sizes="180x180" />
-  <script type="module" crossorigin src="./assets/index-Ntv5yrIg.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-C5Va0flR.css">
+  <script type="module" crossorigin src="./assets/index-pUc5GUwy.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DASBNH_r.css">
+  <script type="module">import.meta.url;import("_").catch(()=>1);(async function*(){})().next();if(location.protocol!="file:"){window.__vite_is_modern_browser=true}</script>
+  <script type="module">!function(){if(window.__vite_is_modern_browser)return;console.warn("vite: loading legacy chunks, syntax error above and the same error below should be ignored");var e=document.getElementById("vite-legacy-polyfill"),n=document.createElement("script");n.src=e.src,n.onload=function(){System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))},document.body.appendChild(n)}();</script>
 </head>
 
 <body>
-  <div class="screen active" id="main-menu">
-    <main>
+  <div class="screen safe-center active" id="main-menu">
+    <main class="safe-center">
       <h1>Snake<span class="logo-shift">Shift</span></h1>
       <button class="bw-button" id="play-button" autofocus>
         <img src="./graphics/play.svg" alt="" />
@@ -35,11 +37,11 @@
     </main>
     <footer>
       <a href="https://isaiahodhner.io/games">More Games</a>
-      &nbsp;|&nbsp;
+      &nbsp;&middot;&nbsp;
       <a href="https://www.paypal.com/paypalme/isaiahodhner">Donate</a>
     </footer>
   </div>
-  <div class="screen" id="credits">
+  <div class="screen safe-center" id="credits">
     <h1>Credits</h1>
     <p>
       <a href="https://isaiahodhner.io/games">Isaiah Odhner</a> — Programming, Design, Art
@@ -71,7 +73,7 @@
       <a href="https://freesound.org/people/MindlessTrails/sounds/509532/">MindlessTrails (Freesound) — Crate push</a>
     </p>
   </div>
-  <div class="screen" id="level-select">
+  <div class="screen safe-center" id="level-select">
     <h2>Level Select</h2>
     <!-- If changing a level's id, add an upgrade step in initLocalStorage to preserve the player's solution status. -->
     <div id="level-list">
@@ -150,14 +152,17 @@
       </div>
     </div>
   </div>
-  <div class="screen" id="loading-screen">
+  <div class="screen safe-center" id="loading-screen">
     <div id="load-progress"></div>
   </div>
-  <div class="screen splash-screen" id="level-splash">
+  <div class="screen safe-center splash-screen" id="level-splash">
+    <div class="dummy-for-safe-center-child-margin"></div>
     <h1 id="level-splash-title"></h1>
     <div class="gong-effect"></div>
+    <div class="dummy-for-safe-center-child-margin"></div>
   </div>
-  <div class="screen" id="game-win-screen">
+  <div class="screen safe-center" id="game-win-screen">
+    <div class="dummy-for-safe-center-child-margin"></div>
     <h1>You Win!</h1>
     <blockquote id="tao-te-ching-quote">
       <div class="line-a">Thirty spokes share the wheel's hub;</div><br>
@@ -174,6 +179,7 @@
       </footer>
     </blockquote>
     <div class="gong-effect"></div>
+    <div class="dummy-for-safe-center-child-margin"></div>
   </div>
   <div id="game-options-bar">
     <button class="bw-button" id="back-to-main-menu-button" aria-keyshortcuts="Escape">
@@ -223,7 +229,7 @@
     </button>
   </div>
   <div id="level-editor">
-    <div id="entities-bar">
+    <div id="entities-bar" class="safe-center">
       <button class="bw-button tool-button entity-button" data-entity="Snake" data-color="White">
         <span class="button-text">Snake (White)</span>
       </button>
@@ -347,7 +353,7 @@
       </form>
     </dialog>
   </div>
-  <div id="replay-bar">
+  <div id="replay-bar" class="safe-center">
     <!-- <button class="bw-button" id="replay-play-pause-button" aria-keyshortcuts="Space">
       <span>▶</span>
       <span class="button-text">Play</span>
@@ -526,6 +532,9 @@
       </div>
     </form>
   </dialog>
+  <script nomodule>!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",(function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()}),!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();</script>
+  <script nomodule crossorigin id="vite-legacy-polyfill" src="./assets/polyfills-legacy-DK152xxf.js"></script>
+  <script nomodule crossorigin id="vite-legacy-entry" data-src="./assets/index-legacy-DM6zxSdN.js">System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))</script>
 </body>
 
 </html>
