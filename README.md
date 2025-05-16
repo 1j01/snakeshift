@@ -14,13 +14,13 @@ Skin and fang. Yin and yang. Snakes shelter sneks like sheds, then shed kin like
 
 ### Mouse/Pen/Touch
 
-Drag anywhere to move the snake in the direction of the drag.
+Drag anywhere to move the active snake. You can move multiple directions in one drag.
 
 Click on a snake to switch to it.
 
 ### Gamepad
 
-Use the left stick to point in the direction you want to move, and then press A to move to the highlighted cell.
+Use the left stick to point in the direction you want to move, and then press Ⓐ to take the move.
 Or use the D-pad to move.
 
 Shoulder buttons switch snakes.
@@ -28,7 +28,7 @@ Shoulder buttons switch snakes.
 Press ⓧ to undo, Ⓑ to redo.  
 Press Ⓨ to restart the level.
 
-You may need to press a button to activate the gamepad, before the web page can see it.
+You may need to press a button on the gamepad before the web page can see it.
 
 NOTE: The level editor does not currently support gamepad controls.
 
@@ -45,6 +45,8 @@ Press <kbd>R</kbd> to restart the level. This is undoable.
 Press <kbd>`</kbd> to toggle the level editor.
 
 Press <kbd>Ctrl+S</kbd> to save the level, and <kbd>Ctrl+O</kbd> to open a level.
+
+The level editor also supports standard shortcuts for copy (<kbd>Ctrl+C</kbd>), cut (<kbd>Ctrl+X</kbd>), paste (<kbd>Ctrl+V</kbd>), select all (<kbd>Ctrl+A</kbd>), and delete (<kbd>Delete</kbd>).
 
 ## Project Structure
 
