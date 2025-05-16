@@ -79,6 +79,9 @@ export function handleInput(
       setControlScheme(ControlScheme.Pointer)
       pointerDownSnake = snakeUnderPointer(event)
       movedSincePointerDown = false
+      // capture the pointer for iframe embed on itch.io or elsewhere
+      // so the mouse doesn't get stuck when releasing outside the iframe
+      eventTarget.setPointerCapture(event.pointerId)
     })
 
     on(window, "pointerup", (event) => {
