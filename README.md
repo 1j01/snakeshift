@@ -14,19 +14,23 @@ Skin and fang. Yin and yang. Snakes shelter sneks like sheds, then shed kin like
 
 ### Mouse/Pen/Touch
 
-Drag anywhere to move the active snake. You can move multiple directions in one drag.
-
-Click on a snake to switch to it.
+| Action             | Controls                                                                   |
+| ------------------ | -------------------------------------------------------------------------- |
+| Move               | Drag anywhere on the screen. You can move multiple directions in one drag. |
+| Switch Snakes      | Click/tap on a snake                                                       |
+| Undo               | ![Undo](./game/public/graphics/undo.svg) button in toolbar                 |
+| Redo               | ![Redo](./game/public/graphics/redo.svg) button in toolbar                 |
+| Restart (Undoable) | ![Restart](./game/public/graphics/restart.svg) button in toolbar           |
 
 ### Gamepad
 
-Use the left stick to point in the direction you want to move, and then press Ⓐ to take the move.
-Or use the D-pad to move.
-
-Shoulder buttons switch snakes.
-
-Press ⓧ to undo, Ⓑ to redo.  
-Press Ⓨ to restart the level.
+| Action             | Controls                                                 |
+| ------------------ | -------------------------------------------------------- |
+| Move               | Hold left stick in a direction and press Ⓐ, or use D-pad |
+| Switch Snakes      | Shoulder buttons                                         |
+| Undo               | ⓧ                                                        |
+| Redo               | Ⓑ                                                        |
+| Restart (Undoable) | Ⓨ                                                        |
 
 You may need to press a button on the gamepad before the web page can see it.
 
@@ -34,19 +38,25 @@ NOTE: The level editor does not currently support gamepad controls.
 
 ### Keyboard
 
-You can use the arrow keys, WASD, HJKL, or the number pad to move.
+| Action             | Controls                                    |
+| ------------------ | ------------------------------------------- |
+| Move               | Arrow keys, WASD, vi keys (HJKL), or Numpad |
+| Switch Snakes      | <kbd>Tab</kbd>                              |
+| Undo               | <kbd>Z</kbd>                                |
+| Redo               | <kbd>Y</kbd>                                |
+| Restart (Undoable) | <kbd>R</kbd>                                |
+| Toggle Editor      | <kbd>`</kbd>                                |
 
-<kbd>Tab</kbd> switches between snakes.
-
-Press <kbd>Z</kbd> to undo, <kbd>Y</kbd> to redo.
-
-Press <kbd>R</kbd> to restart the level. This is undoable.
-
-Press <kbd>`</kbd> to toggle the level editor.
-
-Press <kbd>Ctrl+S</kbd> to save the level, and <kbd>Ctrl+O</kbd> to open a level.
-
-The level editor also supports standard shortcuts for copy (<kbd>Ctrl+C</kbd>), cut (<kbd>Ctrl+X</kbd>), paste (<kbd>Ctrl+V</kbd>), select all (<kbd>Ctrl+A</kbd>), and delete (<kbd>Delete</kbd>).
+The level editor supports these standard shortcuts:
+| Action     | Controls          |
+| ---------- | ----------------- |
+| Save       | <kbd>Ctrl+S</kbd> |
+| Open       | <kbd>Ctrl+O</kbd> |
+| Copy       | <kbd>Ctrl+C</kbd> |
+| Cut        | <kbd>Ctrl+X</kbd> |
+| Paste      | <kbd>Ctrl+V</kbd> |
+| Select All | <kbd>Ctrl+A</kbd> |
+| Delete     | <kbd>Delete</kbd> |
 
 ## Project Structure
 
