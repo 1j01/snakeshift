@@ -105,23 +105,40 @@ export function* lineNoDiagonals(start: Point, end: Point): Generator<Point> {
   }
 }
 
-export function makeEntity(entityType: string): Entity {
-  switch (entityType) {
-    case "Block":
-      return new Block()
-    case "Snake":
-      return new Snake()
-    case "Food":
-      return new Food()
-    case "Inverter":
-      return new Inverter()
-    case "Crate":
-      return new Crate()
-    case "CellularAutomata":
-      return new CellularAutomata()
-    default:
-      throw new Error(`Unknown entity type: ${entityType}`)
+type EntityConstructor = new () => Entity
+
+const entityConstructors: Record<string, EntityConstructor> = {
+  Block,
+  Snake,
+  Food,
+  Inverter,
+  Crate,
+  CellularAutomata,
+}
+
+/**
+ * Get the name of an entity class.
+ * 
+ * This is used instead of `entity.constructor.name` because identifiers
+ * may be mangled in production builds.
+ * Even with `minifyIdentifiers: false` in vite.config.js,
+ * @vitejs/plugin-legacy still mangles identifiers.
+ */
+export function nameOfEntityClass(entityConstructor: EntityConstructor): string {
+  for (const [name, constructor] of Object.entries(entityConstructors)) {
+    if (constructor === entityConstructor) {
+      return name
+    }
   }
+  throw new Error(`Unknown entity class: ${entityConstructor.name}`)
+}
+
+export function makeEntity(entityType: keyof typeof entityConstructors): Entity {
+  const Constructor = entityConstructors[entityType]
+  if (!Constructor) {
+    throw new Error(`Unknown entity type: ${entityType}`)
+  }
+  return new Constructor()
 }
 
 export function sortEntities() {

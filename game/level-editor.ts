@@ -3,7 +3,7 @@ import { Block } from './block'
 import { Collectable } from './collectable'
 import Entity from './entity'
 import { activePlayer, clearLevel, deserialize, entities, levelInfo, onResize, onUpdate, openLevel, postUpdate, saveLevel, serialize, setActivePlayer, undoable } from './game-state'
-import { bresenham, clampToLevel, hitTestAllEntities, invertCollisionLayer, lineNoDiagonals, makeEntity, makeEventListenerGroup, sameTile, sortEntities, topLayer, translateEntity, within, withinLevel } from './helpers'
+import { bresenham, clampToLevel, hitTestAllEntities, invertCollisionLayer, lineNoDiagonals, makeEntity, makeEventListenerGroup, nameOfEntityClass, sameTile, sortEntities, topLayer, translateEntity, within, withinLevel } from './helpers'
 import { RectangularEntity } from './rectangular-entity'
 import { addProblem, clearProblems, draw, drawEntities, pageToWorldTile } from './rendering'
 import Snake, { SnakeSegment } from './snake'
@@ -193,7 +193,7 @@ export function initLevelEditorGUI() {
       tool = Tool.Brush
       setSelectedButton(button)
     })
-    button.classList.toggle('selected', entityName === brushEntityClass.name && layer === brushColor && tool === Tool.Brush)
+    button.classList.toggle('selected', entityName === nameOfEntityClass(brushEntityClass) && layer === brushColor && tool === Tool.Brush)
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')!
     button.prepend(canvas)

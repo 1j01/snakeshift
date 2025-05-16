@@ -4,7 +4,7 @@ import Entity from "./entity"
 import { Food } from "./food"
 import { checkLevelStuck, checkLevelWon, shouldInputBeAllowed, storeLevelSolution } from "./game"
 import { canMove } from "./game-logic"
-import { hitTestAllEntities, makeEntity, withinLevel } from "./helpers"
+import { hitTestAllEntities, makeEntity, nameOfEntityClass, withinLevel } from "./helpers"
 import { handleInput } from "./input"
 import { deleteSnakeSegment, handleInputForLevelEditing } from "./level-editor"
 import { currentLevelID, loadLevelFile, loadNextLevel, setCurrentLevel, setStandaloneLevelMode, standaloneLevelMode, updatePageTitleAndLevelSpecificOverlaysAndHints } from "./level-select"
@@ -121,7 +121,7 @@ export function serialize(forSave = false): GameStateString {
     formatVersion: LEVEL_FORMAT_VERSION,
     levelInfo,
     entities,
-    entityTypes: entities.map(e => e.constructor.name),
+    entityTypes: entities.map(e => nameOfEntityClass(e.constructor as new () => Entity)),
     activePlayerEntityIndex: entities.indexOf(activePlayer!),
     levelId: currentLevelID(),
     levelSessionId: forSave ? undefined : levelSessionId,
