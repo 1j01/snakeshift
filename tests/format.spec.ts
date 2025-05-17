@@ -58,7 +58,7 @@ test('should save a playthrough file from play mode', async ({ page }) => {
   expect(playthrough).toMatchSnapshot()
 })
 
-test.fail('should save a playthrough file from play mode after winning and undoing winning a level', async ({ page }) => {
+test('should save a playthrough file from play mode after winning and undoing winning a level', async ({ page }) => {
   const originalContent = await readFile('game/public/levels/tests/move-right-to-win.json', 'utf8')
   await setLevelContent(page, originalContent, "play")
   // await setLevelContent(page, originalContent, "edit")

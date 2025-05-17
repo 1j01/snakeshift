@@ -205,6 +205,10 @@ export function deserialize(state: GameStateString, levelId: string | null = nul
 
   activePlayer = entities[parsed.activePlayerEntityIndex] as Snake | undefined
 
+  if (parsed.levelSessionId) {
+    levelSessionId = parsed.levelSessionId
+  }
+
   if (!temporary) {
     const whichSnakeAfter = activePlayer?.id ?? ""
     if (whichSnakeBefore !== whichSnakeAfter && (activityMode == "play" || activityMode == "replay")) {
