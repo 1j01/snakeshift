@@ -65,6 +65,10 @@
           "height": 1
         }
       ],
+      "facing": {
+        "x": 0,
+        "y": -1
+      },
       "growOnNextMove": false
     },
     {
@@ -102,6 +106,10 @@
           "height": 1
         }
       ],
+      "facing": {
+        "x": 0,
+        "y": -1
+      },
       "growOnNextMove": false
     },
     {
@@ -131,6 +139,10 @@
           "height": 1
         }
       ],
+      "facing": {
+        "x": 0,
+        "y": -1
+      },
       "growOnNextMove": false
     },
     {
@@ -176,6 +188,10 @@
           "height": 1
         }
       ],
+      "facing": {
+        "x": 0,
+        "y": -1
+      },
       "growOnNextMove": false
     },
     {
