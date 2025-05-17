@@ -167,7 +167,12 @@ addEventListener('keydown', (event) => {
     event.preventDefault()
   } else if (event.key === '`' && !event.repeat) {
     if (activityMode === "play") {
-      setActivityMode("edit")
+      // Could add conditions where it doesn't prompt to discard progress,
+      // like if there are no undos/redos for the current level,
+      // or MAYBE if the level is a custom level.
+      if (confirm("Discard level progress and enter level editor?")) {
+        setActivityMode("edit")
+      }
     } else if (activityMode === "edit") {
       setActivityMode("play")
     }

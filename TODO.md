@@ -1,6 +1,5 @@
 # Snakeshift Todo List
 
-- prevent losing level progress when hitting tilde (currently toggles level edit mode, but it's too close to Tab key)
 - URL routing (see `// TODO: proper routing` in level-select.ts)
 - skip/merge extra undo steps for switching snakes
 - readme image
