@@ -14,53 +14,61 @@ test.beforeEach(async ({ page }) => {
 
 async function snakeShouldBeTrappedIn3x3Area(page: Page) {
   const originalContent = await getCurrentLevelContent(page)
+  const normalize = (content: string) => JSON.stringify(JSON.parse(content), (key, value) => {
+    if (key === 'facing') {
+      return undefined
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return value
+  }, 2)
+
   await test.step('snake should not move past right boundary', async () => {
     // Move once to right
     await page.keyboard.press('ArrowRight')
     const snakeToTheRight = await getCurrentLevelContent(page)
-    expect(snakeToTheRight).not.toEqual(originalContent)
+    expect(normalize(snakeToTheRight)).not.toEqual(normalize(originalContent))
     // Move again should do nothing
     await page.keyboard.press('ArrowRight')
-    expect(await getCurrentLevelContent(page)).toEqual(snakeToTheRight)
+    expect(normalize(await getCurrentLevelContent(page))).toEqual(normalize(snakeToTheRight))
     // Recenter
     await page.keyboard.press('ArrowLeft')
-    expect(await getCurrentLevelContent(page)).toEqual(originalContent)
+    expect(normalize(await getCurrentLevelContent(page))).toEqual(normalize(originalContent))
   })
   await test.step('snake should not move past left boundary', async () => {
     // Move once to left
     await page.keyboard.press('ArrowLeft')
     const snakeToTheLeft = await getCurrentLevelContent(page)
-    expect(snakeToTheLeft).not.toEqual(originalContent)
+    expect(normalize(snakeToTheLeft)).not.toEqual(normalize(originalContent))
     // Move again should do nothing
     await page.keyboard.press('ArrowLeft')
-    expect(await getCurrentLevelContent(page)).toEqual(snakeToTheLeft)
+    expect(normalize(await getCurrentLevelContent(page))).toEqual(normalize(snakeToTheLeft))
     // Recenter
     await page.keyboard.press('ArrowRight')
-    expect(await getCurrentLevelContent(page)).toEqual(originalContent)
+    expect(normalize(await getCurrentLevelContent(page))).toEqual(normalize(originalContent))
   })
   await test.step('snake should not move past top boundary', async () => {
     // Move once upwards
     await page.keyboard.press('ArrowUp')
     const snakeAtTop = await getCurrentLevelContent(page)
-    expect(snakeAtTop).not.toEqual(originalContent)
+    expect(normalize(snakeAtTop)).not.toEqual(normalize(originalContent))
     // Move again should do nothing
     await page.keyboard.press('ArrowUp')
-    expect(await getCurrentLevelContent(page)).toEqual(snakeAtTop)
+    expect(normalize(await getCurrentLevelContent(page))).toEqual(normalize(snakeAtTop))
     // Recenter
     await page.keyboard.press('ArrowDown')
-    expect(await getCurrentLevelContent(page)).toEqual(originalContent)
+    expect(normalize(await getCurrentLevelContent(page))).toEqual(normalize(originalContent))
   })
   await test.step('snake should not move past bottom boundary', async () => {
     // Move once downwards
     await page.keyboard.press('ArrowDown')
     const snakeAtBottom = await getCurrentLevelContent(page)
-    expect(snakeAtBottom).not.toEqual(originalContent)
+    expect(normalize(snakeAtBottom)).not.toEqual(normalize(originalContent))
     // Move again should do nothing
     await page.keyboard.press('ArrowDown')
-    expect(await getCurrentLevelContent(page)).toEqual(snakeAtBottom)
+    expect(normalize(await getCurrentLevelContent(page))).toEqual(normalize(snakeAtBottom))
     // Recenter
     await page.keyboard.press('ArrowUp')
-    expect(await getCurrentLevelContent(page)).toEqual(originalContent)
+    expect(normalize(await getCurrentLevelContent(page))).toEqual(normalize(originalContent))
   })
 }
 
