@@ -18,6 +18,7 @@ export default class Snake extends Entity {
   private _highlightTime = -Infinity
   private _melodyIndex = 0
   private _movementPreview: { x: number, y: number } = { x: 0, y: 0 }
+  private _movementAnimation: { x: number, y: number } = { x: 0, y: 0 }
   private _headRelativeOffset: { x: number, y: number } = { x: 0, y: 0 }
   private _headAngularOffset = 0
   private _tailTravelOffset = 0
@@ -65,16 +66,19 @@ export default class Snake extends Entity {
     //   (if the snake had scales, this would have a greater visual impact)
     // - springiness
 
-    // This function is also used by animation code.
-    // TODO: allow instantaneous movement preview to interact nicely with animations,
-    // without fighting over the displayed state. Addition should work.
-    // But not addition of animations, because that could lead to overshooting.
-    // Only combine instantaneous movement preview with one animation.
-
     this._movementPreview.x = deltaX
     this._movementPreview.y = deltaY
-    const movementPreviewAngle = Math.atan2(this._movementPreview.y, this._movementPreview.x)
-    const movementPreviewDistance = Math.hypot(this._movementPreview.y, this._movementPreview.x)
+    this.updateVisualOffsets()
+  }
+  private setMovementAnimation(deltaX: number, deltaY: number): void {
+    this._movementAnimation.x = deltaX
+    this._movementAnimation.y = deltaY
+    this.updateVisualOffsets()
+  }
+  private updateVisualOffsets(): void {
+    const offset = { x: this._movementAnimation.x + this._movementPreview.x, y: this._movementAnimation.y + this._movementPreview.y }
+    const movementPreviewAngle = Math.atan2(offset.y, offset.x)
+    const movementPreviewDistance = Math.hypot(offset.y, offset.x)
     const headAngle = this.segments.length > 1 ? Math.atan2(this.segments[1].y - this.segments[0].y, this.segments[1].x - this.segments[0].x) : (this.facing ? Math.atan2(-this.facing.y, -this.facing.x) : Math.PI / 2)
     this._headRelativeOffset = {
       x: Math.cos(movementPreviewAngle - headAngle) * movementPreviewDistance,
@@ -343,7 +347,7 @@ export default class Snake extends Entity {
 
       if (elapsed > duration) {
         this._tailAnimFactor = 0
-        this.previewMovement(0, 0)
+        this.setMovementAnimation(0, 0)
         return
       }
 
@@ -356,7 +360,7 @@ export default class Snake extends Entity {
 
       this._tailAnimFactor = 1
       this._tailAnimStartPos = originalTailPosition
-      this.previewMovement(move.delta.x * pos, move.delta.y * pos)
+      this.setMovementAnimation(move.delta.x * pos, move.delta.y * pos)
 
       requestAnimationFrame(animate)
     }
@@ -375,7 +379,7 @@ export default class Snake extends Entity {
       if (elapsed > duration) {
         this._tailAnimFactor = 0
         this._xEyes = false
-        this.previewMovement(0, 0)
+        this.setMovementAnimation(0, 0)
         return
       }
 
@@ -398,7 +402,7 @@ export default class Snake extends Entity {
         this._tailAnimStartPos = null
       }
       // this._tailAnimFactor = 0
-      this.previewMovement(move.delta.x * pos, move.delta.y * pos)
+      this.setMovementAnimation(move.delta.x * pos, move.delta.y * pos)
 
       requestAnimationFrame(animate)
     }

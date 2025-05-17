@@ -81,7 +81,6 @@
 - loading progress could be shown with a snake, eating stars :)
   - can use `previewMovement` to give finer resolution than the grid
 - animation:
-  - when using pointer controls, movement preview conflicts slightly with the animation; it should add the effects together, ideally, but right now the movement preview cancels out the movement animation; it's super subtle, you can just see a frame of jitter sometimes
   - animate undo/redo (implies timeline abstraction, moving animation state outside of entities)
   - animate pushing crates
     - valid move: slide (synced with snake movement)
