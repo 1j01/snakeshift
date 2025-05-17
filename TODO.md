@@ -59,6 +59,8 @@
 
 ## Aesthetics:
 - visuals:
+  - if level border image doesn't load, it obscures the edges of the level
+  - View Replay button makes the level select too noisy; could try different corners, or hiding until hover
   - level stuck hint can be hard to read, especially on narrow level Corkscrew (it can overlap black/white level details and it currently is wrapped within the level border)
   - there's a slight bug where Block is not always sorted to bottom, which I can see when dragging with the pointer control scheme, which animates the snake slightly beyond its cell, in the level Ferry (this might just be the specific level isn't sorted because sorting logic wasn't in place when it was created; but I could add a `sortEntities` call when loading the level)
   - enlarge level border
@@ -99,6 +101,7 @@
   - echo the gong sound with a haptic pulse!? seems weird to do a long vibration for a "good" event, but I wonder what it would feel like
 
 ## Less important
+- View Replay button icons load really slowly, maybe skipping cache due to being added with JS? does this apply to production or just dev?
 - shouldn't show tile highlight when pressing 'Y' to redo; could setControlType or whatever
 - reign in `onUpdate` over-extension/repurposing/overuse, maybe adding an onResize in renderer or something
 - bug: undoing isn't hiding game win screen... right away, consistently? test might not catch this if it's a delay; not sure if it was a delay or it required hitting undo multiple times
@@ -144,6 +147,7 @@
 
 These are just ideas, not necessarily planned features.
 
+- multi-size crates
 - slicing snakes
   - like the ghost peppers in [Ssspicy!](https://torcado.itch.io/ssspicy) but without awkward turn counter timing, it will slice your body into live and dead parts, and the dead parts will retain their shapes will be able to be pushed around like arbitrarily shaped crates
   - generalizes crates, so could do away with crates
