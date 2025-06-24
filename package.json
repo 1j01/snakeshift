@@ -16,7 +16,7 @@
     "dev": "vite --port 5569",
     "build": "vite build",
     "serve": "vite preview",
-    "deploy": "vite build && gh-pages -d game/dist",
+    "deploy": "vite build && butler push game/dist 1j01/snakeshift:browser && gh-pages -d game/dist",
     "lint-cspell": "cspell-cli lint .",
     "lint-eslint": "eslint -c .eslintrc.cjs --ext .ts game tests",
     "lint-ts": "tsc --noEmit",
