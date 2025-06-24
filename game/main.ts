@@ -225,8 +225,8 @@ addEventListener('keydown', (event) => {
   } else if (event.key === 'v' && activityMode == "edit") {
     void clipboardPaste()
     event.preventDefault()
-  } else if (event.key === 'e' && (event.altKey) && activityMode == "edit") {
-    // Alt+E is Image Attributes in MS Paint, the equivalent of Level Info here
+  } else if (event.key === 'e' && (event.ctrlKey || event.metaKey) && activityMode == "edit") {
+    // Ctrl+E is Image Attributes in MS Paint, the equivalent of Level Info here
     // TODO: avoid querySelector
     const levelInfoButton = document.querySelector<HTMLButtonElement>("#level-info-button")!
     levelInfoButton.click()
