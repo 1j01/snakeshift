@@ -200,7 +200,7 @@ export function takeMove(move: Move): void {
 }
 
 // TODO: DRY, copied from function `drag` in level-editor.ts
-function dragSnake(dragging: Snake, draggingSegmentIndex: number, to: Tile) {
+export function dragSnake(dragging: Snake, draggingSegmentIndex: number, to: Tile) {
   const draggingSegment = dragging.segments[draggingSegmentIndex]
   if (
     draggingSegment.x !== to.x ||

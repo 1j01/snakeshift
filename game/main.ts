@@ -3,8 +3,9 @@ import { animate, shouldInputBeAllowed } from "./game"
 import { activityMode, clearLevel, goToHistoryIndex, handleLevelCompletion, loadLevel, openLevel, redo, restartLevel, saveLevel, savePlaythrough, setActivityMode, setControlScheme, undo, undoable } from "./game-state"
 import { yinYangTextureLoaded } from "./inverter"
 import { clipboardCopy, clipboardCut, clipboardPaste, deleteSelectedEntities, initLevelEditorGUI, invert, selectAll, translateSelection } from "./level-editor"
+import { generateLevel } from "./level-generator"
 import { initLevelSelect } from "./level-select"
-import { hideLevelSplash, initMainMenu, showMainMenu } from "./menus"
+import { hideLevelSplash, hideScreens, initMainMenu, showMainMenu } from "./menus"
 import './polyfills'
 import { grassTextureLoaded } from "./rectangular-entity"
 import { canvas } from "./rendering"
@@ -331,6 +332,15 @@ async function main() {
   initLevelSelect()
   Object.assign(resources, await loadResources(resourcePaths))
   animate()
+
+  if (location.hash.includes("generate-level")) {
+    hideScreens()
+    setActivityMode("edit") // before clearing because it switches to separate edit mode undo stacks
+    clearLevel(false, true)
+    document.body.dataset.screen = "level-editor"
+    generateLevel()
+  }
+
 }
 
 main().catch((error) => {

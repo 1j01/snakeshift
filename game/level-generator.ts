@@ -1,0 +1,130 @@
+import { Block } from "./block"
+import { Food } from "./food"
+import { analyzeMoveAbsolute, dragSnake, takeMove } from "./game-logic"
+import { entities, levelInfo, serialize, undo, undoable } from "./game-state"
+import { hitTestAllEntities, invertCollisionLayer, layersCollide, shuffle, topLayer, withinLevel } from "./helpers"
+import Snake from "./snake"
+import { CollisionLayer, DIRECTIONS } from "./types"
+
+export function generateLevel() {
+  const puzzleGenerationLimit = 1000
+  const targetPuzzleComplexity = 100
+
+  levelInfo.width = 5 + Math.floor(Math.random() * 10)
+  levelInfo.height = 5 + Math.floor(Math.random() * 10)
+  entities.length = 0
+
+  // Create blocks
+  for (let x = 0; x < levelInfo.width; x++) {
+    for (let y = 0; y < levelInfo.height; y++) {
+      if (Math.random() < 0.3) {
+        const block = new Block()
+        block.x = x
+        block.y = y
+        entities.push(block)
+      }
+    }
+  }
+
+  // Create snakes
+  const nSnakes = 1 + Math.floor(Math.random() * 3)
+  for (let i = 0; i < nSnakes; i++) {
+    const snake = new Snake()
+    entities.push(snake) // push early so that hitTestAllEntities includes the snake itself
+    snake.segments.length = 0
+    let x = Math.floor(Math.random() * levelInfo.width)
+    let y = Math.floor(Math.random() * levelInfo.height)
+    const hits = hitTestAllEntities(x, y)
+    let layer = CollisionLayer.White
+    if (hits.length > 0) {
+      layer = invertCollisionLayer(hits[0].layer)
+    }
+    snake.segments.push({ x, y, width: 1, height: 1, layer })
+    for (let j = 1; j < 5; j++) {
+      // Try to place the next segment in a random direction
+      const directions = [...DIRECTIONS]
+      shuffle(directions)
+      for (const direction of directions) {
+        if (!withinLevel({ x: x + direction.x, y: y + direction.y, width: 1, height: 1 })) {
+          continue
+        }
+        const hits = hitTestAllEntities(x + direction.x, y + direction.y)
+        if (!layersCollide(topLayer(hits), layer)) {
+          x += direction.x
+          y += direction.y
+          snake.segments.push({ x, y, width: 1, height: 1, layer })
+          break
+        }
+      }
+    }
+  }
+
+  // Simulate in reverse, occasionally creating collectables and shrinking snakes as they move backwards
+  let puzzleSteps = 0
+  for (let i = 0; i < puzzleGenerationLimit; i++) {
+
+    const snakes = entities.filter(e => e instanceof Snake) as Snake[]
+    const snake = snakes[Math.floor(Math.random() * snakes.length)]
+    const direction = DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)]
+    const potentialBeforeTile = {
+      x: snake.segments[snake.segments.length - 1].x - direction.x,
+      y: snake.segments[snake.segments.length - 1].y - direction.y,
+      width: 1,
+      height: 1,
+    }
+    if (!withinLevel(potentialBeforeTile)) {
+      continue
+    }
+    // TODO: technically should ignore opposite end of the snake since moving onto your tail is valid
+    // I have logic to conditionally ignore the tail, but would need to conditionally ignore the head since we're simulating backwards
+    const hits = hitTestAllEntities(potentialBeforeTile.x, potentialBeforeTile.y)
+    if (!layersCollide(topLayer(hits), snake.segments[0].layer)) {
+      undoable() // for debugging level generation... as well as core logic, now; I'm using undo to backtrack if the move is invalid (not the most efficient, but very easy)
+      const eat = Math.random() < 0.1 && snake.segments.length > 1
+      snake.growOnNextMove = eat // to match snapshot
+      const expected = serialize()
+      const previousHead = { ...snake.segments[0] }
+      // FIXME: it's not validating in the case that it generates a collectable
+      if (eat) {
+        const food = new Food()
+        food.x = snake.segments[0].x
+        food.y = snake.segments[0].y
+        food.layer = snake.segments[0].layer
+        entities.push(food)
+      }
+      dragSnake(snake, snake.segments.length - 1, potentialBeforeTile)
+      if (eat) {
+        snake.segments.pop() // shrink the snake, TODO: is this the right end?
+        // snake.segments.shift()
+      }
+      const move = analyzeMoveAbsolute(snake, previousHead)
+      if (!move.valid) {
+        console.log("Undoing generated invalid move:", move)
+        undo()
+        // TODO: maybe clear redo stack because it can be confusing that you can redo to a state that was determined to be invalid
+        continue
+      }
+      // Also need to check that game state matches exactly if simulating forwards
+      // because the move may be valid, but it won't give the expected game state.
+      // Entities may be ordered differently.
+      takeMove(move)
+      const actual = serialize()
+      undo() // always undo takeMove done just for validation
+      if (actual !== expected) {
+        console.log("Undoing generated move which gave an inconsistent game state:", {
+          expected,
+          actual,
+          move,
+        })
+        undo() // backtrack if validation failed
+        continue
+      }
+      puzzleSteps++
+      if (puzzleSteps >= targetPuzzleComplexity) {
+        break
+      }
+    }
+  }
+
+  console.log("Generated a puzzle that can be solved in", puzzleSteps, "steps (likely fewer)")
+}
