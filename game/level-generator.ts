@@ -143,6 +143,12 @@ function tryGenerateLevel() {
       // Also need to check that game state matches exactly if simulating forwards
       // because the move may be valid, but it won't give the expected game state.
       // Entities may be ordered differently.
+      // Note: this MAY be too limiting, comparing the total entity order
+      // Comparing some sort of partial order may be better, but more complex and error-prone.
+      // I haven't determined that it's necessary, but this may be subtly rejecting
+      // more interesting puzzles, if there's a case where the entities are
+      // effectively ordered the same, but irrelevant disorder exists,
+      // and this aligns with characteristics of interesting puzzles.
       takeMove(move)
       const actual = serialize()
       undo() // always undo takeMove done just for validation
@@ -165,6 +171,8 @@ function tryGenerateLevel() {
 
   // TODO: for a better complexity estimate, we could try to contract the playthrough
   // by removing moves that are not necessary to solve the puzzle.
+  // (We could also crop the level afterwards, to the bounding box of moved snakes across all moves,
+  // although it wouldn't affect the complexity.)
   const numFood = entities.filter(e => e instanceof Food).length
   const puzzleSteps = moves.length
   const totalMoveComplexity = moves.reduce((sum, move) => {
