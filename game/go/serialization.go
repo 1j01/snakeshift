@@ -49,7 +49,7 @@ type EntityBlock struct {
 	Layer  CollisionLayer `json:"layer"`
 }
 
-func pointsToSnakeSegments(points []Point) []SnakeSegment {
+func pointsToSnakeSegments(points []Point, layer CollisionLayer) []SnakeSegment {
 	segments := make([]SnakeSegment, len(points))
 	for i, p := range points {
 		segments[i] = SnakeSegment{
@@ -57,7 +57,7 @@ func pointsToSnakeSegments(points []Point) []SnakeSegment {
 			Y:      p.Y,
 			Width:  1,
 			Height: 1,
-			Layer:  White,
+			Layer:  layer,
 		}
 	}
 	return segments
@@ -99,7 +99,7 @@ func SerializeLevel(level Level) ([]byte, error) {
 	for _, snake := range level.Snakes {
 		ent := EntitySnake{
 			ID:             snake.ID,
-			Segments:       pointsToSnakeSegments(snake.Segments),
+			Segments:       pointsToSnakeSegments(snake.Segments, snake.Layer),
 			GrowOnNextMove: snake.GrowOnNextMove,
 		}
 		entities = append(entities, ent)

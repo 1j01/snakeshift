@@ -27,6 +27,21 @@ func GenerateLevel() Level {
 		Snakes: make([]Snake, 0, 10),
 	}
 
+	topLayerAt := func(x, y int) CollisionLayer {
+		if !withinLevel(Point{X: x, Y: y}) {
+			return Both
+		}
+		// TODO: is this the right order?
+		for _, snake := range level.Snakes {
+			for _, segment := range snake.Segments {
+				if segment.X == x && segment.Y == y {
+					return snake.Layer
+				}
+			}
+		}
+		return level.Grid[y][x]
+	}
+
 	// Initialize grid with random block types
 	for i := range level.Grid {
 		level.Grid[i] = make([]CollisionLayer, width)
@@ -61,11 +76,7 @@ func GenerateLevel() Level {
 		x := rand.Intn(width)
 		y := rand.Intn(height)
 		snake.Segments = []Point{{X: x, Y: y}}
-		hits := hitTestAllEntities(x, y)
-		layer := White
-		if len(hits) > 0 {
-			layer = invertCollisionLayer(hits[0].layer)
-		}
+		layer := invertCollisionLayer(topLayerAt(x, y))
 		snake.Segments = append(snake.Segments, Point{X: x, Y: y})
 		targetSnakeEndLength := 2 + rand.Intn(10)
 		for j := 1; j < targetSnakeEndLength; j++ {
@@ -76,8 +87,7 @@ func GenerateLevel() Level {
 				if !withinLevel(Point{X: x + direction.X, Y: y + direction.Y}) {
 					continue
 				}
-				hits := hitTestAllEntities(x+direction.X, y+direction.Y)
-				if !layersCollide(topLayer(hits), layer) {
+				if !layersCollide(topLayerAt(x+direction.X, y+direction.Y), layer) {
 					x += direction.X
 					y += direction.Y
 					snake.Segments = append(snake.Segments, Point{X: x, Y: y})
