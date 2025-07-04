@@ -82,6 +82,8 @@ npm install
 npm run dev
 ```
 
+(There is also an experimental level generator written in Go, which can be run with `go run game/go/*.go >generated-level.json`.)
+
 ### Quality Control
 
 This command runs the spell checker, the typescript compiler, and eslint:
