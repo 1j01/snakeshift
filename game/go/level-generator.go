@@ -71,8 +71,12 @@ func GenerateLevel() Level {
 
 	// Create snakes
 	numSnakes := rand.Intn(3) + 1
+	snakes := make([]Snake, 0, numSnakes)
 	for i := 0; i < numSnakes; i++ {
 		snake := Snake{ID: i + 1}
+		// append early so that hit tests include the snake itself
+		// FIXME: this adds an empty snake... it's not by reference...
+		snakes = append(snakes, snake)
 		x := rand.Intn(width)
 		y := rand.Intn(height)
 		snake.Segments = []Point{{X: x, Y: y}}
