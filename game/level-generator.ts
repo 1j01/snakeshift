@@ -1,7 +1,7 @@
 import { Block } from "./block"
 import { Food } from "./food"
 import { analyzeMoveAbsolute, dragSnake, takeMove } from "./game-logic"
-import { deserialize, entities, levelInfo, serialize, undo, undoable } from "./game-state"
+import { deserialize, entities, levelInfo, serialize, undo } from "./game-state"
 import { hitTestAllEntities, invertCollisionLayer, layersCollide, shuffle, topLayer, withinLevel } from "./helpers"
 import Snake from "./snake"
 import { CollisionLayer, DIRECTIONS, Move } from "./types"
@@ -102,7 +102,17 @@ function tryGenerateLevel() {
     // I have logic to conditionally ignore the tail, but would need to conditionally ignore the head since we're simulating backwards
     const hits = hitTestAllEntities(potentialBeforeTile.x, potentialBeforeTile.y)
     if (!layersCollide(topLayer(hits), snake.segments[0].layer)) {
-      undoable() // for debugging level generation... as well as core logic, now; I'm using undo to backtrack if the move is invalid (not the most efficient, but very easy)
+      // I originally added undoable() here to debug the level generation,
+      // then used it for the core logic of level generation, for backtracking.
+      // However, it's inefficient, ESPECIALLY if we're also calling serialize()
+      // and I was getting lots of browser tab crashes, so I optimized it to
+      // use deserialize() instead, and restore the `growOnNextMove` property
+      // which is the only thing changed before the snapshot.
+      // Still getting browser tab crashes, though,
+      // so it'd be better to avoid serialization altogether.
+      // Or reimplement this in C or something.
+      // undoable()
+      const prevGrowOnNextMove = snake.growOnNextMove
       const eat = Math.random() < foodChance && snake.segments.length > 1
       // `growOnNextMove` is supposed to be set after eating,
       // so we have to do it before the reverse move, and before the `expected` snapshot,
@@ -126,8 +136,8 @@ function tryGenerateLevel() {
       const move = analyzeMoveAbsolute(snake, previousHead)
       if (!move.valid) {
         // console.log("Undoing generated invalid move:", move)
-        undo()
-        // TODO: maybe clear redo stack because it can be confusing that you can redo to a state that was determined to be invalid
+        // backtrack if the move is invalid
+        deserialize(expected); snake.growOnNextMove = prevGrowOnNextMove // undo()
         continue
       }
       // Also need to check that game state matches exactly if simulating forwards
@@ -142,7 +152,8 @@ function tryGenerateLevel() {
         //   actual,
         //   move,
         // })
-        undo() // backtrack if validation failed
+        // backtrack if validation failed
+        deserialize(expected); snake.growOnNextMove = prevGrowOnNextMove // undo()
         continue
       }
       moves.push(move)
