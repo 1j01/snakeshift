@@ -1,12 +1,28 @@
 import { Block } from "./block"
 import { Food } from "./food"
 import { analyzeMoveAbsolute, dragSnake, takeMove } from "./game-logic"
-import { entities, levelInfo, serialize, undo, undoable } from "./game-state"
+import { deserialize, entities, levelInfo, serialize, undo, undoable } from "./game-state"
 import { hitTestAllEntities, invertCollisionLayer, layersCollide, shuffle, topLayer, withinLevel } from "./helpers"
 import Snake from "./snake"
-import { CollisionLayer, DIRECTIONS } from "./types"
+import { CollisionLayer, DIRECTIONS, Move } from "./types"
 
 export function generateLevel() {
+  const tries = 10
+  let bestComplexity = 0
+  let bestLevel = null
+  for (let i = 0; i < tries; i++) {
+    const complexity = tryGenerateLevel().estimatedPuzzleComplexity
+    if (complexity > bestComplexity) {
+      bestComplexity = complexity
+      bestLevel = serialize()
+    }
+  }
+  if (bestLevel) {
+    deserialize(bestLevel)
+  }
+}
+
+function tryGenerateLevel() {
   const puzzleGenerationLimit = 1000
   const targetPuzzleComplexity = 100
 
@@ -60,7 +76,7 @@ export function generateLevel() {
   }
 
   // Simulate in reverse, occasionally creating collectables and shrinking snakes as they move backwards
-  let puzzleSteps = 0
+  const moves: Move[] = []
   for (let i = 0; i < puzzleGenerationLimit; i++) {
 
     const snakes = entities.filter(e => e instanceof Snake) as Snake[]
@@ -81,7 +97,10 @@ export function generateLevel() {
     if (!layersCollide(topLayer(hits), snake.segments[0].layer)) {
       undoable() // for debugging level generation... as well as core logic, now; I'm using undo to backtrack if the move is invalid (not the most efficient, but very easy)
       const eat = Math.random() < 0.1 && snake.segments.length > 1
-      snake.growOnNextMove = eat // to match snapshot
+      // `growOnNextMove` is supposed to be set after eating,
+      // so we have to do it before the reverse move, and before the `expected` snapshot,
+      // because 
+      snake.growOnNextMove = eat
       const expected = serialize()
       const previousHead = { ...snake.segments[0] }
       // FIXME: it's not validating in the case that it generates a collectable
@@ -99,7 +118,7 @@ export function generateLevel() {
       }
       const move = analyzeMoveAbsolute(snake, previousHead)
       if (!move.valid) {
-        console.log("Undoing generated invalid move:", move)
+        // console.log("Undoing generated invalid move:", move)
         undo()
         // TODO: maybe clear redo stack because it can be confusing that you can redo to a state that was determined to be invalid
         continue
@@ -111,20 +130,33 @@ export function generateLevel() {
       const actual = serialize()
       undo() // always undo takeMove done just for validation
       if (actual !== expected) {
-        console.log("Undoing generated move which gave an inconsistent game state:", {
-          expected,
-          actual,
-          move,
-        })
+        // console.log("Undoing generated move which gave an inconsistent game state:", {
+        //   expected,
+        //   actual,
+        //   move,
+        // })
         undo() // backtrack if validation failed
         continue
       }
-      puzzleSteps++
-      if (puzzleSteps >= targetPuzzleComplexity) {
+      moves.push(move)
+      if (moves.length >= targetPuzzleComplexity) {
         break
       }
     }
   }
 
-  console.log("Generated a puzzle that can be solved in", puzzleSteps, "steps (likely fewer)")
+  const numFood = entities.filter(e => e instanceof Food).length
+  const puzzleSteps = moves.length
+  const totalMoveComplexity = moves.reduce((sum, move) => {
+    return sum + 1 + (move.entitiesThere.length * 2 + move.entitiesToPush.length * 3)
+  }, 0)
+  const stats = {
+    puzzleSteps,
+    numFood,
+    totalMoveComplexity,
+    // totalMoveComplexity already includes puzzleSteps, numFood, effectively
+    estimatedPuzzleComplexity: totalMoveComplexity
+  }
+  console.log("Generated a puzzle that can be solved in", puzzleSteps, "steps (likely fewer)", stats)
+  return stats
 }
