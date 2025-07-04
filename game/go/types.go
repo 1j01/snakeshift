@@ -23,6 +23,7 @@ type Snake struct {
 	ID             int
 	Segments       []Point // ordered from head to tail
 	GrowOnNextMove bool
+	Layer          CollisionLayer
 }
 
 type LevelInfo struct {
