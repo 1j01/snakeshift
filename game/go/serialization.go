@@ -10,8 +10,8 @@ type SnakeshiftLevelFormat struct {
 	Entities                []interface{} `json:"entities"`
 	EntityTypes             []string      `json:"entityTypes"`
 	ActivePlayerEntityIndex int           `json:"activePlayerEntityIndex"`
-	LevelId                 string       `json:"levelId,omitempty"`
-	LevelSessionId          int          `json:"levelSessionId,omitempty"`
+	LevelId                 string        `json:"levelId,omitempty"`
+	LevelSessionId          int           `json:"levelSessionId,omitempty"`
 }
 
 type Tile struct {
@@ -20,12 +20,17 @@ type Tile struct {
 	Width  int `json:"width"`
 	Height int `json:"height"`
 }
-
+type SnakeSegment struct {
+	X      int            `json:"x"`
+	Y      int            `json:"y"`
+	Width  int            `json:"width"`
+	Height int            `json:"height"`
+	Layer  CollisionLayer `json:"layer"`
+}
 type EntitySnake struct {
 	ID             int            `json:"id"`
-	Segments       []Tile         `json:"segments"`
+	Segments       []SnakeSegment `json:"segments"`
 	GrowOnNextMove bool           `json:"growOnNextMove"`
-	Layer          CollisionLayer `json:"layer"`
 }
 
 type EntityFood struct {
@@ -44,21 +49,18 @@ type EntityBlock struct {
 	Layer  CollisionLayer `json:"layer"`
 }
 
-func pointToTile(p Point) Tile {
-	return Tile{
-		X:      p.X,
-		Y:      p.Y,
-		Width:  1,
-		Height: 1,
-	}
-}
-
-func pointsToTiles(points []Point) []Tile {
-	tiles := make([]Tile, len(points))
+func pointsToSnakeSegments(points []Point) []SnakeSegment {
+	segments := make([]SnakeSegment, len(points))
 	for i, p := range points {
-		tiles[i] = pointToTile(p)
+		segments[i] = SnakeSegment{
+			X:      p.X,
+			Y:      p.Y,
+			Width:  1,
+			Height: 1,
+			Layer:  White,
+		}
 	}
-	return tiles
+	return segments
 }
 
 func SerializeLevel(level Level) ([]byte, error) {
@@ -97,7 +99,7 @@ func SerializeLevel(level Level) ([]byte, error) {
 	for _, snake := range level.Snakes {
 		ent := EntitySnake{
 			ID:             snake.ID,
-			Segments:       pointsToTiles(snake.Segments),
+			Segments:       pointsToSnakeSegments(snake.Segments),
 			GrowOnNextMove: snake.GrowOnNextMove,
 		}
 		entities = append(entities, ent)
