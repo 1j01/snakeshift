@@ -6,34 +6,40 @@ import { hitTestAllEntities, invertCollisionLayer, layersCollide, shuffle, topLa
 import Snake from "./snake"
 import { CollisionLayer, DIRECTIONS, Move } from "./types"
 
-export function generateLevel() {
-  const tries = 10
+export async function generateLevel() {
+  const tries = 20
   let bestComplexity = 0
   let bestLevel = null
   for (let i = 0; i < tries; i++) {
     const complexity = tryGenerateLevel().estimatedPuzzleComplexity
+    await new Promise(resolve => setTimeout(resolve, 100)) // give the UI a chance to update, avoid crashing the browser
     if (complexity > bestComplexity) {
       bestComplexity = complexity
       bestLevel = serialize()
     }
   }
+  console.log("Best complexity found:", bestComplexity)
   if (bestLevel) {
     deserialize(bestLevel)
   }
 }
 
 function tryGenerateLevel() {
-  const puzzleGenerationLimit = 1000
+  const puzzleGenerationLimit = 10000
   const targetPuzzleComplexity = 100
+  const blockDensity = 0.3
+  const foodChance = 0.3
 
-  levelInfo.width = 5 + Math.floor(Math.random() * 10)
-  levelInfo.height = 5 + Math.floor(Math.random() * 10)
+  // I think smaller levels should be statistically more likely to generate
+  // "puzzle"-like levels rather than meaningless traversal.
+  levelInfo.width = 2 + Math.floor(Math.random() * 5)
+  levelInfo.height = 2 + Math.floor(Math.random() * 5)
   entities.length = 0
 
   // Create blocks
   for (let x = 0; x < levelInfo.width; x++) {
     for (let y = 0; y < levelInfo.height; y++) {
-      if (Math.random() < 0.3) {
+      if (Math.random() < blockDensity) {
         const block = new Block()
         block.x = x
         block.y = y
@@ -56,7 +62,8 @@ function tryGenerateLevel() {
       layer = invertCollisionLayer(hits[0].layer)
     }
     snake.segments.push({ x, y, width: 1, height: 1, layer })
-    for (let j = 1; j < 5; j++) {
+    const targetSnakeEndLength = 2 + Math.floor(Math.random() * 10)
+    for (let j = 1; j < targetSnakeEndLength; j++) {
       // Try to place the next segment in a random direction
       const directions = [...DIRECTIONS]
       shuffle(directions)
@@ -96,7 +103,7 @@ function tryGenerateLevel() {
     const hits = hitTestAllEntities(potentialBeforeTile.x, potentialBeforeTile.y)
     if (!layersCollide(topLayer(hits), snake.segments[0].layer)) {
       undoable() // for debugging level generation... as well as core logic, now; I'm using undo to backtrack if the move is invalid (not the most efficient, but very easy)
-      const eat = Math.random() < 0.1 && snake.segments.length > 1
+      const eat = Math.random() < foodChance && snake.segments.length > 1
       // `growOnNextMove` is supposed to be set after eating,
       // so we have to do it before the reverse move, and before the `expected` snapshot,
       // because 
@@ -145,6 +152,8 @@ function tryGenerateLevel() {
     }
   }
 
+  // TODO: for a better complexity estimate, we could try to contract the playthrough
+  // by removing moves that are not necessary to solve the puzzle.
   const numFood = entities.filter(e => e instanceof Food).length
   const puzzleSteps = moves.length
   const totalMoveComplexity = moves.reduce((sum, move) => {
