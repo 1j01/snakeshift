@@ -43,6 +43,18 @@ func move(direction Point, g *Game) {
 	}
 }
 
+func cycleActiveSnake(g *Game) {
+	if g.activeSnake == nil {
+		return
+	}
+	for i := 0; i < len(g.level.Snakes); i++ {
+		if &g.level.Snakes[i] == g.activeSnake {
+			g.activeSnake = &g.level.Snakes[(i+1)%len(g.level.Snakes)]
+			return
+		}
+	}
+}
+
 func mainGameLoop() {
 	err := termbox.Init()
 	if err != nil {
@@ -74,6 +86,9 @@ func mainGameLoop() {
 					move(Point{X: 0, Y: -1}, g)
 				case ev.Key == termbox.KeyArrowDown:
 					move(Point{X: 0, Y: 1}, g)
+				case ev.Key == termbox.KeyTab:
+					cycleActiveSnake(g)
+					g.invalidMoveFlash = true
 				case ev.Ch == 'q' || ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyCtrlD:
 					return
 				case ev.Ch == 'r':
