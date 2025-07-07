@@ -24,6 +24,26 @@ func layersCollide(a CollisionLayer, b CollisionLayer) bool {
 	return (a & b) != 0
 }
 
+func withinLevel(point Point, level Level) bool {
+	return point.X >= 0 && point.X < level.Info.Width && point.Y >= 0 && point.Y < level.Info.Height
+}
+
+func topLayerAt(x, y int, level Level) CollisionLayer {
+	if !withinLevel(Point{X: x, Y: y}, level) {
+		return Both
+	}
+	// Snakes are in draw order, so we must iterate in reverse to look at topmost snakes first.
+	for i := len(level.Snakes) - 1; i >= 0; i-- {
+		snake := level.Snakes[i]
+		for _, segment := range snake.Segments {
+			if segment.X == x && segment.Y == y {
+				return snake.Layer
+			}
+		}
+	}
+	return level.Grid[y][x]
+}
+
 var CardinalDirections = []Point{
 	{X: 1, Y: 0},
 	{X: 0, Y: 1},

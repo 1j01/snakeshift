@@ -16,31 +16,11 @@ func GenerateLevel() Level {
 	width := rand.Intn(5) + 2
 	height := rand.Intn(5) + 2
 
-	withinLevel := func(point Point) bool {
-		return point.X >= 0 && point.X < width && point.Y >= 0 && point.Y < height
-	}
-
 	level := Level{
 		Info:   LevelInfo{Width: width, Height: height},
 		Grid:   make([][]CollisionLayer, height),
 		Foods:  make([]Food, 0, 50),
 		Snakes: make([]Snake, 0, 10),
-	}
-
-	topLayerAt := func(x, y int) CollisionLayer {
-		if !withinLevel(Point{X: x, Y: y}) {
-			return Both
-		}
-		// Snakes are in draw order, so we must iterate in reverse to look at topmost snakes first.
-		for i := len(level.Snakes) - 1; i >= 0; i-- {
-			snake := level.Snakes[i]
-			for _, segment := range snake.Segments {
-				if segment.X == x && segment.Y == y {
-					return snake.Layer
-				}
-			}
-		}
-		return level.Grid[y][x]
 	}
 
 	// Initialize grid with random block types
@@ -61,7 +41,7 @@ func GenerateLevel() Level {
 		x := rand.Intn(width)
 		y := rand.Intn(height)
 		// Get layer before appending snake so we don't retrieve the snake's own (uninitialized) layer
-		layer := invertCollisionLayer(topLayerAt(x, y))
+		layer := invertCollisionLayer(topLayerAt(x, y, level))
 		// append early (before topLayerAt) so that hit tests include the snake itself
 		level.Snakes = append(level.Snakes, Snake{ID: i + 1})
 		snake := &level.Snakes[i]
@@ -73,10 +53,10 @@ func GenerateLevel() Level {
 			directionOrder := rand.Perm(len(CardinalDirections))
 			for _, directionIndex := range directionOrder {
 				direction := CardinalDirections[directionIndex]
-				if !withinLevel(Point{X: x + direction.X, Y: y + direction.Y}) {
+				if !withinLevel(Point{X: x + direction.X, Y: y + direction.Y}, level) {
 					continue
 				}
-				if !layersCollide(topLayerAt(x+direction.X, y+direction.Y), layer) {
+				if !layersCollide(topLayerAt(x+direction.X, y+direction.Y, level), layer) {
 					x += direction.X
 					y += direction.Y
 					snake.Segments = append(snake.Segments, Point{X: x, Y: y})
