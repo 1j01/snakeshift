@@ -1,21 +1,31 @@
 package main
 
 import (
-	// "context"
+	"context"
 	"fmt"
-	// "os"
-	// "github.com/urfave/cli/v3"
+	"log"
+	"os"
+
+	"github.com/urfave/cli/v3"
 )
 
-//	func main() {
-//		(&cli.Command{}).Run(context.Background(), os.Args)
-//	}
 func main() {
-	level := GenerateLevel()
-	serialized, err := SerializeLevel(level)
-	if err != nil {
-		fmt.Println("Error serializing level:", err)
-		return
+	cmd := &cli.Command{
+		Name:  "snakeshift",
+		Usage: "Generate a random level for the game Snakeshift",
+		Action: func(context.Context, *cli.Command) error {
+			level := GenerateLevel()
+			serialized, err := SerializeLevel(level)
+			if err != nil {
+				return fmt.Errorf("failed to serialize level: %w", err)
+			}
+			fmt.Println(string(serialized))
+			return nil
+		},
 	}
-	fmt.Println(string(serialized))
+
+	if err := cmd.Run(context.Background(), os.Args); err != nil {
+		log.Fatal(err)
+	}
+
 }
