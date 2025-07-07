@@ -16,20 +16,28 @@ const (
 )
 
 type Game struct {
-	level *Level
+	level            *Level
+	activeSnake      *Snake
+	invalidMoveFlash bool
 }
 
 func NewGame() *Game {
-	return &Game{
+	game := &Game{
 		level: GenerateLevel(),
 	}
+	// Set the first snake as the active snake
+	if len(game.level.Snakes) > 0 {
+		game.activeSnake = &game.level.Snakes[0]
+	}
+	return game
 }
 
 func move(direction Point, g *Game) {
-	activeSnake := &g.level.Snakes[0] // Arbitrary for now
-	move := AnalyzeMoveRelative(activeSnake, direction.X, direction.Y, g.level)
+	move := AnalyzeMoveRelative(g.activeSnake, direction.X, direction.Y, g.level)
 	if move.Valid {
 		TakeMove(move, g.level)
+	} else {
+		g.invalidMoveFlash = true
 	}
 }
 
@@ -76,8 +84,9 @@ func mainGameLoop() {
 
 func render(g *Game) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
+	// Title
 	tbPrint(1, 1, termbox.ColorBlack, termbox.ColorWhite, "Snakeshift Game")
-	// tbPrint(titleStartX, titleStartY, instructionsColor, backgroundColor, title)
+	// Draw the game board
 	for y := 0; y < g.level.Info.Height; y++ {
 		for x := 0; x < g.level.Info.Width; x++ {
 			cellValue := g.level.Grid[y][x]
@@ -159,12 +168,17 @@ func render(g *Game) {
 						}
 					}
 
+					if g.invalidMoveFlash && snake.ID == g.activeSnake.ID {
+						fg, bg = bg, fg
+					}
+
 					termbox.SetCell(x+charX, y+charY, ch, fg, bg)
 				}
 			}
 		}
 	}
 	termbox.Flush()
+	g.invalidMoveFlash = false
 }
 
 // Function tbPrint draws a string.
