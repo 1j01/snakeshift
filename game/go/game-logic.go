@@ -1,5 +1,7 @@
 package main
 
+import "slices"
+
 func AnalyzeMoveAbsolute(snake *Snake, targetTile Point, level *Level) Move {
 	deltaGridX := int(targetTile.X - snake.Segments[0].X)
 	deltaGridY := int(targetTile.Y - snake.Segments[0].Y)
@@ -28,7 +30,7 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 	for _, hit := range hitsAllAlong {
 		// if hit.Entity.Solid() &&
 		// 	hit.Entity != snake &&
-		// 	game.EntitiesIndex(hit.Entity) > game.EntitiesIndex(snake) &&
+		// 	indexOfEntity(hit, level.Entity) > indexOfEntity(snake, level) &&
 		// 	!(hit.EntityIsSnake() && snake.FusedSnakeIds.Contains(hit.EntityID())) {
 		// All snakes are solid, and we're not handling food yet, and we're not going to implement fused snakes.
 		encumbered = hit.Entity != nil &&
@@ -100,10 +102,10 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 			!movingBackwards &&
 			!encumbered &&
 			!layersCollide(topLayer(hitsAhead, level), snake.Layer),
-		Encumbered: encumbered,
-		To:         Point{X: x, Y: y},
-		Delta:      Point{X: deltaX, Y: deltaY},
-		// EntitiesThere:  HitsToEntities(hitsAhead),
+		Encumbered:    encumbered,
+		To:            Point{X: x, Y: y},
+		Delta:         Point{X: deltaX, Y: deltaY},
+		EntitiesThere: hitsToEntities(hitsAhead),
 		// EntitiesToPush: entitiesToPush,
 	}
 }
@@ -136,14 +138,27 @@ func TakeMove(m Move, level *Level) {
 	// head.Width, head.Height = m.To.Width, m.To.Height
 	// s.Facing = m.Delta
 
-	// // Sort entities
-	// ontoIndices := game.GetIndicesOfSolids(m.EntitiesThere)
-	// maxIndex := max(ontoIndices...)
-	// thisIndex := game.EntitiesIndex(s)
-	// if thisIndex < maxIndex {
-	// 	game.EntitiesInsert(maxIndex+1, s)
-	// 	game.EntitiesRemoveAt(thisIndex)
-	// }
+	// Sort entities
+	ontoIndices := []int{}
+	for _, e := range m.EntitiesThere {
+		if e.IsSolid() {
+			ontoIndices = append(ontoIndices, indexOfEntity(e, level))
+		}
+	}
+	if len(ontoIndices) > 0 {
+		maxIndex := slices.Max(ontoIndices)
+		thisIndex := indexOfEntity(s, level)
+		// if thisIndex < maxIndex {
+		// 	// Add before removing so relevant indices
+		// 	// stay valid for both splice calls.
+		// 	game.EntitiesInsert(maxIndex+1, s)
+		// 	game.EntitiesRemoveAt(thisIndex)
+		// }
+		for thisIndex < maxIndex {
+			level.Entities[thisIndex], level.Entities[thisIndex+1] = level.Entities[thisIndex+1], level.Entities[thisIndex]
+			thisIndex++
+		}
+	}
 
 	// if len(m.EntitiesToPush) > 0 {
 	// 	audio.PlaySound("pushCrate", audio.Options{

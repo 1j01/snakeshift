@@ -164,6 +164,16 @@ func copyGame(g *Game) *Game {
 	return game
 }
 
+func hitsToEntities(hitsAhead []Hit) []Entity {
+	entities := make([]Entity, 0, len(hitsAhead))
+	for _, hit := range hitsAhead {
+		if hit.Entity != nil {
+			entities = append(entities, hit.Entity)
+		}
+	}
+	return entities
+}
+
 var CardinalDirections = []Point{
 	{X: 1, Y: 0},
 	{X: 0, Y: 1},
