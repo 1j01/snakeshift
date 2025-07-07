@@ -154,11 +154,9 @@ func copyGame(g *Game) *Game {
 	game := &Game{
 		level: copyLevel(g.level),
 	}
-	for _, entity := range g.level.Entities {
+	for _, entity := range game.level.Entities {
 		if snake, ok := entity.(*Snake); ok {
 			if snake.ID == g.activeSnake.ID {
-				// game.activeSnake = &game.level.Entities[i]
-				// game.activeSnake = &game.level.Entities[i].(*Snake)
 				game.activeSnake = snake
 			}
 		}

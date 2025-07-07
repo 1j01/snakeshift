@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/nsf/termbox-go"
@@ -62,7 +63,10 @@ func cycleActiveSnake(g *Game) {
 	// 	return isSnake
 	// })//.([]*Snake)
 	for i := 0; i < len(snakes); i++ {
-		if snakes[i] == g.activeSnake {
+		if snakes[i].ID == g.activeSnake.ID {
+			if snakes[i] != g.activeSnake {
+				panic("Snake with ID " + fmt.Sprint(snakes[i].ID) + " does not equal active snake with ID " + fmt.Sprint(g.activeSnake.ID))
+			}
 			g.activeSnake = snakes[(i+1)%len(snakes)]
 			return
 		}
