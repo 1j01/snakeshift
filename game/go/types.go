@@ -14,6 +14,17 @@ type Point struct {
 	Y int `json:"y"`
 }
 
+type Entity interface {
+	IsSolid() bool
+	GetLayer() CollisionLayer
+	// Went through a few different options for hit testing!
+	// Cells() []Point
+	// Occupies(x, y int, options HitTestOptions) bool
+	// At(x, y int) Hit
+	// At(x, y int, options HitTestOptions) Hit
+	At(x, y int, options HitTestOptions) *Hit
+}
+
 type Food struct {
 	Position Point
 	Layer    CollisionLayer
@@ -26,6 +37,21 @@ type Snake struct {
 	Layer          CollisionLayer
 }
 
+func (snake *Snake) IsSolid() bool            { return true }
+func (snake *Snake) GetLayer() CollisionLayer { return snake.Layer }
+func (snake *Snake) At(x, y int, options HitTestOptions) *Hit {
+	for j, segment := range snake.Segments {
+		if segment.X == x && segment.Y == y && (options.IgnoreTailOfSnake == nil || snake.ID != options.IgnoreTailOfSnake.ID) {
+			return &Hit{
+				Entity:       snake,
+				SegmentIndex: j,
+				Layer:        snake.Layer,
+			}
+		}
+	}
+	return nil
+}
+
 type LevelInfo struct {
 	Width  int `json:"width"`
 	Height int `json:"height"`
@@ -33,14 +59,13 @@ type LevelInfo struct {
 
 // Custom marshaling is defined for the top-level struct.
 type Level struct {
-	Info   LevelInfo
-	Grid   [][]CollisionLayer
-	Foods  []Food
-	Snakes []Snake
+	Info     LevelInfo
+	Grid     [][]CollisionLayer
+	Entities []Entity
 }
 
 type Hit struct {
-	Entity       *Snake // may be nil if it's a block
+	Entity       *Entity // may be nil if it's a block
 	SegmentIndex int
 	Layer        CollisionLayer
 }
@@ -50,11 +75,11 @@ type HitTestOptions struct {
 }
 
 type Move struct {
-	Snake      *Snake
-	To         Point
-	Delta      Point
-	Valid      bool
-	Encumbered bool
-	// EntitiesThere  []Entity
+	Snake         *Snake
+	To            Point
+	Delta         Point
+	Valid         bool
+	Encumbered    bool
+	EntitiesThere []Entity
 	// EntitiesToPush []Entity
 }
