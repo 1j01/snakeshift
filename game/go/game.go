@@ -6,7 +6,7 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
-const animationSpeed = 10 * time.Millisecond
+const animationSpeed = 100 * time.Millisecond
 
 const (
 	cellWidth   = 2
