@@ -1,7 +1,6 @@
 package main
 
 import (
-	"math/rand"
 	"time"
 
 	"github.com/nsf/termbox-go"
@@ -31,8 +30,6 @@ func move(direction Point, g *Game) {
 }
 
 func mainGameLoop() {
-	rand.Seed(time.Now().UnixNano())
-
 	err := termbox.Init()
 	if err != nil {
 		panic(err)
