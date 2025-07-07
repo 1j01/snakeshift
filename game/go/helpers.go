@@ -20,22 +20,9 @@ func invertCollisionLayer(layer CollisionLayer) CollisionLayer {
 	}
 }
 
-// func topLayer(hits []Hit) CollisionLayer {
-// 	for _, hit := range hits {
-// 		if hit.entity.solid {
-// 			return hit.layer
-// 		}
-// 	}
-//   return Black
-// }
-
 func layersCollide(a CollisionLayer, b CollisionLayer) bool {
 	return (a & b) != 0
 }
-
-// func hitTestAllEntities(x, y int) []Hit {
-// 	return nil
-// }
 
 var CardinalDirections = []Point{
 	{X: 1, Y: 0},

@@ -55,21 +55,6 @@ func GenerateLevel() Level {
 		}
 	}
 
-	// // Randomly place foods
-	// for i := 0; i < numFoods; i++ {
-	// 	x := rand.Intn(width)
-	// 	y := rand.Intn(height)
-	// 	layer := CollisionLayer(rand.Intn(3)) // 0, 1, or 2
-	// 	level.Foods = append(level.Foods, Food{Position: Point{X: x, Y: y}, Layer: layer})
-	// }
-
-	// // Randomly place snakes
-	// for i := 0; i < numSnakes; i++ {
-	// 	snake := Snake{ID: i + 1}
-	// 	snake.Segments = append(snake.Segments, Point{X: rand.Intn(width), Y: rand.Intn(height)})
-	// 	level.Snakes = append(level.Snakes, snake)
-	// }
-
 	// Create snakes
 	numSnakes := rand.Intn(3) + 1
 	for i := 0; i < numSnakes; i++ {
