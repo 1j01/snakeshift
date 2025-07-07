@@ -82,7 +82,11 @@ npm install
 npm run dev
 ```
 
-(There is also an experimental level generator written in Go, which can be run with `go run game/go/*.go >game/public/levels/tests/generated-level.json`.)
+There is also an experimental level generator written in Go, which can be run with:
+```sh
+cd game/go
+go run . --generate >../../game/public/levels/tests/generated-level.json
+```
 
 ### Quality Control
 
