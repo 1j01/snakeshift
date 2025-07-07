@@ -19,6 +19,7 @@ type Game struct {
 	level            *Level
 	activeSnake      *Snake
 	invalidMoveFlash bool
+	encumberedFlash  bool
 }
 
 func NewGame() *Game {
@@ -38,6 +39,7 @@ func move(direction Point, g *Game) {
 		TakeMove(move, g.level)
 	} else {
 		g.invalidMoveFlash = true
+		g.encumberedFlash = move.Encumbered
 	}
 }
 
@@ -178,6 +180,9 @@ func render(g *Game) {
 
 					if g.invalidMoveFlash && snake.ID == g.activeSnake.ID {
 						fg, bg = bg, fg
+						if g.encumberedFlash && i == 0 {
+							ch = 'x' // X eyes for encumbered snake
+						}
 					}
 
 					termbox.SetCell(x+charX, y+charY, ch, fg, bg)
@@ -187,6 +192,7 @@ func render(g *Game) {
 	}
 	termbox.Flush()
 	g.invalidMoveFlash = false
+	g.encumberedFlash = false
 }
 
 // Function tbPrint draws a string.
