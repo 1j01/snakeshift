@@ -105,13 +105,13 @@ func mainGameLoop() {
 		case ev := <-eventQueue:
 			if ev.Type == termbox.EventKey {
 				switch {
-				case ev.Key == termbox.KeyArrowLeft:
+				case ev.Key == termbox.KeyArrowLeft || ev.Ch == 'h' || ev.Ch == 'a':
 					move(Point{X: -1, Y: 0}, g, &undos, &redos)
-				case ev.Key == termbox.KeyArrowRight:
+				case ev.Key == termbox.KeyArrowRight || ev.Ch == 'l' || ev.Ch == 'd':
 					move(Point{X: 1, Y: 0}, g, &undos, &redos)
-				case ev.Key == termbox.KeyArrowUp:
+				case ev.Key == termbox.KeyArrowUp || ev.Ch == 'k' || ev.Ch == 'w':
 					move(Point{X: 0, Y: -1}, g, &undos, &redos)
-				case ev.Key == termbox.KeyArrowDown:
+				case ev.Key == termbox.KeyArrowDown || ev.Ch == 'j' || ev.Ch == 's':
 					move(Point{X: 0, Y: 1}, g, &undos, &redos)
 				case ev.Key == termbox.KeyTab:
 					cycleActiveSnake(g)
