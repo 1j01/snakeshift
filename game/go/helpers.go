@@ -2,7 +2,7 @@ package main
 
 import "math/rand"
 
-func shuffle(slice []any) {
+func shuffle[T any](slice []T) {
 	for i := range slice {
 		j := rand.Intn(i + 1)
 		slice[i], slice[j] = slice[j], slice[i]
