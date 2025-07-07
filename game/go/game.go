@@ -117,7 +117,7 @@ func render(g *Game) {
 
 	// Draw the snakes
 	for _, snake := range g.level.Snakes {
-		for _, segment := range snake.Segments {
+		for i, segment := range snake.Segments {
 			x := boardStartX + segment.X*cellWidth
 			y := boardStartY + segment.Y*cellHeight
 			for charY := 0; charY < cellHeight; charY++ {
@@ -138,8 +138,24 @@ func render(g *Game) {
 						bg = termbox.ColorDarkGray
 						fg = termbox.ColorWhite
 					}
+					ch := 'o'
+					dir := Point{X: 0, Y: 0}
+					if i > 0 {
+						prevSegment := snake.Segments[i-1]
+						dir.X = prevSegment.X - segment.X
+						dir.Y = prevSegment.Y - segment.Y
+						if dir.X > 0 {
+							ch = '>'
+						} else if dir.X < 0 {
+							ch = '<'
+						} else if dir.Y > 0 {
+							ch = 'v'
+						} else if dir.Y < 0 {
+							ch = '^'
+						}
+					}
 
-					termbox.SetCell(x+charX, y+charY, '@', fg, bg)
+					termbox.SetCell(x+charX, y+charY, ch, fg, bg)
 				}
 			}
 		}
