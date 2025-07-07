@@ -31,8 +31,9 @@ func GenerateLevel() Level {
 		if !withinLevel(Point{X: x, Y: y}) {
 			return Both
 		}
-		// TODO: is this the right order?
-		for _, snake := range level.Snakes {
+		// Snakes are in draw order, so we must iterate in reverse to look at topmost snakes first.
+		for i := len(level.Snakes) - 1; i >= 0; i-- {
+			snake := level.Snakes[i]
 			for _, segment := range snake.Segments {
 				if segment.X == x && segment.Y == y {
 					return snake.Layer
@@ -72,14 +73,15 @@ func GenerateLevel() Level {
 	// Create snakes
 	numSnakes := rand.Intn(3) + 1
 	for i := 0; i < numSnakes; i++ {
-		// append early so that hit tests include the snake itself
-		level.Snakes = append(level.Snakes, Snake{ID: i + 1})
-		snake := &level.Snakes[i]
 		x := rand.Intn(width)
 		y := rand.Intn(height)
-		snake.Segments = []Point{{X: x, Y: y}}
+		// Get layer before appending snake so we don't retrieve the snake's own (uninitialized) layer
 		layer := invertCollisionLayer(topLayerAt(x, y))
-		snake.Segments = append(snake.Segments, Point{X: x, Y: y})
+		// append early (before topLayerAt) so that hit tests include the snake itself
+		level.Snakes = append(level.Snakes, Snake{ID: i + 1})
+		snake := &level.Snakes[i]
+		snake.Segments = []Point{{X: x, Y: y}}
+		snake.Layer = layer
 		targetSnakeEndLength := 2 + rand.Intn(10)
 		for j := 1; j < targetSnakeEndLength; j++ {
 			// Try to place the next segment in a random direction
