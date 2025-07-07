@@ -26,7 +26,11 @@ func NewGame() *Game {
 }
 
 func move(direction Point, g *Game) {
-	// TODO
+	activeSnake := &g.level.Snakes[0] // Arbitrary for now
+	move := AnalyzeMoveRelative(activeSnake, direction.X, direction.Y, &g.level)
+	if move.Valid {
+		TakeMove(move, &g.level)
+	}
 }
 
 func mainGameLoop() {

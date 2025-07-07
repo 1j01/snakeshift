@@ -40,17 +40,17 @@ type Level struct {
 }
 
 type Hit struct {
-	entity       Snake
-	segmentIndex int
-	layer        CollisionLayer
+	Entity       Snake
+	SegmentIndex int
+	Layer        CollisionLayer
 }
 
 type Move struct {
-	snake      Snake
-	to         Tile
-	delta      Point
-	valid      bool
-	encumbered bool
-	// entitiesThere  []Entity
-	// entitiesToPush []Entity
+	Snake      Snake
+	To         Tile
+	Delta      Point
+	Valid      bool
+	Encumbered bool
+	// EntitiesThere  []Entity
+	// EntitiesToPush []Entity
 }
