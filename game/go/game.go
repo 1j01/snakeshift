@@ -9,6 +9,13 @@ import (
 
 const animationSpeed = 10 * time.Millisecond
 
+const (
+	cellWidth   = 2
+	cellHeight  = 1
+	boardStartX = 2
+	boardStartY = 4
+)
+
 type Game struct {
 	level Level
 }
@@ -70,50 +77,76 @@ func render(g *Game) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
 	tbPrint(1, 1, termbox.ColorBlack, termbox.ColorWhite, "Snakeshift Game")
 	// tbPrint(titleStartX, titleStartY, instructionsColor, backgroundColor, title)
-	// for y := 0; y < boardHeight; y++ {
-	// 	for x := 0; x < boardWidth; x++ {
-	// 		cellValue := g.board[y][x]
-	// 		absCellValue := int(math.Abs(float64(cellValue)))
-	// 		cellColor := pieceColors[absCellValue]
-	// 		for i := 0; i < cellWidth; i++ {
-	// 			termbox.SetCell(boardStartX+cellWidth*x+i, boardStartY+y, ' ', cellColor, cellColor)
-	// 		}
-	// 	}
-	// }
+	for y := 0; y < g.level.Info.Height; y++ {
+		for x := 0; x < g.level.Info.Width; x++ {
+			cellValue := g.level.Grid[y][x]
+			for charY := 0; charY < cellHeight; charY++ {
+				for charX := 0; charX < cellWidth; charX++ {
+					cellColor := termbox.ColorRed
+					switch cellValue {
+					case White:
+						cellColor = termbox.ColorWhite
+					case Black:
+						cellColor = termbox.ColorBlack
+					case Both:
+						cellColor = termbox.ColorLightGray
+					case Neither:
+						cellColor = termbox.ColorDarkGray
+					}
+					termbox.SetCell(boardStartX+cellWidth*x+charX, boardStartY+y, ' ', cellColor, cellColor)
+				}
+			}
+		}
+	}
+	// Draw border with # in the corners and | and - for the sides
+	for charX := -1; charX <= g.level.Info.Width*cellWidth; charX++ {
+		if charX == -1 || charX == g.level.Info.Width*cellWidth {
+			termbox.SetCell(boardStartX+charX, boardStartY-1, '#', termbox.ColorWhite, termbox.ColorBlack)
+			termbox.SetCell(boardStartX+charX, boardStartY+g.level.Info.Height*cellHeight, '#', termbox.ColorWhite, termbox.ColorBlack)
+		} else {
+			termbox.SetCell(boardStartX+charX, boardStartY-1, '-', termbox.ColorWhite, termbox.ColorBlack)
+			termbox.SetCell(boardStartX+charX, boardStartY+g.level.Info.Height*cellHeight, '-', termbox.ColorWhite, termbox.ColorBlack)
+		}
+	}
+	for charY := -1; charY <= g.level.Info.Height*cellHeight; charY++ {
+		if charY == -1 || charY == g.level.Info.Height*cellHeight {
+			termbox.SetCell(boardStartX-1, boardStartY+charY, '#', termbox.ColorWhite, termbox.ColorBlack)
+			termbox.SetCell(boardStartX+g.level.Info.Width*cellWidth, boardStartY+charY, '#', termbox.ColorWhite, termbox.ColorBlack)
+		} else {
+			termbox.SetCell(boardStartX-1, boardStartY+charY, '|', termbox.ColorWhite, termbox.ColorBlack)
+			termbox.SetCell(boardStartX+g.level.Info.Width*cellWidth, boardStartY+charY, '|', termbox.ColorWhite, termbox.ColorBlack)
+		}
+	}
 
-	// tx := g.x
-	// ty := g.y
-	// for g.pieceFits(tx, ty) {
-	// 	ty += 1
-	// }
-	// ty -= 1
+	// Draw the snakes
+	for _, snake := range g.level.Snakes {
+		for _, segment := range snake.Segments {
+			x := boardStartX + segment.X*cellWidth
+			y := boardStartY + segment.Y*cellHeight
+			for charY := 0; charY < cellHeight; charY++ {
+				for charX := 0; charX < cellWidth; charX++ {
+					bg := termbox.ColorRed
+					fg := termbox.ColorRed
+					switch snake.Layer {
+					case White:
+						bg = termbox.ColorWhite
+						fg = termbox.ColorBlack
+					case Black:
+						bg = termbox.ColorBlack
+						fg = termbox.ColorWhite
+					case Both:
+						bg = termbox.ColorLightGray
+						fg = termbox.ColorBlack
+					case Neither:
+						bg = termbox.ColorDarkGray
+						fg = termbox.ColorWhite
+					}
 
-	// for k := 0; k < numSquares; k++ {
-	// 	x := tx + g.dx[k]
-	// 	y := ty + g.dy[k]
-	// 	origin_y := g.y + g.dy[k]
-	// 	if 0 <= origin_y && origin_y < boardHeight {
-	// 		if 0 <= y && y < boardHeight && 0 <= x && x < boardWidth && g.board[y][x] != -g.piece {
-	// 			cellValue := g.board[origin_y][x]
-	// 			absCellValue := int(math.Abs(float64(cellValue)))
-	// 			cellColor := pieceColors[absCellValue]
-	// 			for i := 0; i < cellWidth; i++ {
-	// 				termbox.SetCell(boardStartX+cellWidth*x+i, boardStartY+y, '*', termbox.ColorBlack, cellColor)
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// for y, instruction := range instructions {
-	// 	if strings.HasPrefix(instruction, "Level:") {
-	// 		instruction = fmt.Sprintf(instruction, g.level)
-	// 	} else if strings.HasPrefix(instruction, "Lines:") {
-	// 		instruction = fmt.Sprintf(instruction, g.numLines)
-	// 	} else if strings.HasPrefix(instruction, "GAME OVER") && g.state != gameOver {
-	// 		instruction = ""
-	// 	}
-	// 	tbPrint(instructionsStartX, instructionsStartY+y, instructionsColor, backgroundColor, instruction)
-	// }
+					termbox.SetCell(x+charX, y+charY, '@', fg, bg)
+				}
+			}
+		}
+	}
 	termbox.Flush()
 }
 
