@@ -94,11 +94,11 @@ func hitTestAllEntities(x, y int, level *Level) []Hit {
 	// Snakes are in draw order, so we must iterate in reverse to look at topmost snakes first.
 	for i := len(level.Snakes) - 1; i >= 0; i-- {
 		snake := level.Snakes[i]
-		for _, segment := range snake.Segments {
+		for j, segment := range snake.Segments {
 			if segment.X == x && segment.Y == y {
 				hits = append(hits, Hit{
 					Entity:       &snake,
-					SegmentIndex: len(snake.Segments) - 1, // The head segment
+					SegmentIndex: j,
 					Layer:        snake.Layer,
 				})
 			}
