@@ -38,9 +38,15 @@ func NewGame() *Game {
 	return game
 }
 
-func move(direction Point, g *Game) {
+func undoable(g *Game, undos *[]*Game, redos *[]*Game) {
+	*redos = []*Game{}
+	*undos = append(*undos, copyGame(g))
+}
+
+func move(direction Point, g *Game, undos *[]*Game, redos *[]*Game) {
 	move := AnalyzeMoveRelative(g.activeSnake, direction.X, direction.Y, g.level)
 	if move.Valid {
+		undoable(g, undos, redos)
 		TakeMove(move, g.level)
 	} else {
 		g.invalidMoveFlash = true
@@ -89,6 +95,9 @@ func mainGameLoop() {
 
 	g := NewGame()
 	initialGame := copyGame(g)
+	undos := make([]*Game, 0, 10)
+	redos := make([]*Game, 0, 10)
+
 	render(g)
 
 	for {
@@ -97,25 +106,41 @@ func mainGameLoop() {
 			if ev.Type == termbox.EventKey {
 				switch {
 				case ev.Key == termbox.KeyArrowLeft:
-					move(Point{X: -1, Y: 0}, g)
+					move(Point{X: -1, Y: 0}, g, &undos, &redos)
 				case ev.Key == termbox.KeyArrowRight:
-					move(Point{X: 1, Y: 0}, g)
+					move(Point{X: 1, Y: 0}, g, &undos, &redos)
 				case ev.Key == termbox.KeyArrowUp:
-					move(Point{X: 0, Y: -1}, g)
+					move(Point{X: 0, Y: -1}, g, &undos, &redos)
 				case ev.Key == termbox.KeyArrowDown:
-					move(Point{X: 0, Y: 1}, g)
+					move(Point{X: 0, Y: 1}, g, &undos, &redos)
 				case ev.Key == termbox.KeyTab:
 					cycleActiveSnake(g)
 					g.invalidMoveFlash = true
 				case ev.Ch == 'q' || ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyCtrlD:
 					return
 				case ev.Ch == 'r':
+					undoable(g, &undos, &redos)
 					g = copyGame(initialGame)
 					render(g)
 				case ev.Ch == 'n':
+					undoable(g, &undos, &redos)
 					g = NewGame()
 					initialGame = copyGame(g)
 					render(g)
+				case ev.Ch == 'z':
+					if len(undos) > 0 {
+						redos = append(redos, g)
+						g = undos[len(undos)-1]
+						undos = undos[:len(undos)-1]
+						render(g)
+					}
+				case ev.Ch == 'y':
+					if len(redos) > 0 {
+						undos = append(undos, g)
+						g = redos[len(redos)-1]
+						redos = redos[:len(redos)-1]
+						render(g)
+					}
 				}
 			}
 		default:
