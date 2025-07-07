@@ -48,6 +48,15 @@ func withinLevel(point Point, level *Level) bool {
 	return point.X >= 0 && point.X < level.Info.Width && point.Y >= 0 && point.Y < level.Info.Height
 }
 
+func indexOfEntity(entity *Snake, level *Level) int {
+	for i, snake := range level.Snakes {
+		if snake.ID == entity.ID {
+			return i
+		}
+	}
+	return -1 // Not found
+}
+
 func topLayerAt(x, y int, level *Level) CollisionLayer {
 	if !withinLevel(Point{X: x, Y: y}, level) {
 		return Both
@@ -62,6 +71,46 @@ func topLayerAt(x, y int, level *Level) CollisionLayer {
 		}
 	}
 	return level.Grid[y][x]
+}
+
+// Called "hitTestAllEntities" in original TS code,
+// but now should be called "hitTestAllEntitiesAndGrid" since the blocks are no longer entities.
+// or "hitTestSnakesAndGrid" since it's not handling food yet...
+func hitTestAllEntities(x, y int, level *Level) []Hit {
+	var hits []Hit
+	if !withinLevel(Point{X: x, Y: y}, level) {
+		return hits
+	}
+	// Food is always on top
+	// for _, food := range level.Foods {
+	// 	if food.Position.X == x && food.Position.Y == y {
+	// 		hits = append(hits, Hit{
+	// 			Entity:       nil, // Food is not a snake... TODO: Entity interface?
+	// 			SegmentIndex: -1,
+	// 			Layer:        food.Layer,
+	// 		})
+	// 	}
+	// }
+	// Snakes are in draw order, so we must iterate in reverse to look at topmost snakes first.
+	for i := len(level.Snakes) - 1; i >= 0; i-- {
+		snake := level.Snakes[i]
+		for _, segment := range snake.Segments {
+			if segment.X == x && segment.Y == y {
+				hits = append(hits, Hit{
+					Entity:       &snake,
+					SegmentIndex: len(snake.Segments) - 1, // The head segment
+					Layer:        snake.Layer,
+				})
+			}
+		}
+	}
+	hits = append(hits, Hit{
+		Entity:       nil,
+		SegmentIndex: -1,
+		Layer:        level.Grid[y][x],
+	})
+
+	return hits
 }
 
 func copyLevel(level *Level) *Level {

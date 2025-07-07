@@ -19,21 +19,25 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 	// 	IgnoreTailOfSnake: ignoreTailOfSnake,
 	// })
 
-	// hitsAllAlong := []Hit{}
-	// for _, seg := range snake.Segments {
-	// 	hitsAllAlong = append(hitsAllAlong, HitTestAllEntities(seg.X, seg.Y)...)
-	// }
+	hitsAllAlong := []Hit{}
+	for _, seg := range snake.Segments {
+		hitsAllAlong = append(hitsAllAlong, hitTestAllEntities(seg.X, seg.Y, level)...)
+	}
 
-	// encumbered := false
-	// for _, hit := range hitsAllAlong {
-	// 	if hit.Entity.Solid() &&
-	// 		hit.Entity != snake &&
-	// 		game.EntitiesIndex(hit.Entity) > game.EntitiesIndex(snake) &&
-	// 		!(hit.EntityIsSnake() && snake.FusedSnakeIds.Contains(hit.EntityID())) {
-	// 		encumbered = true
-	// 		break
-	// 	}
-	// }
+	encumbered := false
+	for _, hit := range hitsAllAlong {
+		// if hit.Entity.Solid() &&
+		// 	hit.Entity != snake &&
+		// 	game.EntitiesIndex(hit.Entity) > game.EntitiesIndex(snake) &&
+		// 	!(hit.EntityIsSnake() && snake.FusedSnakeIds.Contains(hit.EntityID())) {
+		// All snakes are solid, and we're not handling food yet, and we're not going to implement fused snakes.
+		encumbered = hit.Entity != nil &&
+			hit.Entity != snake &&
+			indexOfEntity(hit.Entity, level) > indexOfEntity(snake, level)
+		if encumbered {
+			break
+		}
+	}
 
 	// Prevent moving backwards when two segments long
 	// (When one segment long, you can plausibly move in any direction,
@@ -95,11 +99,11 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 			(abs(deltaX) == 1 || abs(deltaY) == 1) &&
 			withinLevel(Point{X: x, Y: y}, level) &&
 			!movingBackwards &&
-			// !encumbered &&
+			!encumbered &&
 			!layersCollide(layerAhead, snake.Layer),
-		// Encumbered: encumbered,
-		To:    Point{X: x, Y: y},
-		Delta: Point{X: deltaX, Y: deltaY},
+		Encumbered: encumbered,
+		To:         Point{X: x, Y: y},
+		Delta:      Point{X: deltaX, Y: deltaY},
 		// EntitiesThere:  HitsToEntities(hitsAhead),
 		// EntitiesToPush: entitiesToPush,
 	}

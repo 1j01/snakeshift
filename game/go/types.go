@@ -40,7 +40,7 @@ type Level struct {
 }
 
 type Hit struct {
-	Entity       Snake
+	Entity       *Snake // may be nil if it's a block
 	SegmentIndex int
 	Layer        CollisionLayer
 }
