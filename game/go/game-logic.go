@@ -11,17 +11,17 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 	x := head.X + deltaX
 	y := head.Y + deltaY
 
-	// ignoreTailOfSnake := snake
-	// if snake.GrowOnNextMove {
-	// 	ignoreTailOfSnake = nil
-	// }
-	// hitsAhead := HitTestAllEntities(x, y, HitTestOptions{
-	// 	IgnoreTailOfSnake: ignoreTailOfSnake,
-	// })
+	ignoreTailOfSnake := snake
+	if snake.GrowOnNextMove {
+		ignoreTailOfSnake = nil
+	}
+	hitsAhead := hitTestAllEntities(x, y, level, HitTestOptions{
+		IgnoreTailOfSnake: ignoreTailOfSnake,
+	})
 
 	hitsAllAlong := []Hit{}
 	for _, seg := range snake.Segments {
-		hitsAllAlong = append(hitsAllAlong, hitTestAllEntities(seg.X, seg.Y, level)...)
+		hitsAllAlong = append(hitsAllAlong, hitTestAllEntities(seg.X, seg.Y, level, HitTestOptions{})...)
 	}
 
 	encumbered := false
@@ -90,7 +90,6 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 
 	// Ignore pushed objects as obstacles
 	// hitsAhead = FilterHitsExcludingEntities(hitsAhead, entitiesToPush)
-	layerAhead := topLayerAt(x, y, level)
 
 	return Move{
 		// SnakeId:   s.ID,
@@ -100,7 +99,7 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 			withinLevel(Point{X: x, Y: y}, level) &&
 			!movingBackwards &&
 			!encumbered &&
-			!layersCollide(layerAhead, snake.Layer),
+			!layersCollide(topLayer(hitsAhead, level), snake.Layer),
 		Encumbered: encumbered,
 		To:         Point{X: x, Y: y},
 		Delta:      Point{X: deltaX, Y: deltaY},

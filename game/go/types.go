@@ -45,6 +45,10 @@ type Hit struct {
 	Layer        CollisionLayer
 }
 
+type HitTestOptions struct {
+	IgnoreTailOfSnake *Snake
+}
+
 type Move struct {
 	Snake      *Snake
 	To         Point

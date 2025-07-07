@@ -73,10 +73,18 @@ func topLayerAt(x, y int, level *Level) CollisionLayer {
 	return level.Grid[y][x]
 }
 
+func topLayer(hits []Hit, level *Level) CollisionLayer {
+	for _, hit := range hits {
+		// TODO: check entity is solid
+		return hit.Layer
+	}
+	return Both
+}
+
 // Called "hitTestAllEntities" in original TS code,
 // but now should be called "hitTestAllEntitiesAndGrid" since the blocks are no longer entities.
 // or "hitTestSnakesAndGrid" since it's not handling food yet...
-func hitTestAllEntities(x, y int, level *Level) []Hit {
+func hitTestAllEntities(x, y int, level *Level, options HitTestOptions) []Hit {
 	var hits []Hit
 	if !withinLevel(Point{X: x, Y: y}, level) {
 		return hits
@@ -95,7 +103,7 @@ func hitTestAllEntities(x, y int, level *Level) []Hit {
 	for i := len(level.Snakes) - 1; i >= 0; i-- {
 		snake := level.Snakes[i]
 		for j, segment := range snake.Segments {
-			if segment.X == x && segment.Y == y {
+			if segment.X == x && segment.Y == y && (options.IgnoreTailOfSnake == nil || snake.ID != options.IgnoreTailOfSnake.ID) {
 				hits = append(hits, Hit{
 					Entity:       &snake,
 					SegmentIndex: j,
