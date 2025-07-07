@@ -56,6 +56,7 @@ func mainGameLoop() {
 	}()
 
 	g := NewGame()
+	initialGame := copyGame(g)
 	render(g)
 
 	for {
@@ -73,8 +74,12 @@ func mainGameLoop() {
 					move(Point{X: 0, Y: 1}, g)
 				case ev.Ch == 'q' || ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyCtrlD:
 					return
+				case ev.Ch == 'r':
+					g = copyGame(initialGame)
+					render(g)
 				case ev.Ch == 'n':
 					g = NewGame()
+					initialGame = copyGame(g)
 					render(g)
 				}
 			}

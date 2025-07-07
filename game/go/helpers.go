@@ -64,6 +64,46 @@ func topLayerAt(x, y int, level *Level) CollisionLayer {
 	return level.Grid[y][x]
 }
 
+func copyLevel(level *Level) *Level {
+	newGrid := make([][]CollisionLayer, len(level.Grid))
+	for i := range level.Grid {
+		newGrid[i] = make([]CollisionLayer, len(level.Grid[i]))
+		copy(newGrid[i], level.Grid[i])
+	}
+
+	newFoods := make([]Food, len(level.Foods))
+	copy(newFoods, level.Foods)
+
+	newSnakes := make([]Snake, len(level.Snakes))
+	for i, snake := range level.Snakes {
+		newSnakes[i] = Snake{
+			ID:             snake.ID,
+			Segments:       append([]Point(nil), snake.Segments...),
+			GrowOnNextMove: snake.GrowOnNextMove,
+			Layer:          snake.Layer,
+		}
+	}
+
+	return &Level{
+		Info:   level.Info,
+		Grid:   newGrid,
+		Foods:  newFoods,
+		Snakes: newSnakes,
+	}
+}
+
+func copyGame(g *Game) *Game {
+	game := &Game{
+		level: copyLevel(g.level),
+	}
+	for i, snake := range g.level.Snakes {
+		if snake.ID == g.activeSnake.ID {
+			game.activeSnake = &game.level.Snakes[i]
+		}
+	}
+	return game
+}
+
 var CardinalDirections = []Point{
 	{X: 1, Y: 0},
 	{X: 0, Y: 1},
