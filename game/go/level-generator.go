@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 )
 
@@ -153,15 +152,4 @@ func GenerateLevel() Level {
 	*/
 
 	return level
-}
-
-func main() {
-	level := GenerateLevel()
-	serialized, err := SerializeLevel(level)
-	if err != nil {
-		fmt.Println("Error serializing level:", err)
-		return
-	}
-	// fmt.Println("Serialized Level:", serialized)
-	fmt.Println(string(serialized))
 }
