@@ -30,6 +30,19 @@ type Food struct {
 	Layer    CollisionLayer
 }
 
+func (food *Food) IsSolid() bool            { return true }
+func (food *Food) GetLayer() CollisionLayer { return food.Layer }
+func (food *Food) At(x, y int, options HitTestOptions) *Hit {
+	if food.Position.X == x && food.Position.Y == y {
+		return &Hit{
+			Entity:       food,
+			SegmentIndex: -1, // Not applicable for Food
+			Layer:        food.Layer,
+		}
+	}
+	return nil
+}
+
 type Snake struct {
 	ID             int
 	Segments       []Point // ordered from head to tail
@@ -57,7 +70,7 @@ type LevelInfo struct {
 	Height int `json:"height"`
 }
 
-// Custom marshaling is defined for the top-level struct.
+// Custom marshaling is defined elsewhere for the Level struct.
 type Level struct {
 	Info     LevelInfo
 	Grid     [][]CollisionLayer

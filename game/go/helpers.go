@@ -1,6 +1,9 @@
 package main
 
-import "math/rand"
+import (
+	"math/rand"
+	"slices"
+)
 
 func shuffle[T any](slice []T) {
 	for i := range slice {
@@ -111,24 +114,23 @@ func copyLevel(level *Level) *Level {
 		copy(newGrid[i], level.Grid[i])
 	}
 
-	newFoods := make([]Food, len(level.Foods))
-	copy(newFoods, level.Foods)
+	// newFoods := make([]Food, len(level.Foods))
+	// copy(newFoods, level.Foods)
 
-	newSnakes := make([]Snake, len(level.Snakes))
-	for i, snake := range level.Snakes {
-		newSnakes[i] = Snake{
-			ID:             snake.ID,
-			Segments:       append([]Point(nil), snake.Segments...),
-			GrowOnNextMove: snake.GrowOnNextMove,
-			Layer:          snake.Layer,
-		}
-	}
+	// newSnakes := make([]Snake, len(level.Snakes))
+	// for i, snake := range level.Snakes {
+	// 	newSnakes[i] = Snake{
+	// 		ID:             snake.ID,
+	// 		Segments:       append([]Point(nil), snake.Segments...),
+	// 		GrowOnNextMove: snake.GrowOnNextMove,
+	// 		Layer:          snake.Layer,
+	// 	}
+	// }
 
 	return &Level{
-		Info:   level.Info,
-		Grid:   newGrid,
-		Foods:  newFoods,
-		Snakes: newSnakes,
+		Info:     level.Info,
+		Grid:     newGrid,
+		Entities: slices.Clone(level.Entities), // FIXME? snake segments?
 	}
 }
 
@@ -136,9 +138,11 @@ func copyGame(g *Game) *Game {
 	game := &Game{
 		level: copyLevel(g.level),
 	}
-	for i, snake := range g.level.Snakes {
-		if snake.ID == g.activeSnake.ID {
-			game.activeSnake = &game.level.Snakes[i]
+	for i, entity := range g.level.Entities {
+		if snake, ok := entity.(*Snake); ok {
+			if entity.ID == g.activeSnake.ID {
+				game.activeSnake = &game.level.Entities[i]
+			}
 		}
 	}
 	return game
