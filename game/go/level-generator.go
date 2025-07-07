@@ -66,6 +66,92 @@ func GenerateLevel() Level {
 		}
 	}
 
+	/*
+		// Simulate in reverse, occasionally creating collectables and shrinking snakes as they move backwards
+		var moves []Move
+		for i := 0; i < puzzleGenerationLimit; i++ {
+			snake := &level.Snakes[rand.Intn(len(level.Snakes))]
+			direction := CardinalDirections[rand.Intn(len(CardinalDirections))]
+			potentialBeforeTile := Point{
+				X: snake.Segments[len(snake.Segments)-1].X - direction.X,
+				Y: snake.Segments[len(snake.Segments)-1].Y - direction.Y,
+			}
+			if !withinLevel(potentialBeforeTile, level) {
+				continue
+			}
+			// TODO: technically should ignore opposite end of the snake since moving onto your tail is valid
+			// I have logic to conditionally ignore the tail, but would need to conditionally ignore the head since we're simulating backwards
+			hits := hitTestAllEntities(potentialBeforeTile.X, potentialBeforeTile.Y)
+			if !layersCollide(topLayer(hits, level), snake.Segments[0].Layer) {
+				// I originally added undoable() here to debug the level generation,
+				// then used it for the core logic of level generation, for backtracking.
+				// However, it's inefficient, ESPECIALLY if we're also calling serialize()
+				// and I was getting lots of browser tab crashes, so I optimized it to
+				// use deserialize() instead, and restore the `growOnNextMove` property
+				// which is the only thing changed before the snapshot.
+				// Still getting browser tab crashes, though,
+				// so it'd be better to avoid serialization altogether.
+				// Or reimplement this in C or something. [Note: WIP porting TS to Go]
+				// undoable()
+				prevGrowOnNextMove := snake.GrowOnNextMove
+				// const eat = Math.random() < foodChance && snake.segments.length > 1
+				eat := rand.Float32() < foodChance && len(snake.Segments) > 1
+				// `growOnNextMove` is supposed to be set after eating,
+				// so we have to do it before the reverse move, and before the `expected` snapshot,
+				// because
+				snake.GrowOnNextMove = eat
+				expected := serialize()
+				previousHead := snake.Segments[0]
+				// FIXME: it's not validating in the case that it generates a collectable
+				if eat {
+					food := Food{}
+					food.Position = previousHead
+					entities = append(entities, food)
+				}
+				dragSnake(snake, len(snake.Segments)-1, potentialBeforeTile)
+				if eat {
+					snake.Segments = snake.Segments[:len(snake.Segments)-1] // shrink the snake, TODO: is this the right end?
+					// snake.segments.shift()
+				}
+				move := analyzeMoveAbsolute(snake, previousHead)
+				if !move.valid {
+					// console.log("Undoing generated invalid move:", move)
+					// backtrack if the move is invalid
+					deserialize(expected)
+					snake.GrowOnNextMove = prevGrowOnNextMove
+					continue
+				}
+				// Also need to check that game state matches exactly if simulating forwards
+				// because the move may be valid, but it won't give the expected game state.
+				// Entities may be ordered differently.
+				// Note: this MAY be too limiting, comparing the total entity order
+				// Comparing some sort of partial order may be better, but more complex and error-prone.
+				// I haven't determined that it's necessary, but this may be subtly rejecting
+				// more interesting puzzles, if there's a case where the entities are
+				// effectively ordered the same, but irrelevant disorder exists,
+				// and this aligns with characteristics of interesting puzzles.
+				takeMove(move)
+				actual := serialize()
+				undo() // always undo takeMove done just for validation
+				if actual != expected {
+					// console.log("Undoing generated move which gave an inconsistent game state:", {
+					//   expected,
+					//   actual,
+					//   move,
+					// })
+					// backtrack if validation failed
+					deserialize(expected)
+					snake.GrowOnNextMove = prevGrowOnNextMove
+					continue
+				}
+				moves = append(moves, move)
+				if len(moves) >= targetPuzzleComplexity {
+					break
+				}
+			}
+		}
+	*/
+
 	return level
 }
 

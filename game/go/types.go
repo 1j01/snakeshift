@@ -44,3 +44,13 @@ type Hit struct {
 	segmentIndex int
 	layer        CollisionLayer
 }
+
+type Move struct {
+	snake      Snake
+	to         Tile
+	delta      Point
+	valid      bool
+	encumbered bool
+	// entitiesThere  []Entity
+	// entitiesToPush []Entity
+}
