@@ -73,6 +73,9 @@ func mainGameLoop() {
 					move(Point{X: 0, Y: 1}, g)
 				case ev.Ch == 'q' || ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyCtrlD:
 					return
+				case ev.Ch == 'n':
+					g = NewGame()
+					render(g)
 				}
 			}
 		default:
