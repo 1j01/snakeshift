@@ -12,6 +12,15 @@ func shuffle[T any](slice []T) {
 	}
 }
 
+func filter[T any](ss []T, test func(T) bool) (ret []T) {
+	for _, s := range ss {
+		if test(s) {
+			ret = append(ret, s)
+		}
+	}
+	return
+}
+
 func sign(x int) int {
 	// Alternatively:
 	// return int(math.Copysign(1, float64(x)))
@@ -51,10 +60,10 @@ func withinLevel(point Point, level *Level) bool {
 	return point.X >= 0 && point.X < level.Info.Width && point.Y >= 0 && point.Y < level.Info.Height
 }
 
-func indexOfEntity(entity *Entity, level *Level) int {
+func indexOfEntity(entity Entity, level *Level) int {
 	for i := range level.Entities {
 		// if snake.ID == entity.ID {
-		if &level.Entities[i] == entity { // FIXME?
+		if level.Entities[i] == entity { // FIXME?
 			return i
 		}
 	}
@@ -68,8 +77,8 @@ func topLayerAt(x, y int, level *Level) CollisionLayer {
 	// Entities are in draw order, so we must iterate in reverse to look at topmost entities first.
 	for i := len(level.Entities) - 1; i >= 0; i-- {
 		entity := level.Entities[i]
-		if entity.At(x, y) {
-			return entity.Layer()
+		if entity.At(x, y, HitTestOptions{}) != nil {
+			return entity.GetLayer()
 		}
 	}
 	return level.Grid[y][x]
@@ -138,10 +147,12 @@ func copyGame(g *Game) *Game {
 	game := &Game{
 		level: copyLevel(g.level),
 	}
-	for i, entity := range g.level.Entities {
+	for _, entity := range g.level.Entities {
 		if snake, ok := entity.(*Snake); ok {
-			if entity.ID == g.activeSnake.ID {
-				game.activeSnake = &game.level.Entities[i]
+			if snake.ID == g.activeSnake.ID {
+				// game.activeSnake = &game.level.Entities[i]
+				// game.activeSnake = &game.level.Entities[i].(*Snake)
+				game.activeSnake = snake
 			}
 		}
 	}

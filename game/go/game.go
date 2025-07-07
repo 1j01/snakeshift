@@ -15,6 +15,7 @@ const (
 	boardStartY = 4
 )
 
+// Note: MAKE SURE TO UPDATE copyGame() IF YOU CHANGE THIS STRUCT!
 type Game struct {
 	level            *Level
 	activeSnake      *Snake
@@ -27,8 +28,11 @@ func NewGame() *Game {
 		level: GenerateLevel(),
 	}
 	// Set the first snake as the active snake
-	if len(game.level.Snakes) > 0 {
-		game.activeSnake = &game.level.Snakes[0]
+	for _, entity := range game.level.Entities {
+		if snake, ok := entity.(*Snake); ok {
+			game.activeSnake = snake
+			break
+		}
 	}
 	return game
 }
@@ -47,9 +51,19 @@ func cycleActiveSnake(g *Game) {
 	if g.activeSnake == nil {
 		return
 	}
-	for i := 0; i < len(g.level.Snakes); i++ {
-		if &g.level.Snakes[i] == g.activeSnake {
-			g.activeSnake = &g.level.Snakes[(i+1)%len(g.level.Snakes)]
+	snakes := []*Snake{}
+	for _, entity := range g.level.Entities {
+		if snake, ok := entity.(*Snake); ok {
+			snakes = append(snakes, snake)
+		}
+	}
+	// snakes := filter(g.level.Entities, func(entity Entity) bool {
+	// 	_, isSnake := entity.(*Snake)
+	// 	return isSnake
+	// })//.([]*Snake)
+	for i := 0; i < len(snakes); i++ {
+		if snakes[i] == g.activeSnake {
+			g.activeSnake = snakes[(i+1)%len(snakes)]
 			return
 		}
 	}
@@ -154,7 +168,14 @@ func render(g *Game) {
 	}
 
 	// Draw the snakes
-	for _, snake := range g.level.Snakes {
+	// TODO: Draw method on Entity interface
+	snakes := []*Snake{}
+	for _, entity := range g.level.Entities {
+		if snake, ok := entity.(*Snake); ok {
+			snakes = append(snakes, snake)
+		}
+	}
+	for _, snake := range snakes {
 		for i, segment := range snake.Segments {
 			x := boardStartX + segment.X*cellWidth
 			y := boardStartY + segment.Y*cellHeight

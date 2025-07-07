@@ -16,10 +16,9 @@ func GenerateLevel() *Level {
 	height := rand.Intn(5) + 2
 
 	level := &Level{
-		Info:   LevelInfo{Width: width, Height: height},
-		Grid:   make([][]CollisionLayer, height),
-		Foods:  make([]Food, 0, 50),
-		Snakes: make([]Snake, 0, 10),
+		Info:     LevelInfo{Width: width, Height: height},
+		Grid:     make([][]CollisionLayer, height),
+		Entities: make([]Entity, 0, 100),
 	}
 
 	// Initialize grid with random block types
@@ -42,8 +41,8 @@ func GenerateLevel() *Level {
 		// Get layer before appending snake so we don't retrieve the snake's own (uninitialized) layer
 		layer := invertCollisionLayer(topLayerAt(x, y, level))
 		// append early (before topLayerAt) so that hit tests include the snake itself
-		level.Snakes = append(level.Snakes, Snake{ID: i + 1})
-		snake := &level.Snakes[i]
+		level.Entities = append(level.Entities, &Snake{ID: i + 1})
+		snake := level.Entities[i].(*Snake)
 		snake.Segments = []Point{{X: x, Y: y}}
 		snake.Layer = layer
 		targetSnakeEndLength := 2 + rand.Intn(10)

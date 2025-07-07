@@ -23,6 +23,7 @@ type Entity interface {
 	// At(x, y int) Hit
 	// At(x, y int, options HitTestOptions) Hit
 	At(x, y int, options HitTestOptions) *Hit
+	// TODO: Draw()
 }
 
 type Food struct {
@@ -70,7 +71,8 @@ type LevelInfo struct {
 	Height int `json:"height"`
 }
 
-// Custom marshaling is defined elsewhere for the Level struct.
+// Note: Custom marshaling is defined elsewhere for the Level struct.
+// Note: MAKE SURE TO UPDATE copyLevel() IF YOU CHANGE THIS STRUCT!
 type Level struct {
 	Info     LevelInfo
 	Grid     [][]CollisionLayer
@@ -78,7 +80,7 @@ type Level struct {
 }
 
 type Hit struct {
-	Entity       *Entity // may be nil if it's a block
+	Entity       Entity // may be nil if it's a block
 	SegmentIndex int
 	Layer        CollisionLayer
 }

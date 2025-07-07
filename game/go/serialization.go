@@ -82,28 +82,28 @@ func SerializeLevel(level *Level) ([]byte, error) {
 		}
 	}
 
-	// Convert Food
-	for _, food := range level.Foods {
-		ent := EntityFood{
-			X:      food.Position.X,
-			Y:      food.Position.Y,
-			Width:  1,
-			Height: 1,
-			Layer:  food.Layer,
+	// Convert entities
+	for _, entity := range level.Entities {
+		switch e := entity.(type) {
+		case *Food:
+			ent := EntityFood{
+				X:      e.Position.X,
+				Y:      e.Position.Y,
+				Width:  1,
+				Height: 1,
+				Layer:  e.Layer,
+			}
+			entities = append(entities, ent)
+			entityTypes = append(entityTypes, "Food")
+		case *Snake:
+			ent := EntitySnake{
+				ID:             e.ID,
+				Segments:       pointsToSnakeSegments(e.Segments, e.Layer),
+				GrowOnNextMove: e.GrowOnNextMove,
+			}
+			entities = append(entities, ent)
+			entityTypes = append(entityTypes, "Snake")
 		}
-		entities = append(entities, ent)
-		entityTypes = append(entityTypes, "Food")
-	}
-
-	// Convert Snakes
-	for _, snake := range level.Snakes {
-		ent := EntitySnake{
-			ID:             snake.ID,
-			Segments:       pointsToSnakeSegments(snake.Segments, snake.Layer),
-			GrowOnNextMove: snake.GrowOnNextMove,
-		}
-		entities = append(entities, ent)
-		entityTypes = append(entityTypes, "Snake")
 	}
 
 	// Construct final game state
