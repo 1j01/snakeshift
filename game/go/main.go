@@ -30,8 +30,7 @@ func main() {
 				fmt.Println(string(serialized))
 				return nil
 			}
-			fmt.Println("Welcome to Snakeshift! Use --generate to create a random level.")
-			fmt.Println("To play, you can use the web version at https://1j01.itch.io/snakeshift")
+			mainGameLoop()
 			return nil
 		},
 	}

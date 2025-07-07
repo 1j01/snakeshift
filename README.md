@@ -86,6 +86,7 @@ There is also an experimental level generator written in Go, which can be run wi
 ```sh
 cd game/go
 go run . --generate >../../game/public/levels/tests/generated-level.json
+go run .
 ```
 
 ### Quality Control
