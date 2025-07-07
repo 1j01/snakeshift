@@ -63,7 +63,7 @@ func pointsToSnakeSegments(points []Point, layer CollisionLayer) []SnakeSegment 
 	return segments
 }
 
-func SerializeLevel(level Level) ([]byte, error) {
+func SerializeLevel(level *Level) ([]byte, error) {
 	var entities []interface{}
 	var entityTypes []string
 

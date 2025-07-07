@@ -11,29 +11,29 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 	x := head.X + deltaX
 	y := head.Y + deltaY
 
-	ignoreTailOfSnake := snake
-	if snake.GrowOnNextMove {
-		ignoreTailOfSnake = nil
-	}
-	hitsAhead := HitTestAllEntities(x, y, HitTestOptions{
-		IgnoreTailOfSnake: ignoreTailOfSnake,
-	})
+	// ignoreTailOfSnake := snake
+	// if snake.GrowOnNextMove {
+	// 	ignoreTailOfSnake = nil
+	// }
+	// hitsAhead := HitTestAllEntities(x, y, HitTestOptions{
+	// 	IgnoreTailOfSnake: ignoreTailOfSnake,
+	// })
 
-	hitsAllAlong := []Hit{}
-	for _, seg := range snake.Segments {
-		hitsAllAlong = append(hitsAllAlong, HitTestAllEntities(seg.X, seg.Y)...)
-	}
+	// hitsAllAlong := []Hit{}
+	// for _, seg := range snake.Segments {
+	// 	hitsAllAlong = append(hitsAllAlong, HitTestAllEntities(seg.X, seg.Y)...)
+	// }
 
-	encumbered := false
-	for _, hit := range hitsAllAlong {
-		if hit.Entity.Solid() &&
-			hit.Entity != snake &&
-			game.EntitiesIndex(hit.Entity) > game.EntitiesIndex(snake) &&
-			!(hit.EntityIsSnake() && snake.FusedSnakeIds.Contains(hit.EntityID())) {
-			encumbered = true
-			break
-		}
-	}
+	// encumbered := false
+	// for _, hit := range hitsAllAlong {
+	// 	if hit.Entity.Solid() &&
+	// 		hit.Entity != snake &&
+	// 		game.EntitiesIndex(hit.Entity) > game.EntitiesIndex(snake) &&
+	// 		!(hit.EntityIsSnake() && snake.FusedSnakeIds.Contains(hit.EntityID())) {
+	// 		encumbered = true
+	// 		break
+	// 	}
+	// }
 
 	// Prevent moving backwards when two segments long
 	// (When one segment long, you can plausibly move in any direction,
@@ -45,8 +45,8 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 	// (But that is just a special case of the rule that you shouldn't
 	// be able to move into a tile occupied by a snake which is on top of this snake.)
 	movingBackwards := len(snake.Segments) > 1 &&
-		dirX == sign(snake.Segments[1].X-head.X) &&
-		dirY == sign(snake.Segments[1].Y-head.Y)
+		deltaX == sign(snake.Segments[1].X-head.X) &&
+		deltaY == sign(snake.Segments[1].Y-head.Y)
 
 		// I think I will need to move to a system where the move is simulated and then checked for validity,
 		// to avoid the complexity of adding exceptions to game state access, when answering hypotheticals.
@@ -56,51 +56,52 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 		// If moves are analyzed by checking for collisions within a whole game board,
 		// it could share some code. Theoretically.
 
-	// Push objects
-	var entitiesToPush []entity.Entity
-	{
-		hit := FindFirstSolidEntity(hitsAhead)
-		// TODO: try pushing other snakes too (or save that for when splitting snakes; only push the tail / "dead" half)
-		// TODO: recursively push crates
-		if crateEntity, ok := hit.(*crate.Crate); ok {
-			newTile := Point{
-				X:      crateEntity.X + deltaX,
-				Y:      crateEntity.Y + deltaY,
-				Width:  crateEntity.Width,
-				Height: crateEntity.Height,
-			}
-			hitsAheadCrate := HitTestAllEntities(newTile.X, newTile.Y, HitTestOptions{IgnoreTailOfSnake: snake})
-			if WithinLevel(newTile) &&
-				LayersCollide(crateEntity.Layer, head.Layer) &&
-				!LayersCollide(TopLayer(hitsAheadCrate), crateEntity.Layer) {
-				entitiesToPush = append(entitiesToPush, crateEntity)
-				for _, h := range hitsAhead {
-					if _, ok := h.Entity.(*collectable.Collectable); ok {
-						entitiesToPush = append(entitiesToPush, h.Entity)
-						break
-					}
-				}
-			}
-		}
-	}
+	// // Push objects
+	// var entitiesToPush []entity.Entity
+	// {
+	// 	hit := FindFirstSolidEntity(hitsAhead)
+	// 	// TODO: try pushing other snakes too (or save that for when splitting snakes; only push the tail / "dead" half)
+	// 	// TODO: recursively push crates
+	// 	if crateEntity, ok := hit.(*crate.Crate); ok {
+	// 		newTile := Point{
+	// 			X:      crateEntity.X + deltaX,
+	// 			Y:      crateEntity.Y + deltaY,
+	// 			Width:  crateEntity.Width,
+	// 			Height: crateEntity.Height,
+	// 		}
+	// 		hitsAheadCrate := HitTestAllEntities(newTile.X, newTile.Y, HitTestOptions{IgnoreTailOfSnake: snake})
+	// 		if WithinLevel(newTile) &&
+	// 			LayersCollide(crateEntity.Layer, head.Layer) &&
+	// 			!LayersCollide(TopLayer(hitsAheadCrate), crateEntity.Layer) {
+	// 			entitiesToPush = append(entitiesToPush, crateEntity)
+	// 			for _, h := range hitsAhead {
+	// 				if _, ok := h.Entity.(*collectable.Collectable); ok {
+	// 					entitiesToPush = append(entitiesToPush, h.Entity)
+	// 					break
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	// Ignore pushed objects as obstacles
-	hitsAhead = FilterHitsExcludingEntities(hitsAhead, entitiesToPush)
+	// hitsAhead = FilterHitsExcludingEntities(hitsAhead, entitiesToPush)
+	layerAhead := topLayerAt(x, y, level)
 
 	return Move{
 		// SnakeId:   s.ID,
 		Snake: snake,
-		Valid: (dirX == 0 || dirY == 0) &&
-			(Abs(dirX) == 1 || Abs(dirY) == 1) &&
-			WithinLevel(Point{X: x, Y: y, Width: head.Width, Height: head.Height}) &&
+		Valid: (deltaX == 0 || deltaY == 0) &&
+			(abs(deltaX) == 1 || abs(deltaY) == 1) &&
+			withinLevel(Point{X: x, Y: y}, level) &&
 			!movingBackwards &&
-			!encumbered &&
-			!LayersCollide(TopLayer(hitsAhead), head.Layer),
-		Encumbered:     encumbered,
-		To:             Point{X: x, Y: y, Width: head.Width, Height: head.Height},
-		Delta:          types.Vector{X: deltaX, Y: deltaY},
-		EntitiesThere:  HitsToEntities(hitsAhead),
-		EntitiesToPush: entitiesToPush,
+			// !encumbered &&
+			!layersCollide(layerAhead, snake.Layer),
+		// Encumbered: encumbered,
+		To:    Point{X: x, Y: y},
+		Delta: Point{X: deltaX, Y: deltaY},
+		// EntitiesThere:  HitsToEntities(hitsAhead),
+		// EntitiesToPush: entitiesToPush,
 	}
 }
 
@@ -123,7 +124,7 @@ func TakeMove(m Move, level *Level) {
 	// 	s.GrowOnNextMove = false
 	// }
 
-	head := s.Segments[0]
+	head := &s.Segments[0]
 	for i := len(s.Segments) - 1; i > 0; i-- {
 		s.Segments[i].X = s.Segments[i-1].X
 		s.Segments[i].Y = s.Segments[i-1].Y
@@ -184,44 +185,44 @@ func TakeMove(m Move, level *Level) {
 	// s.AnimateMove(m, originalTailPos)
 }
 
-// TODO: DRY, copied from function `drag` in level-editor.ts
-func DragSnake(dragging *Snake, index int, to Point) {
-	segment := dragging.Segments[index]
-	if segment.X != to.X || segment.Y != to.Y {
-		from := types.Vector{X: segment.X, Y: segment.Y}
-		points := LineNoDiagonals(from, to)
-		for _, point := range points[1:] {
-			for i := len(dragging.Segments) - 1; i > index; i-- {
-				lead(dragging.Segments[i-1], dragging.Segments[i])
-			}
-			for i := 0; i < index; i++ {
-				lead(dragging.Segments[i+1], dragging.Segments[i])
-			}
-			segment.X = point.X
-			segment.Y = point.Y
-			// if snake.DEBUG_SNAKE_DRAGGING {
-			//   draw()
-			// }
-		}
-	}
-}
+// // TODO: DRY, copied from function `drag` in level-editor.ts
+// func DragSnake(dragging *Snake, index int, to Point) {
+// 	segment := dragging.Segments[index]
+// 	if segment.X != to.X || segment.Y != to.Y {
+// 		from := Point{X: segment.X, Y: segment.Y}
+// 		points := LineNoDiagonals(from, to)
+// 		for _, point := range points[1:] {
+// 			for i := len(dragging.Segments) - 1; i > index; i-- {
+// 				lead(dragging.Segments[i-1], dragging.Segments[i])
+// 			}
+// 			for i := 0; i < index; i++ {
+// 				lead(dragging.Segments[i+1], dragging.Segments[i])
+// 			}
+// 			segment.X = point.X
+// 			segment.Y = point.Y
+// 			// if snake.DEBUG_SNAKE_DRAGGING {
+// 			//   draw()
+// 			// }
+// 		}
+// 	}
+// }
 
-// TODO: DRY, copied from function `lead` in level-editor.ts
-func lead(leader, follower *snake.Segment) {
-	follower.X = leader.X
-	follower.Y = leader.Y
-	follower.Width = leader.Width
-	follower.Height = leader.Height
-	// if snake.DEBUG_SNAKE_DRAGGING {
-	//   draw()
-	// }
-}
+// // TODO: DRY, copied from function `lead` in level-editor.ts
+// func lead(leader, follower *snake.Segment) {
+// 	follower.X = leader.X
+// 	follower.Y = leader.Y
+// 	follower.Width = leader.Width
+// 	follower.Height = leader.Height
+// 	// if snake.DEBUG_SNAKE_DRAGGING {
+// 	//   draw()
+// 	// }
+// }
 
-func GrowSnake(s *Snake) {
-	tail := s.Segments[len(s.Segments)-1]
-	newTail := tail.Copy()
-	s.Segments = append(s.Segments, newTail)
-}
+// func GrowSnake(s *Snake) {
+// 	tail := s.Segments[len(s.Segments)-1]
+// 	newTail := tail.Copy()
+// 	s.Segments = append(s.Segments, newTail)
+// }
 
 /*
 func InvertSnake(s *Snake) {

@@ -4,7 +4,7 @@ import (
 	"math/rand"
 )
 
-func GenerateLevel() Level {
+func GenerateLevel() *Level {
 	const puzzleGenerationLimit = 10000
 	const targetPuzzleComplexity = 100
 	const blockDensity = 0.3
@@ -15,7 +15,7 @@ func GenerateLevel() Level {
 	width := rand.Intn(5) + 2
 	height := rand.Intn(5) + 2
 
-	level := Level{
+	level := &Level{
 		Info:   LevelInfo{Width: width, Height: height},
 		Grid:   make([][]CollisionLayer, height),
 		Foods:  make([]Food, 0, 50),

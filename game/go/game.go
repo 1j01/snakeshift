@@ -16,7 +16,7 @@ const (
 )
 
 type Game struct {
-	level Level
+	level *Level
 }
 
 func NewGame() *Game {
@@ -27,9 +27,9 @@ func NewGame() *Game {
 
 func move(direction Point, g *Game) {
 	activeSnake := &g.level.Snakes[0] // Arbitrary for now
-	move := AnalyzeMoveRelative(activeSnake, direction.X, direction.Y, &g.level)
+	move := AnalyzeMoveRelative(activeSnake, direction.X, direction.Y, g.level)
 	if move.Valid {
-		TakeMove(move, &g.level)
+		TakeMove(move, g.level)
 	}
 }
 

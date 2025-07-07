@@ -44,11 +44,11 @@ func layersCollide(a CollisionLayer, b CollisionLayer) bool {
 	return (a & b) != 0
 }
 
-func withinLevel(point Point, level Level) bool {
+func withinLevel(point Point, level *Level) bool {
 	return point.X >= 0 && point.X < level.Info.Width && point.Y >= 0 && point.Y < level.Info.Height
 }
 
-func topLayerAt(x, y int, level Level) CollisionLayer {
+func topLayerAt(x, y int, level *Level) CollisionLayer {
 	if !withinLevel(Point{X: x, Y: y}, level) {
 		return Both
 	}

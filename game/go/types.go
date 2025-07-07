@@ -46,8 +46,8 @@ type Hit struct {
 }
 
 type Move struct {
-	Snake      Snake
-	To         Tile
+	Snake      *Snake
+	To         Point
 	Delta      Point
 	Valid      bool
 	Encumbered bool
