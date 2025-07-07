@@ -123,23 +123,30 @@ func copyLevel(level *Level) *Level {
 		copy(newGrid[i], level.Grid[i])
 	}
 
-	// newFoods := make([]Food, len(level.Foods))
-	// copy(newFoods, level.Foods)
-
-	// newSnakes := make([]Snake, len(level.Snakes))
-	// for i, snake := range level.Snakes {
-	// 	newSnakes[i] = Snake{
-	// 		ID:             snake.ID,
-	// 		Segments:       append([]Point(nil), snake.Segments...),
-	// 		GrowOnNextMove: snake.GrowOnNextMove,
-	// 		Layer:          snake.Layer,
-	// 	}
-	// }
+	newEntities := make([]Entity, len(level.Entities))
+	for i, entity := range level.Entities {
+		switch e := entity.(type) {
+		case *Food:
+			newEntities[i] = &Food{
+				Position: Point{X: e.Position.X, Y: e.Position.Y},
+				Layer:    e.Layer,
+			}
+		case *Snake:
+			newEntities[i] = &Snake{
+				ID:             e.ID,
+				Segments:       slices.Clone(e.Segments),
+				GrowOnNextMove: e.GrowOnNextMove,
+				Layer:          e.Layer,
+			}
+		default:
+			panic("Unknown entity type during level copy")
+		}
+	}
 
 	return &Level{
 		Info:     level.Info,
 		Grid:     newGrid,
-		Entities: slices.Clone(level.Entities), // FIXME? snake segments?
+		Entities: newEntities, // slices.Clone(level.Entities), wouldn't that be nice?
 	}
 }
 
