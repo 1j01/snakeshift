@@ -84,22 +84,11 @@ func GenerateLevel() *Level {
 			// IgnoreHeadOfSnake: snake,
 		})
 		if !layersCollide(topLayer(hits), snake.Layer) {
-			// I originally added undoable() here to debug the level generation,
-			// then used it for the core logic of level generation, for backtracking.
-			// However, it's inefficient, ESPECIALLY if we're also calling serialize()
-			// and I was getting lots of browser tab crashes, so I optimized it to
-			// use deserialize() instead, and restore the `growOnNextMove` property
-			// which is the only thing changed before the snapshot.
-			// Still getting browser tab crashes, though,
-			// so it'd be better to avoid serialization altogether.
-			// Or reimplement this in C or something. [Note: WIP porting TS to Go]
-			// undoable()
 			prevGrowOnNextMove := snake.GrowOnNextMove
 			// const eat = Math.random() < foodChance && snake.segments.length > 1
 			eat := rand.Float32() < foodChance && len(snake.Segments) > 1
-			// `growOnNextMove` is supposed to be set after eating,
-			// so we have to do it before the reverse move, and before the `expected` snapshot,
-			// because
+			// `GrowOnNextMove` is supposed to be set after eating,
+			// so we have to do it before the reverse move, and before the `expected` snapshot
 			snake.GrowOnNextMove = eat
 			expected := copyLevel(level)
 			previousHead := snake.Segments[0]
@@ -113,7 +102,6 @@ func GenerateLevel() *Level {
 			moveSnakeByTail(snake, potentialBeforeTile)
 			if eat {
 				snake.Segments = snake.Segments[:len(snake.Segments)-1] // shrink the snake, TODO: is this the right end?
-				// snake.segments.shift()
 			}
 			move := AnalyzeMoveAbsolute(snake, previousHead, level)
 			if !move.Valid {
@@ -124,7 +112,8 @@ func GenerateLevel() *Level {
 				continue
 			}
 			// Also need to check that game state matches exactly if simulating forwards
-			// because the move may be valid, but it won't give the expected game state.
+			// because the move may be valid in isolation, but not as a way to get to the expected state.
+			// In other words, it can be valid move without being a valid precondition.
 			// Entities may be ordered differently.
 			// Note: this MAY be too limiting, comparing the total entity order
 			// Comparing some sort of partial order may be better, but more complex and error-prone.

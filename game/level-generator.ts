@@ -111,12 +111,12 @@ function tryGenerateLevel() {
       // Still getting browser tab crashes, though,
       // so it'd be better to avoid serialization altogether.
       // Or reimplement this in C or something.
+      // UPDATE: I've reimplemented this in Go. See game/go/level-generator.go
       // undoable()
       const prevGrowOnNextMove = snake.growOnNextMove
       const eat = Math.random() < foodChance && snake.segments.length > 1
       // `growOnNextMove` is supposed to be set after eating,
-      // so we have to do it before the reverse move, and before the `expected` snapshot,
-      // because 
+      // so we have to do it before the reverse move, and before the `expected` snapshot
       snake.growOnNextMove = eat
       const expected = serialize()
       const previousHead = { ...snake.segments[0] }
