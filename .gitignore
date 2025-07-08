@@ -5,6 +5,9 @@
 /blob-report/
 /playwright/.cache/
 
+# VS Code's Go launch configuration creates a temporary executable
+__debug*
+
 # Temporary backup files from text editors
 *~
 
