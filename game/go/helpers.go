@@ -21,6 +21,20 @@ func filter[T any](ss []T, test func(T) bool) (ret []T) {
 	return
 }
 
+func getSnakes(level *Level) []*Snake {
+	// snakes := filter(level.Entities, func(entity Entity) bool {
+	// 	_, isSnake := entity.(*Snake)
+	// 	return isSnake
+	// })//.([]*Snake)
+	snakes := []*Snake{}
+	for _, entity := range level.Entities {
+		if snake, ok := entity.(*Snake); ok {
+			snakes = append(snakes, snake)
+		}
+	}
+	return snakes
+}
+
 func sign(x int) int {
 	// Alternatively:
 	// return int(math.Copysign(1, float64(x)))

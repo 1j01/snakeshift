@@ -144,16 +144,7 @@ func cycleActiveSnake(g *Game) {
 	if g.activeSnake == nil {
 		return
 	}
-	snakes := []*Snake{}
-	for _, entity := range g.level.Entities {
-		if snake, ok := entity.(*Snake); ok {
-			snakes = append(snakes, snake)
-		}
-	}
-	// snakes := filter(g.level.Entities, func(entity Entity) bool {
-	// 	_, isSnake := entity.(*Snake)
-	// 	return isSnake
-	// })//.([]*Snake)
+	snakes := getSnakes(g.level)
 	for i := 0; i < len(snakes); i++ {
 		if snakes[i].ID == g.activeSnake.ID {
 			if snakes[i] != g.activeSnake {
