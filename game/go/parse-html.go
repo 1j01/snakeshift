@@ -18,8 +18,14 @@ type LevelEntry struct {
 	TutorialText string
 }
 
-// TODO: parse HTML only once
-// TODO: extract tutorial text
+var (
+	cachedLevels []LevelEntry
+	cacheLoaded  bool
+)
+
+// TODO: extract tutorial text... or actually, define it separately for the terminal version; it mainly talks about controls
+// but maybe extract hints (for now, we can just assume the terminal version is for hardcore players)
+// (hints are actually in hints.ts right now, not the HTML)
 
 func parseLevelsFromHTML(htmlContent string) ([]LevelEntry, error) {
 	doc, err := html.Parse(strings.NewReader(htmlContent))
@@ -53,6 +59,10 @@ func parseLevelsFromHTML(htmlContent string) ([]LevelEntry, error) {
 }
 
 func getLevels() ([]LevelEntry, error) {
+	if cacheLoaded {
+		return cachedLevels, nil
+	}
+
 	file, err := os.Open("../index.html")
 	if err != nil {
 		return nil, fmt.Errorf("failed to open index.html: %w", err)
@@ -72,6 +82,9 @@ func getLevels() ([]LevelEntry, error) {
 	if len(levels) == 0 {
 		return nil, errors.New("no levels found in index.html")
 	}
+
+	cachedLevels = levels
+	cacheLoaded = true
 
 	return levels, nil
 }
