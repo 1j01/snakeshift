@@ -24,6 +24,7 @@ const (
 type Game struct {
 	level           *Level
 	levelId         string
+	levelName       string
 	activeSnake     *Snake
 	blinkSnake      bool
 	blinkEncumbered bool
@@ -58,7 +59,7 @@ func LoadLevel(levelId string) (*Level, error) {
 }
 
 func loadNextLevel(g *Game) {
-	levelIds, err := getLevels()
+	levelIds, nameByLevelId, err := getLevels()
 	if err != nil {
 		panic(err)
 	}
@@ -79,6 +80,7 @@ func loadNextLevel(g *Game) {
 		panic(err)
 	}
 	g.level = level
+	g.levelName = nameByLevelId[g.levelId]
 	activateSomeSnake(g)
 }
 
@@ -87,7 +89,7 @@ func NewGame() *Game {
 	// 	level: GenerateLevel(),
 	// }
 
-	levelIds, err := getLevels()
+	levelIds, nameByLevelId, err := getLevels()
 	if err != nil {
 		panic(err)
 	}
@@ -98,8 +100,9 @@ func NewGame() *Game {
 	}
 
 	game := &Game{
-		level:   level,
-		levelId: levelId,
+		level:     level,
+		levelId:   levelId,
+		levelName: nameByLevelId[levelId],
 	}
 	activateSomeSnake(game)
 
@@ -241,8 +244,7 @@ func mainGameLoop() {
 func render(g *Game) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
 	// Title
-	// TODO: display level name instead of just "Snakeshift Game"
-	tbPrint(1, 1, termbox.ColorBlack, termbox.ColorWhite, "Snakeshift Game")
+	tbPrint(1, 1, termbox.ColorBlack, termbox.ColorWhite, g.levelName)
 	// Draw the game board
 	for y := 0; y < g.level.Info.Height; y++ {
 		for x := 0; x < g.level.Info.Width; x++ {
