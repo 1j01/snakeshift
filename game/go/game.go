@@ -28,6 +28,9 @@ type Game struct {
 }
 
 func LoadLevel(levelId string) (*Level, error) {
+	if levelId == "" {
+		return nil, fmt.Errorf("levelId cannot be empty")
+	}
 	levelJSON, err := os.ReadFile(path.Join("..", "public", levelId))
 	if err != nil {
 		return nil, fmt.Errorf("failed to read level file %s: %w", levelId, err)
