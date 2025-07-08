@@ -154,8 +154,8 @@ func copyLevel(level *Level) *Level {
 
 func copyGame(g *Game) *Game {
 	game := &Game{
-		level:   copyLevel(g.level),
-		levelId: g.levelId,
+		level:     copyLevel(g.level),
+		levelId:   g.levelId,
 		levelName: g.levelName,
 	}
 	for _, entity := range game.level.Entities {
