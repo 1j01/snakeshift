@@ -17,13 +17,8 @@ type Point struct {
 type Entity interface {
 	IsSolid() bool
 	GetLayer() CollisionLayer
-	// Went through a few different options for hit testing!
-	// Cells() []Point
-	// Occupies(x, y int, options HitTestOptions) bool
-	// At(x, y int) Hit
-	// At(x, y int, options HitTestOptions) Hit
 	At(x, y int, options HitTestOptions) *Hit
-	// TODO: Draw()
+	Draw(g *Game)
 }
 
 type Food struct {

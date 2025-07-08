@@ -230,15 +230,7 @@ func render(g *Game) {
 
 	// Draw the entities
 	for _, entity := range g.level.Entities {
-		switch e := entity.(type) {
-		case *Food:
-			e.Draw(g)
-		case *Snake:
-			e.Draw(g)
-		default:
-			fmt.Fprintf(os.Stderr, "Unknown entity type: %T\n", e)
-			continue
-		}
+		entity.Draw(g)
 	}
 
 	termbox.Flush()
