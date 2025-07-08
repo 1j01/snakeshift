@@ -1,7 +1,5 @@
 package main
 
-import "slices"
-
 func AnalyzeMoveAbsolute(snake *Snake, targetTile Point, level *Level) Move {
 	deltaGridX := int(targetTile.X - snake.Segments[0].X)
 	deltaGridY := int(targetTile.Y - snake.Segments[0].Y)
@@ -121,7 +119,7 @@ func TakeMove(m Move, level *Level) {
 	s := m.Snake
 	// originalTailPos := s.Segments[len(s.Segments)-1]
 
-	// gamestate.Undoable()
+	// undoable() // handled externally
 	// audio.PlaySound("move")
 
 	// if s.GrowOnNextMove {
@@ -135,25 +133,18 @@ func TakeMove(m Move, level *Level) {
 		s.Segments[i].Y = s.Segments[i-1].Y
 	}
 	head.X, head.Y = m.To.X, m.To.Y
-	// head.Width, head.Height = m.To.Width, m.To.Height
 	// s.Facing = m.Delta
 
 	// Sort entities
-	ontoIndices := []int{}
+	// Could probably just unconditionally sort the moved snake to the top.
+	maxIndex := -1
 	for _, e := range m.EntitiesThere {
 		if e.IsSolid() {
-			ontoIndices = append(ontoIndices, indexOfEntity(e, level))
+			maxIndex = max(maxIndex, indexOfEntity(e, level))
 		}
 	}
-	if len(ontoIndices) > 0 {
-		maxIndex := slices.Max(ontoIndices)
+	if maxIndex > -1 {
 		thisIndex := indexOfEntity(s, level)
-		// if thisIndex < maxIndex {
-		// 	// Add before removing so relevant indices
-		// 	// stay valid for both splice calls.
-		// 	game.EntitiesInsert(maxIndex+1, s)
-		// 	game.EntitiesRemoveAt(thisIndex)
-		// }
 		for thisIndex < maxIndex {
 			level.Entities[thisIndex], level.Entities[thisIndex+1] = level.Entities[thisIndex+1], level.Entities[thisIndex]
 			thisIndex++
