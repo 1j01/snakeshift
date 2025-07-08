@@ -228,65 +228,19 @@ func render(g *Game) {
 		}
 	}
 
-	// Draw the snakes
-	// TODO: Draw method on Entity interface
-	snakes := []*Snake{}
+	// Draw the entities
 	for _, entity := range g.level.Entities {
-		if snake, ok := entity.(*Snake); ok {
-			snakes = append(snakes, snake)
+		switch e := entity.(type) {
+		case *Food:
+			e.Draw(g)
+		case *Snake:
+			e.Draw(g)
+		default:
+			fmt.Fprintf(os.Stderr, "Unknown entity type: %T\n", e)
+			continue
 		}
 	}
-	for _, snake := range snakes {
-		for i, segment := range snake.Segments {
-			x := boardStartX + segment.X*cellWidth
-			y := boardStartY + segment.Y*cellHeight
-			for charY := 0; charY < cellHeight; charY++ {
-				for charX := 0; charX < cellWidth; charX++ {
-					bg := termbox.ColorRed
-					fg := termbox.ColorRed
-					switch snake.Layer {
-					case White:
-						bg = termbox.ColorWhite
-						fg = termbox.ColorBlack
-					case Black:
-						bg = termbox.ColorBlack
-						fg = termbox.ColorWhite
-					case Both:
-						bg = termbox.ColorLightGray
-						fg = termbox.ColorBlack
-					case Neither:
-						bg = termbox.ColorDarkGray
-						fg = termbox.ColorWhite
-					}
-					ch := 'o'
-					dir := Point{X: 0, Y: 0}
-					if i > 0 {
-						prevSegment := snake.Segments[i-1]
-						dir.X = prevSegment.X - segment.X
-						dir.Y = prevSegment.Y - segment.Y
-						if dir.X > 0 {
-							ch = '>'
-						} else if dir.X < 0 {
-							ch = '<'
-						} else if dir.Y > 0 {
-							ch = 'v'
-						} else if dir.Y < 0 {
-							ch = '^'
-						}
-					}
 
-					if g.blinkSnake && snake.ID == g.activeSnake.ID {
-						fg, bg = bg, fg
-						if g.blinkEncumbered && i == 0 {
-							ch = 'x' // X eyes for encumbered snake
-						}
-					}
-
-					termbox.SetCell(x+charX, y+charY, ch, fg, bg)
-				}
-			}
-		}
-	}
 	termbox.Flush()
 	g.blinkSnake = false
 	g.blinkEncumbered = false
@@ -297,5 +251,77 @@ func tbPrint(x, y int, fg, bg termbox.Attribute, msg string) {
 	for _, c := range msg {
 		termbox.SetCell(x, y, c, fg, bg)
 		x++
+	}
+}
+
+func (food *Food) Draw(g *Game) {
+	x := boardStartX + food.Position.X*cellWidth
+	y := boardStartY + food.Position.Y*cellHeight
+	for charY := 0; charY < cellHeight; charY++ {
+		for charX := 0; charX < cellWidth; charX++ {
+			bg := termbox.ColorRed
+			fg := termbox.ColorRed
+			switch food.Layer {
+			case White:
+				fg = termbox.ColorWhite
+				bg = termbox.ColorBlack
+			case Black:
+				fg = termbox.ColorBlack
+				bg = termbox.ColorWhite
+			}
+			termbox.SetCell(x+charX, y+charY, '+', fg, bg)
+		}
+	}
+}
+
+func (snake *Snake) Draw(g *Game) {
+	for i, segment := range snake.Segments {
+		x := boardStartX + segment.X*cellWidth
+		y := boardStartY + segment.Y*cellHeight
+		for charY := 0; charY < cellHeight; charY++ {
+			for charX := 0; charX < cellWidth; charX++ {
+				bg := termbox.ColorRed
+				fg := termbox.ColorRed
+				switch snake.Layer {
+				case White:
+					bg = termbox.ColorWhite
+					fg = termbox.ColorBlack
+				case Black:
+					bg = termbox.ColorBlack
+					fg = termbox.ColorWhite
+				case Both:
+					bg = termbox.ColorLightGray
+					fg = termbox.ColorBlack
+				case Neither:
+					bg = termbox.ColorDarkGray
+					fg = termbox.ColorWhite
+				}
+				ch := 'o'
+				dir := Point{X: 0, Y: 0}
+				if i > 0 {
+					prevSegment := snake.Segments[i-1]
+					dir.X = prevSegment.X - segment.X
+					dir.Y = prevSegment.Y - segment.Y
+					if dir.X > 0 {
+						ch = '>'
+					} else if dir.X < 0 {
+						ch = '<'
+					} else if dir.Y > 0 {
+						ch = 'v'
+					} else if dir.Y < 0 {
+						ch = '^'
+					}
+				}
+
+				if g.blinkSnake && snake.ID == g.activeSnake.ID {
+					fg, bg = bg, fg
+					if g.blinkEncumbered && i == 0 {
+						ch = 'x' // X eyes for encumbered snake
+					}
+				}
+
+				termbox.SetCell(x+charX, y+charY, ch, fg, bg)
+			}
+		}
 	}
 }
