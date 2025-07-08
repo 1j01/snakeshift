@@ -236,7 +236,12 @@ func render(g *Game) {
 	// Draw the game board
 	for y := 0; y < g.level.Info.Height; y++ {
 		for x := 0; x < g.level.Info.Width; x++ {
-			cellValue := g.level.Grid[y][x]
+			cellValue := Neither
+			if y >= 0 && y < len(g.level.Grid) && x >= 0 && x < len(g.level.Grid[y]) {
+				cellValue = g.level.Grid[y][x]
+			} else {
+				cellValue = Invalid
+			}
 			for charY := 0; charY < cellHeight; charY++ {
 				for charX := 0; charX < cellWidth; charX++ {
 					cellColor := termbox.ColorRed
@@ -249,6 +254,8 @@ func render(g *Game) {
 						cellColor = termbox.ColorLightGray
 					case Neither:
 						cellColor = termbox.ColorDarkGray
+					case Invalid:
+						cellColor = termbox.ColorRed
 					}
 					termbox.SetCell(boardStartX+cellWidth*x+charX, boardStartY+y, ' ', cellColor, cellColor)
 				}

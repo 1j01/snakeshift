@@ -7,6 +7,7 @@ const (
 	White   CollisionLayer = 1
 	Black   CollisionLayer = 2
 	Both    CollisionLayer = 3 // = White | Black
+	Invalid CollisionLayer = 4
 )
 
 type Point struct {
