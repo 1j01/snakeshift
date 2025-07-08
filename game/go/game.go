@@ -30,13 +30,20 @@ type Game struct {
 }
 
 func activateSomeSnake(game *Game) {
-	// Set the first snake as the active snake
-	for _, entity := range game.level.Entities {
-		if snake, ok := entity.(*Snake); ok {
+	// TODO: get default snake from level data if available
+	snakes := getSnakes(game.level)
+	if len(snakes) == 0 {
+		return
+	}
+	// Set the first snake that can move as the active snake
+	for _, snake := range snakes {
+		if CanMove(snake, game.level) {
 			game.activeSnake = snake
-			break
+			return
 		}
 	}
+	// If no snake can move, just set the first snake as active
+	game.activeSnake = snakes[0]
 }
 
 func LoadLevel(levelId string) (*Level, error) {
