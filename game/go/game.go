@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"path"
 	"time"
@@ -312,7 +313,7 @@ func tbPrint(x, y int, fg, bg termbox.Attribute, msg string) {
 func (food *Food) Draw(g *Game) {
 	x := boardStartX + food.Position.X*cellWidth
 	y := boardStartY + food.Position.Y*cellHeight
-	t := time.Now()
+	t := float64(time.Now().UnixMilli())/1000.0 - float64(food.Position.X+food.Position.Y)/20.0
 	for charY := 0; charY < cellHeight; charY++ {
 		for charX := 0; charX < cellWidth; charX++ {
 			bg := termbox.ColorRed
@@ -326,10 +327,13 @@ func (food *Food) Draw(g *Game) {
 				bg = termbox.ColorWhite
 			}
 			ch := '+'
-			if t.Second()%2 == 0 {
+			if math.Mod(t, 2) < 1 {
 				ch = '*'
 			}
-			termbox.SetCell(x+charX, y+charY, ch, fg, bg)
+			// blink so that you can also see what's under the food, even if it's in a less-than-ideal way
+			if math.Mod(t, 1) < 0.5 {
+				termbox.SetCell(x+charX, y+charY, ch, fg, bg)
+			}
 		}
 	}
 }
