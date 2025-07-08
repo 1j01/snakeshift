@@ -9,6 +9,7 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
+// FIXME: input gets delayed if you run into a wall repeatedly (animation delay seems to get queued up)
 const animationSpeed = 100 * time.Millisecond
 
 const (
@@ -127,6 +128,7 @@ func move(direction Point, g *Game, undos *[]*Game, redos *[]*Game) {
 		if levelIsWon(g.level) {
 			loadNextLevel(g)
 		}
+		// TODO: detect when there are no more possible moves, and show a message
 	} else {
 		g.blinkSnake = true
 		g.blinkEncumbered = move.Encumbered
@@ -159,6 +161,11 @@ func cycleActiveSnake(g *Game) {
 }
 
 func mainGameLoop() {
+	// TODO: menu system
+	// - main menu
+	// - level select
+	// - credits
+
 	err := termbox.Init()
 	if err != nil {
 		panic(err)
@@ -198,6 +205,7 @@ func mainGameLoop() {
 				case ev.Ch == 'q' || ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyCtrlD:
 					return
 				case ev.Ch == 'r':
+					// FIXME: handle level progression (either look at levelId or set initialGame when moving between levels)
 					undoable(g, &undos, &redos)
 					g = copyGame(initialGame)
 					render(g)
@@ -232,6 +240,7 @@ func mainGameLoop() {
 func render(g *Game) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
 	// Title
+	// TODO: display level name instead of just "Snakeshift Game"
 	tbPrint(1, 1, termbox.ColorBlack, termbox.ColorWhite, "Snakeshift Game")
 	// Draw the game board
 	for y := 0; y < g.level.Info.Height; y++ {
