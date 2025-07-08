@@ -39,7 +39,7 @@ func parseLevelsFromHTML(htmlContent string) ([]string, error) {
 }
 
 func getLevels() ([]string, error) {
-	file, err := os.Open("index.html")
+	file, err := os.Open("../index.html")
 	if err != nil {
 		return nil, fmt.Errorf("failed to open index.html: %w", err)
 	}

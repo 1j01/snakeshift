@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"path"
 	"time"
 
 	"github.com/nsf/termbox-go"
@@ -24,10 +26,40 @@ type Game struct {
 	blinkEncumbered bool
 }
 
-func NewGame() *Game {
-	game := &Game{
-		level: GenerateLevel(),
+func LoadLevel(levelId string) (*Level, error) {
+	levelJSON, err := os.ReadFile(path.Join("..", "public", levelId))
+	if err != nil {
+		return nil, fmt.Errorf("failed to read level file %s: %w", levelId, err)
 	}
+	level, err := DeserializeLevel(levelJSON)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load level %s: %w", levelId, err)
+	}
+	if len(level.Entities) == 0 {
+		return nil, fmt.Errorf("level %s has no entities", levelId)
+	}
+	return level, nil
+}
+
+func NewGame() *Game {
+	// game := &Game{
+	// 	level: GenerateLevel(),
+	// }
+
+	levelIds, err := getLevels()
+	if err != nil {
+		panic(err)
+	}
+	levelId := levelIds[0]
+	level, err := LoadLevel(levelId)
+	if err != nil {
+		panic(err)
+	}
+
+	game := &Game{
+		level: level,
+	}
+
 	// Set the first snake as the active snake
 	for _, entity := range game.level.Entities {
 		if snake, ok := entity.(*Snake); ok {
