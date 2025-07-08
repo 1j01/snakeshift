@@ -63,6 +63,7 @@ The level editor supports these standard shortcuts:
 This project uses [Vite](https://vitejs.dev/) and [TypeScript](https://www.typescriptlang.org/).
 
 - `/game/` — the source code.
+- `/game/go/` — terminal based reimplementation of the game in Go
 - `/game/dist/` — the built files, which could be deployed to a static web server.
 - `/public/`  — Files in this folder will be copied to the `dist` directory when building. These are referenced with absolute paths in CSS, but relative paths in HTML and JS, without the `/public` prefix in either case.
 - `/tests/` — Playwright tests.
@@ -82,7 +83,7 @@ npm install
 npm run dev
 ```
 
-There is also an experimental level generator written in Go, which can be run with:
+There is also an experimental level generator and terminal version written in Go, which can be run with:
 ```sh
 cd game/go
 go run . --generate >../../game/public/levels/tests/generated-level.json
