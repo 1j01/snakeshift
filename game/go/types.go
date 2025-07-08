@@ -31,7 +31,7 @@ type Food struct {
 	Layer    CollisionLayer
 }
 
-func (food *Food) IsSolid() bool            { return true }
+func (food *Food) IsSolid() bool            { return false }
 func (food *Food) GetLayer() CollisionLayer { return food.Layer }
 func (food *Food) At(x, y int, options HitTestOptions) *Hit {
 	if food.Position.X == x && food.Position.Y == y {
