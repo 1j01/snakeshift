@@ -99,7 +99,7 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 			withinLevel(Point{X: x, Y: y}, level) &&
 			!movingBackwards &&
 			!encumbered &&
-			!layersCollide(topLayer(hitsAhead, level), snake.Layer),
+			!layersCollide(topLayer(hitsAhead), snake.Layer),
 		Encumbered:    encumbered,
 		To:            Point{X: x, Y: y},
 		Delta:         Point{X: deltaX, Y: deltaY},

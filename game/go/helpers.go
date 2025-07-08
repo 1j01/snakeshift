@@ -84,7 +84,7 @@ func topLayerAt(x, y int, level *Level) CollisionLayer {
 	return level.Grid[y][x]
 }
 
-func topLayer(hits []Hit, level *Level) CollisionLayer {
+func topLayer(hits []Hit) CollisionLayer {
 	for _, hit := range hits {
 		if hit.Entity != nil && !hit.Entity.IsSolid() {
 			continue // Skip non-solid entities
