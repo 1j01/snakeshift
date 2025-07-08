@@ -27,6 +27,16 @@ type Game struct {
 	blinkEncumbered bool
 }
 
+func activateSomeSnake(game *Game) {
+	// Set the first snake as the active snake
+	for _, entity := range game.level.Entities {
+		if snake, ok := entity.(*Snake); ok {
+			game.activeSnake = snake
+			break
+		}
+	}
+}
+
 func LoadLevel(levelId string) (*Level, error) {
 	if levelId == "" {
 		return nil, fmt.Errorf("levelId cannot be empty")
@@ -67,6 +77,7 @@ func loadNextLevel(g *Game) {
 		panic(err)
 	}
 	g.level = level
+	activateSomeSnake(g)
 }
 
 func NewGame() *Game {
@@ -88,14 +99,8 @@ func NewGame() *Game {
 		level:   level,
 		levelId: levelId,
 	}
+	activateSomeSnake(game)
 
-	// Set the first snake as the active snake
-	for _, entity := range game.level.Entities {
-		if snake, ok := entity.(*Snake); ok {
-			game.activeSnake = snake
-			break
-		}
-	}
 	return game
 }
 
