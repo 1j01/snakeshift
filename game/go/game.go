@@ -312,6 +312,7 @@ func tbPrint(x, y int, fg, bg termbox.Attribute, msg string) {
 func (food *Food) Draw(g *Game) {
 	x := boardStartX + food.Position.X*cellWidth
 	y := boardStartY + food.Position.Y*cellHeight
+	t := time.Now()
 	for charY := 0; charY < cellHeight; charY++ {
 		for charX := 0; charX < cellWidth; charX++ {
 			bg := termbox.ColorRed
@@ -324,7 +325,11 @@ func (food *Food) Draw(g *Game) {
 				fg = termbox.ColorBlack
 				bg = termbox.ColorWhite
 			}
-			termbox.SetCell(x+charX, y+charY, '+', fg, bg)
+			ch := '+'
+			if t.Second()%2 == 0 {
+				ch = '*'
+			}
+			termbox.SetCell(x+charX, y+charY, ch, fg, bg)
 		}
 	}
 }
