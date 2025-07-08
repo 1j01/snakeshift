@@ -21,6 +21,7 @@ const (
 // Note: MAKE SURE TO UPDATE copyGame() IF YOU CHANGE THIS STRUCT!
 type Game struct {
 	level           *Level
+	levelId         string
 	activeSnake     *Snake
 	blinkSnake      bool
 	blinkEncumbered bool
@@ -41,6 +42,30 @@ func LoadLevel(levelId string) (*Level, error) {
 	return level, nil
 }
 
+func loadNextLevel(g *Game) {
+	levelIds, err := getLevels()
+	if err != nil {
+		panic(err)
+	}
+	for i, id := range levelIds {
+		if id == g.levelId {
+			if i+1 < len(levelIds) {
+				g.levelId = levelIds[i+1]
+				break
+			} else {
+				fmt.Println("Congratulations! You've completed all levels!")
+				termbox.Close()
+				os.Exit(0)
+			}
+		}
+	}
+	level, err := LoadLevel(g.levelId)
+	if err != nil {
+		panic(err)
+	}
+	g.level = level
+}
+
 func NewGame() *Game {
 	// game := &Game{
 	// 	level: GenerateLevel(),
@@ -57,7 +82,8 @@ func NewGame() *Game {
 	}
 
 	game := &Game{
-		level: level,
+		level:   level,
+		levelId: levelId,
 	}
 
 	// Set the first snake as the active snake
@@ -75,11 +101,24 @@ func undoable(g *Game, undos *[]*Game, redos *[]*Game) {
 	*undos = append(*undos, copyGame(g))
 }
 
+func levelIsWon(level *Level) bool {
+	for _, entity := range level.Entities {
+		_, isFood := entity.(*Food)
+		if isFood {
+			return false // If there's any food left, the level is not won
+		}
+	}
+	return true // All food has been eaten, level is won
+}
+
 func move(direction Point, g *Game, undos *[]*Game, redos *[]*Game) {
 	move := AnalyzeMoveRelative(g.activeSnake, direction.X, direction.Y, g.level)
 	if move.Valid {
 		undoable(g, undos, redos)
 		TakeMove(move, g.level)
+		if levelIsWon(g.level) {
+			loadNextLevel(g)
+		}
 	} else {
 		g.blinkSnake = true
 		g.blinkEncumbered = move.Encumbered
