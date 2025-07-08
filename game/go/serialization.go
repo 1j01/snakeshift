@@ -70,6 +70,9 @@ func SerializeLevel(level *Level) ([]byte, error) {
 	// Convert Grid
 	for y, row := range level.Grid {
 		for x, layer := range row {
+			if layer == Black {
+				continue // same as background
+			}
 			ent := EntityBlock{
 				X:      x,
 				Y:      y,
