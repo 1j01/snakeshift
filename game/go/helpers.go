@@ -178,6 +178,24 @@ func hitsToEntities(hitsAhead []Hit) []Entity {
 	return entities
 }
 
+func moveSnakeByHead(snake *Snake, to Point) {
+	head := &snake.Segments[0]
+	for i := len(snake.Segments) - 1; i > 0; i-- {
+		snake.Segments[i].X = snake.Segments[i-1].X
+		snake.Segments[i].Y = snake.Segments[i-1].Y
+	}
+	head.X, head.Y = to.X, to.Y
+}
+
+func moveSnakeByTail(snake *Snake, to Point) {
+	tail := &snake.Segments[len(snake.Segments)-1]
+	for i := 0; i < len(snake.Segments)-1; i++ {
+		snake.Segments[i].X = snake.Segments[i+1].X
+		snake.Segments[i].Y = snake.Segments[i+1].Y
+	}
+	tail.X, tail.Y = to.X, to.Y
+}
+
 var CardinalDirections = []Point{
 	{X: 1, Y: 0},
 	{X: 0, Y: 1},

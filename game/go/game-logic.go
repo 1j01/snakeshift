@@ -131,12 +131,8 @@ func TakeMove(m Move, level *Level) {
 		s.GrowOnNextMove = false
 	}
 
-	head := &s.Segments[0]
-	for i := len(s.Segments) - 1; i > 0; i-- {
-		s.Segments[i].X = s.Segments[i-1].X
-		s.Segments[i].Y = s.Segments[i-1].Y
-	}
-	head.X, head.Y = m.To.X, m.To.Y
+	moveSnakeByHead(s, m.To)
+
 	// s.Facing = m.Delta
 
 	// Sort entities
