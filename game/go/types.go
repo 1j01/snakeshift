@@ -54,11 +54,11 @@ type Snake struct {
 func (snake *Snake) IsSolid() bool            { return true }
 func (snake *Snake) GetLayer() CollisionLayer { return snake.Layer }
 func (snake *Snake) At(x, y int, options HitTestOptions) *Hit {
-	for j, segment := range snake.Segments {
+	for segmentIndex, segment := range snake.Segments {
 		if segment.X == x && segment.Y == y && (options.IgnoreTailOfSnake == nil || snake.ID != options.IgnoreTailOfSnake.ID) {
 			return &Hit{
 				Entity:       snake,
-				SegmentIndex: j,
+				SegmentIndex: segmentIndex,
 				Layer:        snake.Layer,
 			}
 		}
