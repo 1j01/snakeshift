@@ -375,6 +375,8 @@ func (snake *Snake) Draw(g *Game) {
 					} else if dir.Y < 0 {
 						ch = '^'
 					}
+				} else if snake.GrowOnNextMove {
+					ch = '~' // In the original game, this was more like ^^ eyes but ^ is used on the body here as arrows; ~ conveys happy eyes pretty well here.
 				}
 
 				if g.blinkSnake && snake.ID == g.activeSnake.ID {
