@@ -55,7 +55,10 @@ func (snake *Snake) IsSolid() bool            { return true }
 func (snake *Snake) GetLayer() CollisionLayer { return snake.Layer }
 func (snake *Snake) At(x, y int, options HitTestOptions) *Hit {
 	for segmentIndex, segment := range snake.Segments {
-		if segment.X == x && segment.Y == y && (options.IgnoreTailOfSnake == nil || snake.ID != options.IgnoreTailOfSnake.ID) {
+		if segment.X == x &&
+			segment.Y == y &&
+			(options.IgnoreTailOfSnake == nil ||
+				(snake.ID != options.IgnoreTailOfSnake.ID || segmentIndex != len(snake.Segments)-1)) {
 			return &Hit{
 				Entity:       snake,
 				SegmentIndex: segmentIndex,
