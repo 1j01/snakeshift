@@ -32,8 +32,8 @@ func AnalyzeMoveRelative(snake *Snake, deltaX, deltaY int, level *Level) Move {
 		// 	hit.Entity != snake &&
 		// 	indexOfEntity(hit, level.Entity) > indexOfEntity(snake, level) &&
 		// 	!(hit.EntityIsSnake() && snake.FusedSnakeIds.Contains(hit.EntityID())) {
-		// All snakes are solid, and we're not handling food yet, and we're not going to implement fused snakes.
 		encumbered = hit.Entity != nil &&
+			hit.Entity.IsSolid() &&
 			hit.Entity != snake &&
 			indexOfEntity(hit.Entity, level) > indexOfEntity(snake, level)
 		if encumbered {
