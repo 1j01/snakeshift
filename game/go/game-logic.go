@@ -1,5 +1,7 @@
 package main
 
+import "slices"
+
 func AnalyzeMoveAbsolute(snake *Snake, targetTile Point, level *Level) Move {
 	deltaGridX := int(targetTile.X - snake.Segments[0].X)
 	deltaGridY := int(targetTile.Y - snake.Segments[0].Y)
@@ -122,10 +124,12 @@ func TakeMove(m Move, level *Level) {
 	// undoable() // handled externally
 	// audio.PlaySound("move")
 
-	// if s.GrowOnNextMove {
-	// 	GrowSnake(s)
-	// 	s.GrowOnNextMove = false
-	// }
+	if s.GrowOnNextMove {
+		// Duplicate the tail segment
+		tail := s.Segments[len(s.Segments)-1]
+		s.Segments = append(s.Segments, tail)
+		s.GrowOnNextMove = false
+	}
 
 	head := &s.Segments[0]
 	for i := len(s.Segments) - 1; i > 0; i-- {
@@ -168,21 +172,25 @@ func TakeMove(m Move, level *Level) {
 	// 	game.SortEntities()
 	// }
 
-	// for _, e := range m.EntitiesThere {
-	// 	if c, ok := e.(*collectable.Collectable); ok {
-	// 		if LayersCollide(c.Layer, head.Layer) && !entityInSlice(c, m.EntitiesToPush) {
-	// 			game.RemoveEntity(c)
-	// 			if _, isFood := c.(*food.Food); isFood {
-	// 				s.GrowOnNextMove = true
-	// 				if !game.CheckLevelWon() {
-	// 					audio.PlayMelodicSound("eat", s.NextMelodyIndex())
-	// 				}
-	// 			} else if _, isInverter := c.(*inverter.Inverter); isInverter {
-	// 				InvertSnake(s)
-	// 			}
-	// 		}
-	// 	}
-	// }
+	for _, e := range m.EntitiesThere {
+		if c, ok := e.(*Food); ok { // TODO: collectables in general
+			if layersCollide(c.Layer, s.Layer) { // TODO: && !entityInSlice(c, m.EntitiesToPush) {
+				index := indexOfEntity(c, level)
+				if index < 0 {
+					continue // maybe
+				}
+				level.Entities = slices.Delete(level.Entities, index, index+1)
+				// if _, isFood := c.(*food.Food); isFood {
+				s.GrowOnNextMove = true
+				// if !game.CheckLevelWon() {
+				// 	audio.PlayMelodicSound("eat", s.NextMelodyIndex())
+				// }
+				// } else if _, isInverter := c.(*inverter.Inverter); isInverter {
+				// 	InvertSnake(s)
+				// }
+			}
+		}
+	}
 
 	// for id := range s.FusedSnakeIds {
 	// 	if fs, ok := game.FindSnakeByID(id); ok {
@@ -225,12 +233,6 @@ func TakeMove(m Move, level *Level) {
 // 	// if snake.DEBUG_SNAKE_DRAGGING {
 // 	//   draw()
 // 	// }
-// }
-
-// func GrowSnake(s *Snake) {
-// 	tail := s.Segments[len(s.Segments)-1]
-// 	newTail := tail.Copy()
-// 	s.Segments = append(s.Segments, newTail)
 // }
 
 /*
