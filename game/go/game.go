@@ -185,7 +185,7 @@ func mainGameLoop() {
 	}()
 
 	g := NewGame()
-	initialGame := copyGame(g)
+	// initialGame := copyGame(g)
 	undos := make([]*Game, 0, 10)
 	redos := make([]*Game, 0, 10)
 
@@ -210,14 +210,22 @@ func mainGameLoop() {
 				case ev.Ch == 'q' || ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyCtrlD:
 					return
 				case ev.Ch == 'r':
-					// FIXME: handle level progression (either look at levelId or set initialGame when moving between levels)
 					undoable(g, &undos, &redos)
-					g = copyGame(initialGame)
-					render(g)
+					// g = copyGame(initialGame)
+					// TODO: encapsulate loading level into the active game and activating a snake
+					level, err := LoadLevel(g.levelId)
+					if err != nil {
+						fmt.Fprintf(os.Stderr, "Failed to reload level %s: %v\n", g.levelId, err)
+						// return
+					} else {
+						g.level = level
+						activateSomeSnake(g)
+						render(g)
+					}
 				case ev.Ch == 'n':
 					undoable(g, &undos, &redos)
 					g = NewGame()
-					initialGame = copyGame(g)
+					// initialGame = copyGame(g)
 					render(g)
 				case ev.Ch == 'z':
 					if len(undos) > 0 {
