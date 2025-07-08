@@ -19,6 +19,16 @@ func main() {
 				Value: false,
 				Usage: "generate a random level",
 			},
+			&cli.BoolFlag{
+				Name:  "list",
+				Value: false,
+				Usage: "list all available levels",
+			},
+			// &cli.StringFlag{
+			// 	Name:  "level",
+			// 	Value: "",
+			// 	Usage: "specify a level to play",
+			// },
 		},
 		Action: func(ctx context.Context, cmd *cli.Command) error {
 			if cmd.Bool("generate") {
@@ -28,6 +38,21 @@ func main() {
 					return fmt.Errorf("failed to serialize level: %w", err)
 				}
 				fmt.Println(string(serialized))
+				return nil
+			}
+			if cmd.Bool("list") {
+				levels, err := getLevels()
+				if err != nil {
+					return fmt.Errorf("failed to list levels: %w", err)
+				}
+				for _, level := range levels {
+					// fmt.Printf("%s:\n  %s\n", level.LevelId, level.Title)
+					fmt.Println(level.Title)
+					// Hide test levels
+					if level.Title == "The Finish Line" {
+						break
+					}
+				}
 				return nil
 			}
 			mainGameLoop()
