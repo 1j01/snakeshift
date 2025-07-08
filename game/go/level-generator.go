@@ -96,6 +96,7 @@ func GenerateLevel() *Level {
 			if eat {
 				food := &Food{}
 				food.Position = previousHead
+				food.Layer = snake.Layer
 				level.Entities = append(level.Entities, food)
 			}
 			// dragSnake(snake, len(snake.Segments)-1, potentialBeforeTile)
