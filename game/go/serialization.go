@@ -178,6 +178,7 @@ func SerializeLevel(level *Level) ([]byte, error) {
 // 	return level, nil
 // }
 func DeserializeLevel(data []byte) (*Level, error) {
+	// TODO: check format and version
 	var levelFormat SnakeshiftLevelFormat
 	if err := json.Unmarshal(data, &levelFormat); err != nil {
 		return nil, err
@@ -211,7 +212,11 @@ func DeserializeLevel(data []byte) (*Level, error) {
 			if err := json.Unmarshal(mapped, &block); err != nil {
 				return nil, err
 			}
-			grid[block.Y][block.X] = block.Layer
+			for w := 0; w < block.Width; w++ {
+				for h := 0; h < block.Height; h++ {
+					grid[block.Y+h][block.X+w] = block.Layer
+				}
+			}
 
 		case "Food":
 			var food EntityFood
