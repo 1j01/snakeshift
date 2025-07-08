@@ -58,14 +58,16 @@ func LoadLevel(levelId string) (*Level, error) {
 }
 
 func loadNextLevel(g *Game) {
-	levelIds, nameByLevelId, err := getLevels()
+	levelEntries, err := getLevels()
 	if err != nil {
 		panic(err)
 	}
-	for i, id := range levelIds {
-		if id == g.levelId {
-			if i+1 < len(levelIds) {
-				g.levelId = levelIds[i+1]
+	// var nextEntry LevelEntry
+	for i, entry := range levelEntries {
+		if entry.LevelId == g.levelId {
+			if i+1 < len(levelEntries) {
+				g.levelId = levelEntries[i+1].LevelId
+				g.levelName = levelEntries[i+1].Title
 				break
 			} else {
 				fmt.Println("Congratulations! You've completed all levels!")
@@ -79,7 +81,6 @@ func loadNextLevel(g *Game) {
 		panic(err)
 	}
 	g.level = level
-	g.levelName = nameByLevelId[g.levelId]
 	activateSomeSnake(g)
 }
 
@@ -88,11 +89,12 @@ func NewGame() *Game {
 	// 	level: GenerateLevel(),
 	// }
 
-	levelIds, nameByLevelId, err := getLevels()
+	levelEntries, err := getLevels()
 	if err != nil {
 		panic(err)
 	}
-	levelId := levelIds[0]
+	levelIndex := 0
+	levelId := levelEntries[levelIndex].LevelId
 	level, err := LoadLevel(levelId)
 	if err != nil {
 		panic(err)
@@ -101,7 +103,7 @@ func NewGame() *Game {
 	game := &Game{
 		level:     level,
 		levelId:   levelId,
-		levelName: nameByLevelId[levelId],
+		levelName: levelEntries[levelIndex].Title,
 	}
 	activateSomeSnake(game)
 

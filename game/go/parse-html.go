@@ -12,21 +12,33 @@ import (
 	"golang.org/x/net/html"
 )
 
-func parseLevelsFromHTML(htmlContent string) ([]string, map[string]string, error) {
+type LevelEntry struct {
+	LevelId      string
+	Title        string
+	TutorialText string
+}
+
+// TODO: parse HTML only once
+// TODO: extract tutorial text
+
+func parseLevelsFromHTML(htmlContent string) ([]LevelEntry, error) {
 	doc, err := html.Parse(strings.NewReader(htmlContent))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	var levelIds []string
-	var nameByLevelId = map[string]string{}
+	var levels []LevelEntry
 	var f func(*html.Node)
 	f = func(n *html.Node) {
 		if n.Type == html.ElementNode && n.Data == "button" {
+			var level LevelEntry
 			for _, attr := range n.Attr {
 				if attr.Key == "data-level" {
-					levelIds = append(levelIds, attr.Val)
-					nameByLevelId[attr.Val] = strings.TrimSpace(n.FirstChild.Data)
+					level.LevelId = attr.Val
+					if n.FirstChild != nil {
+						level.Title = strings.TrimSpace(n.FirstChild.Data)
+					}
+					levels = append(levels, level)
 					break
 				}
 			}
@@ -37,29 +49,29 @@ func parseLevelsFromHTML(htmlContent string) ([]string, map[string]string, error
 	}
 	f(doc)
 
-	return levelIds, nameByLevelId, nil
+	return levels, nil
 }
 
-func getLevels() ([]string, map[string]string, error) {
+func getLevels() ([]LevelEntry, error) {
 	file, err := os.Open("../index.html")
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to open index.html: %w", err)
+		return nil, fmt.Errorf("failed to open index.html: %w", err)
 	}
 	defer file.Close()
 
 	htmlContent, err := io.ReadAll(file)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to read index.html: %w", err)
+		return nil, fmt.Errorf("failed to read index.html: %w", err)
 	}
 
-	levelIds, nameByLevelId, err := parseLevelsFromHTML(string(htmlContent))
+	levels, err := parseLevelsFromHTML(string(htmlContent))
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to parse levels from HTML: %w", err)
+		return nil, fmt.Errorf("failed to parse levels from HTML: %w", err)
 	}
 
-	if len(levelIds) == 0 {
-		return nil, nil, errors.New("no levels found in index.html")
+	if len(levels) == 0 {
+		return nil, errors.New("no levels found in index.html")
 	}
 
-	return levelIds, nameByLevelId, nil
+	return levels, nil
 }
