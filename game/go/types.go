@@ -45,7 +45,7 @@ func (food *Food) At(x, y int, options HitTestOptions) *Hit {
 }
 
 type Snake struct {
-	ID             int
+	ID             string
 	Segments       []Point // ordered from head to tail
 	GrowOnNextMove bool
 	Layer          CollisionLayer

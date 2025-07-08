@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 )
 
@@ -41,7 +42,7 @@ func GenerateLevel() *Level {
 		// Get layer before appending snake so we don't retrieve the snake's own (uninitialized) layer
 		layer := invertCollisionLayer(topLayerAt(x, y, level))
 		// append early (before topLayerAt) so that hit tests include the snake itself
-		level.Entities = append(level.Entities, &Snake{ID: i + 1})
+		level.Entities = append(level.Entities, &Snake{ID: fmt.Sprint(i + 1)})
 		snake := level.Entities[i].(*Snake)
 		snake.Segments = []Point{{X: x, Y: y}}
 		snake.Layer = layer

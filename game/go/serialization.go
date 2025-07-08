@@ -28,7 +28,7 @@ type SnakeSegment struct {
 	Layer  CollisionLayer `json:"layer"`
 }
 type EntitySnake struct {
-	ID             int            `json:"id"`
+	ID             string         `json:"id"`
 	Segments       []SnakeSegment `json:"segments"`
 	GrowOnNextMove bool           `json:"growOnNextMove"`
 }
