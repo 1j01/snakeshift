@@ -18,10 +18,10 @@ const (
 
 // Note: MAKE SURE TO UPDATE copyGame() IF YOU CHANGE THIS STRUCT!
 type Game struct {
-	level            *Level
-	activeSnake      *Snake
-	invalidMoveFlash bool
-	encumberedFlash  bool
+	level           *Level
+	activeSnake     *Snake
+	blinkSnake      bool
+	blinkEncumbered bool
 }
 
 func NewGame() *Game {
@@ -49,8 +49,8 @@ func move(direction Point, g *Game, undos *[]*Game, redos *[]*Game) {
 		undoable(g, undos, redos)
 		TakeMove(move, g.level)
 	} else {
-		g.invalidMoveFlash = true
-		g.encumberedFlash = move.Encumbered
+		g.blinkSnake = true
+		g.blinkEncumbered = move.Encumbered
 	}
 }
 
@@ -115,7 +115,7 @@ func mainGameLoop() {
 					move(Point{X: 0, Y: 1}, g, &undos, &redos)
 				case ev.Key == termbox.KeyTab:
 					cycleActiveSnake(g)
-					g.invalidMoveFlash = true
+					g.blinkSnake = true
 				case ev.Ch == 'q' || ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyCtrlD:
 					return
 				case ev.Ch == 'r':
@@ -243,9 +243,9 @@ func render(g *Game) {
 						}
 					}
 
-					if g.invalidMoveFlash && snake.ID == g.activeSnake.ID {
+					if g.blinkSnake && snake.ID == g.activeSnake.ID {
 						fg, bg = bg, fg
-						if g.encumberedFlash && i == 0 {
+						if g.blinkEncumbered && i == 0 {
 							ch = 'x' // X eyes for encumbered snake
 						}
 					}
@@ -256,8 +256,8 @@ func render(g *Game) {
 		}
 	}
 	termbox.Flush()
-	g.invalidMoveFlash = false
-	g.encumberedFlash = false
+	g.blinkSnake = false
+	g.blinkEncumbered = false
 }
 
 // Function tbPrint draws a string.
