@@ -188,33 +188,10 @@ func DeserializeLevel(data []byte) (*Level, error) {
 		Entities: []Entity{},
 	}
 
-	// Determine grid size by scanning for max X and Y
-	var maxX, maxY int
-	for i, typ := range levelFormat.EntityTypes {
-		if typ != "Block" {
-			continue
-		}
-		raw := levelFormat.Entities[i]
-		var block EntityBlock
-		mapped, err := json.Marshal(raw)
-		if err != nil {
-			return nil, err
-		}
-		if err := json.Unmarshal(mapped, &block); err != nil {
-			return nil, err
-		}
-		if block.X > maxX {
-			maxX = block.X
-		}
-		if block.Y > maxY {
-			maxY = block.Y
-		}
-	}
-
 	// Initialize grid
-	grid := make([][]CollisionLayer, maxY+1)
+	grid := make([][]CollisionLayer, levelFormat.LevelInfo.Height)
 	for y := range grid {
-		grid[y] = make([]CollisionLayer, maxX+1)
+		grid[y] = make([]CollisionLayer, levelFormat.LevelInfo.Width)
 		for x := range grid[y] {
 			grid[y][x] = Black
 		}
