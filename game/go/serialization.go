@@ -215,6 +215,9 @@ func DeserializeLevel(data []byte) (*Level, error) {
 	grid := make([][]CollisionLayer, maxY+1)
 	for y := range grid {
 		grid[y] = make([]CollisionLayer, maxX+1)
+		for x := range grid[y] {
+			grid[y][x] = Black
+		}
 	}
 
 	// Process entities
