@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"slices"
 )
 
 func GenerateLevel() *Level {
@@ -106,7 +107,7 @@ func GenerateLevel() *Level {
 			}
 			move := AnalyzeMoveAbsolute(snake, previousHead, level)
 			if !move.Valid {
-				// console.log("Undoing generated invalid move:", move)
+				// fmt.Println("Undoing generated invalid move:", move)
 				// backtrack if the move is invalid
 				level = expected
 				snake.GrowOnNextMove = prevGrowOnNextMove
@@ -126,12 +127,22 @@ func GenerateLevel() *Level {
 			TakeMove(move, level)
 			actual := copyLevel(level)
 			level = beforeMove // always undo takeMove done just for validation
-			if actual != expected {
-				// console.log("Undoing generated move which gave an inconsistent game state:", {
-				//   expected,
-				//   actual,
-				//   move,
-				// })
+			// if actual != expected {
+			if !Equal(expected, actual) {
+				expectedJSON, _ := SerializeLevel(expected)
+				actualJSON, _ := SerializeLevel(actual)
+				fmt.Println("Undoing generated move which gave an inconsistent game state:", map[string]interface{}{
+					"expectedJSON":               expectedJSON,
+					"actualJSON":                 actualJSON,
+					"expectedJSON == actualJSON": slices.Equal(expectedJSON, actualJSON),
+					"move":                       move,
+				})
+
+				// // Save expected and actual to files for debugging
+				// os.WriteFile("expected.json", expectedJSON, 0644)
+				// os.WriteFile("actual.json", actualJSON, 0644)
+				// os.Exit(1)
+
 				// backtrack if validation failed
 				level = expected
 				snake.GrowOnNextMove = prevGrowOnNextMove

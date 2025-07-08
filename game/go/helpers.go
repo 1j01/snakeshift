@@ -166,6 +166,43 @@ func copyLevel(level *Level) *Level {
 	}
 }
 
+func Equal(level *Level, other *Level) bool {
+	if level.Info.Width != other.Info.Width || level.Info.Height != other.Info.Height {
+		return false
+	}
+
+	for y := 0; y < level.Info.Height; y++ {
+		for x := 0; x < level.Info.Width; x++ {
+			if level.Grid[y][x] != other.Grid[y][x] {
+				return false
+			}
+		}
+	}
+
+	if len(level.Entities) != len(other.Entities) {
+		return false
+	}
+
+	for i, entity := range level.Entities {
+		switch e := entity.(type) {
+		case *Food:
+			o, ok := other.Entities[i].(*Food)
+			if !ok || e.Position != o.Position || e.Layer != o.Layer {
+				return false
+			}
+		case *Snake:
+			o, ok := other.Entities[i].(*Snake)
+			if !ok || e.ID != o.ID || e.GrowOnNextMove != o.GrowOnNextMove || !slices.Equal(e.Segments, o.Segments) || e.Layer != o.Layer {
+				return false
+			}
+		default:
+			panic("Unknown entity type during level equality check")
+		}
+	}
+
+	return true
+}
+
 func copyGame(g *Game) *Game {
 	game := &Game{
 		level:     copyLevel(g.level),
