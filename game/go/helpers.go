@@ -261,6 +261,59 @@ func getAllPossibleMoves(level *Level) []Move {
 	return moves
 }
 
+func MoveInputsToMoves(inputs []MoveInput, level *Level) []Move {
+	// giving up on this approach to storing moves
+	// probably should have every MoveInput/Action/whatever include the snake ID and direction.
+	moves := make([]Move, 0, len(inputs))
+	currentLevel := copyLevel(level)
+	activeSnake := ... or game := ...
+	activateSomeSnake()
+	for _, input := range inputs {
+		dir := Point{X: 0, Y: 0}
+		switch input {
+		case Up:
+			dir = Point{X: 0, Y: -1}
+		case Down:
+			dir = Point{X: 0, Y: 1}
+		case Left:
+			dir = Point{X: -1, Y: 0}
+		case Right:
+			dir = Point{X: 1, Y: 0}
+		default:
+			activeSnake := getSnakes(currentLevel)[input - SwitchToSnake]
+			if activeSnake == nil {
+				panic("Invalid switch to snake input")
+			}
+		}
+		move := AnalyzeMoveRelative(activeSnake, dir.X, dir.Y, currentLevel)
+		if move.Valid {
+			moves = append(moves, move)
+		} else {
+			panic("Invalid move input: " + string(input))
+		}
+	}
+	return moves
+}
+
+func MovesToMoveInputs(moves []Move) []MoveInput {
+	// giving up on this approach to storing moves
+	// probably should have every MoveInput/Action/whatever include the snake ID and direction.
+	inputs := make([]MoveInput, 0, len(moves))
+	for _, move := range moves {
+		inputs = append(inputs, MoveInput(move.Snake.ID+SwitchToSnake))
+		if move.Delta.X == 0 && move.Delta.Y == -1 {
+			inputs = append(inputs, Up)
+		} else if move.Delta.X == 0 && move.Delta.Y == 1 {
+			inputs = append(inputs, Down)
+		} else if move.Delta.X == -1 && move.Delta.Y == 0 {
+			inputs = append(inputs, Left)
+		} else if move.Delta.X == 1 && move.Delta.Y == 0 {
+			inputs = append(inputs, Right)
+		}
+	}
+	return inputs
+}
+
 var CardinalDirections = []Point{
 	{X: 1, Y: 0},
 	{X: 0, Y: 1},

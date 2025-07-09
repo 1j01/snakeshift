@@ -12,13 +12,13 @@ func TestSimplifyPlaythrough(t *testing.T) {
 	}
 
 	moves := []MoveInput{
-		up, down, right,
+		Up, Down, Right,
 	}
 
 	simplified := simplifyPlaythrough(moves, level)
 
 	expected := []MoveInput{
-		right,
+		Right,
 	}
 
 	if !reflect.DeepEqual(simplified, expected) {
