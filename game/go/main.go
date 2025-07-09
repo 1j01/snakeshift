@@ -32,7 +32,10 @@ func main() {
 		},
 		Action: func(ctx context.Context, cmd *cli.Command) error {
 			if cmd.Bool("generate") {
-				level := GenerateLevel()
+				level, err := GenerateLevel()
+				if err != nil {
+					return fmt.Errorf("failed to generate level: %w", err)
+				}
 				serialized, err := SerializeLevel(level)
 				if err != nil {
 					return fmt.Errorf("failed to serialize level: %w", err)

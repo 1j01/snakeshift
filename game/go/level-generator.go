@@ -7,20 +7,23 @@ import (
 	"slices"
 )
 
-func GenerateLevel() *Level {
+func GenerateLevel() (*Level, error) {
 	const tries = 200
 	var bestComplexity int
 	var bestLevel *Level
 	for i := 0; i < tries; i++ {
 		level, complexity := tryGenerateLevel()
 		// time.Sleep(100 * time.Millisecond)
-		if complexity > bestComplexity {
+		if level != nil && complexity > bestComplexity {
 			bestComplexity = complexity
 			bestLevel = level
 		}
 	}
 	fmt.Fprintf(os.Stderr, "Best complexity found: %d\n", bestComplexity)
-	return bestLevel
+	if bestLevel == nil {
+		return nil, fmt.Errorf("failed to generate any valid level in %d tries", tries)
+	}
+	return bestLevel, nil
 }
 
 func tryGenerateLevel() (*Level, int) {
@@ -182,6 +185,16 @@ func tryGenerateLevel() (*Level, int) {
 		// complexity += 1 + len(move.EntitiesThere)*2 //+ len(move.entitiesToPush) * 3
 		complexity += len(move.EntitiesThere)
 	}
-
+	numFood := 0
+	for _, entity := range level.Entities {
+		if _, ok := entity.(*Food); ok {
+			numFood++
+		}
+	}
+	// complexity += numFood * 10
+	if numFood == 0 {
+		// Unsolvable
+		return nil, 0
+	}
 	return level, complexity
 }
