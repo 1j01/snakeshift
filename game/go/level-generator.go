@@ -180,18 +180,45 @@ func tryGenerateLevel() (*Level, int) {
 		}
 	}
 
-	complexity := 0
-	// for _, move := range moves {
-	// 	// complexity += 1 + len(move.EntitiesThere)*2 //+ len(move.entitiesToPush) * 3
-	// 	complexity += len(move.EntitiesThere)
-	// }
+	// It's easy to think of metrics that, if applied to human-designed levels,
+	// would correlate with puzzle complexity, but it's hard to design rules
+	// that filter out garbage generated levels...
+	// For instance, more snake switches might imply a more complex puzzle solution,
+	// but in practice it favors open-ended levels with more snakes than you need.
+	// Some things we might try:
+	// - Automatically simplify the playthrough by removing unnecessary moves.
+	//   - Might be difficult because removing one move at a time can make it fail to solve
+	//     even if the move is part of a sequence of useless moves.
+	// - Count the number of moves where the possible moves at that state are limited.
+	//   - This may incentivize tighter, less open-ended levels.
+	//   - In the extreme, this would favor a level that is just a corridor.
+	//     However, since we're currently generating too open-ended levels,
+	//		 it may help to balance out the structure.
+	// - Count the times a snake moves onto another snake WHICH IS USED LATER TO EAT FOOD.
+	//   - Without checking that the snake is used later, this would favor
+	//     levels that unnecessarily/meaninglessly use snakes as terrain.
+	//     Using snakes as terrain is core to the game, but only as a means to an end;
+	//     by itself it only increases _visual_ complexity.
+	//   - May or may not want to count only when A moves onto B when A was not already on B.
+	//     Or compromise by scoring both cases differently. I dunno.
+
+	lastSnakeID := ""
+	numSnakeSwitches := 0
+	for _, move := range moves {
+		// complexity += 1 + len(move.EntitiesThere)*2 //+ len(move.entitiesToPush) * 3
+		// complexity += len(move.EntitiesThere)
+		if move.Snake.ID != lastSnakeID {
+			numSnakeSwitches++
+		}
+		lastSnakeID = move.Snake.ID
+	}
 	numFood := 0
 	for _, entity := range level.Entities {
 		if _, ok := entity.(*Food); ok {
 			numFood++
 		}
 	}
-	complexity += numFood
+	complexity := numFood //+ numSnakeSwitches
 	if numFood == 0 {
 		// Unsolvable
 		return nil, 0
