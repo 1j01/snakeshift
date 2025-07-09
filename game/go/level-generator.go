@@ -203,6 +203,11 @@ func tryGenerateLevel() (*Level, int) {
 	//     results in a later state in the playthrough.
 	//     If it does, and it's shorter than the original subsequence,
 	//     we could replace the original subsequence with the shorter one.
+	//     - If we generate a state that exists EARLIER in the playthrough,
+	//       we can skip that tree of exploration.
+	//       Whether that helps performance overall is unclear.
+	//       It probably would if we have hashes, not sure though if we're comparing every field individually.
+	//     - We could apply this process recursively, until no simplification is made.
 	// - Count the number of moves where the possible moves at that state are limited.
 	//   - This may incentivize tighter, less open-ended levels.
 	//   - In the extreme, this would favor a level that is just a corridor.
