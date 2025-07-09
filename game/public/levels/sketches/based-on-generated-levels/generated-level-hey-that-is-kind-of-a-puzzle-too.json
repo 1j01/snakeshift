@@ -1,0 +1,179 @@
+{
+  "format": "snakeshift",
+  "formatVersion": 6,
+  "levelInfo": {
+    "width": 4,
+    "height": 4
+  },
+  "entities": [
+    {
+      "x": 2,
+      "y": 0,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "id": "1",
+      "segments": [
+        {
+          "x": 1,
+          "y": 2,
+          "width": 1,
+          "height": 1,
+          "layer": 1
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "width": 1,
+          "height": 1,
+          "layer": 1
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "width": 1,
+          "height": 1,
+          "layer": 1
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "width": 1,
+          "height": 1,
+          "layer": 1
+        },
+        {
+          "x": 3,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "layer": 1
+        }
+      ],
+      "growOnNextMove": true
+    },
+    {
+      "id": "2",
+      "segments": [
+        {
+          "x": 2,
+          "y": 1,
+          "width": 1,
+          "height": 1,
+          "layer": 2
+        }
+      ],
+      "growOnNextMove": false
+    },
+    {
+      "id": "3",
+      "segments": [
+        {
+          "x": 0,
+          "y": 2,
+          "width": 1,
+          "height": 1,
+          "layer": 1
+        }
+      ],
+      "growOnNextMove": false
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "layer": 2
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "width": 1,
+      "height": 1,
+      "layer": 2
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "layer": 2
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "width": 1,
+      "height": 1,
+      "layer": 2
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "width": 1,
+      "height": 1,
+      "layer": 2
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "width": 1,
+      "height": 1,
+      "layer": 2
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "layer": 2
+    }
+  ],
+  "entityTypes": [
+    "Block",
+    "Block",
+    "Block",
+    "Block",
+    "Snake",
+    "Snake",
+    "Snake",
+    "Food",
+    "Food",
+    "Food",
+    "Food",
+    "Food",
+    "Food",
+    "Food",
+    "Food"
+  ],
+  "activePlayerEntityIndex": -1
+}
