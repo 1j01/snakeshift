@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"slices"
 )
 
 func GenerateLevel() *Level {
@@ -106,10 +107,10 @@ func tryGenerateLevel() (*Level, int) {
 			previousHead := snake.Segments[0]
 			eat := rand.Float32() < foodChance && len(snake.Segments) > 1 &&
 				// prevent generating food on top of other food
-				len(filter(hitTestAllEntities(previousHead.X, previousHead.Y, level, HitTestOptions{}), func(hit Hit) bool {
+				!slices.ContainsFunc(hitTestAllEntities(previousHead.X, previousHead.Y, level, HitTestOptions{}), func(hit Hit) bool {
 					_, isFood := hit.Entity.(*Food)
 					return isFood
-				})) == 0
+				})
 			// `GrowOnNextMove` is supposed to be set after eating,
 			// so we have to do it before the reverse move, and before the `expected` snapshot
 			snake.GrowOnNextMove = eat
