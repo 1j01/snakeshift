@@ -189,16 +189,38 @@ func tryGenerateLevel() (*Level, int) {
 	// - Automatically simplify the playthrough by removing unnecessary moves.
 	//   - Might be difficult because removing one move at a time can make it fail to solve
 	//     even if the move is part of a sequence of useless moves.
+	//   - Could look for any duplicate level states in the playthrough,
+	//     and remove anything between the first and last occurrence of that state
+	//     (and one of the occurrences).
+	//   - Before looking for cycles (i.e. duplicates),
+	//     we could try to sort the moves by snake,
+	//     in as much as it preserves the validity of the playthrough.
+	//     This would help prevent a disorganized playthrough from inflating the complexity score.
+	//   - We could also try to generatively simplify the playthrough.
+	//     It may be too expensive to find a playthrough from scratch,
+	//     trying every move in every state, but since we have a valid playthrough,
+	//     we could try every combination of N moves at each step, and see if it
+	//     results in a later state in the playthrough.
+	//     If it does, and it's shorter than the original subsequence,
+	//     we could replace the original subsequence with the shorter one.
 	// - Count the number of moves where the possible moves at that state are limited.
 	//   - This may incentivize tighter, less open-ended levels.
 	//   - In the extreme, this would favor a level that is just a corridor.
 	//     However, since we're currently generating too open-ended levels,
 	//		 it may help to balance out the structure.
+	//   - We could call these "pinch points" in the puzzle,
+	//     but again, if we're measuring it in not the puzzle or an optimal playthrough,
+	//     but rather some stupid random thoughtless playthrough,
+	//     this may incentivize meaningless "wall hugging" if we can't
+	//     figure out how to optimize the playthrough well enough.
 	// - Count the times a snake moves onto another snake WHICH IS USED LATER TO EAT FOOD.
 	//   - Without checking that the snake is used later, this would favor
 	//     levels that unnecessarily/meaninglessly use snakes as terrain.
 	//     Using snakes as terrain is core to the game, but only as a means to an end;
 	//     by itself it only increases _visual_ complexity.
+	//     It might make it harder to solve, but not in the right way.
+	//     We don't just want red herrings or visual noise,
+	//     we want sequences where you have to use snakes together.
 	//   - May or may not want to count only when A moves onto B when A was not already on B.
 	//     Or compromise by scoring both cases differently. I dunno.
 
