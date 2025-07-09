@@ -3,10 +3,26 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"slices"
+	"os"
 )
 
 func GenerateLevel() *Level {
+	const tries = 20
+	var bestComplexity int
+	var bestLevel *Level
+	for i := 0; i < tries; i++ {
+		level, complexity := tryGenerateLevel()
+		// time.Sleep(100 * time.Millisecond)
+		if complexity > bestComplexity {
+			bestComplexity = complexity
+			bestLevel = level
+		}
+	}
+	fmt.Fprintf(os.Stderr, "Best complexity found: %d\n", bestComplexity)
+	return bestLevel
+}
+
+func tryGenerateLevel() (*Level, int) {
 	const puzzleGenerationLimit = 10000
 	const targetPuzzleComplexity = 100
 	const blockDensity = 0.3
@@ -107,7 +123,7 @@ func GenerateLevel() *Level {
 			}
 			move := AnalyzeMoveAbsolute(snake, previousHead, level)
 			if !move.Valid {
-				// fmt.Println("Undoing generated invalid move:", move)
+				// fmt.Fprintf(os.Stderr, "Undoing generated invalid move:", move)
 				// backtrack if the move is invalid
 				level = expected
 				snake.GrowOnNextMove = prevGrowOnNextMove
@@ -129,14 +145,14 @@ func GenerateLevel() *Level {
 			level = beforeMove // always undo takeMove done just for validation
 			// if actual != expected {
 			if !Equal(expected, actual) {
-				expectedJSON, _ := SerializeLevel(expected)
-				actualJSON, _ := SerializeLevel(actual)
-				fmt.Println("Undoing generated move which gave an inconsistent game state:", map[string]interface{}{
-					"expectedJSON":               expectedJSON,
-					"actualJSON":                 actualJSON,
-					"expectedJSON == actualJSON": slices.Equal(expectedJSON, actualJSON),
-					"move":                       move,
-				})
+				// expectedJSON, _ := SerializeLevel(expected)
+				// actualJSON, _ := SerializeLevel(actual)
+				// fmt.Fprint(os.Stderr, "Undoing generated move which gave an inconsistent game state:", map[string]interface{}{
+				// 	"expectedJSON":               string(expectedJSON),
+				// 	"actualJSON":                 string(actualJSON),
+				// 	"expectedJSON == actualJSON": slices.Equal(expectedJSON, actualJSON),
+				// 	"move":                       move,
+				// })
 
 				// // Save expected and actual to files for debugging
 				// os.WriteFile("expected.json", expectedJSON, 0644)
@@ -155,5 +171,10 @@ func GenerateLevel() *Level {
 		}
 	}
 
-	return level
+	complexity := 0
+	for _, move := range moves {
+		complexity += 1 + len(move.EntitiesThere)*2 //+ len(move.entitiesToPush) * 3
+	}
+
+	return level, complexity
 }
