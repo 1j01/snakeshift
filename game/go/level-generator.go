@@ -181,17 +181,17 @@ func tryGenerateLevel() (*Level, int) {
 	}
 
 	complexity := 0
-	for _, move := range moves {
-		// complexity += 1 + len(move.EntitiesThere)*2 //+ len(move.entitiesToPush) * 3
-		complexity += len(move.EntitiesThere)
-	}
+	// for _, move := range moves {
+	// 	// complexity += 1 + len(move.EntitiesThere)*2 //+ len(move.entitiesToPush) * 3
+	// 	complexity += len(move.EntitiesThere)
+	// }
 	numFood := 0
 	for _, entity := range level.Entities {
 		if _, ok := entity.(*Food); ok {
 			numFood++
 		}
 	}
-	// complexity += numFood * 10
+	complexity += numFood
 	if numFood == 0 {
 		// Unsolvable
 		return nil, 0
