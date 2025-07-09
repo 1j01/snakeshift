@@ -97,3 +97,7 @@ type Move struct {
 	EntitiesThere []Entity
 	// EntitiesToPush []Entity
 }
+
+type MoveInput int
+const (
+	

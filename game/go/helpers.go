@@ -247,6 +247,20 @@ func moveSnakeByTail(snake *Snake, to Point) {
 	tail.X, tail.Y = to.X, to.Y
 }
 
+func getAllPossibleMoves(level *Level) []Move {
+	snakes := getSnakes(level)
+	moves := make([]Move, 0, len(snakes)*4)
+	for _, snake := range snakes {
+		for _, direction := range CardinalDirections {
+			move := AnalyzeMoveRelative(snake, direction.X, direction.Y, level)
+			if move.Valid {
+				moves = append(moves, move)
+			}
+		}
+	}
+	return moves
+}
+
 var CardinalDirections = []Point{
 	{X: 1, Y: 0},
 	{X: 0, Y: 1},

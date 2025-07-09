@@ -1,0 +1,44 @@
+package main
+
+func simplifyPlaythrough(moves []Move, level *Level) []Move {
+	// Simplify the playthrough by generating new subsequences to patch into the playthrough.
+	// It may be too expensive to find an optimal playthrough from scratch,
+	// trying every move in every state (this explodes combinatorially),
+	// but assuming we have a valid playthrough,
+	// we can try every combination of N moves at each step, and see if it
+	// results in any later state in the playthrough (or the winning of the level).
+	// If it does, and it's shorter than the original subsequence,
+	// we can replace the original subsequence with the shorter one.
+	// - If we ever generate a state that exists EARLIER in the playthrough,
+	//   we can skip that tree of exploration, since it will be a redundant loop.
+	//   Whether that helps performance overall is unclear.
+	//   It probably would if we use hashes, not sure though if we're comparing every field individually.
+	//   Probably still would but not as much.
+	// - We could apply this process recursively, until no simplification is made.
+	// - This function will not guarantee an optimal playthrough,
+	//   but it will guarantee a valid playthrough that is at least as short as the original.
+
+	// First, detect any redundant state cycles in the playthrough.
+	states := make([]*Level, 0, len(moves))
+	states = append(states, copyLevel(level))
+	for _, move := range moves {
+		lastState := states[len(states)-1]
+		newState := copyLevel(lastState)
+		TakeMove(move, newState)
+		states = append(states, newState)
+	}
+	for i := 0; i < len(states); i++ {
+		for j := i + 1; j < len(states); j++ {
+			if Equal(states[i], states[j]) {
+				// Detected a cycle: states[i] returns to the same state as states[j].
+				// Remove the cycle by skipping states[i:j] and moves[i:j].
+				states = append(states[:i], states[j:]...)
+				moves = append(moves[:i], moves[j:]...)
+				i-- // Adjust i to account for the removed elements.
+				break
+			}
+		}
+	}
+	return moves
+
+}
