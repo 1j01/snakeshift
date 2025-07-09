@@ -103,12 +103,17 @@ func tryGenerateLevel() (*Level, int) {
 		if !layersCollide(topLayer(hits), snake.Layer) {
 			prevGrowOnNextMove := snake.GrowOnNextMove
 			// const eat = Math.random() < foodChance && snake.segments.length > 1
-			eat := rand.Float32() < foodChance && len(snake.Segments) > 1
+			previousHead := snake.Segments[0]
+			eat := rand.Float32() < foodChance && len(snake.Segments) > 1 &&
+				// prevent generating food on top of other food
+				len(filter(hitTestAllEntities(previousHead.X, previousHead.Y, level, HitTestOptions{}), func(hit Hit) bool {
+					_, isFood := hit.Entity.(*Food)
+					return isFood
+				})) == 0
 			// `GrowOnNextMove` is supposed to be set after eating,
 			// so we have to do it before the reverse move, and before the `expected` snapshot
 			snake.GrowOnNextMove = eat
 			expected := copyLevel(level)
-			previousHead := snake.Segments[0]
 			// FIXME: it's not validating in the case that it generates a collectable
 			if eat {
 				food := &Food{}
