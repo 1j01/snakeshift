@@ -6,7 +6,7 @@ import (
 	"slices"
 )
 
-const maxSubsequenceLength = 10 // Maximum length of subsequences to consider for simplification.
+const maxSubsequenceLength = 12 // Maximum length of subsequences to consider for simplification.
 
 type SubSequencePatch struct {
 	moveInputs  []MoveInput
@@ -72,7 +72,11 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 
 	// Try to replace subsequences of moves with shorter ones that lead to the same state.
 	for i := 0; i < len(moveInputs); i++ {
-		possiblePatches := make([]SubSequencePatch, 0, int(math.Pow(4, float64(maxSubsequenceLength))))
+		// 4^maxSubsequenceLength is the maximum number of subsequences to consider.
+		// The likely length is several orders of magnitude smaller than that.
+		// For a snake longer than one segment, you can't move backwards,
+		// so there are USUALLY no more than 3 valid directions at a given step.
+		possiblePatches := make([]SubSequencePatch, 0, int(math.Pow(3, float64(maxSubsequenceLength))))
 		visitPuzzleStates(level, func(l *Level, newSubsequence []MoveInput) bool {
 			// Check if the level is won OR matches a later state in the playthrough.
 			if levelIsWon(l) {
@@ -84,6 +88,8 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 			}
 			for j := i + 1; j < len(states); j++ {
 				if Equal(l, states[j]) {
+					// Possible optimization: don't append unless the new subsequence is shorter than the original.
+					// Could make a function for that, and could make one for calculating the length savings.
 					possiblePatches = append(possiblePatches, SubSequencePatch{
 						moveInputs:  newSubsequence,
 						deleteCount: j - i, // TODO: vet for possible off-by-one error
