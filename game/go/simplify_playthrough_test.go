@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestSimplifyPlaythrough(t *testing.T) {
+func TestSimplifyPlaythroughCycleAtStart(t *testing.T) {
 	level, err := LoadLevel("levels/tests/move-right-to-win.json")
 	if err != nil {
 		t.Fatalf("Failed to load level: %v", err)
@@ -48,7 +48,51 @@ func TestSimplifyPlaythrough(t *testing.T) {
 	}
 }
 
-func TestSimplifyPlaythrough2(t *testing.T) {
+func TestSimplifyPlaythroughCyclesInMiddle(t *testing.T) {
+	level, err := LoadLevel("levels/tests/move-right-5x-to-win.json")
+	if err != nil {
+		t.Fatalf("Failed to load level: %v", err)
+	}
+
+	snakeId := "08ef6a5d-f983-4079-ae94-ea6cafd136f2"
+
+	moveInputs := []MoveInput{
+		{Direction: Right, SnakeID: snakeId},
+		// Loop around the starting position
+		{Direction: Up, SnakeID: snakeId},
+		{Direction: Left, SnakeID: snakeId},
+		{Direction: Left, SnakeID: snakeId},
+		{Direction: Down, SnakeID: snakeId},
+		{Direction: Down, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Up, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Up, SnakeID: snakeId},
+		{Direction: Down, SnakeID: snakeId},
+		{Direction: Down, SnakeID: snakeId},
+		{Direction: Up, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+	}
+
+	actual := simplifyPlaythrough(moveInputs, level)
+
+	expected := []MoveInput{
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+	}
+
+	if !reflect.DeepEqual(actual, expected) {
+		t.Errorf("Expected %v, but got %v", expected, actual)
+	}
+}
+
+func TestSimplifyPlaythroughByFindingNewRoutes(t *testing.T) {
 	level, err := LoadLevel("levels/tests/copy-of-001-movement.json")
 	if err != nil {
 		t.Fatalf("Failed to load level: %v", err)

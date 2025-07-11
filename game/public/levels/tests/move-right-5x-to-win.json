@@ -1,0 +1,40 @@
+{
+  "format": "snakeshift",
+  "formatVersion": 6,
+  "levelInfo": {
+    "width": 8,
+    "height": 3
+  },
+  "entities": [
+    {
+      "id": "08ef6a5d-f983-4079-ae94-ea6cafd136f2",
+      "segments": [
+        {
+          "layer": 1,
+          "x": 1,
+          "y": 1,
+          "width": 1,
+          "height": 1
+        }
+      ],
+      "facing": {
+        "x": 1,
+        "y": 0
+      },
+      "growOnNextMove": false
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "layer": 1
+    }
+  ],
+  "entityTypes": [
+    "Snake",
+    "Food"
+  ],
+  "activePlayerEntityIndex": -1,
+  "levelId": ""
+}

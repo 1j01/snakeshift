@@ -45,7 +45,9 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 			// fmt.Printf("States %d and %d: %v\n", i, j, Equal(states[i], states[j]))
 			if Equal(states[i], states[j]) {
 				// Detected a cycle: states[i] returns to the same state as states[j].
-				// Remove the cycle by skipping states[i:j] and moves[i:j].
+				// Remove the cycle by skipping states[i:j] and related moves.
+				// I added tests for this, but I still find this suspicious.
+				// Shouldn't this be an off-by-one error?
 				states = append(states[:i], states[j:]...)
 				moveInputs = append(moveInputs[:i], moveInputs[j:]...)
 				i-- // Adjust i to account for the removed elements.
