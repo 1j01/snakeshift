@@ -14,7 +14,13 @@ func TestSimplifyPlaythrough(t *testing.T) {
 	snakeId := "04f13bbb-2635-4470-9849-eaaecc079201"
 	moveInputs := []MoveInput{
 		{Direction: Up, SnakeID: snakeId},
+		{Direction: Left, SnakeID: snakeId},
+		{Direction: Left, SnakeID: snakeId},
+		{Direction: Left, SnakeID: snakeId},
 		{Direction: Down, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
 		{Direction: Right, SnakeID: snakeId},
 	}
 

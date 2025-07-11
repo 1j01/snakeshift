@@ -35,6 +35,7 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 	}
 	for i := 0; i < len(states); i++ {
 		for j := i + 1; j < len(states); j++ {
+			// fmt.Printf("States %d and %d: %v\n", i, j, Equal(states[i], states[j]))
 			if Equal(states[i], states[j]) {
 				// Detected a cycle: states[i] returns to the same state as states[j].
 				// Remove the cycle by skipping states[i:j] and moves[i:j].
