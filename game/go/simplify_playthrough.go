@@ -1,6 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"slices"
+)
+
+const maxSubsequenceLength = 6 // Maximum length of subsequences to consider for simplification.
+
+type SubSequencePatch struct {
+	moveInputs  []MoveInput
+	deleteCount int // Number of moves to delete from the original playthrough.
+}
 
 func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 	// Simplify the playthrough by generating new subsequences to patch into the playthrough.
@@ -58,31 +68,43 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 
 	// Try to replace subsequences of moves with shorter ones that lead to the same state.
 	for i := 0; i < len(moveInputs); i++ {
-		isPartialSolution := func(l *Level) bool {
+		possiblePatches := make([]SubSequencePatch, 0, 4^maxSubsequenceLength)
+		visitPuzzleStates(level, func(l *Level, newSubsequence []MoveInput) bool {
 			// Check if the level is won OR matches a later state in the playthrough.
 			if levelIsWon(l) {
+				possiblePatches = append(possiblePatches, SubSequencePatch{
+					moveInputs:  newSubsequence,
+					deleteCount: len(moveInputs) - i,
+				})
 				return true
 			}
 			for j := i + 1; j < len(states); j++ {
 				if Equal(l, states[j]) {
+					possiblePatches = append(possiblePatches, SubSequencePatch{
+						moveInputs:  newSubsequence,
+						deleteCount: len(moveInputs) - (j - i + 1), // TODO: vet this
+					})
 					return true
 				}
 			}
 			return false
-		}
-		// Hmmm, TODO: this can't work as intended.
-		// If it returns only the shortest subsequence,
-		// it will always return a single move.
-		// We need to look at ALL subsequences up to a certain length,
-		// and find ones that are shorter than equivalent subsequences.
-		// I thought I could be cute by making it a "solvePuzzle" function
-		// with a special condition, but I may need to make it more of a "visitPuzzleStates"
-		// We also want to keep track of the specific end state that matched,
-		// in order to do the replacement, which a boolean isSolved function wouldn't provide for.
-		// (We could find the matching state afterwards, but that would be inefficient.)
-		newSubsequence := solvePuzzle(states[i], isPartialSolution, 6)
-		if newSubsequence != nil {
-
+		}, maxSubsequenceLength)
+		fmt.Println("Starting at index", i, "possible subsequence patches:", len(possiblePatches))
+		if len(possiblePatches) > 0 {
+			// Sort patches by length savings
+			slices.SortStableFunc(possiblePatches, func(a, b SubSequencePatch) int {
+				return (a.deleteCount - len(a.moveInputs)) - (b.deleteCount - len(b.moveInputs))
+			})
+			// Apply the best patch if it saves any moves.
+			bestPatch := possiblePatches[0]
+			fmt.Println("Best patch:", String(bestPatch.moveInputs), "saves", bestPatch.deleteCount-len(bestPatch.moveInputs), "moves")
+			if bestPatch.deleteCount-len(bestPatch.moveInputs) > 0 {
+				// Replace the subsequence starting at i with the new subsequence.
+				// TODO: vet this for off-by-one errors, etc.
+				moveInputs = append(moveInputs[:i], append(bestPatch.moveInputs, moveInputs[i+bestPatch.deleteCount:]...)...)
+				states = append(states[:i+1], states[i+bestPatch.deleteCount:]...)
+				// Continue on to the next index as normal.
+			}
 		}
 	}
 
@@ -90,22 +112,18 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 
 }
 
-func solvePuzzle(level *Level, isSolved func(*Level) bool, depth int) []MoveInput {
-	// Use BFS to find the shortest path to a solution.
-
+func visitPuzzleStates(level *Level, handleState func(*Level, []MoveInput) bool, depth int, moveInputs ...MoveInput) {
+	// Use BFS to visit all states up to a certain depth.
 	possibleMoves := getAllPossibleMoves(level)
 	for _, move := range possibleMoves {
 		newLevel := copyLevel(level)
 		TakeMove(move, newLevel)
-		if isSolved(newLevel) {
-			return MovesToMoveInputs([]Move{move}) // Found a solution.
+		if handleState(newLevel, moveInputs) {
+			// Allow aborting the search if a [partial] solution is found.
+			return
 		}
 		if depth > 0 {
-			subsequentMoves := solvePuzzle(newLevel, isSolved, depth-1)
-			if subsequentMoves != nil {
-				return append(MovesToMoveInputs([]Move{move}), subsequentMoves...)
-			}
+			visitPuzzleStates(newLevel, handleState, depth-1, append(moveInputs, MoveToMoveInput(move))...)
 		}
 	}
-	return nil
 }
