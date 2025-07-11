@@ -17,14 +17,12 @@ func TestSimplifyPlaythrough(t *testing.T) {
 		{Direction: Down, SnakeID: snakeId},
 		{Direction: Right, SnakeID: snakeId},
 	}
-	moves := MoveInputsToMoves(moveInputs, level)
 
-	simplifiedMoves := simplifyPlaythrough(moves, level)
+	actual := simplifyPlaythrough(moveInputs, level)
 
 	expected := []MoveInput{
 		{Direction: Right, SnakeID: snakeId},
 	}
-	actual := MovesToMoveInputs(simplifiedMoves)
 
 	if !reflect.DeepEqual(actual, expected) {
 		t.Errorf("Expected %v, but got %v", expected, actual)

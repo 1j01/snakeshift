@@ -1,6 +1,6 @@
 package main
 
-func simplifyPlaythrough(moves []Move, level *Level) []Move {
+func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 	// Simplify the playthrough by generating new subsequences to patch into the playthrough.
 	// It may be too expensive to find an optimal playthrough from scratch,
 	// trying every move in every state (this explodes combinatorially),
@@ -19,11 +19,17 @@ func simplifyPlaythrough(moves []Move, level *Level) []Move {
 	//   but it will guarantee a valid playthrough that is at least as short as the original.
 
 	// First, detect any redundant state cycles in the playthrough.
-	states := make([]*Level, 0, len(moves))
+	states := make([]*Level, 0, len(moveInputs)+1)
 	states = append(states, copyLevel(level))
-	for _, move := range moves {
+	for _, input := range moveInputs {
 		lastState := states[len(states)-1]
 		newState := copyLevel(lastState)
+		move := AnalyzeMoveRelative(
+			getSnakeByID(input.SnakeID, newState),
+			input.Direction.X,
+			input.Direction.Y,
+			newState,
+		)
 		TakeMove(move, newState)
 		states = append(states, newState)
 	}
@@ -33,12 +39,12 @@ func simplifyPlaythrough(moves []Move, level *Level) []Move {
 				// Detected a cycle: states[i] returns to the same state as states[j].
 				// Remove the cycle by skipping states[i:j] and moves[i:j].
 				states = append(states[:i], states[j:]...)
-				moves = append(moves[:i], moves[j:]...)
+				moveInputs = append(moveInputs[:i], moveInputs[j:]...)
 				i-- // Adjust i to account for the removed elements.
 				break
 			}
 		}
 	}
-	return moves
+	return moveInputs
 
 }

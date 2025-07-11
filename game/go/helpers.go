@@ -36,6 +36,16 @@ func getSnakes(level *Level) []*Snake {
 	return snakes
 }
 
+func getSnakeByID(snakeId string, level *Level) *Snake {
+	for _, entity := range level.Entities {
+		if snake, ok := entity.(*Snake); ok && snake.ID == snakeId {
+			return snake
+		}
+	}
+	panic("No snake found with ID '" + snakeId + "'")
+	// return nil
+}
+
 func sign(x int) int {
 	// Alternatively:
 	// return int(math.Copysign(1, float64(x)))
