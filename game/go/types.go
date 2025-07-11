@@ -98,12 +98,7 @@ type Move struct {
 	// EntitiesToPush []Entity
 }
 
-type MoveInput int
-
-const (
-	Up            MoveInput = -1
-	Down          MoveInput = -2
-	Left          MoveInput = -3
-	Right         MoveInput = -4
-	SwitchToSnake MoveInput = 0
-)
+type MoveInput struct {
+	Direction Point
+	SnakeID   string
+}

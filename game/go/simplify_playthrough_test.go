@@ -11,17 +11,22 @@ func TestSimplifyPlaythrough(t *testing.T) {
 		t.Fatalf("Failed to load level: %v", err)
 	}
 
-	moves := []MoveInput{
-		Up, Down, Right,
+	snakeId := "04f13bbb-2635-4470-9849-eaaecc079201"
+	moveInputs := []MoveInput{
+		{Direction: Up, SnakeID: snakeId},
+		{Direction: Down, SnakeID: snakeId},
+		{Direction: Right, SnakeID: snakeId},
 	}
+	moves := MoveInputsToMoves(moveInputs, level)
 
-	simplified := simplifyPlaythrough(moves, level)
+	simplifiedMoves := simplifyPlaythrough(moves, level)
 
 	expected := []MoveInput{
-		Right,
+		{Direction: Right, SnakeID: snakeId},
 	}
+	actual := MovesToMoveInputs(simplifiedMoves)
 
-	if !reflect.DeepEqual(simplified, expected) {
-		t.Errorf("Expected %v, but got %v", expected, simplified)
+	if !reflect.DeepEqual(actual, expected) {
+		t.Errorf("Expected %v, but got %v", expected, actual)
 	}
 }
