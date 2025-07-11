@@ -296,18 +296,17 @@ func MoveInputsToMoves(inputs []MoveInput, level *Level) []Move {
 	return moves
 }
 
+func MoveToMoveInput(move Move) MoveInput {
+	return MoveInput{
+		Direction: move.Delta,
+		SnakeID:   move.Snake.ID,
+	}
+}
+
 func MovesToMoveInputs(moves []Move) []MoveInput {
 	inputs := make([]MoveInput, 0, len(moves))
 	for _, move := range moves {
-		if move.Delta.X == 0 && move.Delta.Y == -1 {
-			inputs = append(inputs, MoveInput{Direction: Up, SnakeID: move.Snake.ID})
-		} else if move.Delta.X == 0 && move.Delta.Y == 1 {
-			inputs = append(inputs, MoveInput{Direction: Down, SnakeID: move.Snake.ID})
-		} else if move.Delta.X == -1 && move.Delta.Y == 0 {
-			inputs = append(inputs, MoveInput{Direction: Left, SnakeID: move.Snake.ID})
-		} else if move.Delta.X == 1 && move.Delta.Y == 0 {
-			inputs = append(inputs, MoveInput{Direction: Right, SnakeID: move.Snake.ID})
-		}
+		inputs = append(inputs, MoveToMoveInput(move))
 	}
 	return inputs
 }
