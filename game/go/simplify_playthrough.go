@@ -5,7 +5,7 @@ import (
 	"slices"
 )
 
-const maxSubsequenceLength = 6 // Maximum length of subsequences to consider for simplification.
+const maxSubsequenceLength = 10 // Maximum length of subsequences to consider for simplification.
 
 type SubSequencePatch struct {
 	moveInputs  []MoveInput
@@ -29,6 +29,8 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 	// - We could apply this process recursively, until no simplification is made.
 	// - This function will not guarantee an optimal playthrough,
 	//   but it will guarantee a valid playthrough that is at least as short as the original.
+
+	fmt.Printf("Trying to simplify playthrough with %d moves (%v)...\n", len(moveInputs), String(moveInputs))
 
 	// First, create a list of states that the playthrough goes through.
 	states := make([]*Level, 0, len(moveInputs)+1)
@@ -82,7 +84,7 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 				if Equal(l, states[j]) {
 					possiblePatches = append(possiblePatches, SubSequencePatch{
 						moveInputs:  newSubsequence,
-						deleteCount: len(moveInputs) - (j - i + 1), // TODO: vet this
+						deleteCount: j - i, // TODO: vet for possible off-by-one error
 					})
 					return true
 				}
@@ -93,12 +95,13 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 		if len(possiblePatches) > 0 {
 			// Sort patches by length savings
 			slices.SortStableFunc(possiblePatches, func(a, b SubSequencePatch) int {
-				return (a.deleteCount - len(a.moveInputs)) - (b.deleteCount - len(b.moveInputs))
+				return (b.deleteCount - len(b.moveInputs)) - (a.deleteCount - len(a.moveInputs))
 			})
 			// Apply the best patch if it saves any moves.
 			bestPatch := possiblePatches[0]
-			fmt.Println("Best patch:", String(bestPatch.moveInputs), "saves", bestPatch.deleteCount-len(bestPatch.moveInputs), "moves")
-			if bestPatch.deleteCount-len(bestPatch.moveInputs) > 0 {
+			saved := bestPatch.deleteCount - len(bestPatch.moveInputs)
+			fmt.Println("Best patch:", String(bestPatch.moveInputs), "saves", saved, "moves")
+			if saved > 0 {
 				// Replace the subsequence starting at i with the new subsequence.
 				// TODO: vet this for off-by-one errors, etc.
 				moveInputs = append(moveInputs[:i], append(bestPatch.moveInputs, moveInputs[i+bestPatch.deleteCount:]...)...)
