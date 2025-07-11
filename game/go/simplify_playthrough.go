@@ -67,6 +67,7 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 			}
 		}
 	}
+	fmt.Printf("After any redundant cycles removed: %d moves (%v)\n", len(moveInputs), String(moveInputs))
 
 	// Try to replace subsequences of moves with shorter ones that lead to the same state.
 	for i := 0; i < len(moveInputs); i++ {
@@ -121,12 +122,13 @@ func visitPuzzleStates(level *Level, handleState func(*Level, []MoveInput) bool,
 	for _, move := range possibleMoves {
 		newLevel := copyLevel(level)
 		TakeMove(move, newLevel)
-		if handleState(newLevel, moveInputs) {
+		newMoveInputs := append(moveInputs, MoveToMoveInput(move))
+		if handleState(newLevel, newMoveInputs) {
 			// Allow aborting the search if a [partial] solution is found.
 			return
 		}
 		if depth > 0 {
-			visitPuzzleStates(newLevel, handleState, depth-1, append(moveInputs, MoveToMoveInput(move))...)
+			visitPuzzleStates(newLevel, handleState, depth-1, newMoveInputs...)
 		}
 	}
 }
