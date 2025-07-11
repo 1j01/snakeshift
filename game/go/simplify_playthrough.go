@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"slices"
 )
 
@@ -71,7 +72,7 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 
 	// Try to replace subsequences of moves with shorter ones that lead to the same state.
 	for i := 0; i < len(moveInputs); i++ {
-		possiblePatches := make([]SubSequencePatch, 0, 4^maxSubsequenceLength)
+		possiblePatches := make([]SubSequencePatch, 0, int(math.Pow(4, float64(maxSubsequenceLength))))
 		visitPuzzleStates(level, func(l *Level, newSubsequence []MoveInput) bool {
 			// Check if the level is won OR matches a later state in the playthrough.
 			if levelIsWon(l) {
