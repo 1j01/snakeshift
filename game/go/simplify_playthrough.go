@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 	// Simplify the playthrough by generating new subsequences to patch into the playthrough.
 	// It may be too expensive to find an optimal playthrough from scratch,
@@ -18,10 +20,10 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 	// - This function will not guarantee an optimal playthrough,
 	//   but it will guarantee a valid playthrough that is at least as short as the original.
 
-	// First, detect any redundant state cycles in the playthrough.
+	// First, create a list of states that the playthrough goes through.
 	states := make([]*Level, 0, len(moveInputs)+1)
 	states = append(states, copyLevel(level))
-	for _, input := range moveInputs {
+	for i, input := range moveInputs {
 		lastState := states[len(states)-1]
 		newState := copyLevel(lastState)
 		move := AnalyzeMoveRelative(
@@ -30,9 +32,14 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 			input.Direction.Y,
 			newState,
 		)
+		if !move.Valid {
+			panic("Invalid move input at index " + fmt.Sprint(i) + ": snake ID '" + input.SnakeID + "', direction (" + fmt.Sprint(input.Direction.X) + ", " + fmt.Sprint(input.Direction.Y) + ")")
+		}
 		TakeMove(move, newState)
 		states = append(states, newState)
 	}
+
+	// Detect any redundant state cycles in the playthrough.
 	for i := 0; i < len(states); i++ {
 		for j := i + 1; j < len(states); j++ {
 			// fmt.Printf("States %d and %d: %v\n", i, j, Equal(states[i], states[j]))
