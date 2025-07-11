@@ -320,3 +320,23 @@ var (
 )
 
 var CardinalDirections = []Point{Right, Down, Left, Up}
+
+func String(inputs []MoveInput) string {
+	// TODO: maybe show the snake ID as well but only when it changes (and initially)?
+	result := ""
+	for _, input := range inputs {
+		switch input.Direction {
+		case Up:
+			result += "↑"
+		case Down:
+			result += "↓"
+		case Left:
+			result += "←"
+		case Right:
+			result += "→"
+		default:
+			result += fmt.Sprintf("(invalid direction: (%d, %d))", input.Direction.X, input.Direction.Y)
+		}
+	}
+	return result
+}
