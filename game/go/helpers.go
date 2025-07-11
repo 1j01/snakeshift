@@ -321,7 +321,10 @@ var (
 
 var CardinalDirections = []Point{Right, Down, Left, Up}
 
-func String(inputs []MoveInput) string {
+// MoveInputSlice is a named type for a slice of MoveInput to allow method definitions.
+type MoveInputSlice []MoveInput
+
+func (inputs MoveInputSlice) String() string {
 	// TODO: maybe show the snake ID as well but only when it changes (and initially)?
 	result := ""
 	for _, input := range inputs {

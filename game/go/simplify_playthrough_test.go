@@ -25,7 +25,7 @@ func TestSimplifyPlaythrough(t *testing.T) {
 	// | 7           | 6          | (-1,  0) | Right         |
 	// | 8           | 7          | ( 0,  0) | Right         |
 	// | 9           | 8          | ( 1,  0) | Right         |
-	moveInputs := []MoveInput{
+	moveInputs := MoveInputSlice{
 		{Direction: Up, SnakeID: snakeId},
 		{Direction: Left, SnakeID: snakeId},
 		{Direction: Left, SnakeID: snakeId},
@@ -39,7 +39,7 @@ func TestSimplifyPlaythrough(t *testing.T) {
 
 	actual := simplifyPlaythrough(moveInputs, level)
 
-	expected := []MoveInput{
+	expected := MoveInputSlice{
 		{Direction: Right, SnakeID: snakeId},
 	}
 
@@ -56,7 +56,7 @@ func TestSimplifyPlaythrough2(t *testing.T) {
 
 	snakeId := "4c031c36-36d7-4190-91af-e4c0f1d1de5b"
 
-	moveInputs := []MoveInput{
+	moveInputs := MoveInputSlice{
 		{Direction: Right, SnakeID: snakeId}, // lines up with optimal playthrough
 		{Direction: Up, SnakeID: snakeId},    // suboptimal
 		{Direction: Right, SnakeID: snakeId}, // suboptimal
@@ -89,7 +89,7 @@ func TestSimplifyPlaythrough2(t *testing.T) {
 
 	actual := simplifyPlaythrough(moveInputs, level)
 
-	expected := []MoveInput{
+	expected := MoveInputSlice{
 		{Direction: Right, SnakeID: snakeId},
 		{Direction: Right, SnakeID: snakeId},
 		{Direction: Right, SnakeID: snakeId},
@@ -115,6 +115,6 @@ func TestSimplifyPlaythrough2(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(actual, expected) {
-		t.Errorf("Playthrough didn't match.\nExpected:\n  %v\nActual:\n  %v\nOriginal:\n  %v", String(expected), String(actual), String(moveInputs))
+		t.Errorf("Playthrough didn't match.\nExpected:\n  %s\nActual:\n  %s\nOriginal:\n  %s", expected, actual, moveInputs)
 	}
 }
