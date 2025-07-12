@@ -51,10 +51,6 @@ func main() {
 				for _, level := range levels {
 					// fmt.Printf("%s:\n  %s\n", level.LevelId, level.Title)
 					fmt.Println(level.Title)
-					// Hide test levels
-					if level.Title == "The Finish Line" {
-						break
-					}
 				}
 				return nil
 			}

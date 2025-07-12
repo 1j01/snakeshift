@@ -64,7 +64,7 @@ func LoadLevel(levelId string) (*Level, error) {
 	return level, nil
 }
 
-func loadNextLevel(g *Game) {
+func loadNextLevel(g *Game, backwards bool) {
 	levelEntries, err := getLevels()
 	if err != nil {
 		panic(err)
@@ -72,13 +72,20 @@ func loadNextLevel(g *Game) {
 	// var nextEntry LevelEntry
 	for i, entry := range levelEntries {
 		if entry.LevelId == g.levelId {
-			if i+1 < len(levelEntries) {
-				g.levelId = levelEntries[i+1].LevelId
-				g.levelName = levelEntries[i+1].Title
+			to := i + 1
+			if backwards {
+				to = i - 1
+			}
+			if to < 0 {
+				to = len(levelEntries) - 1 // Wrap around to the last level... but only one way? Not sure about this.
+			}
+			if to < len(levelEntries) {
+				g.levelId = levelEntries[to].LevelId
+				g.levelName = levelEntries[to].Title
 				break
 			} else {
-				fmt.Println("Congratulations! You've completed all levels!")
 				termbox.Close()
+				fmt.Println("Congratulations! You've completed all levels!")
 				os.Exit(0)
 			}
 		}
@@ -138,7 +145,7 @@ func move(direction Point, g *Game, undos *[]*Game, redos *[]*Game) {
 		undoable(g, undos, redos)
 		TakeMove(move, g.level)
 		if levelIsWon(g.level) {
-			loadNextLevel(g)
+			loadNextLevel(g, false)
 		}
 		// TODO: detect when there are no more possible moves, and show a message
 	} else {
@@ -225,6 +232,10 @@ func mainGameLoop() {
 					g = NewGame()
 					// initialGame = copyGame(g)
 					render(g)
+				case ev.Ch == ',' || ev.Ch == '<':
+					loadNextLevel(g, true)
+				case ev.Ch == '.' || ev.Ch == '>':
+					loadNextLevel(g, false)
 				case ev.Ch == 'z':
 					if len(undos) > 0 {
 						redos = append(redos, g)

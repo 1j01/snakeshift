@@ -83,6 +83,14 @@ func getLevels() ([]LevelEntry, error) {
 		return nil, errors.New("no levels found in index.html")
 	}
 
+	// Hide test levels
+	for i, level := range levels {
+		if level.Title == "The Finish Line" {
+			levels = levels[:i+1]
+			break
+		}
+	}
+
 	cachedLevels = levels
 	cacheLoaded = true
 
