@@ -84,6 +84,9 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 					moveInputs:  newSubsequence,
 					deleteCount: len(moveInputs) - i,
 				})
+				// When it comes to actually winning, the fastest route is the best route.
+				// (though there may be multiple routes of equal length)
+				// If we find a winning state, there's no need to keep searching.
 				return true
 			}
 			for j := i + 1; j < len(states); j++ {
@@ -94,7 +97,8 @@ func simplifyPlaythrough(moveInputs []MoveInput, level *Level) []MoveInput {
 						moveInputs:  newSubsequence,
 						deleteCount: j - i, // TODO: vet for possible off-by-one error
 					})
-					return true
+					// return true
+					return false // We found a match, but we want to keep searching for better subsequences.
 				}
 			}
 			return false
