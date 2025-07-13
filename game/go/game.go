@@ -9,7 +9,6 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
-// FIXME: input gets delayed if you run into a wall repeatedly (animation delay seems to get queued up)
 const animationSpeed = 100 * time.Millisecond
 
 const (
@@ -197,6 +196,7 @@ func mainGameLoop() {
 	render(g)
 
 	for {
+		needsRender := true
 		select {
 		case ev := <-eventQueue:
 			if ev.Type == termbox.EventKey {
@@ -213,7 +213,7 @@ func mainGameLoop() {
 					cycleActiveSnake(g)
 					g.blinkSnake = true
 				case ev.Ch == 'q' || ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyCtrlD:
-					return
+					return // Exit the game
 				case ev.Ch == 'r':
 					undoable(g, &undos, &redos)
 					// g = copyGame(initialGame)
@@ -225,13 +225,11 @@ func mainGameLoop() {
 					} else {
 						g.level = level
 						activateSomeSnake(g)
-						render(g)
 					}
 				case ev.Ch == 'n':
 					undoable(g, &undos, &redos)
 					g = NewGame()
 					// initialGame = copyGame(g)
-					render(g)
 				case ev.Ch == ',' || ev.Ch == '<':
 					loadNextLevel(g, true)
 				case ev.Ch == '.' || ev.Ch == '>':
@@ -241,20 +239,25 @@ func mainGameLoop() {
 						redos = append(redos, g)
 						g = undos[len(undos)-1]
 						undos = undos[:len(undos)-1]
-						render(g)
+					} else {
+						needsRender = false
 					}
 				case ev.Ch == 'y':
 					if len(redos) > 0 {
 						undos = append(undos, g)
 						g = redos[len(redos)-1]
 						redos = redos[:len(redos)-1]
-						render(g)
+					} else {
+						needsRender = false
 					}
+				default:
+					needsRender = false
 				}
 			}
-		default:
+		case <-time.After(animationSpeed):
+		}
+		if needsRender {
 			render(g)
-			time.Sleep(animationSpeed)
 		}
 	}
 }
