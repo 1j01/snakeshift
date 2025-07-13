@@ -10,7 +10,7 @@ import (
 func render(g *Game) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
 	// Title
-	tbPrint(1, 1, termbox.ColorBlack, termbox.ColorWhite, g.levelName)
+	tbPrint(0, 0, termbox.ColorBlack, termbox.ColorWhite, g.levelName)
 	// Draw the game board
 	for y := 0; y < g.level.Info.Height; y++ {
 		for x := 0; x < g.level.Info.Width; x++ {
@@ -67,7 +67,7 @@ func render(g *Game) {
 
 	// Show level stuck hint
 	if len(getAllPossibleMoves(g.level)) == 0 {
-		tbPrint(1, boardStartY+g.level.Info.Height*cellHeight+2, termbox.ColorBlack, termbox.ColorWhite, "Press 'Z' to undo or 'R' to restart the level.")
+		tbPrint(0, boardStartY+g.level.Info.Height*cellHeight+1, termbox.ColorBlack, termbox.ColorWhite, "Press 'Z' to undo or 'R' to restart the level.")
 	}
 
 	termbox.Flush()
