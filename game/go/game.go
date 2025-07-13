@@ -11,13 +11,6 @@ import (
 
 const animationSpeed = 100 * time.Millisecond
 
-const (
-	cellWidth   = 2
-	cellHeight  = 1
-	boardStartX = 1
-	boardStartY = 2
-)
-
 // Note: MAKE SURE TO UPDATE copyGame() IF YOU CHANGE THIS STRUCT!
 type Game struct {
 	level           *Level

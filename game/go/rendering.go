@@ -7,6 +7,13 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
+const (
+	cellWidth   = 2
+	cellHeight  = 1
+	boardStartX = 1
+	boardStartY = 2
+)
+
 func render(g *Game) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
 	// Title
