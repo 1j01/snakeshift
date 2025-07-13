@@ -10,6 +10,16 @@ Skin and fang. Yin and yang. Snakes shelter sneks like sheds, then shed kin like
 
 [Play Snakeshift](https://1j01.github.io/snakeshift/) in your browser.
 
+You can also play it in your terminal (requires [Go](https://go.dev/doc/install)):
+```sh
+git clone https://github.com/1j01/snakeshift.git
+cd snakeshift/game/go
+go run .
+```
+
+The terminal version is for "hardcore" players, as the graphics are harder to read, and only keyboard controls are supported.  
+Also there's a bug where the rendering may be jumbled until you resize the terminal window.
+
 ## Controls
 
 ### Mouse/Pen/Touch
