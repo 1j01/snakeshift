@@ -146,7 +146,6 @@ func move(direction Point, g *Game, undos *[]*Game, redos *[]*Game) {
 		if levelIsWon(g.level) {
 			loadNextLevel(g, false)
 		}
-		// TODO: detect when there are no more possible moves, and show a message
 	} else {
 		g.blinkSnake = true
 		g.blinkEncumbered = move.Encumbered

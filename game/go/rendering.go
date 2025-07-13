@@ -65,6 +65,11 @@ func render(g *Game) {
 		entity.Draw(g)
 	}
 
+	// Show level stuck hint
+	if len(getAllPossibleMoves(g.level)) == 0 {
+		tbPrint(1, boardStartY+g.level.Info.Height*cellHeight+2, termbox.ColorBlack, termbox.ColorWhite, "Press 'Z' to undo or 'R' to restart the level.")
+	}
+
 	termbox.Flush()
 	g.blinkSnake = false
 	g.blinkEncumbered = false
