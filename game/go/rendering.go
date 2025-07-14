@@ -17,7 +17,9 @@ const (
 func render(g *Game) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
 	// Title
-	tbPrint(0, 0, termbox.ColorBlack, termbox.ColorWhite, g.levelName)
+	tbPrint(0, 0, termbox.ColorWhite, termbox.ColorBlack, "Snake")
+	tbPrint(5, 0, termbox.ColorBlack, termbox.ColorWhite, "Shift")
+	tbPrint(11, 0, termbox.ColorWhite, termbox.ColorBlack, "- "+g.levelName)
 	// Draw the game board
 	for y := 0; y < g.level.Info.Height; y++ {
 		for x := 0; x < g.level.Info.Width; x++ {
