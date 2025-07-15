@@ -14,18 +14,18 @@ var (
 	boardStartX = 1
 	boardStartY = 2
 	fancyBorder = [][]rune{
-		[]rune("╔╗╥╥╥╥╥╥╥╥╥╥╥╥╥╥╔╗"),
-		[]rune("╚╬══════════════╬╝"),
-		[]rune("│║              ║│"),
-		[]rune("│║              ║│"),
-		[]rune("│║              ║│"),
-		[]rune("│║              ║│"),
-		[]rune("│║              ║│"),
-		[]rune("│║              ║│"),
-		[]rune("╔╬══════════════╬╗"),
-		[]rune("╚╝╨╨╨╨╨╨╨╨╨╨╨╨╨╨╚╝"),
+		[]rune("╔═╗──────────────╔═╗"),
+		[]rune("╚═╬══════════════╬═╝"),
+		[]rune("│ ║              ║ │"),
+		[]rune("│ ║              ║ │"),
+		[]rune("│ ║              ║ │"),
+		[]rune("│ ║              ║ │"),
+		[]rune("│ ║              ║ │"),
+		[]rune("│ ║              ║ │"),
+		[]rune("╔═╬══════════════╬═╗"),
+		[]rune("╚═╝──────────────╚═╝"),
 	}
-	fancyBorderSliceX = 2
+	fancyBorderSliceX = 3
 	fancyBorderSliceY = 2
 )
 
@@ -34,8 +34,8 @@ func setUnicodeEnabled(enabled bool) {
 	if unicode {
 		cellWidth = 3
 		cellHeight = 1
-		boardStartX = 2
-		boardStartY = 3
+		boardStartX = fancyBorderSliceX
+		boardStartY = fancyBorderSliceY + 1
 	} else {
 		cellWidth = 2
 		cellHeight = 1
