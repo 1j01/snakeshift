@@ -172,6 +172,9 @@ func (snake *Snake) Draw(g *Game) {
 					fg = termbox.ColorWhite
 				}
 				ch := 'o'
+				if unicode {
+					ch = '•'
+				}
 				dir := Point{X: 0, Y: 0}
 				if i > 0 {
 					prevSegment := snake.Segments[i-1]
@@ -189,9 +192,12 @@ func (snake *Snake) Draw(g *Game) {
 				} else {
 					if snake.GrowOnNextMove {
 						ch = '~' // In the original game, this was more like ^^ eyes but ^ is used on the body here as arrows; ~ conveys happy eyes pretty well here.
+						if unicode {
+							ch = 'ᵔ'
+						}
 					}
 					if charX == 1 && cellWidth == 3 {
-						ch = '_'
+						ch = 'ᴗ'
 					}
 				}
 
