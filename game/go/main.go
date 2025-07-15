@@ -24,11 +24,11 @@ func main() {
 				Value: false,
 				Usage: "list all available levels",
 			},
-			// &cli.StringFlag{
-			// 	Name:  "level",
-			// 	Value: "",
-			// 	Usage: "specify a level to play",
-			// },
+			&cli.StringFlag{
+				Name:  "level",
+				Value: "",
+				Usage: "specify a level to play",
+			},
 			&cli.BoolFlag{
 				Name:  "ascii",
 				Value: false,
@@ -59,7 +59,7 @@ func main() {
 				}
 				return nil
 			}
-			mainGameLoop(cmd.Bool("ascii"))
+			mainGameLoop(cmd.Bool("ascii"), cmd.String("level"))
 			return nil
 		},
 	}

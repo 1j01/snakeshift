@@ -90,7 +90,7 @@ func loadNextLevel(g *Game, backwards bool) {
 	activateSomeSnake(g)
 }
 
-func NewGame() *Game {
+func NewGame(levelId string) *Game {
 	// game := &Game{
 	// 	level: GenerateLevel(),
 	// }
@@ -100,7 +100,22 @@ func NewGame() *Game {
 		panic(err)
 	}
 	levelIndex := 0
-	levelId := levelEntries[levelIndex].LevelId
+	if levelId == "" {
+		levelId = levelEntries[0].LevelId
+	} else {
+		levelIndex = -1
+		for i, entry := range levelEntries {
+			if entry.LevelId == levelId || entry.Title == levelId {
+				levelId = entry.LevelId
+				levelIndex = i
+				break
+			}
+		}
+		if levelIndex == -1 {
+			fmt.Fprintf(os.Stderr, "Level %s not found.\n", levelId)
+			os.Exit(1)
+		}
+	}
 	level, err := LoadLevel(levelId)
 	if err != nil {
 		panic(err)
@@ -161,7 +176,7 @@ func cycleActiveSnake(g *Game) {
 	}
 }
 
-func mainGameLoop(ascii bool) {
+func mainGameLoop(ascii bool, levelId string) {
 	// TODO: menu system
 	// - main menu
 	// - level select
@@ -182,7 +197,7 @@ func mainGameLoop(ascii bool) {
 		}
 	}()
 
-	g := NewGame()
+	g := NewGame(levelId)
 	// initialGame := copyGame(g)
 	undos := make([]*Game, 0, 10)
 	redos := make([]*Game, 0, 10)
@@ -222,7 +237,7 @@ func mainGameLoop(ascii bool) {
 					}
 				case ev.Ch == 'n':
 					undoable(g, &undos, &redos)
-					g = NewGame()
+					g = NewGame("")
 					// initialGame = copyGame(g)
 				case ev.Ch == ',' || ev.Ch == '<':
 					loadNextLevel(g, true)
