@@ -13,14 +13,34 @@ var (
 	cellHeight  = 1
 	boardStartX = 1
 	boardStartY = 2
+	fancyBorder = [][]rune{
+		[]rune("╔╗╥╥╥╥╥╥╥╥╥╥╥╥╥╥╔╗"),
+		[]rune("╚╬══════════════╬╝"),
+		[]rune("│║              ║│"),
+		[]rune("│║              ║│"),
+		[]rune("│║              ║│"),
+		[]rune("│║              ║│"),
+		[]rune("│║              ║│"),
+		[]rune("│║              ║│"),
+		[]rune("╔╬══════════════╬╗"),
+		[]rune("╚╝╨╨╨╨╨╨╨╨╨╨╨╨╨╨╚╝"),
+	}
+	fancyBorderSliceX = 2
+	fancyBorderSliceY = 2
 )
 
 func setUnicodeEnabled(enabled bool) {
 	unicode = enabled
 	if unicode {
 		cellWidth = 3
+		cellHeight = 1
+		boardStartX = 2
+		boardStartY = 3
 	} else {
 		cellWidth = 2
+		cellHeight = 1
+		boardStartX = 1
+		boardStartY = 2
 	}
 }
 
@@ -63,23 +83,77 @@ func render(g *Game) {
 			}
 		}
 	}
-	// Draw border with # in the corners and | and - for the sides
-	for charX := -1; charX <= g.level.Info.Width*cellWidth; charX++ {
-		if charX == -1 || charX == g.level.Info.Width*cellWidth {
-			termbox.SetCell(boardStartX+charX, boardStartY-1, '#', termbox.ColorWhite, termbox.ColorBlack)
-			termbox.SetCell(boardStartX+charX, boardStartY+g.level.Info.Height*cellHeight, '#', termbox.ColorWhite, termbox.ColorBlack)
-		} else {
-			termbox.SetCell(boardStartX+charX, boardStartY-1, '-', termbox.ColorWhite, termbox.ColorBlack)
-			termbox.SetCell(boardStartX+charX, boardStartY+g.level.Info.Height*cellHeight, '-', termbox.ColorWhite, termbox.ColorBlack)
+
+	// Draw border
+	if unicode {
+		// Draw nine-slice border
+		// Top-left corner
+		for charY := 0; charY < fancyBorderSliceY; charY++ {
+			for charX := 0; charX < fancyBorderSliceX; charX++ {
+				termbox.SetCell(boardStartX-fancyBorderSliceX+charX, boardStartY-fancyBorderSliceY+charY, fancyBorder[charY][charX], termbox.ColorWhite, termbox.ColorBlack)
+			}
 		}
-	}
-	for charY := -1; charY <= g.level.Info.Height*cellHeight; charY++ {
-		if charY == -1 || charY == g.level.Info.Height*cellHeight {
-			termbox.SetCell(boardStartX-1, boardStartY+charY, '#', termbox.ColorWhite, termbox.ColorBlack)
-			termbox.SetCell(boardStartX+g.level.Info.Width*cellWidth, boardStartY+charY, '#', termbox.ColorWhite, termbox.ColorBlack)
-		} else {
-			termbox.SetCell(boardStartX-1, boardStartY+charY, '|', termbox.ColorWhite, termbox.ColorBlack)
-			termbox.SetCell(boardStartX+g.level.Info.Width*cellWidth, boardStartY+charY, '|', termbox.ColorWhite, termbox.ColorBlack)
+		// Top-right corner
+		for charY := 0; charY < fancyBorderSliceY; charY++ {
+			for charX := 0; charX < fancyBorderSliceX; charX++ {
+				termbox.SetCell(boardStartX+g.level.Info.Width*cellWidth+charX, boardStartY-fancyBorderSliceY+charY, fancyBorder[charY][len(fancyBorder[charY])-fancyBorderSliceX+charX], termbox.ColorWhite, termbox.ColorBlack)
+			}
+		}
+		// Bottom-left corner
+		for charY := 0; charY < fancyBorderSliceY; charY++ {
+			for charX := 0; charX < fancyBorderSliceX; charX++ {
+				termbox.SetCell(boardStartX-fancyBorderSliceX+charX, boardStartY+g.level.Info.Height*cellHeight+charY, fancyBorder[len(fancyBorder)-fancyBorderSliceY+charY][charX], termbox.ColorWhite, termbox.ColorBlack)
+			}
+		}
+		// Bottom-right corner
+		for charY := 0; charY < fancyBorderSliceY; charY++ {
+			for charX := 0; charX < fancyBorderSliceX; charX++ {
+				termbox.SetCell(boardStartX+g.level.Info.Width*cellWidth+charX, boardStartY+g.level.Info.Height*cellHeight+charY, fancyBorder[len(fancyBorder)-fancyBorderSliceY+charY][len(fancyBorder[0])-fancyBorderSliceX+charX], termbox.ColorWhite, termbox.ColorBlack)
+			}
+		}
+		// Top border
+		for charX := 0; charX < g.level.Info.Width*cellWidth; charX++ {
+			for charY := 0; charY < fancyBorderSliceY; charY++ {
+				termbox.SetCell(boardStartX+charX, boardStartY-fancyBorderSliceY+charY, fancyBorder[charY][fancyBorderSliceX+(charX%(len(fancyBorder[charY])-fancyBorderSliceX*2))], termbox.ColorWhite, termbox.ColorBlack)
+			}
+		}
+		// Bottom border
+		for charX := 0; charX < g.level.Info.Width*cellWidth; charX++ {
+			for charY := 0; charY < fancyBorderSliceY; charY++ {
+				termbox.SetCell(boardStartX+charX, boardStartY+g.level.Info.Height*cellHeight+charY, fancyBorder[len(fancyBorder)-fancyBorderSliceY+charY][fancyBorderSliceX+(charX%(len(fancyBorder[0])-fancyBorderSliceX*2))], termbox.ColorWhite, termbox.ColorBlack)
+			}
+		}
+		// Left border
+		for charY := 0; charY < g.level.Info.Height*cellHeight; charY++ {
+			for charX := 0; charX < fancyBorderSliceX; charX++ {
+				termbox.SetCell(boardStartX-fancyBorderSliceX+charX, boardStartY+charY, fancyBorder[fancyBorderSliceY+(charY%(len(fancyBorder)-fancyBorderSliceY*2))][charX], termbox.ColorWhite, termbox.ColorBlack)
+			}
+		}
+		// Right border
+		for charY := 0; charY < g.level.Info.Height*cellHeight; charY++ {
+			for charX := 0; charX < fancyBorderSliceX; charX++ {
+				termbox.SetCell(boardStartX+g.level.Info.Width*cellWidth+charX, boardStartY+charY, fancyBorder[fancyBorderSliceY+(charY%(len(fancyBorder)-fancyBorderSliceY*2))][len(fancyBorder[0])-fancyBorderSliceX+charX], termbox.ColorWhite, termbox.ColorBlack)
+			}
+		}
+	} else {
+		// Draw border with # in the corners and | and - for the sides
+		for charX := -1; charX <= g.level.Info.Width*cellWidth; charX++ {
+			if charX == -1 || charX == g.level.Info.Width*cellWidth {
+				termbox.SetCell(boardStartX+charX, boardStartY-1, '#', termbox.ColorWhite, termbox.ColorBlack)
+				termbox.SetCell(boardStartX+charX, boardStartY+g.level.Info.Height*cellHeight, '#', termbox.ColorWhite, termbox.ColorBlack)
+			} else {
+				termbox.SetCell(boardStartX+charX, boardStartY-1, '-', termbox.ColorWhite, termbox.ColorBlack)
+				termbox.SetCell(boardStartX+charX, boardStartY+g.level.Info.Height*cellHeight, '-', termbox.ColorWhite, termbox.ColorBlack)
+			}
+		}
+		for charY := -1; charY <= g.level.Info.Height*cellHeight; charY++ {
+			if charY == -1 || charY == g.level.Info.Height*cellHeight {
+				termbox.SetCell(boardStartX-1, boardStartY+charY, '#', termbox.ColorWhite, termbox.ColorBlack)
+				termbox.SetCell(boardStartX+g.level.Info.Width*cellWidth, boardStartY+charY, '#', termbox.ColorWhite, termbox.ColorBlack)
+			} else {
+				termbox.SetCell(boardStartX-1, boardStartY+charY, '|', termbox.ColorWhite, termbox.ColorBlack)
+				termbox.SetCell(boardStartX+g.level.Info.Width*cellWidth, boardStartY+charY, '|', termbox.ColorWhite, termbox.ColorBlack)
+			}
 		}
 	}
 
