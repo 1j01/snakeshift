@@ -7,12 +7,19 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
-const (
+var (
+	unicode     = true
 	cellWidth   = 2
 	cellHeight  = 1
 	boardStartX = 1
 	boardStartY = 2
 )
+
+func init() {
+	if unicode {
+		cellWidth = 3
+	}
+}
 
 func render(g *Game) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
@@ -98,23 +105,38 @@ func (food *Food) Draw(g *Game) {
 	t := float64(time.Now().UnixMilli())/1000.0 - float64(food.Position.X+food.Position.Y)/20.0
 	for charY := 0; charY < cellHeight; charY++ {
 		for charX := 0; charX < cellWidth; charX++ {
-			bg := termbox.ColorRed
-			fg := termbox.ColorRed
-			switch food.Layer {
-			case White:
-				fg = termbox.ColorWhite
-				bg = termbox.ColorBlack
-			case Black:
-				fg = termbox.ColorBlack
-				bg = termbox.ColorWhite
-			}
-			ch := '+'
-			if math.Mod(t, 2) < 1 {
-				ch = '*'
-			}
-			// blink so that you can also see what's under the food, even if it's in a less-than-ideal way
-			if math.Mod(t, 1) < 0.5 {
-				termbox.SetCell(x+charX, y+charY, ch, fg, bg)
+			if unicode {
+				if charX == 1 {
+					colorUnder := termbox.GetCell(x+charX, y+charY).Bg
+					invColor := termbox.ColorWhite
+					if colorUnder == termbox.ColorWhite {
+						invColor = termbox.ColorBlack
+					}
+					ch := '◆'
+					if (colorUnder == termbox.ColorBlack) != (food.Layer == White) {
+						ch = '◇'
+					}
+					termbox.SetCell(x+charX, y+charY, ch, invColor, colorUnder)
+				}
+			} else {
+				bg := termbox.ColorRed
+				fg := termbox.ColorRed
+				switch food.Layer {
+				case White:
+					fg = termbox.ColorWhite
+					bg = termbox.ColorBlack
+				case Black:
+					fg = termbox.ColorBlack
+					bg = termbox.ColorWhite
+				}
+				ch := '+'
+				if math.Mod(t, 2) < 1 {
+					ch = '*'
+				}
+				// blink so that you can also see what's under the food, even if it's in a less-than-ideal way
+				if math.Mod(t, 1) < 0.5 {
+					termbox.SetCell(x+charX, y+charY, ch, fg, bg)
+				}
 			}
 		}
 	}
@@ -157,8 +179,13 @@ func (snake *Snake) Draw(g *Game) {
 					} else if dir.Y < 0 {
 						ch = '^'
 					}
-				} else if snake.GrowOnNextMove {
-					ch = '~' // In the original game, this was more like ^^ eyes but ^ is used on the body here as arrows; ~ conveys happy eyes pretty well here.
+				} else {
+					if snake.GrowOnNextMove {
+						ch = '~' // In the original game, this was more like ^^ eyes but ^ is used on the body here as arrows; ~ conveys happy eyes pretty well here.
+					}
+					if charX == 1 && cellWidth == 3 {
+						ch = '_'
+					}
 				}
 
 				if g.blinkSnake && snake.ID == g.activeSnake.ID {
