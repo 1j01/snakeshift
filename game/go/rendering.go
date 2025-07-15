@@ -283,6 +283,9 @@ func (snake *Snake) Draw(g *Game) {
 					fg, bg = bg, fg
 					if g.blinkEncumbered && i == 0 {
 						ch = 'x' // X eyes for encumbered snake
+						if charX == 1 && cellWidth == 3 {
+							ch = '_'
+						}
 					}
 				}
 
