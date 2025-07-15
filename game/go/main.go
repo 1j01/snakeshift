@@ -29,6 +29,11 @@ func main() {
 			// 	Value: "",
 			// 	Usage: "specify a level to play",
 			// },
+			&cli.BoolFlag{
+				Name:  "ascii",
+				Value: false,
+				Usage: "use ASCII rendering instead of Unicode, for better compatibility with some terminals",
+			},
 		},
 		Action: func(ctx context.Context, cmd *cli.Command) error {
 			if cmd.Bool("generate") {
@@ -54,7 +59,7 @@ func main() {
 				}
 				return nil
 			}
-			mainGameLoop()
+			mainGameLoop(cmd.Bool("ascii"))
 			return nil
 		},
 	}

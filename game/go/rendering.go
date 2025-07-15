@@ -9,16 +9,23 @@ import (
 
 var (
 	unicode     = true
-	cellWidth   = 2
+	cellWidth   = 3
 	cellHeight  = 1
 	boardStartX = 1
 	boardStartY = 2
 )
 
-func init() {
+func setUnicodeEnabled(enabled bool) {
+	unicode = enabled
 	if unicode {
 		cellWidth = 3
+	} else {
+		cellWidth = 2
 	}
+}
+
+func init() {
+	setUnicodeEnabled(unicode)
 }
 
 func render(g *Game) {

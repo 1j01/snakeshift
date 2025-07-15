@@ -161,11 +161,13 @@ func cycleActiveSnake(g *Game) {
 	}
 }
 
-func mainGameLoop() {
+func mainGameLoop(ascii bool) {
 	// TODO: menu system
 	// - main menu
 	// - level select
 	// - credits
+
+	setUnicodeEnabled(!ascii)
 
 	err := termbox.Init()
 	if err != nil {
@@ -242,6 +244,8 @@ func mainGameLoop() {
 					} else {
 						needsRender = false
 					}
+				case ev.Ch == 'u':
+					setUnicodeEnabled(!unicode)
 				default:
 					needsRender = false
 				}

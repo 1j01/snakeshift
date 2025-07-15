@@ -17,8 +17,7 @@ cd snakeshift/game/go
 go run .
 ```
 
-The terminal version is for "hardcore" players, as the graphics are harder to read, and only keyboard controls are supported.  
-Also there's a bug where the rendering may be jumbled until you resize the terminal window.
+The terminal version only supports keyboard controls, and has bug where the rendering may be jumbled until you resize the terminal window.
 
 ## Controls
 
