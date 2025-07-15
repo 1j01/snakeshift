@@ -164,7 +164,11 @@ func render(g *Game) {
 
 	// Show level stuck hint
 	if len(getAllPossibleMoves(g.level)) == 0 {
-		tbPrint(0, boardStartY+g.level.Info.Height*cellHeight+1, termbox.ColorWhite, termbox.ColorBlack, "Press 'Z' to undo or 'R' to restart the level.")
+		borderHeight := 1
+		if unicode {
+			borderHeight = fancyBorderSliceY
+		}
+		tbPrint(0, boardStartY+g.level.Info.Height*cellHeight+borderHeight, termbox.ColorWhite, termbox.ColorBlack, "Press 'Z' to undo or 'R' to restart the level.")
 	}
 
 	termbox.Flush()
