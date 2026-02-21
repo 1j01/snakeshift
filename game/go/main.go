@@ -34,6 +34,12 @@ func main() {
 				Value: false,
 				Usage: "use ASCII rendering instead of Unicode, for better compatibility with some terminals",
 			},
+			&cli.BoolFlag{
+				Name:    "version",
+				Value:   false,
+				Aliases: []string{"v"},
+				Usage:   "print the version information",
+			},
 		},
 		Action: func(ctx context.Context, cmd *cli.Command) error {
 			if cmd.Bool("generate") {
@@ -57,6 +63,10 @@ func main() {
 					// fmt.Printf("%s:\n  %s\n", level.LevelId, level.Title)
 					fmt.Println(level.Title)
 				}
+				return nil
+			}
+			if cmd.Bool("version") {
+				fmt.Println("SnakeShift version 0.1.0")
 				return nil
 			}
 			mainGameLoop(cmd.Bool("ascii"), cmd.String("level"))
