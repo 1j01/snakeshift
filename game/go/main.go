@@ -12,7 +12,7 @@ import (
 func main() {
 	cmd := &cli.Command{
 		Name:  "snakeshift",
-		Usage: "Play Snakeshift or generate levels",
+		Usage: "Play SnakeShift or generate levels",
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:  "generate",
